@@ -1,0 +1,186 @@
+﻿/* 
+ * Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
+ * This file is part of OpenBound.
+ * OpenBound is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
+ * 
+ * OpenBound is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
+ */
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Common;
+using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level.Scene;
+using OpenBound.GameComponents.Pawn.Unit;
+using OpenBound.GameComponents.PawnAction;
+using Openbound_Network_Object_Library.Entity;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace OpenBound.GameComponents.Pawn.UnitProjectiles
+{
+    public class MageProjectileEmitter
+    {
+        //This method was created to prevent hurricane positions
+        public static void Shot2(Mage mobile)
+        {
+            mobile.LastCreatedProjectileList.Add(new MageProjectile2(mobile, 0, new Color(200, 60, 100, 60)));
+            mobile.LastCreatedProjectileList.Add(new MageProjectile2(mobile, MathHelper.Pi, new Color(150, 150, 200, 100)));
+        }
+    }
+
+    public class MageProjectile1 : DummyProjectile
+    {
+        HelicoidalTrace trace;
+
+        public MageProjectile1(Mage mobile)
+            : base(mobile, ShotType.S1, Parameter.ProjectileMageS1ExplosionRadius, Parameter.ProjectileMageS1BaseDamage)
+        {
+            //Physics/Trajectory setups
+            mass = Parameter.ProjectileMageS1Mass;
+            windInfluence = Parameter.ProjectileMageS1WindInfluence;
+
+            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S1, Color.White);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            trace.Update(FlipbookList[0].Position, Vector2.Zero, FlipbookList[0].Rotation, 0, 0);
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+            SpecialEffectBuilder.MageProjectile1Explosion(FlipbookList[0].Position, 0);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (SpawnTimeCounter < SpawnTime) return;
+            base.Draw(gameTime, spriteBatch);
+            trace.Draw(gameTime, spriteBatch);
+        }
+    }
+
+    public class MageProjectile2 : DummyProjectile
+    {
+        HelicoidalTrace trace;
+        float angleOffset;
+
+        DummyProjectile dProj;
+
+        public MageProjectile2(Mage mobile, float angleOffset, Color color)
+            : base(mobile, ShotType.S2, 0, 0, canCollide: false)
+        {
+            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S2, color);
+            this.angleOffset = angleOffset;
+
+            mass = Parameter.ProjectileMageS2Mass;
+            windInfluence = Parameter.ProjectileMageS2WindInfluence;
+
+            dProj = new DummyProjectile(mobile, ShotType.S2, Parameter.ProjectileMageS2ExplosionRadius, Parameter.ProjectileMageS2BaseDamage);
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+            SpecialEffectBuilder.MageProjectile2Explosion(trace.Position, 0);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
+            {
+                trace.Update(FlipbookList[0].Position, new Vector2(0, 15), FlipbookList[0].Rotation, Parameter.ProjectileMovementTimeElapsedPerInteraction, angleOffset);
+
+                dProj.FlipbookList[0].Position = trace.Position;
+
+                if (dProj.CheckOutOfBounds(trace.Position))
+                    return;
+
+                if (dProj.UpdateCollider(trace.Position))
+                {
+                    Explode();
+                    return;
+                }
+            }
+        }
+
+        public override bool CheckOutOfBounds(Vector2 position)
+        {
+            return base.CheckOutOfBounds(trace.Position);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            if (SpawnTimeCounter < SpawnTime) return;
+            base.Draw(gameTime, spriteBatch);
+            trace.Draw(gameTime, spriteBatch);
+        }
+    }
+
+    public class MageProjectile3 : Projectile
+    {
+        public MageProjectile3(Mage mobile)
+            : base(mobile, ShotType.S1, Parameter.ProjectileMageS2ExplosionRadius, Parameter.ProjectileMageS2BaseDamage)
+        {
+            //Initializing Flipbook
+            FlipbookList.Add(Flipbook.CreateFlipbook(
+                mobile.Crosshair.CannonPosition, new Vector2(27, 27),
+                54, 54, "Graphics/Tank/Mage/Bullet3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
+                true, DepthParameter.Projectile));
+
+            //Physics/Trajectory setups
+            mass = Parameter.ProjectileMageS2Mass;
+            windInfluence = Parameter.ProjectileMageS2WindInfluence;
+        }
+
+        protected override int CalculateDamage(Mobile mobile)
+        {
+            double distance = mobile.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+
+            if (distance < Parameter.ProjectileMageSSEExplosionRadius)
+            {
+                return base.CalculateDamage(mobile) + (int)mobile.SyncMobile.MobileMetadata.CurrentShield;
+            }
+
+            return 0;
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+
+            SpecialEffectBuilder.MageProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
+
+            foreach (Mobile m in LevelScene.MobileList)
+            {
+                double distance = mobile.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+
+                if (distance < Parameter.ProjectileMageSSEExplosionRadius)
+                {
+                    m.DepleteShield();
+                }
+            }
+        }
+
+        protected override void Destroy()
+        {
+            base.Destroy();
+
+            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+
+            if (pjList.Count() == 0)
+                OnFinalizeExecution?.Invoke();
+        }
+    }
+}

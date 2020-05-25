@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F8C0C7A5-574E-4CD6-BDC6-6B97D2262516}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Openbound_Network_Object_Library</RootNamespace>
+    <AssemblyName>Openbound Network Object Library</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugScene|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugScene\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.InteropServices" />
+    <Reference Include="System.Threading.Thread" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\ObjectValidator.cs" />
+    <Compile Include="Common\ObjectWrapper.cs" />
+    <Compile Include="Common\NetworkObjectParameters.cs" />
+    <Compile Include="FileOutput\ConfigFileManager.cs" />
+    <Compile Include="Database\Context\OpenboundDatabaseContext.cs" />
+    <Compile Include="Database\Controller\GuildController.cs" />
+    <Compile Include="Database\Controller\PlayerController.cs" />
+    <Compile Include="Helper\FormsHelper.cs" />
+    <Compile Include="Migrations\202005241907359_InitialCreate.cs" />
+    <Compile Include="Migrations\202005241907359_InitialCreate.Designer.cs">
+      <DependentUpon>202005241907359_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Guild.cs" />
+    <Compile Include="Entity\Map.cs" />
+    <Compile Include="Entity\MatchManager.cs" />
+    <Compile Include="Entity\MatchMetadata.cs" />
+    <Compile Include="Entity\MobileMetadata.cs" />
+    <Compile Include="Entity\MobileType.cs" />
+    <Compile Include="Models\Player.cs" />
+    <Compile Include="Entity\RoomMetadata.cs" />
+    <Compile Include="FileOutput\MessageLogger.cs" />
+    <Compile Include="Helper\FormValidationHelper.cs" />
+    <Compile Include="Helper\NotOrCharacter.cs" />
+    <Compile Include="Security\SecurityToken.cs" />
+    <Compile Include="Entity\GameServerInformation.cs" />
+    <Compile Include="Entity\ServerInformation.cs" />
+    <Compile Include="Entity\Sync\SynchronizableAction.cs" />
+    <Compile Include="Entity\Sync\SyncMobile.cs" />
+    <Compile Include="Entity\Sync\SyncProjectile.cs" />
+    <Compile Include="Entity\WeatherType.cs" />
+    <Compile Include="Extension\EArray.cs" />
+    <Compile Include="Extension\ECollections.cs" />
+    <Compile Include="Extension\EConcurrentQueue.cs" />
+    <Compile Include="Security\SecurityTokenHandler.cs" />
+    <Compile Include="ServiceProvider\ServiceProviderServer.cs" />
+    <Compile Include="TCP\ServiceProvider\ClientServiceProvider.cs" />
+    <Compile Include="TCP\ServiceProvider\ServerServiceProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidationModel\Registration\Account.cs" />
+    <Compile Include="ValidationModel\ValidationModelBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LICENCE.GPL" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202005241907359_InitialCreate.resx">
+      <DependentUpon>202005241907359_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CryptSharpOfficial">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="EntityFramework">
+      <Version>6.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SqlClient">
+      <Version>4.8.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
