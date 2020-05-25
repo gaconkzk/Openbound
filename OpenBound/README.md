@@ -1,3 +1,4 @@
+
 ﻿<h2>Configuration & Setup</h2>
 
 This solution contains four applications that works together to make the game work.
@@ -148,11 +149,13 @@ Legend:
 <h2>Contributors</h2>
 
 <h3>Developers</h3>
-- [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
-- [Icy Willow](https://github.com/IcyWillow/) - Since 05/21/2020
+
+ - [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
+ - [Icy Willow](https://github.com/IcyWillow/) - Since 05/21/2020
 
 <h2>Bug Reports/Testers</h2>
-- [sdyalor](https://github.com/sdyalor)
+
+ - [sdyalor](https://github.com/sdyalor)
 
 <h2>Licence and copyright</h2>
 
