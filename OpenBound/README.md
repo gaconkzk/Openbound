@@ -1,4 +1,4 @@
-﻿#Configuration & Setup
+﻿<h2>Configuration & Setup</h2>
 
 This solution contains four applications that works together to make the game work.
 
@@ -13,7 +13,7 @@ In the current version is MANDATORY that all servers are opened in the same orde
 
 All the necessary configuration (IP tables, public/local IPs and database address) can be edited by changing the configuration files that each application creates when are opened.
 
-##Configuring the Solution
+<h3>Configuring the Solution</h3>
 
 1. First of all, you have to generate the config files, for that, all you have to do is open the LoginServer, LobbyServer and GameServer executables at least once and edit the generated .txt files.
 
@@ -46,9 +46,9 @@ Currently compatible databases:
 - SQL Server Express
 - SQL Server (Recommended)
 
-#Different things from the original game:
+<h2>Different things from the original game:</h2>
 
-##Assets
+<h3>Assets</h3>
 
 Reminder: The following clients were datamined in order to acquire all necessary assets. Because of that, newer assets/mobiles/features aren't going to be incorporated into the game.
 - MagicPunk (Non-GB game made by the same company)
@@ -96,7 +96,7 @@ Legend:
        - Moving - Gallop sound extracted from HoMM3
        - UnableToMove - Horse neigh sound extracted from HoMM3
 
-##General
+<h3>General</h3>
 
 1. Audio
    - Music player randomizes songs from every GB version
@@ -131,7 +131,7 @@ Legend:
 6. Networking
    - All clients are fed with the same information at the same time, meaning that it is expected to have no delay between clients.
 
-#Known bugs
+<h3>Known bugs</h3>
 
 1. Client
    - It is possible to freeze the match by passing the turn (there is a button on the interface for that).
@@ -145,16 +145,16 @@ Legend:
    - There is no verification check on teams equality when a game is being started (INTENDED).
    - All servers are not smart enough to "re-attatch" the connections. In order to make it work again close it and open again in the same order described in Configurations & Setup.
 
-##Contributors
+<h2>Contributors</h2>
 
-#Developers
+<h3>Developers</h3>
 - [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
 - [Icy Willow] (https://github.com/IcyWillow/) - Since 05/21/2020
 
-#Bug Reports/Testers
+<h2>Bug Reports/Testers
 - [sdyalor](https://github.com/sdyalor)
 
-##Licence and copyright
+<h2>Licence and copyright</h2>
 
 All repositories/programs that copies this repository must include the following line:
 - Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
