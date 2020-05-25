@@ -149,9 +149,9 @@ Legend:
 
 <h3>Developers</h3>
 - [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
-- [Icy Willow] (https://github.com/IcyWillow/) - Since 05/21/2020
+- [Icy Willow](https://github.com/IcyWillow/) - Since 05/21/2020
 
-<h2>Bug Reports/Testers
+<h2>Bug Reports/Testers</h2>
 - [sdyalor](https://github.com/sdyalor)
 
 <h2>Licence and copyright</h2>
