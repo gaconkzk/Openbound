@@ -114,22 +114,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\ColorBlending.cs" />
+    <Compile Include="Entity\ImportedImage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\AssetMaker.cs" />
-    <Compile Include="Utils\Common.cs" />
+    <Compile Include="Common\FileImportManager.cs" />
+    <Compile Include="Utils\ImageBorderFix.cs" />
+    <Compile Include="Common\Parameters.cs" />
     <Compile Include="Utils\CrosshairDrawer.cs" />
     <Compile Include="Utils\ImageComparer.cs" />
     <Compile Include="Utils\ImageSyncComparer.cs" />
     <Compile Include="Utils\MinimapThumbGenerator.cs" />
-    <Compile Include="Utils\NameFix.cs" />
+    <Compile Include="Utils\FileNameFixer.cs" />
     <Compile Include="Utils\SpriteImportManager.cs" />
-    <Compile Include="Utils\SpritesheetMaker.cs" />
-    <Compile Include="Utils\SpriteSheetMaker5Blender.cs" />
-    <Compile Include="Utils\SpriteSheetMaker4.cs" />
+    <Compile Include="Utils\MultiLayerSpritesheetMaker.cs" />
+    <Compile Include="Utils\SingleLayerSpritesheetMaker.cs" />
     <Compile Include="Utils\SpriteSheetMaker3.cs" />
-    <Compile Include="Utils\SpriteSheetMaker2.cs" />
-    <Compile Include="Utils\TerrainAlphaChannelFix.cs" />
     <Compile Include="Utils\XTFCracker.cs" />
   </ItemGroup>
   <ItemGroup>

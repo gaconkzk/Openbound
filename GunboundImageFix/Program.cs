@@ -26,115 +26,91 @@ namespace GunboundImageFix
                 Console.WriteLine("Gunbound Raw Image Fix Tools");
 
                 Console.WriteLine("SpriteSheet tools");
-                Console.WriteLine("1 - Create Spritesheet");
-                Console.WriteLine("2 - Create Spritesheet [Repositioning]");
-                Console.WriteLine("3 - Create Spritesheet [Custom Image Size]");
-                Console.WriteLine("b - Create Spritesheet [SFX][Custom Image Size]");
-                Console.WriteLine("c - Create Spritesheet [SFX][+Blend]");
-                Console.WriteLine("e - Create Minimap Tumbnails");
+                Console.WriteLine("1 - Create Spritesheet [SFX][Custom Image Size][1-Layer]");
+                Console.WriteLine("2 - Create Spritesheet [SFX][Custom Image Size][2-Layer - AlphaBlend]");
+                Console.WriteLine("3 - Create Spritesheet [Equal Images]");
+
+                Console.WriteLine("\nImage Utils");
+                Console.WriteLine("4 - Image Border Fixer");
 
                 Console.WriteLine("\nImage Processing");
-                Console.WriteLine("4 - Aggressive Alpha Fix for stages.");
                 Console.WriteLine("5 - Massive .IMG import.");
-                Console.WriteLine("7 - Image Sync Comparer");
-                Console.WriteLine("9 - Image Comparer");
+                Console.WriteLine("6 - Image Sync Comparer [DEPRECATED]");
+                Console.WriteLine("7 - Image Comparer");
 
                 Console.WriteLine("\nFile manipulation");
-                Console.WriteLine("6 - Name Fixer.");
+                Console.WriteLine("8 - Name Fixer.");
 
                 Console.WriteLine("\nDecrypt/Cypher");
-                Console.WriteLine("8 - XTF Crack");
+                Console.WriteLine("9 - XTF Crack");
 
                 Console.WriteLine("\nCreate Assets");
-                Console.WriteLine("a - Crosshair Drawer");
-                Console.WriteLine("d - Mobile Buttons");
+                Console.WriteLine("0 - Crosshair Drawer");
+                Console.WriteLine("a - Mobile Buttons");
+                Console.WriteLine("b - Create Minimap Tumbnails");
 
 
-                /*try
-                {*/
+                try
+                {
                     DateTime sDate = DateTime.Now;
 
                     switch (Console.ReadLine()[0])
                     {
                         case '1':
-                            new SpritesheetMaker().CreateSpritesheet();
+                            new SingleLayerSpritesheetMaker().CreateSpritesheet();
                             break;
                         case '2':
-                            new SpritesheetMaker2().CreateSpritesheet();
+                            new MultiLayerSpritesheetMaker().CreateSpritesheet();
                             break;
                         case '3':
-                            new SpritesheetMaker3().CreateSpritesheet();
+                            new SimpleSpritesheetMaker().CreateSpritesheet();
                             break;
+
                         case '4':
-                            new TerrainFix().AggressiveAlphaFix();
+                            ImageBorderFix.FixBorder();
                             break;
+
                         case '5':
                             new SpriteImportManager().ImportSprites();
                             break;
                         case '6':
-                            new NameFix().ImportSprites();
-                            break;
-                        case '7':
                             ImageSyncComparer.ImageSyncCompare();
                             break;
-                        case '8':
-                            XTFCracker.Crack();
-                            break;
-                        case '9':
+                        case '7':
                             ImageComparer.CompareImages();
                             break;
-                        case 'a':
+
+                        case '8':
+                            new FileNameFixer().ImportSprites();
+                            break;
+                        case '9':
+                            XTFCracker.Crack();
+                            break;
+
+                        case '0':
                             CrosshairDrawer.DrawCrosshairs();
                             break;
-                        case 'b':
-                            new SpritesheetMaker4().CreateSpritesheet();
-                            break;
-                        case 'c':
-                            new SpritesheetMaker5Blender().CreateSpritesheet();
-                            break;
-                        case 'd':
+                        case 'a':
                             new AssetMaker().CreateButton();
                             break;
-                        case 'e':
+                        case 'b':
                             MinimapThumbGenerator.GenerateButtonThumbnails();
                             break;
-                        case 'f':
-                            FixImage();
-                            break;
+
                         default:
                             throw new Exception();
                     }
 
                     Console.WriteLine("Process complete. Running time: " + (DateTime.Now - sDate).TotalSeconds);
                     Console.ReadKey();
-                /*}
+                }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                     Console.ReadKey();
                     Console.Clear();
-                }*/
+                }
             } while (true);
-        }
-
-        public static void FixImage()
-        {
-            Bitmap bmp = (Bitmap)Image.FromFile(@"C:\Users\Carlos\source\repos\OpenBound\OpenBound\Content\Graphics\Maps\FourHeads\ForegroundA.png");
-            int[][][] imageChannels = new int[4][][];
-
-            imageChannels = ImageProcessing.SplitImageChannels(bmp);
-
-            imageChannels[0] = ImageProcessing.Erode(imageChannels[0]);
-            imageChannels[1] = ImageProcessing.Erode(imageChannels[1]);
-            imageChannels[2] = ImageProcessing.Erode(imageChannels[2]);
-            imageChannels[3] = ImageProcessing.Erode(imageChannels[3]);
-
-            //imageChannels[0] = ImageProcessing.Dilatate(imageChannels[0]);
-            //imageChannels[1] = ImageProcessing.Dilatate(imageChannels[1]);
-            //imageChannels[2] = ImageProcessing.Dilatate(imageChannels[2]);
-            //imageChannels[3] = ImageProcessing.Dilatate(imageChannels[3]);
-
-            ImageProcessing.CreateImage(ImageProcessing.JoinImageChannels(imageChannels)).Save(@"C:\Users\Carlos\source\repos\OpenBound\GunboundImageFix\Output\FixedImage\output.png");
         }
     }
 }

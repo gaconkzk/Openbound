@@ -65,7 +65,7 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Random,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand, new AnimationInstance() { StartingFrame =   0, EndingFrame =  11, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.Stand, new AnimationInstance() { StartingFrame = 000, EndingFrame = 011, TimePerFrame = 1/20f } },
                 }
             },
             #region Armor
@@ -73,38 +73,38 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Armor,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  20, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 020, TimePerFrame = 1/20f } },
                     { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 151, EndingFrame = 171, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  21, EndingFrame =  39, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 021, EndingFrame = 039, TimePerFrame = 1/17f } },
                     { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 169, EndingFrame = 189, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 349, EndingFrame = 378, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 312, EndingFrame = 349, TimePerFrame = 1/29f } },
 
                     { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 378, EndingFrame = 405, TimePerFrame = 1/24f } },
                     { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 404, EndingFrame = 430, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame =  49, EndingFrame =  69, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 049, EndingFrame = 069, TimePerFrame = 1/19f } },
                     { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame =  91, EndingFrame = 110, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame =  40, EndingFrame =  49, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 040, EndingFrame = 049, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame =  91, EndingFrame = 110, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
                     { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 291, EndingFrame = 318, TimePerFrame = 1/26f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame =  91, EndingFrame = 110, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/14f } },
                     { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 429, EndingFrame = 454, TimePerFrame = 1/20f } },
 
                     { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 230, EndingFrame = 250, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame =  71, EndingFrame =  89, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 071, EndingFrame = 089, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 131, EndingFrame = 149, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 456, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 456, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -113,12 +113,12 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Bigfoot,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame =  45, EndingFrame =  64, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  44, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame =  65, EndingFrame = 104, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 045, EndingFrame = 064, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 044, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 065, EndingFrame = 104, TimePerFrame = 1/17f } },
                     //
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame = 105, EndingFrame = 124, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 105, EndingFrame = 124, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
@@ -143,7 +143,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 187, EndingFrame = 201, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -152,12 +152,12 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Dragon,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame =  40, EndingFrame =  59, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  39, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame =  60, EndingFrame =  79, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame =  80, EndingFrame =  99, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
@@ -182,7 +182,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 248, EndingFrame = 262, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -191,12 +191,12 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Mage,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame =  40, EndingFrame =  59, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  39, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame =  60, EndingFrame =  79, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame =  80, EndingFrame =  99, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
@@ -221,7 +221,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 160, EndingFrame = 178, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 411, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 411, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -230,12 +230,12 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Ice,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame =  35, EndingFrame =  54, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  34, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame =  55, EndingFrame =  74, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 055, EndingFrame = 074, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame =  75, EndingFrame =  94, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 075, EndingFrame = 094, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
@@ -246,7 +246,7 @@ namespace OpenBound.GameComponents.Animation
                     { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 135, EndingFrame = 135, TimePerFrame = 0f } },
 
                     { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 223, EndingFrame = 237, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame =  95, EndingFrame = 114, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 114, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 238, EndingFrame = 252, TimePerFrame = 1/19f } },
                     { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/21f } },
@@ -260,7 +260,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 293, EndingFrame = 312, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -269,13 +269,13 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Knight,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
                     { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 182, EndingFrame = 199, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  37, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 037, TimePerFrame = 1/17f } },
                     { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 200, EndingFrame = 217, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame = 103, EndingFrame = 122, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 103, EndingFrame = 122, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
@@ -285,14 +285,14 @@ namespace OpenBound.GameComponents.Animation
                     { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 288, EndingFrame = 307, TimePerFrame = 1/19f } },
                     { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame =  68, EndingFrame =  87, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame =  88, EndingFrame = 102, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 068, EndingFrame = 087, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 088, EndingFrame = 102, TimePerFrame = 1/14f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame =  38, EndingFrame =  52, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame =  53, EndingFrame =  67, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 038, EndingFrame = 052, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
 
                     { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 358, EndingFrame = 372, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame =  53, EndingFrame =  67, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
 
                     { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 248, EndingFrame = 267, TimePerFrame = 1/19f } },
 
@@ -300,7 +300,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 123, EndingFrame = 141, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 373, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 373, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
@@ -309,13 +309,13 @@ namespace OpenBound.GameComponents.Animation
                 MobileType.Turtle,
                 new Dictionary<MobileFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame =   0, EndingFrame =  19, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame =  42, EndingFrame =  61, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 042, EndingFrame = 061, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame =  20, EndingFrame =  41, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame =  62, EndingFrame =  83, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 041, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 062, EndingFrame = 083, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,   new AnimationInstance() { StartingFrame =   84, EndingFrame = 103, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 084, EndingFrame = 103, TimePerFrame = 1/19f } },
 
                     { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
                     { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
@@ -340,7 +340,7 @@ namespace OpenBound.GameComponents.Animation
 
                     { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 164, EndingFrame = 183, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame =   0, EndingFrame = 464, TimePerFrame = 1/18f } },
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 464, TimePerFrame = 1/18f } },
                 }
             },
             #endregion

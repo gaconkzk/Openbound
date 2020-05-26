@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
 using GunboundImageProcessing.ImageUtils;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace GunboundImageFix.Utils
             Console.WriteLine("Importing Sprites...");
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.InitialDirectory = Common.Directory + "Output";
+            dialog.InitialDirectory = Parameters.OutputDirectory;
             dialog.ShowDialog();
 
             if (dialog.FileNames.Length == 0)

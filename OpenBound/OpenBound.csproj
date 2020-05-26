@@ -451,7 +451,6 @@
     <Content Include="Content\Misc\Dummy.png" />
     <None Include="LICENCE.GPL" />
     <None Include="Resources\GBIcon.ico" />
-    <Content Include="TODO.txt" />
     <Compile Include="GameComponents\Animation\SpecialEffectBuilder.cs" />
     <Compile Include="GameComponents\Collision\CollisionBox.cs" />
     <Compile Include="GameComponents\Debug\DebugCircle.cs" />

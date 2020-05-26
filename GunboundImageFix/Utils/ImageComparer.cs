@@ -10,8 +10,11 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
+using GunboundImageFix.Entity;
 using GunboundImageProcessing.ImageUtils;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,43 +23,23 @@ namespace GunboundImageFix.Utils
 {
     class ImageComparer
     {
-        static string[] imageFilePaths;
-        static string[] imageFilePaths2;
-
-        [STAThread]
-        public static void ImportIMGThread()
-        {
-            Console.WriteLine("\n\nImporting Sprites...");
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = false;
-            dialog.InitialDirectory = Common.Directory + @"Input";
-            dialog.Filter = "Image Files (png)|*.png;";
-            dialog.ShowDialog();
-            imageFilePaths = dialog.FileNames;
-        }
-
+        /// <summary>
+        /// Compare and check if two images are identical
+        /// </summary>
         public static void CompareImages()
         {
-            Console.WriteLine("Importing IMG Files");
-            Thread t = new Thread(() => ImportIMGThread());
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+            List<ImportedImage> list1, list2;
+         
+            Console.WriteLine("Importing first set of image files");
+            list1 = FileImportManager.ReadMultipleImages();
 
-            while (t.IsAlive) Thread.Sleep(100);
+            Console.WriteLine("Importing first set of image files");
+            list2 = FileImportManager.ReadMultipleImages();
 
-            imageFilePaths2 = imageFilePaths;
-
-            Console.WriteLine("Importing IMG Files");
-            t = new Thread(() => ImportIMGThread());
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-
-            while (t.IsAlive) Thread.Sleep(100);
-
-            Bitmap img1 = new Bitmap(imageFilePaths[0]);
-            Bitmap img2 = new Bitmap(imageFilePaths2[0]);
-
-            ImageProcessing.CompareImages(img1, img2, 0);
+            for (int i = 0; i < list1.Count; i++)
+            {
+                ImageProcessing.CompareImages(list1[i].Image, list2[i].Image, Parameters.ComparisonOutputDirectory + $@"{i}.png");
+            }
         }
     }
 }

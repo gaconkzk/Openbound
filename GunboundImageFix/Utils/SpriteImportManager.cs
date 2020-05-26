@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
 using ImgTools;
 using System;
 using System.Collections.Generic;
@@ -22,32 +23,15 @@ namespace GunboundImageFix.Utils
 {
     class SpriteImportManager
     {
-        string[] imageFilePaths;
-
-        [STAThread]
-        public void ImportIMGThread()
-        {
-            Console.WriteLine("\n\nImporting Sprites...");
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            dialog.InitialDirectory = Common.Directory + @"Input";
-            dialog.Filter = "Image Files (IMG)|*.img;";
-            dialog.ShowDialog();
-            imageFilePaths = dialog.FileNames;
-        }
-
+        /// <summary>
+        /// Import multiple .IMG files at once. It may fail due to errors containing in the external library parser.
+        /// This method is used to extract the .txt pivot files from .IMG its associated .png images.
+        /// </summary>
         public void ImportSprites()
         {
-            Console.WriteLine("Importing IMG Files");
-            Thread t = new Thread(() => ImportIMGThread());
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-
-            while (t.IsAlive) Thread.Sleep(1000);
-
             List<string> failureList = new List<string>();
 
-            foreach (string imgFilePath in imageFilePaths)
+            foreach (string imgFilePath in FileImportManager.ReadMultipleIMGFiles())
             {
                 string fileName = "";
 
@@ -68,11 +52,11 @@ namespace GunboundImageFix.Utils
                         {
                             pivotStrList += $"{string.Format("{0:000}", i2)},{frameArr[i2].m_CenterX},{frameArr[i2].m_CenterY}|";
 
-                            string s = $@"{Common.Directory}\Output\Raw\{fileName}-{string.Format("{0:000}", i2)}.png";
+                            string s = $@"{Parameters.RawOutputDirectory}\{fileName}-{string.Format("{0:000}", i2)}.png";
                             frameArr[i2].m_Image.Save(s);
                         }
 
-                        File.WriteAllLines($@"{Common.Directory}\Output\Raw\{fileName}.txt", pivotStrList.Split('|'));
+                        File.WriteAllLines($@"{Parameters.RawOutputDirectory}\{fileName}.txt", pivotStrList.Split('|'));
 
                         Console.WriteLine($"Imported: {fileName}");
                     }

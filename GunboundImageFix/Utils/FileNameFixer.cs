@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -18,53 +20,31 @@ using System.Windows.Forms;
 
 namespace GunboundImageFix.Utils
 {
-    class NameFix
+    class FileNameFixer
     {
-        string[] imageFilePaths;
-
-        [STAThread]
-        public void ImportIMGThread()
-        {
-            Console.WriteLine("\n\nImporting Sprites...");
-
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Multiselect = true,
-                InitialDirectory = Common.Directory + @"Input",
-                Filter = "Image Files (PNG)|*.png"
-            };
-
-            dialog.ShowDialog();
-            imageFilePaths = dialog.FileNames;
-        }
-
         public void ImportSprites()
         {
-            Console.WriteLine("Fixing Image Names");
-            Thread t = new Thread(() => ImportIMGThread());
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-
-            while (t.IsAlive) Thread.Sleep(1000);
+            List<string> filePaths = FileImportManager.ReadMultipleFilePaths();
 
             try
             {
                 Console.WriteLine("Enter the starting number: ");
                 int sNum = int.Parse(Console.ReadLine());
 
-                string[] name = imageFilePaths[0].Split('\\');
+                string[] name = filePaths[0].Split('\\');
 
                 string text = string.Join("/", name.ToList().GetRange(0, name.Length - 1));
 
-                foreach (string imgFilePath in imageFilePaths)
+                foreach (string imgFilePath in filePaths)
                 {
                     try
                     {
                         File.Move(imgFilePath, text + "/" + sNum++ + ".png");
+                        Console.WriteLine($"File: {imgFilePath} was moved");
                     }
                     catch
                     {
-
+                        Console.WriteLine($"File: {imgFilePath} could not be moved");
                     }
                 }
 

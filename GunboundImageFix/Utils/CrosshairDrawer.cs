@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
 using GunboundImageProcessing.ImageUtils;
 using Openbound_Network_Object_Library.Entity;
 using System;
@@ -23,11 +24,11 @@ namespace GunboundImageFix.Utils
     {
         public static void DrawCrosshairs()
         {
-            Bitmap image = new Bitmap($@"{Common.Directory}\Files\crosshair.png");
+            Bitmap image = new Bitmap($@"{Parameters.BaseDirectory}\Files\crosshair.png");
             Color[][] cMatrix = ImageProcessing.CreateBlankColorMatrix(83, 83);
             ImageProcessing.AddImageIntoMatrix(cMatrix, image, 0, 0);
             cMatrix = ImageProcessing.Flip(cMatrix, true, false);
-            ImageProcessing.CreateImage(cMatrix).Save($@"{Common.Directory}\\Output\\Crosshair\\CrosshairFrame.png");
+            ImageProcessing.CreateImage(cMatrix).Save($@"{Parameters.BaseDirectory}\\Output\\Crosshair\\CrosshairFrame.png");
 
             foreach (KeyValuePair<MobileType, Dictionary<ShotType, AimPreset>> kvp in MobileMetadata.AimPresets)
             {
@@ -39,18 +40,18 @@ namespace GunboundImageFix.Utils
                         kvp2.Value.AimFalseRotationMin,
                         kvp2.Value.AimFalseRotationMax,
                         true);
-                    ImageProcessing.CreateImage(cMatrix).Save($@"{Common.Directory}\\Output\\Crosshair\\{kvp.Key}{kvp2.Key}Ally.png");
+                    ImageProcessing.CreateImage(cMatrix).Save($@"{Parameters.BaseDirectory}\\Output\\Crosshair\\{kvp.Key}{kvp2.Key}Ally.png");
 
                     cMatrix = DrawCrosshair(
                         kvp2.Value.AimTrueRotationMin, kvp2.Value.AimTrueRotationMax,
                         kvp2.Value.AimFalseRotationMin, kvp2.Value.AimFalseRotationMax,
                         false);
 
-                    ImageProcessing.CreateImage(cMatrix).Save($@"{Common.Directory}\\Output\\Crosshair\\{kvp.Key}{kvp2.Key}Enemy.png");
+                    ImageProcessing.CreateImage(cMatrix).Save($@"{Parameters.BaseDirectory}\\Output\\Crosshair\\{kvp.Key}{kvp2.Key}Enemy.png");
                 }
             }
 
-            Process.Start($@"{Common.Directory}\\Output\\Crosshair");
+            Process.Start($@"{Parameters.BaseDirectory}\\Output\\Crosshair");
         }
 
         private static Color[][] DrawCrosshair(int startingAngle, int endingAngle, int startingFadedAngle, int endingFadedAngle, bool IsAlly = true)

@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Common;
 using ImgTools;
 using System;
 using System.Collections.Generic;
@@ -26,30 +27,11 @@ namespace GunboundImageFix.Utils
 {
     class XTFCracker
     {
-        static string[] imageFilePaths;
-
-        [STAThread]
-        public static void ImportIMGThread()
-        {
-            Console.WriteLine("\n\nImporting Sprites...");
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = true;
-            dialog.InitialDirectory = Common.Directory + @"Input";
-            dialog.Filter = "Image Files (xtf)|*.xtf;";
-            dialog.ShowDialog();
-            imageFilePaths = dialog.FileNames;
-        }
-
         public static void Crack()
         {
-            Console.WriteLine("Importing IMG Files");
-            Thread t = new Thread(() => ImportIMGThread());
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+            Console.WriteLine("Importing xtf Files");
 
-            while (t.IsAlive) Thread.Sleep(100);
-
-            foreach (string file in imageFilePaths)
+            foreach (string file in FileImportManager.ReadMultipleXTFFiles())
             {
                 Console.WriteLine(file);
 
@@ -84,7 +66,7 @@ namespace GunboundImageFix.Utils
                     image.SetPixel(width % imageWidth, width / imageWidth, Color.FromArgb((byte)alpha, (byte)red, (byte)green, (byte)blue));
                 }
 
-                image.Save($@"C:\Users\Carlos\Desktop\Sample\Imported\{file.Split('\\').Last().Split('.')[0]}.png");
+                image.Save($@"{Parameters.TextureOutputDirectory}{file.Split('\\').Last().Split('.')[0]}.png");
             }
         }
 

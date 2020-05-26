@@ -141,6 +141,7 @@ Legend:
    - [Testing] There is a slightly improbable chance of a projectile deal different damage on different clients.
    - Weather animations are not fps proof. A laggy player can have different wind settings.
    - Maximum resolution can not be greater than 1600 width OR 1600 height.
+   - Tactical map offset can be bigger than 
 
 2. Server
    - There is no verification check on teams equality when a game is being started (INTENDED).

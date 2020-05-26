@@ -51,7 +51,7 @@ namespace GunboundImageFix.Utils
             for (int i = 0; i < wingedList.Count; i++)
             {
                 Console.WriteLine("\nComparing: " + wickedStrList[i].Split('\\').Last() + " with " + wingedStrList[i].Split('\\').Last());
-                ImageProcessing.CompareImages(wickedList[i], wingedList[i], int.Parse(wickedStrList[i].Split(' ').Last().Replace(".png", "")));
+                //ImageProcessing.CompareImages(wickedList[i], wingedList[i], int.Parse(wickedStrList[i].Split(' ').Last().Replace(".png", "")));
             }
         }
     }

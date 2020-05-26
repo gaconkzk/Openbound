@@ -142,6 +142,34 @@ namespace GunboundImageProcessing.ImageUtils
             return isEqual;
         }
 
+        public static void CompareImages(Bitmap bitmap1, Bitmap bitmap2, string path)
+        {
+            int ocurrences = 0;
+            for (int i = 0; i < bitmap1.Width; i++)
+            {
+                for (int j = 0; j < bitmap2.Height; j++)
+                {
+                    Color b1 = bitmap1.GetPixel(i, j);
+                    Color b2 = bitmap2.GetPixel(i, j);
+
+                    if (!(b1.R == b2.R && b1.B == b2.B &&
+                          b1.G == b2.G && b1.A == b2.A))
+                    {
+                        ocurrences++;
+                        bitmap2.SetPixel(i, j, Color.FromArgb(255, 0, 0));
+                    }
+                }
+            }
+
+            Console.WriteLine($"The comparison process has found {ocurrences} ocurrences.");
+
+            if (ocurrences > 0)
+            {
+                Console.WriteLine($"File exported at: {path}");
+                bitmap2.Save(path);
+            }
+        }
+
         public static void CompareImages(Bitmap bitmap1, Bitmap bitmap2, int imageIndex)
         {
             int ocurrences = 0;
