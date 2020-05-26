@@ -175,6 +175,44 @@ namespace GunboundImageFix.Common
         }
 
         /// <summary>
+        /// Reads a pivot file and return its lines as a List of integer arrays
+        /// </summary>
+        /// <returns></returns>
+        public static List<int[]> ReadPivotFile()
+        {
+            string fileName = "";
+            Thread t = new Thread(() =>
+            {
+                Console.WriteLine("Importing Images...");
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Parameters.OutputDirectory;
+                dialog.Filter = "Text Files (txt)|*.txt;";
+                dialog.ShowDialog();
+                fileName = dialog.FileName;
+            });
+
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
+            while (t.IsAlive)
+            {
+                Thread.Sleep(50);
+            }
+
+            List<int[]> fileContent = new List<int[]>();
+
+            File.ReadAllLines(fileName).ToList().ForEach((x) =>
+            {
+                string[] line = x.Split(',');
+
+                if (line.Count() == 3)
+                    fileContent.Add(new int[] { int.Parse(line[0]), int.Parse(line[1]), int.Parse(line[2]) });
+            });
+
+            return fileContent;
+        }
+
+        /// <summary>
         /// Reads multiple image files (.png) and its pivot file (.txt). All files must be selected at once.
         /// </summary>
         /// <returns></returns>

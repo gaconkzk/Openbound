@@ -40,14 +40,15 @@ namespace GunboundImageFix
 
                 Console.WriteLine("\nFile manipulation");
                 Console.WriteLine("8 - Name Fixer.");
+                Console.WriteLine("9 - Pivot Offset Fixer");
 
                 Console.WriteLine("\nDecrypt/Cypher");
-                Console.WriteLine("9 - XTF Crack");
+                Console.WriteLine("0 - XTF Crack");
 
                 Console.WriteLine("\nCreate Assets");
-                Console.WriteLine("0 - Crosshair Drawer");
-                Console.WriteLine("a - Mobile Buttons");
-                Console.WriteLine("b - Create Minimap Tumbnails");
+                Console.WriteLine("a - Crosshair Drawer");
+                Console.WriteLine("b - Mobile Buttons");
+                Console.WriteLine("c - Create Minimap Tumbnails");
 
 
                 try
@@ -84,16 +85,20 @@ namespace GunboundImageFix
                             new FileNameFixer().ImportSprites();
                             break;
                         case '9':
-                            XTFCracker.Crack();
+                            PivotFileManager.FixPivotFile();
                             break;
 
                         case '0':
+                            XTFCracker.Crack();
+                            break;
+
+                        case 'a':
                             CrosshairDrawer.DrawCrosshairs();
                             break;
-                        case 'a':
+                        case 'b':
                             new AssetMaker().CreateButton();
                             break;
-                        case 'b':
+                        case 'c':
                             MinimapThumbGenerator.GenerateButtonThumbnails();
                             break;
 
