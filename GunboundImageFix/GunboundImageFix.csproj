@@ -130,7 +130,7 @@
     <Compile Include="Utils\SpriteImportManager.cs" />
     <Compile Include="Utils\MultiLayerSpritesheetMaker.cs" />
     <Compile Include="Utils\SingleLayerSpritesheetMaker.cs" />
-    <Compile Include="Utils\SpriteSheetMaker3.cs" />
+    <Compile Include="Utils\SimpleSpritesheetMaker.cs" />
     <Compile Include="Utils\XTFCracker.cs" />
   </ItemGroup>
   <ItemGroup>
