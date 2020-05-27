@@ -17,7 +17,6 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Interface.Popup;
-using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Security;
@@ -26,7 +25,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Openbound_Network_Object_Library.Models;
 
-namespace OpenBound.GameComponents.Level.Scene.Menu
+namespace OpenBound.GameComponents.Level.Scene
 {
     public class DebugScene : LevelScene
     {
@@ -60,7 +59,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Turtle,
+                    PrimaryMobile = MobileType.Trico,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -336,7 +335,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             mFlipbook = new List<MobileFlipbook>();
 
             for (int k = 0; k < 21; k++)
-                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Turtle, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
+                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Trico, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
 
             int i = 0;
 

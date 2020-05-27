@@ -135,6 +135,18 @@ namespace OpenBound.GameComponents.Interface
                     }
                 },
                 #endregion
+                #region Trico
+                {
+                    MobileType.Trico,
+                    new Dictionary<ShotType, CrosshairPreset>()
+                    {
+                        {
+                            ShotType.S1,
+                            new CrosshairPreset() { CannonOffsetDistance = -28, CannonOffsetRotation = MathHelper.ToRadians(40), CrosshairPointerOffset = 29f }
+                        },
+                    }
+                },
+                #endregion
                 #region Turtle
                 {
                     MobileType.Turtle,
