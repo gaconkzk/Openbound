@@ -49,7 +49,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 CrosshairAngle = 10,
                 Delay = 500,
                 //Facing = Facing.Left,
-                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Ice),
+                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Lightning),
                 Owner = new Player()
                 {
                     CharacterGender = Gender.Feminine,
@@ -59,7 +59,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Trico,
+                    PrimaryMobile = MobileType.Lightning,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -335,7 +335,7 @@ namespace OpenBound.GameComponents.Level.Scene
             mFlipbook = new List<MobileFlipbook>();
 
             for (int k = 0; k < 21; k++)
-                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Trico, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
+                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Lightning, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
 
             int i = 0;
 
