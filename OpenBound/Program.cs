@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
-using OpenBound.GameComponents.Level.Scene.Menu;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.Launcher;
 using OpenBound.ServerCommunication;
 using System;

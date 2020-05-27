@@ -134,7 +134,7 @@ namespace GunboundImageProcessing.ImageUtils
             {
                 for (int h = 0; h < bmp1.Height; h++)
                 {
-                    Color c1 = bmp2.GetPixel(w, h);
+                    Color c1 = bmp1.GetPixel(w, h);
                     Color c2 = bmp2.GetPixel(w, h);
                     isEqual = isEqual && c1.R == c2.R && c1.G == c2.G && c1.B == c2.B && c1.A == c2.A;
                 }

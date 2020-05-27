@@ -304,6 +304,47 @@ namespace OpenBound.GameComponents.Animation
                 }
             },
             #endregion
+            #region Trico
+            {
+                MobileType.Trico,
+                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                {
+                    //Done
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 070, EndingFrame = 084, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 190, EndingFrame = 209, TimePerFrame = 1/18f } },
+
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 145, EndingFrame = 159, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 210, EndingFrame = 229, TimePerFrame = 1/17f } },
+
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 160, EndingFrame = 174, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
+                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
+
+                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/24f } },
+                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 334, EndingFrame = 358, TimePerFrame = 1/24f } },
+                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 230, EndingFrame = 244, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 137, EndingFrame = 137, TimePerFrame = 1f } },
+
+                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 055, EndingFrame = 069, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/26f } },
+
+                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 263, EndingFrame = 276, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 278, EndingFrame = 293, TimePerFrame = 1/20f } },
+
+                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 245, EndingFrame = 262, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 189, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 294, EndingFrame = 308, TimePerFrame = 1/18f } },
+
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 415, TimePerFrame = 1/18f } },
+                }
+            },
+            #endregion
             #region Turtle
             {
                 MobileType.Turtle,
@@ -419,6 +460,11 @@ namespace OpenBound.GameComponents.Animation
                 case MobileType.Knight:
                     mb.Flipbook = Flipbook.CreateFlipbook(
                         Position, new Vector2(59, 88), 2160 / 20, 2413 / 19, spritePath,
+                        new AnimationInstance(), true, DepthParameter.Mobile);
+                    break;
+                case MobileType.Trico:
+                    mb.Flipbook = Flipbook.CreateFlipbook(
+                        Position, new Vector2(65, 80), 2360 / 20, 2730 / 21, spritePath,
                         new AnimationInstance(), true, DepthParameter.Mobile);
                     break;
                 case MobileType.Turtle:
