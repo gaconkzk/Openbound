@@ -300,8 +300,8 @@
     <Content Include="Content\Audio\SFX\Tank\Shoot\TurtleS1.mp3" />
     <Content Include="Content\Audio\SFX\Tank\Shoot\TurtleS2.mp3" />
     <Content Include="Content\Audio\SFX\Tank\Shoot\TurtleSS.mp3" />
-    <Content Include="Content\DebugObjects\DebugCrosshair.png" />
-    <Content Include="Content\DebugObjects\DebugDot.png" />
+    <Content Include="Content\Debug\DebugCrosshair.png" />
+    <Content Include="Content\Debug\DebugDot.png" />
     <Content Include="Content\Graphics\Maps\Metamine\Background.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation1.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation2.png" />
