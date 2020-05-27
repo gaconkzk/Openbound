@@ -17,11 +17,23 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
+    public class TricoProjectileEmitter
+    {
+        public static void Shot2(Trico mobile)
+        {
+            float angleModifier = mobile.Facing == Facing.Left ? -1 : 1;
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2( 35, 0), angleModifier));
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, Vector2.Zero,        angleModifier));
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2(-35, 0), angleModifier));
+        }
+    }
+
     public class TricoProjectile1 : Projectile
     {
         public TricoProjectile1(Trico mobile)
@@ -39,6 +51,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS1Mass;
             windInfluence = Parameter.ProjectileTricoS1WindInfluence;
+
+            SpawnTime = 0.7;
         }
 
         protected override void Explode()
@@ -67,10 +81,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16, 16),
                 32, 32, "Graphics/Tank/Trico/Bullet2",
-                new List<AnimationInstance>() {
-                    new AnimationInstance()
-                    { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile));
+
+            FlipbookList[0].SetTransparency(0);
         }
 
         protected override void Explode()
@@ -80,40 +93,55 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
     }
 
-    public class TricoDummyProjectile2 : DummyProjectile
+    public class TricoBaseProjectile2 : DummyProjectile
     {
         TricoProjectile2 projectile;
-        float angleOffset;
+
+        float angleModifier;
         float rotationAngle;
+        float offsetFactor;
         Vector2 offset;
-        
-        public TricoDummyProjectile2(Trico mobile, float angleOffset)
+
+        public TricoBaseProjectile2(Trico mobile, Vector2 positionOffset, float angleModifier)
             : base(mobile, ShotType.S2, 0, 0, canCollide: false)
         {
             projectile = new TricoProjectile2(mobile);
 
-            this.angleOffset = angleOffset;
             rotationAngle = 0;
-            offset = new Vector2(20, 0);
+            offset = positionOffset;
+            this.angleModifier = angleModifier;
+
+            SpawnTime = 0.7f;
+            offsetFactor = 0;
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS2Mass;
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
         }
 
-        public override void Update()
+        public override void OnSpawn()
         {
-            base.Update();
+            base.OnSpawn();
+            projectile.FlipbookList[0].SetTransparency(1);
+        }
 
+        protected override void UpdatePosition()
+        {
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
+                offsetFactor = MathHelper.Min(offsetFactor + Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
+
+                base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
 
                 rotationAngle += Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
-                
-                projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset, Matrix.CreateRotationZ(angleOffset + rotationAngle));
+
+                projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset * offsetFactor, Matrix.CreateRotationZ(rotationAngle * angleModifier));
+
                 if (projectile.UpdateCollider(projectile.FlipbookList[0].Position))
+                {
                     Destroy();
+                    break;
+                }
             }
         }
 
@@ -179,7 +207,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mass = Parameter.ProjectileArmorSSMass;
             windInfluence = Parameter.ProjectileArmorSSWindInfluence;
 
-            SpawnTime = 0.7;
+            SpawnTime = 1;
         }
 
         protected override void UpdatePosition()

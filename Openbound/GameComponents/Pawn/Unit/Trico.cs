@@ -43,7 +43,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
             if (SelectedShotType == ShotType.S1)
                 LastCreatedProjectileList.Add(new TricoProjectile1(this));
             else if (SelectedShotType == ShotType.S2)
-                LastCreatedProjectileList.Add(new TricoDummyProjectile2(this, 0));
+                TricoProjectileEmitter.Shot2(this);
             //else if (SelectedShotType == ShotType.SS)
               //  LastCreatedProjectileList.Add(new IceProjectile3(this));
                 
