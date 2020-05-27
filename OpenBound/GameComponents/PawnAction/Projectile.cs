@@ -197,20 +197,25 @@ namespace OpenBound.GameComponents.PawnAction
             //Interpolate Movement for collision
             for (float elapsedTime = 0; elapsedTime < Parameter.ProjectileMovementTotalTimeElapsed; elapsedTime += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                yMovement.RefreshCurrentPosition(Parameter.ProjectileMovementTimeElapsedPerInteraction);
-                xMovement.RefreshCurrentPosition(Parameter.ProjectileMovementTimeElapsedPerInteraction);
+                UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
 
-                Vector2 newPosition = projectileInitialPosition + new Vector2(xMovement.CurrentPosition, yMovement.CurrentPosition);
-
-                //Update all projectile list related to the new position
-                FlipbookList.ForEach((x) => x.Position = newPosition);
-
-                if (CheckOutOfBounds(newPosition) || UpdateCollider(newPosition)) break;
+                if (CheckOutOfBounds(Position) || UpdateCollider(Position)) break;
             }
 
 #if Debug
             debugCrosshair.Update(FlipbookList[0].Position);
 #endif
+        }
+
+        protected virtual void UpdateMovementIteraction(float timeElapsedPerIteraction)
+        {
+            yMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
+            xMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
+
+            Vector2 newPosition = projectileInitialPosition + new Vector2(xMovement.CurrentPosition, yMovement.CurrentPosition);
+
+            //Update all projectile list related to the new position
+            FlipbookList.ForEach((x) => x.Position = newPosition);
         }
 
         public virtual bool CheckOutOfBounds(Vector2 position)

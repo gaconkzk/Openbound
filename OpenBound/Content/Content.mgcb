@@ -1033,7 +1033,7 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Shoot/TurtleSS.mp3
 
-#begin Debug/DebugCrosshair.png
+#begin DebugObjects/DebugCrosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1043,9 +1043,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Debug/DebugCrosshair.png
+/build:DebugObjects/DebugCrosshair.png
 
-#begin Debug/DebugDot.png
+#begin DebugObjects/DebugDot.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1055,7 +1055,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Debug/DebugDot.png
+/build:DebugObjects/DebugDot.png
 
 #begin Fonts/Arial12.spritefont
 /importer:FontDescriptionImporter

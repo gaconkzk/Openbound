@@ -345,6 +345,29 @@ namespace OpenBound.Common
         public const float ProjectileKnightS2WindInfluence = 1.4f;
         public const float ProjectileKnightSSWindInfluence = 1.4f;
 
+        //Trico
+        public const int ProjectileTricoS1ExplosionRadius = 25;
+        public const int ProjectileTricoS2ExplosionRadius = 25;
+        public const int ProjectileTricoS2EExplosionRadius = 20;
+        public const int ProjectileTricoSSExplosionRadius = 25;
+        public const int ProjectileTricoSSEExplosionRadius = 25;
+
+        public const int ProjectileTricoS1BaseDamage = 150;
+        public const int ProjectileTricoS2BaseDamage = 200;
+        public const int ProjectileTricoS2EBaseDamage = 80;
+        public const int ProjectileTricoSSBaseDamage = 150;
+        public const int ProjectileTricoSSEBaseDamage = 300;
+
+        public const float ProjectileTricoS1Mass = 10f;
+        public const float ProjectileTricoS2Mass = 10f;
+        public const float ProjectileTricoSSMass = 10f;
+
+        public const float ProjectileTricoS1WindInfluence = 1.2f;
+        public const float ProjectileTricoS2WindInfluence = 1.2f;
+        public const float ProjectileTricoSSWindInfluence = 1.2f;
+
+        public const float ProjectileTricoSSTransformTime = 2f;
+
         //Turtle
         public const int ProjectileTurtleS1ExplosionRadius = 25;
         public const int ProjectileTurtleS2ExplosionRadius = 25;
