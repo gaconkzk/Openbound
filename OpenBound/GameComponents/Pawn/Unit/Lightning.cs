@@ -50,14 +50,13 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
         protected override void Shoot()
         {
-            /*
             if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new TurtleProjectile1(this));
+                LastCreatedProjectileList.Add(new LightningProjectile1(this));
             else if (SelectedShotType == ShotType.S2)
-                TurtleProjectileEmitter.Shot2(this);
+                LastCreatedProjectileList.Add(new LightningProjectile2(this));
             else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new TurtleProjectile3(this));
-            */
+                LastCreatedProjectileList.Add(new LightningProjectile3(this));
+
             base.Shoot();
         }
     }

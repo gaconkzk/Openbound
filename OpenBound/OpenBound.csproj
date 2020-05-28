@@ -688,6 +688,7 @@
     <Compile Include="GameComponents\Pawn\Local\LocalMovement.cs" />
     <Compile Include="GameComponents\Pawn\Remote\RemoteMovement.cs" />
     <Compile Include="GameComponents\Pawn\Rider.cs" />
+    <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\TricoProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ArmorProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\DragonProjectile.cs" />

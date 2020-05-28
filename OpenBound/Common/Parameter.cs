@@ -397,6 +397,24 @@ namespace OpenBound.Common
         public const float ProjectileTurtleSSAngleOffsetDegrees = 3;
         public const float ProjectileTurtleSSBubbleNumber = 6;
         public const float ProjectileTurtleSSDampeningFactor = 3f;
+
+
+        //Lightning
+        public const int ProjectileLightningS1ExplosionRadius = 25;
+        public const int ProjectileLightningS2ExplosionRadius = 25;
+        public const int ProjectileLightningSSExplosionRadius = 25;
+
+        public const int ProjectileLightningS1BaseDamage = 150;
+        public const int ProjectileLightningS2BaseDamage = 200;
+        public const int ProjectileLightningSSBaseDamage = 300;
+
+        public const float ProjectileLightningS1Mass = 14f;
+        public const float ProjectileLightningS2Mass = 14f;
+        public const float ProjectileLightningSSMass = 14f;
+
+        public const float ProjectileLightningS1WindInfluence = 1.2f;
+        public const float ProjectileLightningS2WindInfluence = 1.2f;
+        public const float ProjectileLightningSSWindInfluence = 1.2f;
         #endregion
     }
 }
