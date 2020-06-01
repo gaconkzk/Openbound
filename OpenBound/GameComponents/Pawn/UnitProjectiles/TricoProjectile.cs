@@ -17,11 +17,23 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
+    public class TricoProjectileEmitter
+    {
+        public static void Shot2(Trico mobile)
+        {
+            float angleModifier = mobile.Facing == Facing.Left ? -1 : 1;
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2( 35, 0), angleModifier));
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, Vector2.Zero,        angleModifier));
+            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2(-35, 0), angleModifier));
+        }
+    }
+
     public class TricoProjectile1 : Projectile
     {
         public TricoProjectile1(Trico mobile)
@@ -39,12 +51,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS1Mass;
             windInfluence = Parameter.ProjectileTricoS1WindInfluence;
+
+            SpawnTime = 0.7;
         }
 
         protected override void Explode()
         {
             base.Explode();
-            //SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.TricoProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
 
         protected override void Destroy()
@@ -67,64 +81,76 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16, 16),
                 32, 32, "Graphics/Tank/Trico/Bullet2",
-                new List<AnimationInstance>() {
-                    new AnimationInstance()
-                    { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile));
+
+            FlipbookList[0].SetTransparency(0);
         }
 
         protected override void Explode()
         {
             base.Explode();
-            //SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.TricoProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
     }
 
-    public class TricoDummyProjectile2 : DummyProjectile
+    public class TricoBaseProjectile2 : DummyProjectile
     {
         TricoProjectile2 projectile;
-        float angleOffset;
+
+        float angleModifier;
         float rotationAngle;
+        float offsetFactor;
         Vector2 offset;
-        
-        public TricoDummyProjectile2(Trico mobile, float angleOffset)
+
+        public TricoBaseProjectile2(Trico mobile, Vector2 positionOffset, float angleModifier)
             : base(mobile, ShotType.S2, 0, 0, canCollide: false)
         {
             projectile = new TricoProjectile2(mobile);
 
-            this.angleOffset = angleOffset;
             rotationAngle = 0;
-            offset = new Vector2(20, 0);
+            offset = positionOffset;
+            this.angleModifier = angleModifier;
+
+            SpawnTime = 0.7f;
+            offsetFactor = 0;
+
+            projectile.OnFinalizeExecution = OnFinalizeExecution;
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS2Mass;
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
         }
 
-        public override void Update()
+        public override void OnSpawn()
         {
-            base.Update();
-
-            for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
-            {
-                UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
-
-                rotationAngle += Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
-                
-                projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset, Matrix.CreateRotationZ(angleOffset + rotationAngle));
-                if (projectile.UpdateCollider(projectile.FlipbookList[0].Position))
-                    Destroy();
-            }
+            base.OnSpawn();
+            projectile.FlipbookList[0].SetTransparency(1);
         }
 
-        protected override void Destroy()
+        protected override void UpdateRotation()
         {
-            base.Destroy();
+            base.UpdateRotation();
+            projectile.FlipbookList[0].Rotation = FlipbookList[0].Rotation;
+        }
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+        protected override void UpdatePosition()
+        {
+            for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
+            {
+                offsetFactor = MathHelper.Min(offsetFactor + Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
 
-            if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
+
+                rotationAngle += Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
+
+                projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset * offsetFactor, Matrix.CreateRotationZ(rotationAngle * angleModifier));
+
+                if (projectile.CheckOutOfBounds(projectile.FlipbookList[0].Position) || projectile.UpdateCollider(projectile.FlipbookList[0].Position))
+                {
+                    Destroy();
+                    break;
+                }
+            }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -136,97 +162,97 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class TricoProjectile3 : Projectile
     {
-        ProjectileAnimation rocketAnimation;
+        Vector2 baseCoordinate;
+        bool hasExploded;
+        float explosionTimer;
+        float rotationExplosionOffset;
+        float baseRotation;
+        int explosions;
 
-        public Dictionary<ProjectileAnimation, AnimationInstance> rocketAnimationPresets
-            = new Dictionary<ProjectileAnimation, AnimationInstance>()
-            {
-                {
-                    ProjectileAnimation.Closed,
-                    new AnimationInstance()
-                    { StartingFrame = 0, EndingFrame = 10, TimePerFrame = 1 / 20f }
-                },
-                {
-                    ProjectileAnimation.Opening,
-                    new AnimationInstance()
-                    { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 15f }
-                },
-                {
-                    ProjectileAnimation.Opened,
-                    new AnimationInstance()
-                    { StartingFrame = 22, EndingFrame = 31, TimePerFrame = 1 / 20f }
-                }
-            };
-
-        float totalTravelledTime;
-
-        public TricoProjectile3(Armor mobile)
-            : base(mobile, ShotType.SS, Parameter.ProjectileArmorSSExplosionRadius, Parameter.ProjectileArmorSSBaseDamage)
+        public TricoProjectile3(Trico mobile)
+            : base(mobile, ShotType.SS, Parameter.ProjectileTricoSSExplosionRadius, Parameter.ProjectileTricoSSBaseDamage)
         {
             this.mobile = mobile;
 
-            rocketAnimation = ProjectileAnimation.Closed;
-            totalTravelledTime = 0;
+            rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
-                mobile.Crosshair.CannonPosition, new Vector2(65, 54),
-                131, 109, "Graphics/Tank/Trico/Bullet3",
-                new List<AnimationInstance>() { rocketAnimationPresets[rocketAnimation] },
+                mobile.Crosshair.CannonPosition, new Vector2(40, 17),
+                66, 36, "Graphics/Tank/Trico/Bullet3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1/19f },
                 true, DepthParameter.Projectile));
 
-            //Physics/Trajectory setups
-            mass = Parameter.ProjectileArmorSSMass;
-            windInfluence = Parameter.ProjectileArmorSSWindInfluence;
+            hasExploded = false;
+            explosionTimer = 0;
 
-            SpawnTime = 0.7;
+            //Physics/Trajectory setups
+            mass = Parameter.ProjectileTricoSSMass;
+            windInfluence = Parameter.ProjectileTricoSSWindInfluence;
+
+            SpawnTime = 0.5f;
         }
 
         protected override void UpdatePosition()
-        {
-            switch (rocketAnimation)
+        {       
+            //Interpolate Movement for collision
+            for (float elapsedTime = 0; elapsedTime < Parameter.ProjectileMovementTotalTimeElapsed; elapsedTime += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                case ProjectileAnimation.Closed:
-                    if (totalTravelledTime < Parameter.ProjectileArmorSSTransformTime)
-                    {
-                        totalTravelledTime += Parameter.ProjectileMovementTotalTimeElapsed;
-                        base.UpdatePosition();
-                    }
-                    else
-                    {
-                        rocketAnimation = ProjectileAnimation.Opening;
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opening], true);
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opened]);
-                        BaseDamage = Parameter.ProjectileArmorSSExplosionRadius;
-                        ExplosionRadius = Parameter.ProjectileArmorSSEExplosionRadius;
-                    }
+                if (!hasExploded)
+                    UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
+
+                if (CheckOutOfBounds(Position))
                     break;
-                case ProjectileAnimation.Opening:
-                    if (FlipbookList[0].CurrentAnimationInstance == rocketAnimationPresets[ProjectileAnimation.Opened])
+                
+                if (hasExploded || UpdateCollider(Position))
+                {
+                    if (!hasExploded)
                     {
-                        rocketAnimation = ProjectileAnimation.Opened;
+                        hasExploded = true;
+                        baseCoordinate = Position;
+                        baseRotation = FlipbookList[0].Rotation;
+                        SpecialEffectBuilder.TricoProjectile3Explosion(FlipbookList[0].Position);
+                        FlipbookList[0].SetTransparency(0);
                     }
-                    break;
-                case ProjectileAnimation.Opened:
-                    base.UpdatePosition();
-                    break;
+
+                    if ((explosionTimer += Parameter.ProjectileMovementTimeElapsedPerInteraction) > Parameter.ProjectileTricoSSExtraBlastTime)
+                    {
+                        explosionTimer = 0;
+
+                        FlipbookList[0].Position = baseCoordinate +
+                            Vector2.Transform(
+                                Parameter.ProjectileTricoSSExplosionOffset,
+                                Matrix.CreateRotationZ(
+                                    baseRotation + explosions * (explosions % 2 == 0 ? 1 : -1) * Parameter.ProjectileTricoSSRotationOffset * rotationExplosionOffset));
+                        
+                        explosions++;
+                        Explode();
+                    }
+                }
             }
+
+#if Debug
+            debugCrosshair.Update(FlipbookList[0].Position);
+#endif
         }
 
-        protected override void Explode()
+        protected override void OutofboundsDestroy()
         {
-            SpecialEffectBuilder.ArmorProjectile3Explosion(FlipbookList[0].Position);
-            base.Explode();
+            explosions = Parameter.ProjectileTricoSSNumberOfExplosions;
+            base.OutofboundsDestroy();
         }
 
         protected override void Destroy()
         {
-            base.Destroy();
+            if (explosions >= Parameter.ProjectileTricoSSNumberOfExplosions)
+            {
+                base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+                List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
-            if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                if (pjList.Count() == 0)
+                    OnFinalizeExecution?.Invoke();
+            }
         }
     }
 }

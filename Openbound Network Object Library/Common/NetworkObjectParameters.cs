@@ -97,7 +97,7 @@ namespace Openbound_Network_Object_Library.Common
         public static readonly Random Random = new Random(RandomSeed);
 
         //Game Constants
-        public static List<MobileType> ImplementedMobileList = new List<MobileType>() { MobileType.Armor, MobileType.Bigfoot, MobileType.Dragon, MobileType.Ice, MobileType.Knight, MobileType.Mage, MobileType.Random, MobileType.Turtle };
+        public static List<MobileType> ImplementedMobileList = new List<MobileType>() { MobileType.Armor, MobileType.Bigfoot, MobileType.Dragon, MobileType.Ice, MobileType.Knight, MobileType.Mage, MobileType.Random, MobileType.Trico, MobileType.Turtle };
 
         //Game Constants - Weather
         public const int WeatherMinimumWindForce = 0;

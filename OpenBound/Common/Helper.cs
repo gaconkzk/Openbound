@@ -54,5 +54,19 @@ namespace OpenBound.Common
             Vector2 c = a - b;
             return Math.Sqrt(c.X * c.X + c.Y * c.Y);
         }
+
+        public static float EuclideanDistance(float xA, float yA, float xB, float yB)
+        {
+            float x = xA - xB;
+            float y = yA - yB;
+            return (float)Math.Sqrt(x * x + y * y);
+        }
+
+        public static float SquaredEuclideanDistance(float xA, float yA, float xB, float yB)
+        {
+            float x = xA - xB;
+            float y = yA - yB;
+            return x * x + y * y;
+        }
     }
 }

@@ -366,10 +366,14 @@ namespace OpenBound.Common
         public const float ProjectileTricoS2WindInfluence = 1.2f;
         public const float ProjectileTricoSSWindInfluence = 1.2f;
 
-        public const float ProjectileTricoSSTransformTime = 2f;
+        public const float ProjectileTricoSSExtraBlastTime = 0.1f;
+        public const int ProjectileTricoSSNumberOfExplosionsFactor = 45;
+        public const int ProjectileTricoSSNumberOfExplosions = 360 / ProjectileTricoSSNumberOfExplosionsFactor;
+        public static float ProjectileTricoSSRotationOffset = MathHelper.ToRadians(ProjectileTricoSSNumberOfExplosionsFactor);
+        public static Vector2 ProjectileTricoSSExplosionOffset = new Vector2(20, 0);
 
         //Turtle
-        public const int ProjectileTurtleS1ExplosionRadius = 25;
+        public const int ProjectileTurtleS1ExplosionRadius = 250;
         public const int ProjectileTurtleS2ExplosionRadius = 25;
         public const int ProjectileTurtleS2EExplosionRadius = 20;
         public const int ProjectileTurtleSSExplosionRadius = 25;
