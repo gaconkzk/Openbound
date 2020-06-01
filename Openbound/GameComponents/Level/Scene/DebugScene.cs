@@ -59,7 +59,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Trico,
+                    PrimaryMobile = MobileType.Turtle,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -284,7 +284,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 TeamA = new List<Player>() { sMobList[0].Owner, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner },
                 TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
-            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine);
+            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Dragon);
         }
 
 

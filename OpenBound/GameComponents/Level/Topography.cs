@@ -22,6 +22,9 @@ namespace OpenBound.GameComponents.Level
         public static bool[][] CollidableForegroundMatrix { get; protected set; }
         private static Color[][] StageMatrix;
 
+        public static int MapHeight => CollidableForegroundMatrix.Length;
+        public static int MapWidth => CollidableForegroundMatrix[0].Length;
+
         //Object Reference
         private static Sprite foreground;
 
@@ -55,37 +58,38 @@ namespace OpenBound.GameComponents.Level
             int startingIndexY = MathHelper.Clamp(pos[1] - (int)blastRadius, 0, StageMatrix.Length);
             int endingIndexY = MathHelper.Clamp(pos[1] + (int)blastRadius + 1, 0, StageMatrix.Length);
 
-            Color[][] StageMatrixSlice = StageMatrix.ExtractMatrixSlice(startingIndexX, endingIndexX, startingIndexY, endingIndexY);
-            bool[][] CollisionMatrixSlice = CollidableForegroundMatrix.ExtractMatrixSlice(startingIndexX, endingIndexX, startingIndexY, endingIndexY);
-
-            StageMatrixSlice.RadiusBasedMap(
-                StageMatrixSlice[0].Length / 2,
-                StageMatrixSlice.Length / 2,
-                (int)blastRadius,
-                (Color a) => (a.A == 255),
-                (pixelColor) => pixelColor.MultiplyByFactor(Parameter.BlastBlackmaskExplosionRadiusColorFactor));
-
             int numberOfRemovedPixels = 0;
 
-            StageMatrixSlice.RadiusBasedMap(
-                StageMatrixSlice[0].Length / 2,
-                StageMatrixSlice.Length / 2,
-                (int)Radius,
-                (a) => true,
-                (c) => { if (c != Color.Transparent) numberOfRemovedPixels++; return Color.Transparent; });
+            for (int h = startingIndexY; h < endingIndexY; h++)
+            {
+                for(int w = startingIndexX; w < endingIndexX; w++)
+                {
+                    //Using Squared euclidean to prevent SQRT method
+                    float calculatedDistance = Helper.SquaredEuclideanDistance(pos[0], pos[1], w, h);
 
-            CollisionMatrixSlice.RadiusBasedMap(
-                StageMatrixSlice[0].Length / 2,
-                StageMatrixSlice.Length / 2,
-                (int)blastRadius,
-                (a) => true,
-                (b) => false);
+                    //If it the explosion is able to generate black mask
+                    if (calculatedDistance <= blastRadius * blastRadius)
+                    {
+                        //If the explosion is able to open holes
+                        if (calculatedDistance <= Radius * Radius)
+                        {
+                            numberOfRemovedPixels++;
+                            StageMatrix[h][w] = Color.Transparent;
+                            CollidableForegroundMatrix[h][w] = false;
+                        }
+                        else
+                        {
+                            StageMatrix[h][w] = StageMatrix[h][w].MultiplyByFactor(Parameter.BlastBlackmaskExplosionRadiusColorFactor);
+                        }
+                    }
+                }
+            }
 
-            StageMatrix.ApplyMatrixSlice(StageMatrixSlice, startingIndexX, startingIndexY);
-            CollidableForegroundMatrix.ApplyMatrixSlice(CollisionMatrixSlice, startingIndexX, startingIndexY);
-
-            Color[] Color1DArray = StageMatrixSlice.ConvertTo1D();
-            foreground.Texture2D.SetData(0, new Rectangle(startingIndexX, startingIndexY, StageMatrixSlice[0].Length, StageMatrixSlice.Length), Color1DArray, 0, Color1DArray.Length);
+            //Change the scenario to a 1D matrix and set the texture data. Ideally there should be no
+            //2D matrix at all, but since this method runs pretty quick i see no problem in leaving it like that
+            //fror now
+            //TODO: Fix This
+            foreground.Texture2D.SetData(StageMatrix.ConvertTo1D());
 
             return numberOfRemovedPixels;
         }
@@ -133,7 +137,7 @@ namespace OpenBound.GameComponents.Level
             //lower than the limit 0.
 
             int[] relPos = GetRelativePosition(Position);
-            return relPos[1] >= StageMatrix.Length || relPos[1] < Parameter.ProjectilePlayableMapAreaYLimit || relPos[0] < 0 || relPos[0] >= 1800;
+            return relPos[1] >= StageMatrix.Length || relPos[1] < Parameter.ProjectilePlayableMapAreaYLimit || relPos[0] < 0 || relPos[0] >= StageMatrix[0].Length;
         }
 
         public static bool IsNotInsideMapYBoundaries(Vector2 Position)

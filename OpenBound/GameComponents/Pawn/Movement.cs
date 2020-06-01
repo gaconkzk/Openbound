@@ -77,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn
             int[] relPos = Topography.GetRelativePosition(Mobile.Position);
             int i = (int)Parameter.TankMovementMaxYStepping;
 
-            //Flag variable to determine if the movement is possible
+            //Flag to determine if the movement is possible
             bool isValid = false;
 
             //Get the possible adjacent block coordinate and save it on newX & newY
@@ -87,7 +87,7 @@ namespace OpenBound.GameComponents.Pawn
 
                 //Save as a possible adjacent solution
 
-                if (relPos[0] - TankSpeed < 0 || relPos[0] - TankSpeed >= 1800)
+                if (relPos[0] - TankSpeed < 0 || relPos[0] - TankSpeed >= Topography.MapHeight)
                 {
                     //Keep the height
                     i = 0;
@@ -152,7 +152,7 @@ namespace OpenBound.GameComponents.Pawn
                 if (relPos[1] + yPosition >= Topography.CollidableForegroundMatrix.Length)
                     continue;
 
-                if (relPos[0] > 0 && relPos[0] < 1800 && Topography.CollidableForegroundMatrix[relPos[1] + yPosition][relPos[0]])
+                if (relPos[0] > 0 && relPos[0] < Topography.MapHeight && Topography.CollidableForegroundMatrix[relPos[1] + yPosition][relPos[0]])
                     break;
             }
 

@@ -58,7 +58,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            //SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.TricoProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
 
         protected override void Destroy()
@@ -89,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            //SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.TricoProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
     }
 
@@ -114,6 +114,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7f;
             offsetFactor = 0;
 
+            projectile.OnFinalizeExecution = OnFinalizeExecution;
+
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS2Mass;
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
@@ -123,6 +125,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.OnSpawn();
             projectile.FlipbookList[0].SetTransparency(1);
+        }
+
+        protected override void UpdateRotation()
+        {
+            base.UpdateRotation();
+            projectile.FlipbookList[0].Rotation = FlipbookList[0].Rotation;
         }
 
         protected override void UpdatePosition()
@@ -137,22 +145,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset * offsetFactor, Matrix.CreateRotationZ(rotationAngle * angleModifier));
 
-                if (projectile.UpdateCollider(projectile.FlipbookList[0].Position))
+                if (projectile.CheckOutOfBounds(projectile.FlipbookList[0].Position) || projectile.UpdateCollider(projectile.FlipbookList[0].Position))
                 {
                     Destroy();
                     break;
                 }
             }
-        }
-
-        protected override void Destroy()
-        {
-            base.Destroy();
-
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
-
-            if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -164,97 +162,97 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class TricoProjectile3 : Projectile
     {
-        ProjectileAnimation rocketAnimation;
+        Vector2 baseCoordinate;
+        bool hasExploded;
+        float explosionTimer;
+        float rotationExplosionOffset;
+        float baseRotation;
+        int explosions;
 
-        public Dictionary<ProjectileAnimation, AnimationInstance> rocketAnimationPresets
-            = new Dictionary<ProjectileAnimation, AnimationInstance>()
-            {
-                {
-                    ProjectileAnimation.Closed,
-                    new AnimationInstance()
-                    { StartingFrame = 0, EndingFrame = 10, TimePerFrame = 1 / 20f }
-                },
-                {
-                    ProjectileAnimation.Opening,
-                    new AnimationInstance()
-                    { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 15f }
-                },
-                {
-                    ProjectileAnimation.Opened,
-                    new AnimationInstance()
-                    { StartingFrame = 22, EndingFrame = 31, TimePerFrame = 1 / 20f }
-                }
-            };
-
-        float totalTravelledTime;
-
-        public TricoProjectile3(Armor mobile)
-            : base(mobile, ShotType.SS, Parameter.ProjectileArmorSSExplosionRadius, Parameter.ProjectileArmorSSBaseDamage)
+        public TricoProjectile3(Trico mobile)
+            : base(mobile, ShotType.SS, Parameter.ProjectileTricoSSExplosionRadius, Parameter.ProjectileTricoSSBaseDamage)
         {
             this.mobile = mobile;
 
-            rocketAnimation = ProjectileAnimation.Closed;
-            totalTravelledTime = 0;
+            rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
-                mobile.Crosshair.CannonPosition, new Vector2(65, 54),
-                131, 109, "Graphics/Tank/Trico/Bullet3",
-                new List<AnimationInstance>() { rocketAnimationPresets[rocketAnimation] },
+                mobile.Crosshair.CannonPosition, new Vector2(40, 17),
+                66, 36, "Graphics/Tank/Trico/Bullet3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1/19f },
                 true, DepthParameter.Projectile));
 
-            //Physics/Trajectory setups
-            mass = Parameter.ProjectileArmorSSMass;
-            windInfluence = Parameter.ProjectileArmorSSWindInfluence;
+            hasExploded = false;
+            explosionTimer = 0;
 
-            SpawnTime = 1;
+            //Physics/Trajectory setups
+            mass = Parameter.ProjectileTricoSSMass;
+            windInfluence = Parameter.ProjectileTricoSSWindInfluence;
+
+            SpawnTime = 0.5f;
         }
 
         protected override void UpdatePosition()
-        {
-            switch (rocketAnimation)
+        {       
+            //Interpolate Movement for collision
+            for (float elapsedTime = 0; elapsedTime < Parameter.ProjectileMovementTotalTimeElapsed; elapsedTime += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                case ProjectileAnimation.Closed:
-                    if (totalTravelledTime < Parameter.ProjectileArmorSSTransformTime)
-                    {
-                        totalTravelledTime += Parameter.ProjectileMovementTotalTimeElapsed;
-                        base.UpdatePosition();
-                    }
-                    else
-                    {
-                        rocketAnimation = ProjectileAnimation.Opening;
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opening], true);
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opened]);
-                        BaseDamage = Parameter.ProjectileArmorSSExplosionRadius;
-                        ExplosionRadius = Parameter.ProjectileArmorSSEExplosionRadius;
-                    }
+                if (!hasExploded)
+                    UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
+
+                if (CheckOutOfBounds(Position))
                     break;
-                case ProjectileAnimation.Opening:
-                    if (FlipbookList[0].CurrentAnimationInstance == rocketAnimationPresets[ProjectileAnimation.Opened])
+                
+                if (hasExploded || UpdateCollider(Position))
+                {
+                    if (!hasExploded)
                     {
-                        rocketAnimation = ProjectileAnimation.Opened;
+                        hasExploded = true;
+                        baseCoordinate = Position;
+                        baseRotation = FlipbookList[0].Rotation;
+                        SpecialEffectBuilder.TricoProjectile3Explosion(FlipbookList[0].Position);
+                        FlipbookList[0].SetTransparency(0);
                     }
-                    break;
-                case ProjectileAnimation.Opened:
-                    base.UpdatePosition();
-                    break;
+
+                    if ((explosionTimer += Parameter.ProjectileMovementTimeElapsedPerInteraction) > Parameter.ProjectileTricoSSExtraBlastTime)
+                    {
+                        explosionTimer = 0;
+
+                        FlipbookList[0].Position = baseCoordinate +
+                            Vector2.Transform(
+                                Parameter.ProjectileTricoSSExplosionOffset,
+                                Matrix.CreateRotationZ(
+                                    baseRotation + explosions * (explosions % 2 == 0 ? 1 : -1) * Parameter.ProjectileTricoSSRotationOffset * rotationExplosionOffset));
+                        
+                        explosions++;
+                        Explode();
+                    }
+                }
             }
+
+#if Debug
+            debugCrosshair.Update(FlipbookList[0].Position);
+#endif
         }
 
-        protected override void Explode()
+        protected override void OutofboundsDestroy()
         {
-            SpecialEffectBuilder.ArmorProjectile3Explosion(FlipbookList[0].Position);
-            base.Explode();
+            explosions = Parameter.ProjectileTricoSSNumberOfExplosions;
+            base.OutofboundsDestroy();
         }
 
         protected override void Destroy()
         {
-            base.Destroy();
+            if (explosions >= Parameter.ProjectileTricoSSNumberOfExplosions)
+            {
+                base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+                List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
-            if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                if (pjList.Count() == 0)
+                    OnFinalizeExecution?.Invoke();
+            }
         }
     }
 }

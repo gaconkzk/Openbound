@@ -44,8 +44,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 LastCreatedProjectileList.Add(new TricoProjectile1(this));
             else if (SelectedShotType == ShotType.S2)
                 TricoProjectileEmitter.Shot2(this);
-            //else if (SelectedShotType == ShotType.SS)
-              //  LastCreatedProjectileList.Add(new IceProjectile3(this));
+            else if (SelectedShotType == ShotType.SS)
+                LastCreatedProjectileList.Add(new TricoProjectile3(this));
                 
 
             base.Shoot();

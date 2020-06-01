@@ -11,8 +11,8 @@
  */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
-using System;
 
 namespace OpenBound.GameComponents.Animation
 {
@@ -112,7 +112,7 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
         #endregion
-        
+        #region Mage
         public static void MageProjectile1Explosion(Vector2 position, float rotation)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(96.5f, 96), 193, 192, "Graphics/Special Effects/Tank/Mage/Flame1",
@@ -150,7 +150,8 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffectHandler.Add(se);
         }
-
+        #endregion
+        #region Turtle
         public static void TurtleProjectile1Explosion(Vector2 position, float rotation)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(104f, 105f), 193, 200, "Graphics/Special Effects/Tank/Turtle/Flame1",
@@ -190,7 +191,35 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffectHandler.Add(se);
         }
+        #endregion
+        #region Trico
+        public static void TricoProjectile1Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(90f, 100f), 192, 192, "Graphics/Special Effects/Tank/Trico/Flame1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+            SpecialEffect se = new SpecialEffect(fb, 1);
+            SpecialEffectHandler.Add(se);
+        }
 
+        public static void TricoProjectile2Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(90f, 100f), 192, 192, "Graphics/Special Effects/Tank/Trico/Flame1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+            fb.Scale = new Vector2(0.7f, 0.7f);
+            fb.Effect = SpriteEffects.FlipVertically;
+            SpecialEffect se = new SpecialEffect(fb, 1);
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void TricoProjectile3Explosion(Vector2 position)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(179f, 197f), 311, 313, "Graphics/Special Effects/Tank/Trico/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 29, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, 0);
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+        #endregion
         /*
         public static void BuildMobileItem(Mobile mobile)
         {
