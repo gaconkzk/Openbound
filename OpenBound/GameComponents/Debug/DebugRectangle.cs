@@ -21,33 +21,41 @@ namespace OpenBound.GameComponents.Debug
     {
         List<DebugLine> dLineList = new List<DebugLine>();
 
-        public DebugRectangle(Color Color)
+        public DebugRectangle(Color color)
         {
             dLineList = new List<DebugLine>()
             {
-                new DebugLine(Color),
-                new DebugLine(Color),
-                new DebugLine(Color),
-                new DebugLine(Color),
+                new DebugLine(color),
+                new DebugLine(color),
+                new DebugLine(color),
+                new DebugLine(color),
             };
         }
 
-        public void SetColor(Color Color)
+        public void SetColor(Color color)
         {
-            dLineList.ForEach((x) => x.Sprite.Color = Color);
+            dLineList.ForEach((x) => x.Sprite.Color = color);
         }
 
-        public override void Draw(SpriteBatch SpriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            dLineList.ForEach((x) => x.Draw(SpriteBatch));
+            dLineList.ForEach((x) => x.Draw(spriteBatch));
         }
 
-        public void Update(Vector2[] Corner)
+        public void Update(Vector2[] corner)
         {
-            dLineList[0].Update(Corner[0], Corner[1]);
-            dLineList[1].Update(Corner[1], Corner[2]);
-            dLineList[2].Update(Corner[2], Corner[3]);
-            dLineList[3].Update(Corner[3], Corner[0]);
+            dLineList[0].Update(corner[0], corner[1]);
+            dLineList[1].Update(corner[1], corner[2]);
+            dLineList[2].Update(corner[2], corner[3]);
+            dLineList[3].Update(corner[3], corner[0]);
+        }
+
+        public void Update(Rectangle rectangle)
+        {
+            dLineList[0].Update(new Vector2(rectangle.X, rectangle.Y),                                      new Vector2(rectangle.X,                   rectangle.Y + rectangle.Height));
+            dLineList[1].Update(new Vector2(rectangle.X,                   rectangle.Y + rectangle.Height), new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height));
+            dLineList[2].Update(new Vector2(rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height), new Vector2(rectangle.X + rectangle.Width, rectangle.Y));
+            dLineList[3].Update(new Vector2(rectangle.X + rectangle.Width, rectangle.Y),                    new Vector2(rectangle.X,                   rectangle.Y));
         }
     }
 }

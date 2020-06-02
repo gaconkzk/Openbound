@@ -16,6 +16,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Level.Scene;
+using OpenBound.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -901,7 +902,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
             Rectangle collisionRectangle = CalculateCollisionRectangle();
 
-            if (collisionRectangle.Intersects(new Rectangle((int)cursor.CurrentFlipbook.Position.X, (int)cursor.CurrentFlipbook.Position.Y, 1, 1)))
+            if (collisionRectangle.Intersects(cursor.CurrentFlipbook.Position))
             {
                 if (InputHandler.IsBeingPressed(MKeys.Left))
                 {

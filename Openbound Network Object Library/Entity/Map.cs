@@ -124,7 +124,7 @@ namespace Openbound_Network_Object_Library.Entity
         }
 
         public int Force { get => WeatherPreset[0]; }
-        public int Hurricane { get => WeatherPreset[1]; }
+        public int Tornado { get => WeatherPreset[1]; }
         public int Electricity { get => WeatherPreset[2]; }
         public int Wind { get => WeatherPreset[3]; }
         public int Weakness { get => WeatherPreset[4]; }

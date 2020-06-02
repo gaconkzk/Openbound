@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
@@ -95,7 +96,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
         {
             Rectangle collisionRectangle = CalculateCollisionRectangle();
 
-            if (collisionRectangle.Intersects(new Rectangle((int)cursor.CurrentFlipbook.Position.X, (int)cursor.CurrentFlipbook.Position.Y, 1, 1)))
+            if (collisionRectangle.Intersects(cursor.CurrentFlipbook.Position))
             {
                 if (InputHandler.IsBeingPressed(MKeys.Left))
                 {

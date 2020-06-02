@@ -20,6 +20,7 @@ using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Physics;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -47,12 +48,18 @@ namespace OpenBound.GameComponents.PawnAction
         protected float mass, angle, windInfluence;
         protected float force;
 
+        public bool IsAbleToRefreshPosition;
+
         //Physics-related variables - Wind
         protected float ywSpeedComponent, xwSpeedComponent;
         protected float wAngle, wForce;
 
         //Camera Tracking
-        public virtual Vector2 Position => FlipbookList[0].Position;
+        public Vector2 Position
+        {
+            get => FlipbookList[0].Position;
+            set => FlipbookList[0].Position = value;
+        }
 
         //Rotation-related variables
         protected Vector2 previousPosition;
@@ -95,6 +102,8 @@ namespace OpenBound.GameComponents.PawnAction
             xMovement = new AcceleratedMovement();
 
             projectileOffset = Vector2.Zero;
+
+            IsAbleToRefreshPosition = true;
 
             if (projectileInitialPosition != default)
                 this.projectileInitialPosition = previousPosition = projectileInitialPosition;
@@ -207,8 +216,33 @@ namespace OpenBound.GameComponents.PawnAction
 #endif
         }
 
+        public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
+        public Vector2 AngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public float CurrentAngle => FlipbookList[0].Rotation;
+
+        protected virtual void CheckCollisionWithWeather()
+        {
+            foreach (Weather w in LevelScene.WeatherList)
+            {
+                w.InteractWithProjectile(this);
+            }
+        }
+
+        public void SetBasePosition(Vector2 newPosition)
+        {
+            projectileInitialPosition = newPosition;
+            xSpeedComponent = (float)Math.Round(Math.Cos(CurrentAngle), 3);
+            ySpeedComponent = (float)Math.Round(Math.Sin(CurrentAngle), 3);
+            Initialize();
+        }
+
         protected virtual void UpdateMovementIteraction(float timeElapsedPerIteraction)
         {
+            CheckCollisionWithWeather();
+
+            if (!IsAbleToRefreshPosition) return;
+
+            //Normal movement positioning
             yMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
             xMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
 

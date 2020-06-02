@@ -402,5 +402,12 @@ namespace OpenBound.Common
         public const float ProjectileTurtleSSBubbleNumber = 6;
         public const float ProjectileTurtleSSDampeningFactor = 3f;
         #endregion
+
+        #region WeatherEffects
+        public const float WeaterEffectRandomFlipbookUpdateTimer = 0.1f;
+        public static float WeatherEffectVerticalScrollingUpdateSpeed = 50f;
+
+        public static float WeatherEffectTornadoMinimumProjectileSpeed = 15f;
+        #endregion
     }
 }
