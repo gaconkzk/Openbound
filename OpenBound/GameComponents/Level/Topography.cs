@@ -73,9 +73,12 @@ namespace OpenBound.GameComponents.Level
                         //If the explosion is able to open holes
                         if (calculatedDistance <= Radius * Radius)
                         {
-                            numberOfRemovedPixels++;
-                            StageMatrix[h][w] = Color.Transparent;
-                            CollidableForegroundMatrix[h][w] = false;
+                            if (StageMatrix[h][w] != Color.Transparent)
+                            {
+                                numberOfRemovedPixels++;
+                                StageMatrix[h][w] = Color.Transparent;
+                                CollidableForegroundMatrix[h][w] = false;
+                            }
                         }
                         else
                         {

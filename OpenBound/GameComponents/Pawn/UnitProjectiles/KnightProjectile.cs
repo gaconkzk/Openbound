@@ -160,6 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     public class KnightSatelliteProjectile : Projectile
     {
         List<SpecialEffect> swordTrace;
+        Vector2 previousSESpawnPosition;
         Vector2 initialPosition;
         float initialAlpha;
 
@@ -167,7 +168,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(Mobile, ShotType.Satellite, Parameter.ProjectileKnightExplosionRadius, Parameter.ProjectileKnightSwordBaseDamage,
                   projectileInitialPosition: InitialPosition)
         {
-            initialPosition = InitialPosition;
+            previousSESpawnPosition = initialPosition = InitialPosition;
             initialAlpha = Parameter.ProjectileKnightInitialAlpha;
 
             //Calculate the angle of the swords
@@ -195,37 +196,48 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             SpawnTimeCounter = FreezeTimeCounter = 0;
 
-            yMovement.Preset((float)(Math.Sin(angle) * Parameter.ProjectileKnightSpeed), 0);
-            xMovement.Preset((float)(Math.Cos(angle) * Parameter.ProjectileKnightSpeed), 0);
-
             swordTrace = new List<SpecialEffect>();
+
+            InitializeMovement();
         }
 
-        protected override void UpdatePosition()
+        public override void InitializeMovement()
+        {
+            yMovement.Preset((float)(Math.Sin(CurrentAngle) * Parameter.ProjectileKnightSpeed), 0);
+            xMovement.Preset((float)(Math.Cos(CurrentAngle) * Parameter.ProjectileKnightSpeed), 0);
+        }
+
+        public override void Update()
         {
             //if the number of swords in trace is 0 
             //or the last created sword reach its limit distance
-            if (swordTrace.Count == 0 ||
-                Helper.EuclideanDistance(swordTrace.Last().Flipbook.Position, initialPosition) > Parameter.ProjectileKnightTraceDistanceOffset)
+            if (Helper.EuclideanDistance(Position, previousSESpawnPosition) > Parameter.ProjectileKnightTraceDistanceOffset)
             {
+                previousSESpawnPosition = Position;
+
                 //a new sword and sfx is appended to the trace
-                SpecialEffect sword = SpecialEffectBuilder.KnightProjectileBullet1(initialPosition, FlipbookList[0].Rotation);
+                SpecialEffect sword = SpecialEffectBuilder.KnightProjectileBullet1(Position, CurrentAngle);
 
-                sword.Flipbook.Color = new Color(new Vector4(initialAlpha, initialAlpha, initialAlpha, initialAlpha));
+                swordTrace.Insert(0, sword);
 
-                initialAlpha -= Parameter.ProjectileKnightTraceAlphaDecay + swordTrace.Count * Parameter.ProjectileKnightTraceAlphaDecayFactor;
+                //Transparency
+                initialAlpha = Parameter.ProjectileKnightInitialAlpha;
 
-                SpecialEffectHandler.Add(sword);
-
-                swordTrace.Add(sword);
+                foreach (SpecialEffect se in swordTrace)
+                {
+                    se.Flipbook.SetTransparency(initialAlpha);
+                    initialAlpha -= Parameter.ProjectileKnightTraceAlphaDecay + swordTrace.Count * Parameter.ProjectileKnightTraceAlphaDecayFactor;
+                }
             }
 
+            base.Update();
+
             //and update the sword and the trace positions
+            /*
             Vector2 position = FlipbookList[0].Position;
 
             if (FreezeTimeCounter >= FreezeTime)
             {
-                base.UpdatePosition();
             }
             else
             {
@@ -238,7 +250,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             position -= FlipbookList[0].Position;
 
-            swordTrace.ForEach((x) => x.Flipbook.Position -= position);
+            swordTrace.ForEach((x) => x.Flipbook.Position -= position);*/
         }
 
         protected override void Destroy()

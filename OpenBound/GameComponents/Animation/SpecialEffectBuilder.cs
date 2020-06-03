@@ -20,8 +20,10 @@ namespace OpenBound.GameComponents.Animation
     {
         public static SpecialEffect KnightProjectileBullet1(Vector2 position, float rotation)
         {
-            return new SpecialEffect(Flipbook.CreateFlipbook(position, new Vector2(81, 32), 162, 65, "Graphics/Tank/Knight/Bullet1",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 60f }, true, DepthParameter.ProjectileSFX, rotation), 0);
+            SpecialEffect se = new SpecialEffect(Flipbook.CreateFlipbook(position, new Vector2(81, 32), 162, 65, "Graphics/Tank/Knight/Bullet1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation), 0);
+            SpecialEffectHandler.Add(se);
+            return se;
         }
 
         #region Common
