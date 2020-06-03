@@ -27,7 +27,13 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             TornadoAnimationState = TornadoAnimationState.FirstStep;
 
-            SpeedVector = projectile.AngleVector * Math.Max(projectile.SpeedVector.Length(), Parameter.WeatherEffectTornadoMinimumProjectileSpeed); 
+            float speed = projectile.SpeedVector.Length();
+            float initialSpeed = projectile.InitialSpeedVector.Length();
+
+            if (speed == 0)
+                speed = initialSpeed;
+
+            SpeedVector = projectile.AngleVector * Math.Max(speed, Parameter.WeatherEffectTornadoMinimumProjectileSpeed); 
         }
     }
 
@@ -46,13 +52,13 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void OnInteract(Projectile projectile)
         {
-            projectile.IsAbleToRefreshPosition = false;
+            projectile.IsExternallyRefreshingPosition = true;
             tornadoInteraction.Add(projectile, new TornadoProjectileState(projectile));
         }
 
         public override void OnStopInteracting(Projectile projectile)
         {
-            projectile.IsAbleToRefreshPosition = true;
+            projectile.IsExternallyRefreshingPosition = false;
             projectile.SetBasePosition(projectile.Position);
             modifiedProjectileList.Remove(projectile);
             tornadoInteraction.Remove(projectile);
@@ -68,6 +74,8 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             foreach(KeyValuePair<Projectile, TornadoProjectileState> kvp in tornadoInteraction)
             {
+                if (!kvp.Key.IsExternallyRefreshingPosition || !kvp.Key.IsAbleToRefreshPosition) continue;
+
                 switch (kvp.Value.TornadoAnimationState)
                 {
                     case TornadoAnimationState.FirstStep:

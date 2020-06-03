@@ -41,6 +41,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class DragonProjectile : Projectile
     {
+        Vector2 previousSESpawnPosition;
         double currentDistance = 0;
 
         public DragonProjectile(Dragon mobile, int damage, int blastRadius, float forceModifier, float angleModifier = 0, float spawnTime = 0) : base(mobile, ShotType.S1, blastRadius, damage, angleModifier: angleModifier, forceModifier: forceModifier)
@@ -55,18 +56,19 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             SpawnTime = spawnTime;
             FlipbookList[0].HideElement();
+
+            previousSESpawnPosition = FlipbookList[0].Position;
         }
 
         protected override void UpdatePosition()
         {
-            Vector2 tmpPos = FlipbookList[0].Position;
-
             base.UpdatePosition();
 
-            currentDistance += Helper.EuclideanDistance(tmpPos, FlipbookList[0].Position);
+            currentDistance += Helper.EuclideanDistance(previousSESpawnPosition, FlipbookList[0].Position);
 
             if (currentDistance > Parameter.ProjectileParticleNewEmissionMaxDistance)
             {
+                previousSESpawnPosition = FlipbookList[0].Position;
                 currentDistance = 0;
 
                 SpecialEffect se = SpecialEffectBuilder.DragonProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
@@ -169,24 +171,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class DragonProjectile3SS : Projectile
     {
-        public enum ProjectileState
-        {
-            Spawning,
-            Moving,
-        };
-
-        public Dictionary<ProjectileState, AnimationInstance> projectileAnimationPresets
-            = new Dictionary<ProjectileState, AnimationInstance>()
-            {
-                {
-                    ProjectileState.Spawning,
-                    new AnimationInstance() { StartingFrame =  0, EndingFrame = 17, TimePerFrame = 1/20f }
-                },
-                {
-                    ProjectileState.Moving,
-                    new AnimationInstance() { StartingFrame = 18, EndingFrame = 40, TimePerFrame = 1/20f }
-                }
-            };
+        ProjectileAnimationState animationState;
 
         public DragonProjectile3SS(Dragon mobile, Vector2 initialPosition, Vector2 finalPosition, float spawnTime)
             : base(mobile, ShotType.SS, Parameter.ProjectileDragonSSExplosionRadius, Parameter.ProjectileDragonSSBaseDamage, projectileInitialPosition: initialPosition)
@@ -201,22 +186,41 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 initialPosition, new Vector2(49.5f, 40),
                 99, 80, "Graphics/Tank/Dragon/Shot3",
                 new List<AnimationInstance>() {
-                    projectileAnimationPresets[ProjectileState.Spawning],
-                    projectileAnimationPresets[ProjectileState.Moving],
+                    new AnimationInstance() { StartingFrame =  0, EndingFrame = 17, TimePerFrame = 1/20f },
+                    new AnimationInstance() { StartingFrame = 18, EndingFrame = 40, TimePerFrame = 1/20f },
                 },
                 true, DepthParameter.Projectile, Rotation: (float)angle));
 
             SpawnTime = spawnTime;
 
-            //Physics/Trajectory setups
-            yMovement.Preset((float)Math.Sin(angle) * 100, (float)Math.Sin(angle) * 200);
-            xMovement.Preset((float)Math.Cos(angle) * 100, (float)Math.Cos(angle) * 200);
+            animationState = ProjectileAnimationState.Spawning;
+
+            IsAbleToRefreshPosition = false;
+
+            InitializeMovement();
+        }
+
+        public override void InitializeMovement()
+        {
+            yMovement.Preset((float)Math.Sin(CurrentAngle) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Sin(CurrentAngle) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
+            xMovement.Preset((float)Math.Cos(CurrentAngle) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Cos(CurrentAngle) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
         }
 
         protected override void UpdatePosition()
         {
-            if (FlipbookList[0].CurrentAnimationInstance == projectileAnimationPresets[ProjectileState.Moving])
-                base.UpdatePosition();
+            base.UpdatePosition();
+
+            switch (animationState)
+            {
+                case ProjectileAnimationState.Spawning:
+                    if (FlipbookList[0].FlipbookAnimationList.Count() == 1)
+                    {
+                        IsAbleToRefreshPosition = true;
+                        animationState = ProjectileAnimationState.Moving;
+                    }
+                    break;
+                case ProjectileAnimationState.Moving: break;
+            }                
         }
 
         protected override void Explode()

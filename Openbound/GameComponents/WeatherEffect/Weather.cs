@@ -16,18 +16,6 @@ using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
-    /*
-    public enum WeatherSpriteType
-    {
-        Force,
-        Hurricane,
-        Electricity,
-        Weakness,
-        Mirror,
-        Random,
-        LightningSE,
-    }*/
-
     public enum WeatherAnimationType
     {
         FixedAnimationFrame,
@@ -135,7 +123,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
-        public void InteractWithProjectile(Projectile projectile)
+        public void CheckProjectileInteraction(Projectile projectile)
         {
             if (collisionRectangle.Intersects(projectile.Position) && !modifiedProjectileList.Contains(projectile))
             {

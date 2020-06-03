@@ -29,7 +29,7 @@ namespace OpenBound.GameComponents.Physics
 
         public void Preset(float InitialSpeed, float Acceleration)
         {
-            CurrentPosition = CurrentTime = 0;
+            CurrentSpeed = CurrentPosition = CurrentTime = 0;
 
             this.InitialSpeed = InitialSpeed;
             this.Acceleration = Acceleration;

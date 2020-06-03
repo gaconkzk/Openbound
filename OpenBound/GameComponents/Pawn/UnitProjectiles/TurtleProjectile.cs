@@ -150,7 +150,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class TurtleProjectile3 : Projectile
     {
-        ProjectileAnimation bubbleAnimation;
+        ProjectileAnimationState bubbleAnimation;
         float totalTravelledTime;
 
         public TurtleProjectile3(Turtle mobile)
@@ -172,7 +172,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             switch (bubbleAnimation)
             {
-                case ProjectileAnimation.Closed:
+                case ProjectileAnimationState.Closed:
                     if (totalTravelledTime < Parameter.ProjectileTurtleSSTransformTime)
                     {
                         totalTravelledTime += Parameter.ProjectileMovementTotalTimeElapsed;
@@ -180,17 +180,17 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     }
                     else
                     {
-                        bubbleAnimation = ProjectileAnimation.Opening;
+                        bubbleAnimation = ProjectileAnimationState.Opening;
                     }
                     break;
-                case ProjectileAnimation.Opening:
-                    bubbleAnimation = ProjectileAnimation.Opened;
+                case ProjectileAnimationState.Opening:
+                    bubbleAnimation = ProjectileAnimationState.Opened;
                     SpecialEffectBuilder.TurtleProjectile3Division(FlipbookList[0].Position, FlipbookList[0].Rotation);
                     TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecution);
                     PlayExplosionSFX();
                     GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
                     break;
-                case ProjectileAnimation.Opened:
+                case ProjectileAnimationState.Opened:
                     base.Destroy();
                     break;
             }

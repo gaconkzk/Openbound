@@ -27,8 +27,11 @@ using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.PawnAction
 {
-    public enum ProjectileAnimation
+    public enum ProjectileAnimationState
     {
+        Spawning,
+        Moving,
+
         Closed,
         Opening,
         Opened,
@@ -49,6 +52,7 @@ namespace OpenBound.GameComponents.PawnAction
         protected float force;
 
         public bool IsAbleToRefreshPosition;
+        public bool IsExternallyRefreshingPosition;
 
         //Physics-related variables - Wind
         protected float ywSpeedComponent, xwSpeedComponent;
@@ -104,6 +108,7 @@ namespace OpenBound.GameComponents.PawnAction
             projectileOffset = Vector2.Zero;
 
             IsAbleToRefreshPosition = true;
+            IsExternallyRefreshingPosition = false;
 
             if (projectileInitialPosition != default)
                 this.projectileInitialPosition = previousPosition = projectileInitialPosition;
@@ -131,7 +136,7 @@ namespace OpenBound.GameComponents.PawnAction
 #endif
         }
 
-        public virtual void Initialize()
+        public virtual void InitializeMovement()
         {
             yMovement.Preset(ySpeedComponent * force * Parameter.ProjectileMovementForceFactor / mass, Parameter.ProjectileMovementGravity + ywSpeedComponent * wForce * windInfluence);
             xMovement.Preset(xSpeedComponent * force * Parameter.ProjectileMovementForceFactor / mass, xwSpeedComponent * wForce * windInfluence);
@@ -217,6 +222,7 @@ namespace OpenBound.GameComponents.PawnAction
         }
 
         public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
+        public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
         public Vector2 AngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
         public float CurrentAngle => FlipbookList[0].Rotation;
 
@@ -224,7 +230,7 @@ namespace OpenBound.GameComponents.PawnAction
         {
             foreach (Weather w in LevelScene.WeatherList)
             {
-                w.InteractWithProjectile(this);
+                w.CheckProjectileInteraction(this);
             }
         }
 
@@ -233,14 +239,16 @@ namespace OpenBound.GameComponents.PawnAction
             projectileInitialPosition = newPosition;
             xSpeedComponent = (float)Math.Round(Math.Cos(CurrentAngle), 3);
             ySpeedComponent = (float)Math.Round(Math.Sin(CurrentAngle), 3);
-            Initialize();
+            InitializeMovement();
         }
 
         protected virtual void UpdateMovementIteraction(float timeElapsedPerIteraction)
         {
+            if (!IsAbleToRefreshPosition) return;
+
             CheckCollisionWithWeather();
 
-            if (!IsAbleToRefreshPosition) return;
+            if (IsExternallyRefreshingPosition) return;
 
             //Normal movement positioning
             yMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
