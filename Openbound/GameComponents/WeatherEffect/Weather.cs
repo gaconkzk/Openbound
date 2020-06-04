@@ -27,17 +27,34 @@ namespace OpenBound.GameComponents.WeatherEffect
         private List<Flipbook> flipbookList;
         private float randomRotationElapsedTime;
         private Vector2 offset;
+        public float Scale { get; protected set; }
+        public Vector2 StartingPosition { get; protected set; }
         
         public List<Projectile> ModifiedProjectileList;
-        protected Rectangle collisionRectangle;
+        protected Rectangle collisionRectangle, outerCollisionRectangle;
+
+        protected Vector2 flipbookPivot;
+        protected int numberOfFrames;
+        protected Vector2 collisionRectangleOffset, outerCollisionRectangleOffset;
 
         private DebugRectangle debugRectangle;
+        private DebugRectangle outerDebugRectangle;
 
-        public Weather()
+        public WeatherEffectType WeatherEffectType { get; private set; }
+
+        public Weather(Vector2 startingPosition, Vector2 flipbookPivot, int numberOfFrames, Vector2 collisionRectangleOffset, Vector2 outerCollisionRectangleOffset, WeatherEffectType weatherEffectType, float scale)
         {
             flipbookList = new List<Flipbook>();
             ModifiedProjectileList = new List<Projectile>();
             randomRotationElapsedTime = 0;
+
+            StartingPosition = startingPosition;
+            this.flipbookPivot = flipbookPivot;
+            this.numberOfFrames = numberOfFrames;
+            this.collisionRectangleOffset = collisionRectangleOffset;
+            this.outerCollisionRectangleOffset = outerCollisionRectangleOffset;
+            WeatherEffectType = weatherEffectType;
+            this.Scale = scale;
         }
 
         public virtual void Initialize(string texturePath, Vector2 startingPosition, WeatherAnimationType animationType)
@@ -47,7 +64,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             int startingFrame = 0;
 
-            while (currentOffset.Y - 64 * 2 <= endingPosition.Y)
+            while (currentOffset.Y - flipbookPivot.X * 2 * Scale <= endingPosition.Y)
             {
                 //FixedAnimationsFrames is used on mirror
                 //VariableAnimationFrame is used on tornado, weakness and force
@@ -56,29 +73,40 @@ namespace OpenBound.GameComponents.WeatherEffect
                 switch (animationType)
                 {
                     case WeatherAnimationType.FixedAnimationFrame:
-                        animation.StartingFrame = animation.EndingFrame = startingFrame % 8;
+                        animation.StartingFrame = animation.EndingFrame = startingFrame % numberOfFrames;
                         break;
                     case WeatherAnimationType.VariableAnimationFrame:
-                        animation.EndingFrame = 7;
+                        animation.EndingFrame = (numberOfFrames - 1);
                         break;
                 }
 
                 startingFrame++;
 
-                Flipbook fb = Flipbook.CreateFlipbook(currentOffset, new Vector2(64, 32),
-                    128, 64, texturePath, animation, true, DepthParameter.WeatherEffect);
+                Flipbook fb = Flipbook.CreateFlipbook(currentOffset, flipbookPivot, (int)flipbookPivot.X * 2, (int)flipbookPivot.Y * 2, texturePath, animation, true, DepthParameter.WeatherEffect);
+                fb.Scale *= Scale;
                 flipbookList.Add(fb);
 
-                fb.SetCurrentFrame(startingFrame % 8);
+                fb.SetCurrentFrame(startingFrame % numberOfFrames);
 
-                currentOffset += Vector2.Transform(new Vector2(0, fb.SpriteHeight), Matrix.CreateRotationZ(flipbookList[0].Rotation));
+                currentOffset += Vector2.Transform(new Vector2(0, fb.SpriteHeight), Matrix.CreateRotationZ(flipbookList[0].Rotation)) * Scale;
             }
 
-            collisionRectangle = new Rectangle((int)startingPosition.X - 35, (int)startingPosition.Y, (35 * 2), (int)(endingPosition.Y - startingPosition.Y));
+            collisionRectangle = new Rectangle((int)(startingPosition.X - collisionRectangleOffset.X * Scale), (int)startingPosition.Y,
+                (int)(collisionRectangleOffset.X * 2 * Scale), (int)((endingPosition.Y - startingPosition.Y)));
+
             debugRectangle = new DebugRectangle(Color.Blue);
             debugRectangle.Update(collisionRectangle);
             DebugHandler.Instance.Add(debugRectangle);
+
+            outerCollisionRectangle = new Rectangle(collisionRectangle.X - (int)outerCollisionRectangleOffset.X, collisionRectangle.Y - (int)outerCollisionRectangleOffset.Y,
+                collisionRectangle.Width + (int)outerCollisionRectangleOffset.X * 2, collisionRectangle.Height + 10 * 2);
+
+            outerDebugRectangle = new DebugRectangle(Color.Red);
+            outerDebugRectangle.Update(outerCollisionRectangle);
+            DebugHandler.Instance.Add(outerDebugRectangle);
         }
+
+        public abstract Weather Merge(Weather weather);
 
         public abstract void Update(GameTime gameTime);
 
@@ -113,11 +141,11 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             //Spawn new flipbooks if necessary
             Flipbook lE = flipbookList.Last();
-            if (lE.Position.Y - lE.SourceRectangle.Height >= Topography.MapHeight / 2)
+            if (lE.Position.Y - lE.SourceRectangle.Height * Scale >= Topography.MapHeight / 2)
             {
-                lE.Position = flipbookList[0].Position - new Vector2(0, lE.Pivot.Y * 2);
+                lE.Position = flipbookList[0].Position - new Vector2(0, lE.Pivot.Y * 2) * 2;
                 int newFrame = flipbookList[0].GetCurrentFrame() - 1;
-                lE.SetCurrentFrame(newFrame < 0 ? 7 : newFrame);
+                lE.SetCurrentFrame(newFrame < 0 ? (numberOfFrames - 1) : newFrame);
                 flipbookList.Remove(lE);
                 flipbookList.Insert(0, lE);
             }
@@ -135,6 +163,8 @@ namespace OpenBound.GameComponents.WeatherEffect
             return false;
         }
 
+
+        public bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
         public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
 
         public bool IsInteracting(Projectile projectile) => ModifiedProjectileList.Contains(projectile);

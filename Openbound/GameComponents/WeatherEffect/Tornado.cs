@@ -7,9 +7,6 @@ using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
@@ -45,26 +42,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         Dictionary<Projectile, TornadoProjectileState> tornadoInteraction;
         List<Projectile> unusedProjectileList;
 
-        private Rectangle outerCollisionRectangle;
-
-        private DebugRectangle outerDebugRectangle;
-
-        public Tornado(Vector2 position)
+        public Tornado(Vector2 position, float scale) : base(position, new Vector2(64, 32), 8, new Vector2(35, 0), new Vector2(10, 10), WeatherEffectType.Tornado, scale)
         {
             tornadoInteraction = new Dictionary<Projectile, TornadoProjectileState>();
             unusedProjectileList = new List<Projectile>();
 
             Initialize("Graphics/Special Effects/Weather/Tornado", new Vector2(position.X, -Topography.MapHeight / 2), WeatherAnimationType.VariableAnimationFrame);
-        }
-
-        public override void Initialize(string texturePath, Vector2 startingPosition, WeatherAnimationType animationType)
-        {
-            base.Initialize(texturePath, startingPosition, animationType);
-
-            outerCollisionRectangle = new Rectangle(collisionRectangle.X - 10, collisionRectangle.Y - 10, collisionRectangle.Width + 10 * 2, collisionRectangle.Height + 10 * 2);
-            outerDebugRectangle = new DebugRectangle(Color.Red);
-            outerDebugRectangle.Update(outerCollisionRectangle);
-            DebugHandler.Instance.Add(outerDebugRectangle);
         }
 
         public override void OnInteract(Projectile projectile)
@@ -85,7 +68,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void Update(GameTime gameTime)
         {
-            VerticalScrollingUpdate(gameTime);
+            //VerticalScrollingUpdate(gameTime);
             UpdateProjectiles();
         }
 
@@ -153,6 +136,11 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             unusedProjectileList.ForEach((x) => OnStopInteracting(x));
             unusedProjectileList.Clear();
+        }
+
+        public override Weather Merge(Weather weather)
+        {
+            return new Tornado((StartingPosition + weather.StartingPosition) / 2, Scale + weather.Scale);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

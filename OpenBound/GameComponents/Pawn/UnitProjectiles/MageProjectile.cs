@@ -104,7 +104,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         #region Weather/Tornado
         protected override void CheckCollisionWithWeather()
         {
-            foreach (Weather w in LevelScene.WeatherList)
+            foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
             {
                 if (w.Intersects(dProj) && !w.IsInteracting(this))
                 {
