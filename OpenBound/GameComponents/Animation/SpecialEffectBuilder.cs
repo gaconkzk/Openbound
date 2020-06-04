@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using System;
 
 namespace OpenBound.GameComponents.Animation
 {
@@ -115,35 +116,6 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
         #region Mage
-        #region Lightning
-
-        public static void LightningProjectileThunder(Vector2 position, float rotation = 0)
-        {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
-                new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
-
-            Flipbook fb2 = Flipbook.CreateFlipbook(new Vector2(position.X, position.Y - 256), new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
-          new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
-
-            SpecialEffect se = new SpecialEffect(fb, 3);
-            SpecialEffect se2 = new SpecialEffect(fb2, 3);
-
-
-            float transparency = 1f;
-            Action<SpecialEffect, GameTime> transparencyEffect = (specialEffect, gameTime) =>
-            {
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * 1.5f;
-                se.Flipbook.SetTransparency(transparency);
-            };
-
-            se.UpdateAction += transparencyEffect;
-            se2.UpdateAction += transparencyEffect;
-
-            SpecialEffectHandler.Add(se);
-            SpecialEffectHandler.Add(se2);
-        }
-
-        #endregion
         public static void MageProjectile1Explosion(Vector2 position, float rotation)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(96.5f, 96), 193, 192, "Graphics/Special Effects/Tank/Mage/Flame1",
@@ -250,6 +222,35 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffectHandler.Add(se);
         }
+        #endregion
+        #region Lightning
+
+        public static void LightningProjectileThunder(Vector2 position, float rotation = 0)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
+                new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
+
+            Flipbook fb2 = Flipbook.CreateFlipbook(new Vector2(position.X, position.Y - 256), new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
+          new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
+
+            SpecialEffect se = new SpecialEffect(fb, 3);
+            SpecialEffect se2 = new SpecialEffect(fb2, 3);
+
+
+            float transparency = 1f;
+            Action<SpecialEffect, GameTime> transparencyEffect = (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * 1.5f;
+                se.Flipbook.SetTransparency(transparency);
+            };
+
+            se.UpdateAction += transparencyEffect;
+            se2.UpdateAction += transparencyEffect;
+
+            SpecialEffectHandler.Add(se);
+            SpecialEffectHandler.Add(se2);
+        }
+
         #endregion
         /*
         public static void BuildMobileItem(Mobile mobile)
