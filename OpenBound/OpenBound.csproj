@@ -720,6 +720,8 @@
     <Compile Include="GameComponents\Pawn\Actor.cs" />
     <Compile Include="GameComponents\Interface\Text\SpriteText.cs" />
     <Compile Include="GameComponents\Audio\AudioHandler.cs" />
+    <Compile Include="GameComponents\WeatherEffect\Tornado.cs" />
+    <Compile Include="GameComponents\WeatherEffect\Weather.cs" />
     <Compile Include="Launcher\LauncherRequestManager.cs" />
     <Compile Include="Launcher\GameLauncher.cs">
       <SubType>Form</SubType>

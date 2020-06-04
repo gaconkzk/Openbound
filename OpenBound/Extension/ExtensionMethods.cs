@@ -197,5 +197,10 @@ namespace OpenBound.Extension
 
             source.SetData(mat.ConvertTo1D());
         }
+
+        public static bool Intersects(this Rectangle source, Vector2 position)
+        {
+            return source.Intersects(new Rectangle((int)position.X, (int)position.Y, 1, 1));
+        }
     }
 }

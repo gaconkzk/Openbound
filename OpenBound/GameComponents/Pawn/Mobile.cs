@@ -557,7 +557,7 @@ namespace OpenBound.GameComponents.Pawn
             else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
 
             //Initialize Projectiles
-            LastCreatedProjectileList.ForEach((x) => x.Initialize());
+            LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
         }
 
         public new virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)

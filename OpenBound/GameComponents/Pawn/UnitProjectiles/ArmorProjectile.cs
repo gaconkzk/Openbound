@@ -33,7 +33,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS1Mass;
@@ -74,7 +74,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS2Mass;
@@ -109,23 +109,23 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class ArmorProjectile3 : Projectile
     {
-        ProjectileAnimation rocketAnimation;
+        ProjectileAnimationState rocketAnimation;
 
-        public Dictionary<ProjectileAnimation, AnimationInstance> rocketAnimationPresets
-            = new Dictionary<ProjectileAnimation, AnimationInstance>()
+        public Dictionary<ProjectileAnimationState, AnimationInstance> rocketAnimationPresets
+            = new Dictionary<ProjectileAnimationState, AnimationInstance>()
             {
                 {
-                    ProjectileAnimation.Closed,
+                    ProjectileAnimationState.Closed,
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 10, TimePerFrame = 1 / 20f }
                 },
                 {
-                    ProjectileAnimation.Opening,
+                    ProjectileAnimationState.Opening,
                     new AnimationInstance()
                     { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 15f }
                 },
                 {
-                    ProjectileAnimation.Opened,
+                    ProjectileAnimationState.Opened,
                     new AnimationInstance()
                     { StartingFrame = 22, EndingFrame = 31, TimePerFrame = 1 / 20f }
                 }
@@ -138,7 +138,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             this.mobile = mobile;
 
-            rocketAnimation = ProjectileAnimation.Closed;
+            rocketAnimation = ProjectileAnimationState.Closed;
             totalTravelledTime = 0;
 
             //Initializing Flipbook
@@ -146,7 +146,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 mobile.Crosshair.CannonPosition, new Vector2(65, 54),
                 131, 109, "Graphics/Tank/Armor/Bullet3",
                 new List<AnimationInstance>() { rocketAnimationPresets[rocketAnimation] },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorSSMass;
@@ -157,32 +157,32 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void UpdatePosition()
         {
+            base.UpdatePosition();
             switch (rocketAnimation)
             {
-                case ProjectileAnimation.Closed:
+                case ProjectileAnimationState.Closed:
                     if (totalTravelledTime < Parameter.ProjectileArmorSSTransformTime)
                     {
                         totalTravelledTime += Parameter.ProjectileMovementTotalTimeElapsed;
-                        base.UpdatePosition();
                     }
                     else
                     {
-                        rocketAnimation = ProjectileAnimation.Opening;
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opening], true);
-                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimation.Opened]);
+                        IsAbleToRefreshPosition = false;
+                        rocketAnimation = ProjectileAnimationState.Opening;
+                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimationState.Opening], true);
+                        FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimationState.Opened]);
                         BaseDamage = Parameter.ProjectileArmorSSExplosionRadius;
                         ExplosionRadius = Parameter.ProjectileArmorSSEExplosionRadius;
                     }
                     break;
-                case ProjectileAnimation.Opening:
-                    if (FlipbookList[0].CurrentAnimationInstance == rocketAnimationPresets[ProjectileAnimation.Opened])
+                case ProjectileAnimationState.Opening:
+                    if (FlipbookList[0].CurrentAnimationInstance == rocketAnimationPresets[ProjectileAnimationState.Opened])
                     {
-                        rocketAnimation = ProjectileAnimation.Opened;
+                        IsAbleToRefreshPosition = true;
+                        rocketAnimation = ProjectileAnimationState.Opened;
                     }
                     break;
-                case ProjectileAnimation.Opened:
-                    base.UpdatePosition();
-                    break;
+                case ProjectileAnimationState.Opened: break;
             }
         }
 

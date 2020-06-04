@@ -20,14 +20,18 @@ using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Physics;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.PawnAction
 {
-    public enum ProjectileAnimation
+    public enum ProjectileAnimationState
     {
+        Spawning,
+        Moving,
+
         Closed,
         Opening,
         Opened,
@@ -47,12 +51,19 @@ namespace OpenBound.GameComponents.PawnAction
         protected float mass, angle, windInfluence;
         protected float force;
 
+        public bool IsAbleToRefreshPosition;
+        public bool IsExternallyRefreshingPosition;
+
         //Physics-related variables - Wind
         protected float ywSpeedComponent, xwSpeedComponent;
         protected float wAngle, wForce;
 
         //Camera Tracking
-        public virtual Vector2 Position => FlipbookList[0].Position;
+        public Vector2 Position
+        {
+            get => FlipbookList[0].Position;
+            set => FlipbookList[0].Position = value;
+        }
 
         //Rotation-related variables
         protected Vector2 previousPosition;
@@ -96,6 +107,9 @@ namespace OpenBound.GameComponents.PawnAction
 
             projectileOffset = Vector2.Zero;
 
+            IsAbleToRefreshPosition = true;
+            IsExternallyRefreshingPosition = false;
+
             if (projectileInitialPosition != default)
                 this.projectileInitialPosition = previousPosition = projectileInitialPosition;
             else
@@ -122,7 +136,7 @@ namespace OpenBound.GameComponents.PawnAction
 #endif
         }
 
-        public virtual void Initialize()
+        public virtual void InitializeMovement()
         {
             yMovement.Preset(ySpeedComponent * force * Parameter.ProjectileMovementForceFactor / mass, Parameter.ProjectileMovementGravity + ywSpeedComponent * wForce * windInfluence);
             xMovement.Preset(xSpeedComponent * force * Parameter.ProjectileMovementForceFactor / mass, xwSpeedComponent * wForce * windInfluence);
@@ -207,8 +221,40 @@ namespace OpenBound.GameComponents.PawnAction
 #endif
         }
 
+        public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
+        public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
+        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public float CurrentFlipbookRotation => FlipbookList[0].Rotation;
+
+        protected virtual void CheckCollisionWithWeather()
+        {
+            foreach (Weather w in LevelScene.WeatherList)
+            {
+                w.CheckProjectileInteraction(this);
+            }
+        }
+
+        public virtual void OnBeginTornadoInteraction() { }
+
+        public virtual void OnEndTornadoInteraction() { }
+
+        public void SetBasePosition(Vector2 newPosition)
+        {
+            projectileInitialPosition = newPosition;
+            xSpeedComponent = (float)Math.Round(Math.Cos(CurrentFlipbookRotation), 3);
+            ySpeedComponent = (float)Math.Round(Math.Sin(CurrentFlipbookRotation), 3);
+            InitializeMovement();
+        }
+
         protected virtual void UpdateMovementIteraction(float timeElapsedPerIteraction)
         {
+            if (!IsAbleToRefreshPosition) return;
+
+            CheckCollisionWithWeather();
+
+            if (IsExternallyRefreshingPosition) return;
+
+            //Normal movement positioning
             yMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
             xMovement.RefreshCurrentPosition(timeElapsedPerIteraction);
 

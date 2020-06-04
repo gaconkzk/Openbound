@@ -15,10 +15,12 @@ namespace OpenBound.Common
     public class DepthParameter
     {
         //Game Scenario
-        public const float Background     = 0f;
-        public const float BackgroundAnim = Background + 0.01f;
-        public const float Foreground     = Background + 0.02f;
-        //0.02
+        public const float Background = 0f;
+        public const float BackgroundAnim                 = Background + 0.01f;
+        public const float WeatherEffectTornadoProjectile = Background + 0.019f;
+        public const float WeatherEffect                  = Background + 0.02f;
+        public const float Foreground                     = Background + 0.03f;
+        //0.03
 
         //LoadingScreen requires a bit more variables
         public const float LoadingScreenMinimapForeground     = 0.001f;

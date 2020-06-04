@@ -17,6 +17,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public TurtleProjectile1(Turtle mobile)
             : base(mobile, ShotType.S1, Parameter.ProjectileTurtleS1ExplosionRadius, Parameter.ProjectileTurtleS1BaseDamage)
         {
-            trace = new HelicoidalTrace(MobileType.Turtle, ShotType.S1, Color.White);
+            trace = new HelicoidalTrace(MobileType.Turtle, ShotType.S1, Color.White, this);
 
             mass = Parameter.ProjectileTurtleS1Mass;
             windInfluence = Parameter.ProjectileTurtleS1WindInfluence;
@@ -92,7 +93,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public TurtleProjectile2(Turtle mobile, float angleOffset)
             : base(mobile, ShotType.S2, 0, 0, canCollide: false)
         {
-            trace = new HelicoidalTrace(MobileType.Turtle, ShotType.S2, Color.White);
+            trace = new HelicoidalTrace(MobileType.Turtle, ShotType.S2, Color.White, this);
 
             this.angleOffset = angleOffset;
             angleDecreasingOffsetTimer = Parameter.ProjectileTurtleS2AngleOffsetTimer;
@@ -103,6 +104,21 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mass = Parameter.ProjectileTurtleS2Mass;
             windInfluence = Parameter.ProjectileTurtleS2WindInfluence;
         }
+
+        #region Weather/Tornado
+        protected override void CheckCollisionWithWeather()
+        {
+            foreach (Weather w in LevelScene.WeatherList)
+            {
+                if (w.Intersects(dProj) && !w.IsInteracting(this))
+                {
+                    Position = dProj.Position;
+                    w.ModifiedProjectileList.Add(this);
+                    w.OnInteract(this);
+                }
+            }
+        }
+        #endregion
 
         protected override void Explode()
         {
@@ -150,7 +166,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class TurtleProjectile3 : Projectile
     {
-        ProjectileAnimation bubbleAnimation;
+        ProjectileAnimationState bubbleAnimation;
         float totalTravelledTime;
 
         public TurtleProjectile3(Turtle mobile)
@@ -161,7 +177,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 mobile.Crosshair.CannonPosition, new Vector2(26, 22.5f),
                 52, 45, "Graphics/Tank/Turtle/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
+
+            bubbleAnimation = ProjectileAnimationState.Closed;
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTurtleSSMass;
@@ -170,27 +188,30 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void UpdatePosition()
         {
+            base.UpdatePosition();
+
             switch (bubbleAnimation)
             {
-                case ProjectileAnimation.Closed:
+                case ProjectileAnimationState.Closed:
                     if (totalTravelledTime < Parameter.ProjectileTurtleSSTransformTime)
                     {
                         totalTravelledTime += Parameter.ProjectileMovementTotalTimeElapsed;
-                        base.UpdatePosition();
                     }
                     else
                     {
-                        bubbleAnimation = ProjectileAnimation.Opening;
+                        IsAbleToRefreshPosition = false;
+                        bubbleAnimation = ProjectileAnimationState.Opening;
                     }
                     break;
-                case ProjectileAnimation.Opening:
-                    bubbleAnimation = ProjectileAnimation.Opened;
+                case ProjectileAnimationState.Opening:
+                    bubbleAnimation = ProjectileAnimationState.Opened;
                     SpecialEffectBuilder.TurtleProjectile3Division(FlipbookList[0].Position, FlipbookList[0].Rotation);
                     TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecution);
                     PlayExplosionSFX();
                     GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
+                    IsAbleToRefreshPosition = true;
                     break;
-                case ProjectileAnimation.Opened:
+                case ProjectileAnimationState.Opened:
                     base.Destroy();
                     break;
             }
@@ -223,7 +244,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 positionModifier, new Vector2(15, 13.5f),
                 30, 27, "Graphics/Tank/Turtle/Shot3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             FlipbookList[0].JumpToRandomAnimationFrame();
 

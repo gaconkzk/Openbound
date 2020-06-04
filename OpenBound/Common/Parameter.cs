@@ -267,7 +267,7 @@ namespace OpenBound.Common
         public const float ProjectileBigfootSSWindInfluence = 1.2f;
 
         //Dragon
-        public const float ProjectileParticleNewEmissionMaxDistance = 20f;
+        public const float ProjectileParticleNewEmissionMaxDistance = 30f;
 
         public const int ProjectileDragonS1ExplosionRadius = 25;
         public const int ProjectileDragonS2ExplosionRadius = 25;
@@ -284,6 +284,9 @@ namespace OpenBound.Common
         public const float ProjectileDragonS1WindInfluence = 1.4f;
         public const float ProjectileDragonS2WindInfluence = 1.4f;
         public const float ProjectileDragonSSWindInfluence = 1.4f;
+
+        public const float ProjectileDragonSSEAccelerationStartingFactor = 200f;
+        public const float ProjectileDragonSSESpeedStartingFactor        = 100f;
 
         //Mage
         public const int ProjectileMageS1ExplosionRadius = 25;
@@ -401,6 +404,13 @@ namespace OpenBound.Common
         public const float ProjectileTurtleSSAngleOffsetDegrees = 3;
         public const float ProjectileTurtleSSBubbleNumber = 6;
         public const float ProjectileTurtleSSDampeningFactor = 3f;
+        #endregion
+
+        #region WeatherEffects
+        public const float WeaterEffectRandomFlipbookUpdateTimer = 0.1f;
+        public static float WeatherEffectVerticalScrollingUpdateSpeed = 50f;
+
+        public static float WeatherEffectTornadoMinimumProjectileSpeed = 25f;
         #endregion
     }
 }

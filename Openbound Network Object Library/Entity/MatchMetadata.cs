@@ -79,7 +79,7 @@ namespace Openbound_Network_Object_Library.Entity
             WeatherType newWeather;
 
             if ((val -= map.Force) < 0) newWeather = WeatherType.Force;
-            else if ((val -= map.Hurricane) < 0) newWeather = WeatherType.Hurricane;
+            else if ((val -= map.Tornado) < 0) newWeather = WeatherType.Hurricane;
             else if ((val -= map.Electricity) < 0) newWeather = WeatherType.Electricity;
             else if ((val -= map.Wind) < 0) newWeather = WeatherType.Wind;
             else if ((val -= map.Weakness) < 0) newWeather = WeatherType.Weakness;

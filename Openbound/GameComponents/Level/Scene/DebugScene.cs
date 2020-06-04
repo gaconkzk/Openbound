@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Openbound_Network_Object_Library.Models;
+using OpenBound.GameComponents.WeatherEffect;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -34,6 +36,9 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public PopupGameOptions optionsMenu;
         public PopupSelectMobile popupSelectMobile;
+
+        public Tornado tornado;
+
         internal static void InitializeObjects()
         {
             GameInformation.Instance.PlayerInformation = new Player()
@@ -284,7 +289,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 TeamA = new List<Player>() { sMobList[0].Owner, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner },
                 TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
-            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Dragon);
+            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
         }
 
 
@@ -372,13 +377,19 @@ namespace OpenBound.GameComponents.Level.Scene
             mFlipbook[i++].ChangeState(MobileFlipbookState.All, true);
         }
 
+        public override void Initialize(GraphicsDevice GraphicsDevice, SpriteBatch SpriteBatch)
+        {
+            base.Initialize(GraphicsDevice, SpriteBatch);
+            tornado = new Tornado(Vector2.Zero);
+            WeatherList.Add(tornado);
+        }
+
 
         Random r = new Random();
 
-        public override void Update(GameTime GameTime)
+        public override void Update(GameTime gameTime)
         {
-            base.Update(GameTime);
-
+            base.Update(gameTime);
 
 
             if (InputHandler.IsBeingPressed(Keys.F1))
@@ -434,12 +445,14 @@ namespace OpenBound.GameComponents.Level.Scene
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);
+            tornado.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
+            tornado.Draw(gameTime, spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);

@@ -17,6 +17,8 @@ namespace OpenBound.GameComponents.PawnAction
 {
     public class Trace
     {
+        private Projectile projectile;
+
         protected List<Flipbook> traceList;
         protected Flipbook leadTrace;
 
@@ -30,10 +32,16 @@ namespace OpenBound.GameComponents.PawnAction
         protected DebugCrosshair dc0, dc1;
 #endif
 
-        public Vector2 Position => leadTrace.Position;
-
-        public Trace(MobileType mobileType, Color color)
+        public Vector2 Position
         {
+            get => leadTrace.Position;
+            set => leadTrace.Position = value;
+        }
+            
+
+        public Trace(MobileType mobileType, Color color, Projectile projectile)
+        {
+            this.projectile = projectile;
             traceList = new List<Flipbook>();
             Color = color;
 
@@ -55,9 +63,9 @@ namespace OpenBound.GameComponents.PawnAction
             switch (mobileType)
             {
                 case MobileType.Mage:
-                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(8, 8), 16, 16, $"Graphics/Tank/Mage/{shotType}T", animationInstance, false, DepthParameter.Projectile);
+                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(8, 8), 16, 16, $"Graphics/Tank/Mage/{shotType}T", animationInstance, false, projectile.FlipbookList[0].LayerDepth);
                 case MobileType.Turtle:
-                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(20, 8), 32, 16, $"Graphics/Tank/Turtle/S1T", animationInstance, false, DepthParameter.Projectile);
+                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(20, 8), 32, 16, $"Graphics/Tank/Turtle/S1T", animationInstance, false, projectile.FlipbookList[0].LayerDepth);
             }
 
             return null;

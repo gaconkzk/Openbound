@@ -19,6 +19,7 @@ using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface.Text;
 using System;
 using System.Collections.Generic;
+using OpenBound.Extension;
 
 namespace OpenBound.GameComponents.Interface.Interactive
 {
@@ -590,7 +591,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
             if (state == ButtonAnimationState.Disabled) return;
 
-            if (collisionBox.Intersects(new Rectangle((int)Cursor.Instance.CurrentFlipbook.Position.X, (int)Cursor.Instance.CurrentFlipbook.Position.Y, 1, 1)))
+            if (collisionBox.Intersects(Cursor.Instance.CurrentFlipbook.Position))
             {
                 if (InputHandler.IsBeingHeldUp(MKeys.Left))
                 {

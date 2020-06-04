@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Openbound_Network_Object_Library.Models;
+using OpenBound.GameComponents.WeatherEffect;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -55,19 +56,24 @@ namespace OpenBound.GameComponents.Level.Scene
 
         //Game Constants/Information
         public static MatchMetadata MatchMetadata;
-
         public static List<Mobile> MobileList;
+
+        //Weather
+        public static List<Weather> WeatherList;
 
         //Visual interface
         public static HUD HUD;
-
-        private bool isLeaveGamePopupRendered = false;
+        private bool isLeaveGamePopupRendered;
 
         public LevelScene()
         {
             GameInformation.Instance.GameState = GameState.InGame;
 
             MobileList = new List<Mobile>();
+            WeatherList = new List<Weather>();
+
+            //Popup related
+            isLeaveGamePopupRendered = false;
 
             //Spawning units on the selected coordinates
             RoomMetadata room = GameInformation.Instance.RoomMetadata;
