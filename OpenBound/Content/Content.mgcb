@@ -3432,6 +3432,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Tank/Ice/Flame3.png
 
+#begin Graphics/Special Effects/Tank/Lightning/Flame1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Special Effects/Tank/Lightning/Flame1.png
+
 #begin Graphics/Special Effects/Tank/Mage/Flame1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -3876,6 +3888,42 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/Knight/Shot3.png
 
+#begin Graphics/Tank/Lightning/Bullet1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/Lightning/Bullet1.png
+
+#begin Graphics/Tank/Lightning/Bullet3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/Lightning/Bullet3.png
+
+#begin Graphics/Tank/Lightning/CharacterSpritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/Lightning/CharacterSpritesheet.png
+
 #begin Graphics/Tank/Mage/Bullet3.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4031,6 +4079,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/Turtle/Shot3.png
+
+#begin Graphics/Weather/Electricity.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Weather/Electricity.png
 
 #begin Interface/AnimatedButtons/Buddy.png
 /importer:TextureImporter

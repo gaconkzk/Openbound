@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -384,6 +385,46 @@ namespace OpenBound.GameComponents.Animation
                     { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 464, TimePerFrame = 1/18f } },
                 }
             },
+               #region lightning
+               {
+                MobileType.Lightning,
+                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                {
+                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+
+                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
+
+                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
+                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
+
+                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 370, EndingFrame = 394, TimePerFrame = 1/24f } },
+                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 395, EndingFrame = 419, TimePerFrame = 1/24f } },
+                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 115, EndingFrame = 134, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 156, EndingFrame = 156, TimePerFrame = 1f } },
+
+                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 295, EndingFrame = 309, TimePerFrame = 1/19f } },
+                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 310, EndingFrame = 324, TimePerFrame = 1/26f } },
+
+                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/14f } },
+                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/20f } },
+
+                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 210, EndingFrame = 234, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 194, TimePerFrame = 1/19f } },
+
+                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 155, EndingFrame = 174, TimePerFrame = 1/18f } },
+
+                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 444, TimePerFrame = 1/18f } },
+                }
+            },
+            #endregion
             #endregion
         };
 
@@ -470,6 +511,11 @@ namespace OpenBound.GameComponents.Animation
                 case MobileType.Turtle:
                     mb.Flipbook = Flipbook.CreateFlipbook(
                         Position, new Vector2(59, 88), 2300 / 20, 3000 / 24, spritePath,
+                        new AnimationInstance(), true, DepthParameter.Mobile);
+                    break;
+                case MobileType.Lightning:
+                    mb.Flipbook = Flipbook.CreateFlipbook(
+                        Position, new Vector2(56, 83), 2560 / 20, 3013 / 23, spritePath,
                         new AnimationInstance(), true, DepthParameter.Mobile);
                     break;
             }
