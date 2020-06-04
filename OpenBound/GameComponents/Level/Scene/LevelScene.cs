@@ -431,6 +431,7 @@ namespace OpenBound.GameComponents.Level.Scene
         {
             base.Update(gameTime);
             UpdateBackgroundParallaxPosition();
+            WeatherList.ForEach(x => x.Update(gameTime));
 
             lock (MobileList)
             {
@@ -447,6 +448,7 @@ namespace OpenBound.GameComponents.Level.Scene
             base.Draw(gameTime);
             BackgroundFlipbookList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             Foreground.Draw(gameTime, spriteBatch);
+            WeatherList.ForEach(x => x.Draw(gameTime, spriteBatch));
 
             lock (MobileList)
             {

@@ -445,14 +445,12 @@ namespace OpenBound.GameComponents.Level.Scene
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);
-            tornado.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
-            tornado.Draw(gameTime, spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);
