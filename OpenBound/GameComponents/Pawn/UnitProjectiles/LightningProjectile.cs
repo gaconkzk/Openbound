@@ -13,8 +13,10 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +47,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
+            EletricityStrike tornadox = new EletricityStrike(Position);
+            LevelScene.WeatherList.Add(tornadox);
+            //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
         }
 
         protected override void Destroy()

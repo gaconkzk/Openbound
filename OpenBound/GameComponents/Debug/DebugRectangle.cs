@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Debug
 {
-    class DebugRectangle : DebugElement
+    public class DebugRectangle : DebugElement
     {
         List<DebugLine> dLineList = new List<DebugLine>();
 
