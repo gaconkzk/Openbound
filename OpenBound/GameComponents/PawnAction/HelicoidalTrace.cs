@@ -19,8 +19,8 @@ namespace OpenBound.GameComponents.PawnAction
         private MobileType mobileType;
         private ShotType shotType;
 
-        public HelicoidalTrace(MobileType mobileType, ShotType shotType, Color color)
-            : base(mobileType, color)
+        public HelicoidalTrace(MobileType mobileType, ShotType shotType, Color color, Projectile projectile)
+            : base(mobileType, color, projectile)
         {
             this.mobileType = mobileType;
             leadTrace = SpawnFlipbook(mobileType, shotType, traceLeadAnimationInstance);
@@ -68,11 +68,6 @@ namespace OpenBound.GameComponents.PawnAction
             dc0.Update(projectilePosition);
             dc1.Update(positionRotatedOffset + projectilePosition);
 #endif
-        }
-
-        internal void Update(Vector2 position, Vector2 vector2, float rotation, float projectileMovementTimeElapsedPerInteraction, float angleOffset, object projectileTurtleS2RotationFactor, float angleFactor)
-        {
-            throw new NotImplementedException();
         }
     }
 }

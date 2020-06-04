@@ -223,8 +223,8 @@ namespace OpenBound.GameComponents.PawnAction
 
         public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
         public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
-        public Vector2 AngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
-        public float CurrentAngle => FlipbookList[0].Rotation;
+        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public float CurrentFlipbookRotation => FlipbookList[0].Rotation;
 
         protected virtual void CheckCollisionWithWeather()
         {
@@ -234,11 +234,15 @@ namespace OpenBound.GameComponents.PawnAction
             }
         }
 
+        public virtual void OnBeginTornadoInteraction() { }
+
+        public virtual void OnEndTornadoInteraction() { }
+
         public void SetBasePosition(Vector2 newPosition)
         {
             projectileInitialPosition = newPosition;
-            xSpeedComponent = (float)Math.Round(Math.Cos(CurrentAngle), 3);
-            ySpeedComponent = (float)Math.Round(Math.Sin(CurrentAngle), 3);
+            xSpeedComponent = (float)Math.Round(Math.Cos(CurrentFlipbookRotation), 3);
+            ySpeedComponent = (float)Math.Round(Math.Sin(CurrentFlipbookRotation), 3);
             InitializeMovement();
         }
 

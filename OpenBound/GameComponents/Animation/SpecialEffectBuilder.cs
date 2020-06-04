@@ -72,10 +72,10 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
         #region Dragon
-        public static SpecialEffect DragonProjectile1Explosion(Vector2 position, float rotation)
+        public static SpecialEffect DragonProjectile1Explosion(Vector2 position, float rotation, float layerDepth = DepthParameter.ProjectileSFX)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(94, 92.5f), 188, 185, "Graphics/Special Effects/Tank/Dragon/Flame1",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 30, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 30, TimePerFrame = 1 / 30f }, false, layerDepth, rotation);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 

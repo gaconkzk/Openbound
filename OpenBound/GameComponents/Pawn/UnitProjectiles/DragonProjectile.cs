@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 1, 1, "Misc/Dummy",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             SpawnTime = spawnTime;
             FlipbookList[0].HideElement();
@@ -71,7 +71,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 previousSESpawnPosition = FlipbookList[0].Position;
                 currentDistance = 0;
 
-                SpecialEffect se = SpecialEffectBuilder.DragonProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
+                SpecialEffect se = SpecialEffectBuilder.DragonProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation, FlipbookList[0].LayerDepth);
                 se.Flipbook.Scale = Vector2.One / 3;
                 se.Flipbook.Color = Color.Yellow;
                 se.Flipbook.CurrentAnimationInstance.TimePerFrame = 1 / 60f;
@@ -130,7 +130,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
                 },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileDragonSSMass;
@@ -202,8 +202,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void InitializeMovement()
         {
-            yMovement.Preset((float)Math.Sin(CurrentAngle) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Sin(CurrentAngle) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
-            xMovement.Preset((float)Math.Cos(CurrentAngle) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Cos(CurrentAngle) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
+            yMovement.Preset((float)Math.Sin(CurrentFlipbookRotation) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Sin(CurrentFlipbookRotation) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
+            xMovement.Preset((float)Math.Cos(CurrentFlipbookRotation) * Parameter.ProjectileDragonSSESpeedStartingFactor, (float)Math.Cos(CurrentFlipbookRotation) * Parameter.ProjectileDragonSSEAccelerationStartingFactor);
         }
 
         protected override void UpdatePosition()

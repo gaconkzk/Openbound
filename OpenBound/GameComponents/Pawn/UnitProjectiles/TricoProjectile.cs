@@ -14,8 +14,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
@@ -46,7 +48,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS1Mass;
@@ -81,7 +83,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16, 16),
                 32, 32, "Graphics/Tank/Trico/Bullet2",
-                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile, angle));
 
             FlipbookList[0].SetTransparency(0);
         }
@@ -121,6 +123,21 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
         }
 
+        #region Weather/Tornado
+        protected override void CheckCollisionWithWeather()
+        {
+            foreach (Weather w in LevelScene.WeatherList)
+            {
+                if (w.Intersects(projectile) && !w.IsInteracting(this))
+                {
+                    Position = projectile.Position;
+                    w.ModifiedProjectileList.Add(this);
+                    w.OnInteract(this);
+                }
+            }
+        }
+        #endregion
+
         public override void OnSpawn()
         {
             base.OnSpawn();
@@ -137,7 +154,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                offsetFactor = MathHelper.Min(offsetFactor + Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
+                if (IsExternallyRefreshingPosition)
+                {
+                    offsetFactor = MathHelper.Max(offsetFactor - Parameter.ProjectileMovementTimeElapsedPerInteraction, 0);
+                }
+                else
+                {
+                    offsetFactor = MathHelper.Min(offsetFactor + Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
+                }
 
                 base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
 
@@ -181,7 +205,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 mobile.Crosshair.CannonPosition, new Vector2(40, 17),
                 66, 36, "Graphics/Tank/Trico/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1/19f },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             hasExploded = false;
             explosionTimer = 0;

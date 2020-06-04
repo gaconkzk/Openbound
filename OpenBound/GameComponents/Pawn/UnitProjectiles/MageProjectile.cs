@@ -17,9 +17,11 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
@@ -44,7 +46,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mass = Parameter.ProjectileMageS1Mass;
             windInfluence = Parameter.ProjectileMageS1WindInfluence;
 
-            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S1, Color.White);
+            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S1, Color.White, this);
         }
 
         public override void Update()
@@ -75,16 +77,22 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         DummyProjectile dProj;
 
+        Vector2 traceOffset;
+
         public MageProjectile2(Mage mobile, float angleOffset, Color color)
             : base(mobile, ShotType.S2, 0, 0, canCollide: false)
         {
-            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S2, color);
+            trace = new HelicoidalTrace(MobileType.Mage, ShotType.S2, color, this);
             this.angleOffset = angleOffset;
 
             mass = Parameter.ProjectileMageS2Mass;
             windInfluence = Parameter.ProjectileMageS2WindInfluence;
 
             dProj = new DummyProjectile(mobile, ShotType.S2, Parameter.ProjectileMageS2ExplosionRadius, Parameter.ProjectileMageS2BaseDamage);
+            //dProj.IsAbleToRefreshPosition = false;
+            //dProj.IsExternallyRefreshingPosition = false;
+
+            traceOffset = new Vector2(0, 15);
         }
 
         protected override void Explode()
@@ -93,13 +101,28 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpecialEffectBuilder.MageProjectile2Explosion(trace.Position, 0);
         }
 
+        #region Weather/Tornado
+        protected override void CheckCollisionWithWeather()
+        {
+            foreach (Weather w in LevelScene.WeatherList)
+            {
+                if (w.Intersects(dProj) && !w.IsInteracting(this))
+                {
+                    Position = dProj.Position;
+                    w.ModifiedProjectileList.Add(this);
+                    w.OnInteract(this);
+                }
+            }
+        }
+        #endregion
+
         public override void Update()
         {
             base.Update();
 
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
-                trace.Update(FlipbookList[0].Position, new Vector2(0, 15), FlipbookList[0].Rotation, Parameter.ProjectileMovementTimeElapsedPerInteraction, angleOffset);
+                trace.Update(FlipbookList[0].Position, traceOffset, FlipbookList[0].Rotation, Parameter.ProjectileMovementTimeElapsedPerInteraction, angleOffset);
 
                 dProj.FlipbookList[0].Position = trace.Position;
 
@@ -137,7 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 mobile.Crosshair.CannonPosition, new Vector2(27, 27),
                 54, 54, "Graphics/Tank/Mage/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileMageS2Mass;

@@ -28,7 +28,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         private float randomRotationElapsedTime;
         private Vector2 offset;
         
-        protected List<Projectile> modifiedProjectileList;
+        public List<Projectile> ModifiedProjectileList;
         protected Rectangle collisionRectangle;
 
         private DebugRectangle debugRectangle;
@@ -36,11 +36,11 @@ namespace OpenBound.GameComponents.WeatherEffect
         public Weather()
         {
             flipbookList = new List<Flipbook>();
-            modifiedProjectileList = new List<Projectile>();
+            ModifiedProjectileList = new List<Projectile>();
             randomRotationElapsedTime = 0;
         }
 
-        public void Initialize(string texturePath, Vector2 startingPosition, WeatherAnimationType animationType)
+        public virtual void Initialize(string texturePath, Vector2 startingPosition, WeatherAnimationType animationType)
         {
             Vector2 endingPosition = new Vector2(Topography.MapWidth, Topography.MapHeight) / 2;
             Vector2 currentOffset = startingPosition;
@@ -123,21 +123,26 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
-        public void CheckProjectileInteraction(Projectile projectile)
+        public bool CheckProjectileInteraction(Projectile projectile)
         {
-            if (collisionRectangle.Intersects(projectile.Position) && !modifiedProjectileList.Contains(projectile))
+            if (collisionRectangle.Intersects(projectile.Position) && !ModifiedProjectileList.Contains(projectile))
             {
-                modifiedProjectileList.Add(projectile);
+                ModifiedProjectileList.Add(projectile);
                 OnInteract(projectile);
+                return true;
             }
+
+            return false;
         }
 
-        public bool IsInteracting(Projectile projectile) => modifiedProjectileList.Contains(projectile);
+        public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
+
+        public bool IsInteracting(Projectile projectile) => ModifiedProjectileList.Contains(projectile);
 
         public abstract void OnInteract(Projectile projectile);
         public abstract void OnStopInteracting(Projectile projectile);
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             flipbookList.ForEach((x) => x.Draw(gameTime, spriteBatch));
         }

@@ -37,7 +37,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Knightsword Animation
             Mobile.Satellite.AttackingTarget = FlipbookList[0];
@@ -120,7 +120,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     TimePerFrame = 1 / 20f,
                 },
                 true,
-                DepthParameter.Projectile));
+                DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileKnightSSMass;
@@ -203,8 +203,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void InitializeMovement()
         {
-            yMovement.Preset((float)(Math.Sin(CurrentAngle) * Parameter.ProjectileKnightSpeed), 0);
-            xMovement.Preset((float)(Math.Cos(CurrentAngle) * Parameter.ProjectileKnightSpeed), 0);
+            yMovement.Preset((float)(Math.Sin(CurrentFlipbookRotation) * Parameter.ProjectileKnightSpeed), 0);
+            xMovement.Preset((float)(Math.Cos(CurrentFlipbookRotation) * Parameter.ProjectileKnightSpeed), 0);
         }
 
         public override void Update()
@@ -216,7 +216,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 previousSESpawnPosition = Position;
 
                 //a new sword and sfx is appended to the trace
-                SpecialEffect sword = SpecialEffectBuilder.KnightProjectileBullet1(Position, CurrentAngle);
+                SpecialEffect sword = SpecialEffectBuilder.KnightProjectileBullet1(Position, CurrentFlipbookRotation);
 
                 swordTrace.Insert(0, sword);
 

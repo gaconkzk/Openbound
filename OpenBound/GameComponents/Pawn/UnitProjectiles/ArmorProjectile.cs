@@ -33,7 +33,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS1Mass;
@@ -74,7 +74,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS2Mass;
@@ -146,7 +146,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 mobile.Crosshair.CannonPosition, new Vector2(65, 54),
                 131, 109, "Graphics/Tank/Armor/Bullet3",
                 new List<AnimationInstance>() { rocketAnimationPresets[rocketAnimation] },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorSSMass;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.Extension;
+using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
 using System;
@@ -23,6 +25,7 @@ namespace OpenBound.GameComponents.WeatherEffect
     {
         public Vector2 SpeedVector;
         public TornadoAnimationState TornadoAnimationState;
+
         public TornadoProjectileState(Projectile projectile)
         {
             TornadoAnimationState = TornadoAnimationState.FirstStep;
@@ -33,7 +36,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             if (speed == 0)
                 speed = initialSpeed;
 
-            SpeedVector = projectile.AngleVector * Math.Max(speed, Parameter.WeatherEffectTornadoMinimumProjectileSpeed); 
+            SpeedVector = projectile.CurrentFlipbookAngleVector * Math.Max(speed, Parameter.WeatherEffectTornadoMinimumProjectileSpeed); 
         }
     }
 
@@ -41,6 +44,10 @@ namespace OpenBound.GameComponents.WeatherEffect
     {
         Dictionary<Projectile, TornadoProjectileState> tornadoInteraction;
         List<Projectile> unusedProjectileList;
+
+        private Rectangle outerCollisionRectangle;
+
+        private DebugRectangle outerDebugRectangle;
 
         public Tornado(Vector2 position)
         {
@@ -50,9 +57,20 @@ namespace OpenBound.GameComponents.WeatherEffect
             Initialize("Graphics/Special Effects/Weather/Tornado", new Vector2(position.X, -Topography.MapHeight / 2), WeatherAnimationType.VariableAnimationFrame);
         }
 
+        public override void Initialize(string texturePath, Vector2 startingPosition, WeatherAnimationType animationType)
+        {
+            base.Initialize(texturePath, startingPosition, animationType);
+
+            outerCollisionRectangle = new Rectangle(collisionRectangle.X - 10, collisionRectangle.Y - 10, collisionRectangle.Width + 10 * 2, collisionRectangle.Height + 10 * 2);
+            outerDebugRectangle = new DebugRectangle(Color.Red);
+            outerDebugRectangle.Update(outerCollisionRectangle);
+            DebugHandler.Instance.Add(outerDebugRectangle);
+        }
+
         public override void OnInteract(Projectile projectile)
         {
             projectile.IsExternallyRefreshingPosition = true;
+            projectile.OnBeginTornadoInteraction();
             tornadoInteraction.Add(projectile, new TornadoProjectileState(projectile));
         }
 
@@ -60,7 +78,8 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             projectile.IsExternallyRefreshingPosition = false;
             projectile.SetBasePosition(projectile.Position);
-            modifiedProjectileList.Remove(projectile);
+            projectile.OnEndTornadoInteraction();
+            ModifiedProjectileList.Remove(projectile);
             tornadoInteraction.Remove(projectile);
         }
 
@@ -119,7 +138,7 @@ namespace OpenBound.GameComponents.WeatherEffect
                         {
                             kvp.Key.Position = kvp.Key.Position + kvp.Value.SpeedVector * Parameter.ProjectileMovementTimeElapsedPerInteraction;
 
-                            if (!collisionRectangle.Intersects(kvp.Key.Position))
+                            if (!outerCollisionRectangle.Intersects(kvp.Key.Position))
                             {
                                 kvp.Value.TornadoAnimationState = TornadoAnimationState.Leaving;
                                 break;
@@ -134,6 +153,11 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             unusedProjectileList.ForEach((x) => OnStopInteracting(x));
             unusedProjectileList.Clear();
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            base.Draw(gameTime, spriteBatch);
         }
     }
 }

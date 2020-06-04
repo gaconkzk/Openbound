@@ -72,7 +72,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceS2Mass;
@@ -111,7 +111,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f }
                 },
-                true, DepthParameter.Projectile));
+                true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceSSMass;

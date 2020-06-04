@@ -21,7 +21,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 1, 1, "Misc/Dummy",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
-                }, true, DepthParameter.Projectile));
+                }, true, DepthParameter.Projectile, angle));
         }
 
         protected override void Destroy()
