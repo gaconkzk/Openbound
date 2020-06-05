@@ -59,7 +59,7 @@ namespace OpenBound.GameComponents.Level.Scene
         public static List<Mobile> MobileList;
 
         //Weather
-        public static List<Weather> WeatherList;
+        public static WeatherHandler WeatherHandler;
 
         //Visual interface
         public static HUD HUD;
@@ -70,7 +70,7 @@ namespace OpenBound.GameComponents.Level.Scene
             GameInformation.Instance.GameState = GameState.InGame;
 
             MobileList = new List<Mobile>();
-            WeatherList = new List<Weather>();
+            WeatherHandler = new WeatherHandler();
 
             //Popup related
             isLeaveGamePopupRendered = false;
@@ -432,6 +432,8 @@ namespace OpenBound.GameComponents.Level.Scene
             base.Update(gameTime);
             UpdateBackgroundParallaxPosition();
 
+            WeatherHandler.Update(gameTime);
+
             lock (MobileList)
             {
                 MobileList.ForEach((m) => m.Update(gameTime));
@@ -447,6 +449,8 @@ namespace OpenBound.GameComponents.Level.Scene
             base.Draw(gameTime);
             BackgroundFlipbookList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             Foreground.Draw(gameTime, spriteBatch);
+
+            WeatherHandler.Draw(gameTime, spriteBatch);
 
             lock (MobileList)
             {

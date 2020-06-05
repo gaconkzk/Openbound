@@ -228,7 +228,7 @@ namespace OpenBound.GameComponents.PawnAction
 
         protected virtual void CheckCollisionWithWeather()
         {
-            foreach (Weather w in LevelScene.WeatherList)
+            foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
             {
                 w.CheckProjectileInteraction(this);
             }

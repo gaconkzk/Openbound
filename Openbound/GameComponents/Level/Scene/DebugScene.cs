@@ -37,8 +37,6 @@ namespace OpenBound.GameComponents.Level.Scene
         public PopupGameOptions optionsMenu;
         public PopupSelectMobile popupSelectMobile;
 
-        public Tornado tornado;
-
         internal static void InitializeObjects()
         {
             GameInformation.Instance.PlayerInformation = new Player()
@@ -289,7 +287,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 TeamA = new List<Player>() { sMobList[0].Owner, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner },
                 TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
-            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
+            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.CozyTower) ;
         }
 
 
@@ -380,8 +378,6 @@ namespace OpenBound.GameComponents.Level.Scene
         public override void Initialize(GraphicsDevice GraphicsDevice, SpriteBatch SpriteBatch)
         {
             base.Initialize(GraphicsDevice, SpriteBatch);
-            tornado = new Tornado(Vector2.Zero);
-            WeatherList.Add(tornado);
         }
 
 
@@ -424,35 +420,31 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
-                List<WeatherType> wtL = new List<WeatherType>();
-
-                for (int i = r.Next(1, 1); i > 0; i--)
-                    wtL.Add((WeatherType)r.Next(0, 14));
-
-                Console.WriteLine(wtL.Count);
-
-                HUD.weatherDisplay.AppendWeatherToList(wtL);
+                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                MobileList.RemoveAt(1);
+                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
-                popupSelectMobile.ShouldRender = true;
+                for(int i = 0; i < 8; i++)
+                    WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), i * MathHelper.Pi/4);
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi);
+
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), -MathHelper.Pi - MathHelper.Pi / 4 );
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi / 4);
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);
-            tornado.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
-            tornado.Draw(gameTime, spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);
