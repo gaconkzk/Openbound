@@ -47,8 +47,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            EletricityStrike tornadox = new EletricityStrike(Position);
-            LevelScene.WeatherList.Add(tornadox);
+            LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
             //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
         }
 

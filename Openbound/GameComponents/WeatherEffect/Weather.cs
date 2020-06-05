@@ -40,14 +40,42 @@ namespace OpenBound.GameComponents.WeatherEffect
     {
         //Weather properties
         private List<Flipbook> flipbookList;
-        private float randomRotationElapsedTime;
-        protected Vector2 offset;
-        protected Vector2 startingPosition;
-        protected Vector2 endingPosition;
-        
+
+        protected Vector2 flipbookPivot;
+        protected float rotation;
+        protected int numberOfFrames;
+        protected float _initialTransparency = 1;
+
+        public float Scale { get; protected set; }
+        public Vector2 StartingPosition { get; protected set; }
+
+        public WeatherEffectType WeatherEffectType { get; private set; }
+
+        //Effects
+
+        /// <summary>
+        /// List of modified/under behavior modification projectiles.
+        /// </summary>
         public List<Projectile> ModifiedProjectileList;
 
-        protected DebugRectangle debugRectangle;
+        //Collision
+        protected Rectangle collisionRectangle, outerCollisionRectangle;
+        protected Vector2 collisionRectangleOffset, outerCollisionRectangleOffset;
+
+        //Animation
+        //Animation - VerticalScrolling
+        private Vector2 animationVerticalScrollingOffset;
+
+        //Animation - RandomFlipbookFrame
+        private float animationRandomFlipbookElapsedTime;
+
+        private float fadeAnimationElapsedTime;
+
+#if DEBUG
+        //Debug
+        private DebugRectangle debugRectangle;
+        private DebugRectangle outerDebugRectangle;
+#endif
 
         /// <summary>
         /// Creates a new weather. Ideally it should only be used in <see cref="WeatherHandler.Add"/>.
@@ -170,7 +198,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
         /// </summary>
         public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
-        
+
         /// <summary>
         /// Check if this Weather is interacting with a Projectile.
         /// </summary>
@@ -209,12 +237,25 @@ namespace OpenBound.GameComponents.WeatherEffect
         }
 
         /// <summary>
+        /// Fades the weather object after the timespan is ended.
+        /// </summary>
+        /// <param name="timespan"></param>
+        protected void Fade(GameTime gameTime, float timeLimit = 1)
+        {
+            //transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * timespawn;
+            //timespan -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float transparency = Math.Max(0, 1 - fadeAnimationElapsedTime / timeLimit);
+            flipbookList.ForEach(x => x.SetTransparency(transparency));
+        }
+
+        /// <summary>
         /// Makes the weatherEffect to move down and loop on screen
         /// </summary>
         public void VerticalScrollingUpdate(GameTime gameTime)
         {
-            offset += new Vector2(0, Parameter.WeatherEffectVerticalScrollingUpdateSpeed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+            animationVerticalScrollingOffset += new Vector2(0, Parameter.WeatherEffectVerticalScrollingUpdateSpeed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             //Update position
             if (animationVerticalScrollingOffset.Y >= 1)
             {
@@ -222,8 +263,8 @@ namespace OpenBound.GameComponents.WeatherEffect
                 flipbookList.ForEach((x) => x.Position += roundOffset);
                 animationVerticalScrollingOffset = Vector2.Zero;
             }
-            
-            //Spawn new flipbooks if necessary
+
+            //Move the flipbook to the origin
             Flipbook lE = flipbookList.Last();
             if (lE.Position.Y - lE.SourceRectangle.Height * Scale >= Topography.MapHeight / 2)
             {

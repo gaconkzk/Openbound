@@ -178,7 +178,7 @@ namespace OpenBound.GameComponents.Level.Scene
                         Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero, 100, 186, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 11, TimePerFrame = 0.2f },                                      true, DepthParameter.BackgroundAnim),
                     };
 
-                    BackgroundFlipbookOffsetList = new List<Vector2>() { new Vector2(-38, -403), new Vector2(-192, -158), new Vector2(163, -270), new Vector2( 124, -116) };
+                    BackgroundFlipbookOffsetList = new List<Vector2>() { new Vector2(-38, -403), new Vector2(-192, -158), new Vector2(163, -270), new Vector2(124, -116) };
                     break;
                 #endregion
                 #region SeaOfHero/Candy
@@ -431,7 +431,6 @@ namespace OpenBound.GameComponents.Level.Scene
         {
             base.Update(gameTime);
             UpdateBackgroundParallaxPosition();
-            WeatherList.ForEach(x => x.Update(gameTime));
 
             WeatherHandler.Update(gameTime);
 
@@ -450,7 +449,6 @@ namespace OpenBound.GameComponents.Level.Scene
             base.Draw(gameTime);
             BackgroundFlipbookList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             Foreground.Draw(gameTime, spriteBatch);
-            WeatherList.ForEach(x => x.Draw(gameTime, spriteBatch));
 
             WeatherHandler.Draw(gameTime, spriteBatch);
 

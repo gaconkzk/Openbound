@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.GameComponents.Pawn.Unit;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,6 +55,9 @@ namespace OpenBound.GameComponents.WeatherEffect
             {
                 case WeatherEffectType.Tornado:
                     weather = new Tornado(position, 1);
+                    break;
+                case WeatherEffectType.LightningSES1:
+                    weather = new EletricityStrike(position, 1);
                     break;
             }
 
