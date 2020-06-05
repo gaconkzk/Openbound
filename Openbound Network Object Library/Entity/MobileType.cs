@@ -15,14 +15,14 @@ namespace Openbound_Network_Object_Library.Entity
     public enum MobileType
     {
         Random = 0,
-        Aduka,
+        Aduka, //1
         Armor,
-        ASate,
+        ASate, //2
         Assassin,
 
         Bigfoot,
         BlueWhale,
-        Boomer,
+        Boomer, //3
 
         Carrior,
 
@@ -30,27 +30,27 @@ namespace Openbound_Network_Object_Library.Entity
 
         Frank,
 
-        Grub,
+        Grub, //4
 
         Ice,
 
-        JD,
-        JFrog,
+        JD, //5
+        JFrog, //6
 
-        Kalsiddon,
+        Kalsiddon, //7
         Knight,
 
-        Lightning,
+        Lightning, //8
 
         Mage,
         Maya,
 
-        Nak,
+        Nak, //9
 
         Princess,
         Phoenix,
 
-        RaonLauncher,
+        RaonLauncher, //10
 
         ShadowWalker,
 

@@ -287,7 +287,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 TeamA = new List<Player>() { sMobList[0].Owner, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner },
                 TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
-            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
+            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.CozyTower) ;
         }
 
 
@@ -420,17 +420,22 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
-                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(-200, 0));
+                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(200, 0));
+                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
-                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0));
+                for(int i = 0; i < 8; i++)
+                    WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), i * MathHelper.Pi/4);
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi);
+
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), -MathHelper.Pi - MathHelper.Pi / 4 );
+                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi / 4);
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);
