@@ -40,39 +40,14 @@ namespace OpenBound.GameComponents.WeatherEffect
     {
         //Weather properties
         private List<Flipbook> flipbookList;
-
-        protected Vector2 flipbookPivot;
-        protected float rotation;
-        protected int numberOfFrames;
-
-        public float Scale { get; protected set; }
-        public Vector2 StartingPosition { get; protected set; }
-
-        public WeatherEffectType WeatherEffectType { get; private set; }
-
-        //Effects
-
-        /// <summary>
-        /// List of modified/under behavior modification projectiles.
-        /// </summary>
+        private float randomRotationElapsedTime;
+        protected Vector2 offset;
+        protected Vector2 startingPosition;
+        protected Vector2 endingPosition;
+        
         public List<Projectile> ModifiedProjectileList;
 
-        //Collision
-        protected Rectangle collisionRectangle, outerCollisionRectangle;
-        protected Vector2 collisionRectangleOffset, outerCollisionRectangleOffset;
-
-        //Animation
-        //Animation - VerticalScrolling
-        private Vector2 animationVerticalScrollingOffset;
-
-        //Animation - RandomFlipbookFrame
-        private float animationRandomFlipbookElapsedTime;
-
-#if DEBUG
-        //Debug
-        private DebugRectangle debugRectangle;
-        private DebugRectangle outerDebugRectangle;
-#endif
+        protected DebugRectangle debugRectangle;
 
         /// <summary>
         /// Creates a new weather. Ideally it should only be used in <see cref="WeatherHandler.Add"/>.
@@ -238,8 +213,8 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// </summary>
         public void VerticalScrollingUpdate(GameTime gameTime)
         {
-            animationVerticalScrollingOffset += new Vector2(0, Parameter.WeatherEffectVerticalScrollingUpdateSpeed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
+            offset += new Vector2(0, Parameter.WeatherEffectVerticalScrollingUpdateSpeed) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
             //Update position
             if (animationVerticalScrollingOffset.Y >= 1)
             {
@@ -247,8 +222,8 @@ namespace OpenBound.GameComponents.WeatherEffect
                 flipbookList.ForEach((x) => x.Position += roundOffset);
                 animationVerticalScrollingOffset = Vector2.Zero;
             }
-
-            //Move the flipbook to the origin
+            
+            //Spawn new flipbooks if necessary
             Flipbook lE = flipbookList.Last();
             if (lE.Position.Y - lE.SourceRectangle.Height * Scale >= Topography.MapHeight / 2)
             {
