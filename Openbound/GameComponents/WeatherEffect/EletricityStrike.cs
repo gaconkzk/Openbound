@@ -35,13 +35,14 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             //VerticalScrollingUpdate(gameTime);
             //this.outerCollisionRectangle.Y += 1;
-            _startingPosition.Y += 5; //(float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            collisionRectangle = new Rectangle((int)_startingPosition.X - 35, (int)_startingPosition.Y, (35 * 2), (int)(_startingPosition.Y - _startingPosition.Y));
+            //_startingPosition.Y += 5; //(float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            //collisionRectangle = new Rectangle((int)_startingPosition.X - 35, (int)_startingPosition.Y, (35 * 2), (int)(_startingPosition.Y - _startingPosition.Y));
             //debugRectangle.Update(collisionRectangle);
-            outerCollisionRectangle = new Rectangle(collisionRectangle.X - 10, collisionRectangle.Y - 10, collisionRectangle.Width + 10 * 2, collisionRectangle.Height + 10 * 2);
+            //outerCollisionRectangle = new Rectangle(collisionRectangle.X - 10, collisionRectangle.Y - 10, collisionRectangle.Width + 10 * 2, collisionRectangle.Height + 10 * 2);
             // outerDebugRectangle.Update(outerCollisionRectangle);
-          
-            this.Fade(gameTime, 0.4f);
+
+            this.Fade(gameTime, 10);
+            //this.Fade(gameTime, 0.4f);
         }
 
         public override Weather Merge(Weather weather)

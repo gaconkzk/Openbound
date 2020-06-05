@@ -13,8 +13,11 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Debug;
+using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
+using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
@@ -46,8 +49,36 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
+            LightningInvisibleProjectile invisibleProjectile;
+            int mapTop = -Topography.MapHeight / 2;
+            bool pointFound = false;
+
+            DebugCrosshair xDebug = new DebugCrosshair(Color: Color.Red);
+            xDebug.Sprite.Scale *= 10;
+            DebugHandler.Instance.Add(xDebug);
+            for (int i = mapTop; i < Position.Y; i++)
+            {
+                int[] x = Topography.GetRelativePosition(new Vector2(Position.X, i)).ToArray();
+                if (pointFound = Topography.CollidableForegroundMatrix[x[1]][x[0]])
+                {
+                    //xDebug.Update(new Vector2(Position.X, i));
+                    invisibleProjectile = new LightningInvisibleProjectile((Lightning)mobile, new Vector2(Position.X, x[1]));
+                    mobile.LastCreatedProjectileList.Add(invisibleProjectile);
+                    break;
+                }
+            }
+
+            if (!pointFound)
+            {
+                //xDebug.Update(new Vector2(Position.X, Position.Y));
+                invisibleProjectile = new LightningInvisibleProjectile((Lightning)mobile, Position);
+                mobile.LastCreatedProjectileList.Add(invisibleProjectile);
+            }
+
             base.Explode();
-            LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
+            
+            //Topography.CollidableForegroundMatrix(Position, Topography.GetRelativePosition(Position));
+            //LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
             //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
         }
 
@@ -139,4 +170,25 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 OnFinalizeExecution?.Invoke();
         }
     }
+
+
+    public class LightningInvisibleProjectile : DummyProjectile
+    {
+        public LightningInvisibleProjectile(Lightning lightning, Vector2 position) : base(lightning, ShotType.S1, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage)
+        {
+            this.Position = position;
+        }
+        protected override void Explode()
+        {
+            LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
+            base.Explode();
+        }
+        public override void Update()
+        {
+            base.Update();
+        }
+    }
 }
+
+
+
