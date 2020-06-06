@@ -22,6 +22,14 @@ namespace OpenBound.Common
         public static string GameModeTag = "Tag";
         public static string GameModeJewel = "Jewel";
 
+        //Interface - Weather - Weather Names
+        public const string WeatherForce       = "Force";
+        public const string WeatherTornado     = "Tornado";
+        public const string WeatherElectricity = "Electricity";
+        public const string WeatherWeakness    = "Weakness";
+        public const string WeatherMirror      = "Mirror";
+        public const string WeatherRandom      = "Random";
+
         //Popup - Create Room
         public static string PopupCreateRoomOneVersusOneText = "Room Size: 2 players, 1 on each side.";
         public static string PopupCreateRoomTwoVersusTwoText = "Room Size: 4 players, 2 on each side.";

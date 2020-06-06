@@ -201,7 +201,7 @@ namespace OpenBound.GameComponents.Interface
             });
 
             //Wind Compass
-            windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 30 - Parameter.ScreenCenter.Y));
+            windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
 
             //Weather Display
             weatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
@@ -250,7 +250,7 @@ namespace OpenBound.GameComponents.Interface
             gameOptionsButton.Enable();
         }
 
-        public void Update(GameTime GameTime)
+        public void Update(GameTime gameTime)
         {
             //Sprites
             spriteList.ForEach((x) => x.UpdateAttatchmentPosition());
@@ -260,7 +260,7 @@ namespace OpenBound.GameComponents.Interface
             StrenghtBar.UpdateAttatchmentPosition();
 
             //Floating Texts
-            FloatingTextHandler.Update(GameTime);
+            FloatingTextHandler.Update(gameTime);
 
             //Menu buttons
             menuButtons.ForEach((x) => x.Update());
@@ -270,7 +270,7 @@ namespace OpenBound.GameComponents.Interface
             currentAngle.UpdateValue(mobile.Crosshair.HUDSelectedAngle);
 
             //Fonts and texts
-            spriteNumericFieldList.ForEach((x) => x.Update(GameTime));
+            spriteNumericFieldList.ForEach((x) => x.Update(gameTime));
 
             //Health bars
             healthBarList.ForEach((x) => x.Update());
@@ -280,8 +280,10 @@ namespace OpenBound.GameComponents.Interface
             Delayboard.Update();
 
             //Wind Compass
-            windCompass.Update(GameTime);
-            weatherDisplay.Update(GameTime);
+            windCompass.Update(gameTime);
+
+            //Incoming Weather
+            weatherDisplay.Update(gameTime);
         }
 
         public void UpdatePreviousShotMarker()
@@ -290,35 +292,37 @@ namespace OpenBound.GameComponents.Interface
             previousAngle.UpdateValue((int)currentAngle.CurrentValue);
         }
 
-        public void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //Sprites
-            spriteList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
+            spriteList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             //Bars
-            StrenghtBar.Draw(GameTime, SpriteBatch);
-            MovementBar.Draw(GameTime, SpriteBatch);
+            StrenghtBar.Draw(gameTime, spriteBatch);
+            MovementBar.Draw(gameTime, spriteBatch);
 
             //Floating Texts
-            FloatingTextHandler.Draw(GameTime, SpriteBatch);
+            FloatingTextHandler.Draw(gameTime, spriteBatch);
 
             //SpriteFont
-            spriteNumericFieldList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
+            spriteNumericFieldList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             //Static Buttons
-            shot1Button.Draw(GameTime, SpriteBatch);
-            menuButtons.ForEach((x) => x.Draw(GameTime, SpriteBatch));
+            shot1Button.Draw(gameTime, spriteBatch);
+            menuButtons.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             //Health bars
-            healthBarList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
-            nameplateList.ForEach((x) => x.Draw(SpriteBatch));
+            healthBarList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            nameplateList.ForEach((x) => x.Draw(spriteBatch));
 
             //Delayboard
-            Delayboard.Draw(GameTime, SpriteBatch);
+            Delayboard.Draw(gameTime, spriteBatch);
 
             //Wind Compass
-            windCompass.Draw(SpriteBatch);
-            weatherDisplay.Draw(GameTime, SpriteBatch);
+            windCompass.Draw(spriteBatch);
+
+            //IncomingWeather
+            weatherDisplay.Draw(gameTime, spriteBatch);
         }
     }
 }

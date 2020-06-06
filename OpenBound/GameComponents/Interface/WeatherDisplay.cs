@@ -16,7 +16,10 @@ using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
+using OpenBound.GameComponents.Level;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -35,37 +38,37 @@ namespace OpenBound.GameComponents.Interface
     {
         public static Dictionary<WeatherType, Rectangle> WeatherIconPresets = new Dictionary<WeatherType, Rectangle>()
         {
-            { WeatherType.Force,       new Rectangle(22 * 00, 00, 22, 22) },
-            { WeatherType.Hurricane,     new Rectangle(22 * 01, 00, 22, 22) },
-            { WeatherType.Electricity,   new Rectangle(22 * 02, 00, 22, 22) },
-            { WeatherType.Wind,  new Rectangle(22 * 03, 00, 22, 22) },
-            { WeatherType.Thor,        new Rectangle(22 * 04, 00, 22, 22) },
-            { WeatherType.Protection,  new Rectangle(22 * 05, 00, 22, 22) },
-            { WeatherType.Ignorance,   new Rectangle(22 * 06, 00, 22, 22) },
-            { WeatherType.Weakness,    new Rectangle(22 * 07, 00, 22, 22) },
-            { WeatherType.Mirror,      new Rectangle(22 * 08, 00, 22, 22) },
-            { WeatherType.Random,      new Rectangle(22 * 09, 00, 22, 22) },
-            { WeatherType.DWeather,    new Rectangle(22 * 10, 00, 22, 22) },
-            { WeatherType.FWeather,    new Rectangle(22 * 11, 00, 22, 22) },
-            { WeatherType.TWeather,    new Rectangle(22 * 12, 00, 22, 22) },
-            { WeatherType.BWeather,    new Rectangle(22 * 13, 00, 22, 22) },
-            { WeatherType.GWeather,    new Rectangle(22 * 14, 00, 22, 22) },
+            { WeatherType.Force,        new Rectangle(22 * 00, 00, 22, 22) },
+            { WeatherType.Tornado,      new Rectangle(22 * 01, 00, 22, 22) },
+            { WeatherType.Electricity,  new Rectangle(22 * 02, 00, 22, 22) },
+            { WeatherType.Wind,         new Rectangle(22 * 03, 00, 22, 22) },
+            { WeatherType.Thor,         new Rectangle(22 * 04, 00, 22, 22) },
+            { WeatherType.Protection,   new Rectangle(22 * 05, 00, 22, 22) },
+            { WeatherType.Ignorance,    new Rectangle(22 * 06, 00, 22, 22) },
+            { WeatherType.Weakness,     new Rectangle(22 * 07, 00, 22, 22) },
+            { WeatherType.Mirror,       new Rectangle(22 * 08, 00, 22, 22) },
+            { WeatherType.Random,       new Rectangle(22 * 09, 00, 22, 22) },
+            { WeatherType.DWeather,     new Rectangle(22 * 10, 00, 22, 22) },
+            { WeatherType.FWeather,     new Rectangle(22 * 11, 00, 22, 22) },
+            { WeatherType.TWeather,     new Rectangle(22 * 12, 00, 22, 22) },
+            { WeatherType.BWeather,     new Rectangle(22 * 13, 00, 22, 22) },
+            { WeatherType.GWeather,     new Rectangle(22 * 14, 00, 22, 22) },
 
-            { WeatherType.GForce,      new Rectangle(22 * 00, 22, 22, 22) },
-            { WeatherType.GHurricane,    new Rectangle(22 * 01, 22, 22, 22) },
-            { WeatherType.GElectricity,  new Rectangle(22 * 02, 22, 22, 22) },
-            { WeatherType.GWind, new Rectangle(22 * 03, 22, 22, 22) },
-            { WeatherType.GThor,       new Rectangle(22 * 04, 22, 22, 22) },
-            { WeatherType.GProtection, new Rectangle(22 * 05, 22, 22, 22) },
-            { WeatherType.GIgnorance,  new Rectangle(22 * 06, 22, 22, 22) },
-            { WeatherType.GWeakness,   new Rectangle(22 * 07, 22, 22, 22) },
-            { WeatherType.GMirror,     new Rectangle(22 * 08, 22, 22, 22) },
-            { WeatherType.GRandom,     new Rectangle(22 * 09, 22, 22, 22) },
-            { WeatherType.GDWeather,   new Rectangle(22 * 10, 22, 22, 22) },
-            { WeatherType.GFWeather,   new Rectangle(22 * 11, 22, 22, 22) },
-            { WeatherType.GTWeather,   new Rectangle(22 * 12, 22, 22, 22) },
-            { WeatherType.GBWeather,   new Rectangle(22 * 13, 22, 22, 22) },
-            { WeatherType.GGWeather,   new Rectangle(22 * 14, 22, 22, 22) },
+            { WeatherType.GForce,       new Rectangle(22 * 00, 22, 22, 22) },
+            { WeatherType.GTornado,   new Rectangle(22 * 01, 22, 22, 22) },
+            { WeatherType.GElectricity, new Rectangle(22 * 02, 22, 22, 22) },
+            { WeatherType.GWind,        new Rectangle(22 * 03, 22, 22, 22) },
+            { WeatherType.GThor,        new Rectangle(22 * 04, 22, 22, 22) },
+            { WeatherType.GProtection,  new Rectangle(22 * 05, 22, 22, 22) },
+            { WeatherType.GIgnorance,   new Rectangle(22 * 06, 22, 22, 22) },
+            { WeatherType.GWeakness,    new Rectangle(22 * 07, 22, 22, 22) },
+            { WeatherType.GMirror,      new Rectangle(22 * 08, 22, 22, 22) },
+            { WeatherType.GRandom,      new Rectangle(22 * 09, 22, 22, 22) },
+            { WeatherType.GDWeather,    new Rectangle(22 * 10, 22, 22, 22) },
+            { WeatherType.GFWeather,    new Rectangle(22 * 11, 22, 22, 22) },
+            { WeatherType.GTWeather,    new Rectangle(22 * 12, 22, 22, 22) },
+            { WeatherType.GBWeather,    new Rectangle(22 * 13, 22, 22, 22) },
+            { WeatherType.GGWeather,    new Rectangle(22 * 14, 22, 22, 22) },
         };
 
         Sprite currentWeatherFrame, currentWeatherFrameContent;
@@ -75,7 +78,7 @@ namespace OpenBound.GameComponents.Interface
         Texture2D weatherTexture;
 
         //Movement Animation
-        List<WeatherType> weatherList, displayingWeatherList;
+        List<WeatherMetadata> weatherList, displayingWeatherList;
         Rectangle weatherRouletteRectangle;
         float currentOffset;
         float movingAnimationTime;
@@ -86,12 +89,17 @@ namespace OpenBound.GameComponents.Interface
         //Animation Instances
         WeatherDisplayAnimationState animationState;
 
-        public WeatherType ActiveWeather => displayingWeatherList[displayingWeatherList.Count > 4 ? 1 : 0];
+        //Incoming Weather pointer
+        Queue<IncomingWeatherPointer> incomingWeatherPointers;
+
+        public WeatherMetadata ActiveWeather => displayingWeatherList[displayingWeatherList.Count > 4 ? 1 : 0];
+        private WeatherMetadata previousWeather;
 
         public WeatherDisplay(Vector2 position)
         {
-            weatherList = new List<WeatherType>();
-            displayingWeatherList = new List<WeatherType>();
+            weatherList = new List<WeatherMetadata>();
+            displayingWeatherList = new List<WeatherMetadata>();
+            incomingWeatherPointers = new Queue<IncomingWeatherPointer>();
 
             currentWeatherFrame = new Sprite("Interface/InGame/HUD/Blue/WeatherDisplay/Frame", position: position, layerDepth: DepthParameter.HUDForeground);
             currentWeatherFrameContent = new Sprite("Interface/InGame/HUD/Blue/WeatherDisplay/Weather", position: position, layerDepth: 0.99f)
@@ -112,11 +120,11 @@ namespace OpenBound.GameComponents.Interface
 
         private void AppendWeather()
         {
-            WeatherType weather = weatherList[0];
+            WeatherMetadata weather = weatherList[0];
             weatherList.RemoveAt(0);
 
-            Rectangle rS1 = WeatherIconPresets[weather];
-            Rectangle rS2 = WeatherIconPresets[weather + (int)WeatherType.GForce];
+            Rectangle rS1 = WeatherIconPresets[weather.Weather];
+            Rectangle rS2 = WeatherIconPresets[weather.Weather + (int)WeatherType.GForce];
 
             Point offset = new Point(rS1.Width, rS1.Height);
             Point originS1 = new Point(rS1.X, rS1.Y);
@@ -134,17 +142,42 @@ namespace OpenBound.GameComponents.Interface
 
             weatherRouletteColored.SourceRectangle = weatherRouletteGrayscale.SourceRectangle = weatherRouletteRectangle;
 
+            if (displayingWeatherList.Count > 0)
+                previousWeather = ActiveWeather;
+
             displayingWeatherList.Add(weather);
+
+            if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(weather.Weather))
+                incomingWeatherPointers.Enqueue(new IncomingWeatherPointer(weather));
 
             if (displayingWeatherList.Count > 5)
                 displayingWeatherList.RemoveAt(0);
+
             if (displayingWeatherList.Count >= 4)
-                OnWeatherChange();
+            {
+                ApplyCurrentWeatherEffect();
+            }
         }
 
-        public void OnWeatherChange()
+        public void ApplyCurrentWeatherEffect()
         {
-            switch (ActiveWeather)
+            //Wipe any other weather if it has changed
+            if (previousWeather.Weather != ActiveWeather.Weather)
+                LevelScene.WeatherHandler.RemoveWeather(previousWeather.Weather);
+
+            //Active Weathers
+            if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(ActiveWeather.Weather))
+            {
+                Console.WriteLine($"{(int)ActiveWeather.Position[0]}");
+                LevelScene.WeatherHandler.Add(ActiveWeather.Weather, Topography.FromNormalizedPositionToRelativePosition(ActiveWeather.Position));
+
+                if (incomingWeatherPointers.Count > 0 && 
+                    incomingWeatherPointers.Peek().WeatherMetadata == ActiveWeather)
+                    incomingWeatherPointers.Dequeue();
+            }
+
+            //SFX
+            switch (ActiveWeather.Weather)
             {
                 case WeatherType.Wind:
                     AudioHandler.PlaySoundEffect(SoundEffectParameter.InGameWeatherWindTransition);
@@ -152,12 +185,12 @@ namespace OpenBound.GameComponents.Interface
             }
         }
 
-        public void AppendWeatherToList(WeatherType weather)
+        public void AppendWeatherToList(WeatherMetadata weather)
         {
             weatherList.Add(weather);
         }
 
-        public void AppendWeatherToList(List<WeatherType> weatherList)
+        public void AppendWeatherToList(List<WeatherMetadata> weatherList)
         {
             this.weatherList.AddRange(weatherList);
         }
@@ -204,7 +237,7 @@ namespace OpenBound.GameComponents.Interface
                 //Third step, change back the color of the grayscale mask from 1 to 0.
                 case WeatherDisplayAnimationState.ColorFadeOut:
                     if (displayingWeatherList.Count >= 4)
-                        currentWeatherFrameContent.SourceRectangle = WeatherIconPresets[ActiveWeather];
+                        currentWeatherFrameContent.SourceRectangle = WeatherIconPresets[ActiveWeather.Weather];
 
                     currentWeatherFrameContent.SetTransparency(1);
                     colorFadeAnimationTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -232,6 +265,8 @@ namespace OpenBound.GameComponents.Interface
             weatherRouletteGrayscale.UpdateAttatchmentPosition();
             currentWeatherFrameContent.UpdateAttatchmentPosition();
 
+            incomingWeatherPointers.ForEach((x) => x.Update(gameTime));
+
             UpdateAnimation(gameTime);
         }
 
@@ -241,6 +276,8 @@ namespace OpenBound.GameComponents.Interface
             weatherRouletteColored.Draw(gameTime, spriteBatch);
             weatherRouletteGrayscale.Draw(gameTime, spriteBatch);
             currentWeatherFrameContent.Draw(gameTime, spriteBatch);
+
+            incomingWeatherPointers.ForEach((x) => x.Draw(gameTime, spriteBatch));
         }
     }
 }

@@ -387,7 +387,6 @@ namespace OpenBound.GameComponents.Level.Scene
         {
             base.Update(gameTime);
 
-
             if (InputHandler.IsBeingPressed(Keys.F1))
             {
                 //CurrentTurnOwner.LoseTurn();
@@ -420,22 +419,27 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
-                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Tornado, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
                 for(int i = 0; i < 8; i++)
-                    WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), i * MathHelper.Pi/4);
+                    WeatherHandler.Add(WeatherType.Tornado, new Vector2(0, 0), i * MathHelper.Pi/4);
                 //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi);
 
                 //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), -MathHelper.Pi - MathHelper.Pi / 4 );
                 //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi / 4);
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.F8))
+            {
+
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);

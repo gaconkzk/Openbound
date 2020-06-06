@@ -18,6 +18,7 @@ using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
 using System;
 using System.Collections.Generic;
+using Openbound_Network_Object_Library.Entity;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
@@ -57,12 +58,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         Dictionary<Projectile, TornadoProjectileState> tornadoInteraction;
         List<Projectile> unusedProjectileList;
 
-        public Tornado(Vector2 position, float scale/*, float rotation = 0*/) : base(new Vector2(position.X, -Topography.MapHeight / 2)/*position*/, new Vector2(64, 32), 8, new Vector2(35, 0), new Vector2(10, 10), WeatherEffectType.Tornado, scale, 0/*rotation*/)
+        public Tornado(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(35, 0), new Vector2(10, 10), WeatherType.Tornado, scale, 0)
         {
             tornadoInteraction = new Dictionary<Projectile, TornadoProjectileState>();
             unusedProjectileList = new List<Projectile>();
 
-            Initialize("Graphics/Special Effects/Weather/Tornado", position, WeatherAnimationType.VariableAnimationFrame, 2);
+            Initialize("Graphics/Special Effects/Weather/Tornado", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
         }
 
         public override void OnInteract(Projectile projectile)

@@ -19,6 +19,7 @@ namespace OpenBound.GameComponents.Level
 {
     public class Topography
     {
+        public static Vector2 MapSize { get; protected set; }
         public static bool[][] CollidableForegroundMatrix { get; protected set; }
         private static Color[][] StageMatrix;
 
@@ -120,6 +121,17 @@ namespace OpenBound.GameComponents.Level
                     CollidableForegroundMatrix[h][w] = tmp.A > 0;
                 }
             }
+
+            MapSize = new Vector2(MapWidth, MapHeight);
+        }
+
+        /// <summary>
+        /// Converts a normalized float array into relative position
+        /// </summary>
+        /// <param name="normalizedWorldPosition">Numbers in this array must be normalzized between 0 and 1.</param>
+        public static Vector2 FromNormalizedPositionToRelativePosition(float[] normalizedWorldPosition)
+        {
+            return (normalizedWorldPosition.ToVector2() - new Vector2(0.5f, 0.5f)) * MapSize;
         }
 
         public static int[] GetRelativePosition(Vector2 Position)

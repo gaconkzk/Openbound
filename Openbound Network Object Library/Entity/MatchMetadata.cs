@@ -20,18 +20,23 @@ using System.Linq;
 
 namespace Openbound_Network_Object_Library.Entity
 {
+    public class WeatherMetadata
+    {
+        public float[] Position;
+        public WeatherType Weather, ExtraWeather;
+    }
+
     public class MatchMetadata
     {
         public SyncMobile CurrentTurnOwner;
 
         public int WindForce;
-        public int WindAngleDegrees { get; set; }
+        public int WindAngleDegrees;
 
         public float WindAngleRadians => MathHelper.ToRadians(WindAngleDegrees);
 
-        public List<WeatherType> CurrentWeatherList;
-        public List<WeatherType> UpcomingWeatherList;
-        public int UpcomingWeatherPosition;
+        public List<WeatherMetadata> CurrentWeatherList;
+        public List<WeatherMetadata> IncomingWeatherList;
 
         public int TurnCount;
         public int RoundCount;
@@ -45,8 +50,8 @@ namespace Openbound_Network_Object_Library.Entity
         {
             this.map = map;
 
-            UpcomingWeatherList = new List<WeatherType>();
-            CurrentWeatherList = new List<WeatherType>();
+            IncomingWeatherList = new List<WeatherMetadata>();
+            CurrentWeatherList = new List<WeatherMetadata>();
 
             for (int i = 0; i < 4; i++) EnqueueNextWeather();
 
@@ -62,7 +67,7 @@ namespace Openbound_Network_Object_Library.Entity
 
         internal void PassTurn(int RoomSize)
         {
-            UpcomingWeatherList.Clear();
+            IncomingWeatherList.Clear();
             if (++TurnCount == RoomSize)
             {
                 TurnCount = 0;
@@ -76,39 +81,51 @@ namespace Openbound_Network_Object_Library.Entity
         private void EnqueueNextWeather()
         {
             int val = NetworkObjectParameters.Random.Next(0, map.WeatherPreset.Sum());
-            WeatherType newWeather;
 
-            if ((val -= map.Force) < 0) newWeather = WeatherType.Force;
-            else if ((val -= map.Tornado) < 0) newWeather = WeatherType.Hurricane;
-            else if ((val -= map.Electricity) < 0) newWeather = WeatherType.Electricity;
-            else if ((val -= map.Wind) < 0) newWeather = WeatherType.Wind;
-            else if ((val -= map.Weakness) < 0) newWeather = WeatherType.Weakness;
-            else if ((val -= map.Protection) < 0) newWeather = WeatherType.Protection;
-            else if ((val -= map.Ignorance) < 0) newWeather = WeatherType.Ignorance;
-            else if ((val -= map.Thor) < 0) newWeather = WeatherType.Thor;
-            else if ((val -= map.Mirror) < 0) newWeather = WeatherType.Mirror;
-            else newWeather = WeatherType.Random;
+            WeatherMetadata weatherMetadata = new WeatherMetadata();
 
-            CurrentWeatherList.Add(newWeather);
-            UpcomingWeatherList.Add(newWeather);
+            if ((val -= map.Force) < 0) weatherMetadata.Weather = WeatherType.Force;
+            else if ((val -= map.Tornado) < 0) weatherMetadata.Weather = WeatherType.Tornado;
+            else if ((val -= map.Electricity) < 0) weatherMetadata.Weather = WeatherType.Electricity;
+            else if ((val -= map.Wind) < 0) weatherMetadata.Weather = WeatherType.Wind;
+            else if ((val -= map.Weakness) < 0) weatherMetadata.Weather = WeatherType.Weakness;
+            else if ((val -= map.Protection) < 0) weatherMetadata.Weather = WeatherType.Protection;
+            else if ((val -= map.Ignorance) < 0) weatherMetadata.Weather = WeatherType.Ignorance;
+            else if ((val -= map.Thor) < 0) weatherMetadata.Weather = WeatherType.Thor;
+            else if ((val -= map.Mirror) < 0) weatherMetadata.Weather = WeatherType.Mirror;
+            else weatherMetadata.Weather = WeatherType.Random;
+
+            CurrentWeatherList.Add(weatherMetadata);
+            IncomingWeatherList.Add(weatherMetadata);
+
+            //Generate extra information (if necessary)
+            if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(weatherMetadata.Weather))
+            {
+                CalculateRandomPosition(weatherMetadata);
+
+                if (weatherMetadata.Weather == WeatherType.Random)
+                    RandomizeExtraWeather(weatherMetadata);
+            }
         }
 
         private void ProcessUpcomingWeather()
         {
-            WeatherType w = CurrentWeatherList[0];
+            WeatherMetadata wm = CurrentWeatherList[0];
             CurrentWeatherList.RemoveAt(0);
 
             DisturbWind();
 
-            switch (w)
-            {
-                case WeatherType.Wind:
-                    ChangeWind();
-                    return;
+            if (wm.Weather == WeatherType.Wind) ChangeWind();
+        }
 
-                default:
-                    return;
-            }
+        private void RandomizeExtraWeather(WeatherMetadata weatherMetadata)
+        {
+            weatherMetadata.ExtraWeather = NetworkObjectParameters.RandomizableWeatherEffectList[NetworkObjectParameters.Random.Next(0, NetworkObjectParameters.RandomizableWeatherEffectList.Count())];
+        }
+
+        private void CalculateRandomPosition(WeatherMetadata weatherMetadata)
+        {
+            weatherMetadata.Position = new float[] { (float)NetworkObjectParameters.Random.NextDouble(), (float)NetworkObjectParameters.Random.NextDouble() };
         }
 
         private void DisturbWind()

@@ -55,7 +55,11 @@ namespace OpenBound.GameComponents.Interface.Text
             set => origin = new Vector2((int)value.X, (int)value.Y);
         }
         public Vector2 Scale { get; set; }
+
+        public Color BaseColor { get; set; }
         public Color Color { get; set; }
+
+        public Color OutlineBaseColor { get; set; }
         public Color OutlineColor { get; set; }
 
         private string text;
@@ -91,7 +95,7 @@ namespace OpenBound.GameComponents.Interface.Text
             Position = position;
 
             //this.FontSize = FontSize;
-            Color = color;
+            BaseColor = Color = color;
             this.alignment = alignment;
             LayerDepth = layerDepth;
             FontTextType = fontTextType;
@@ -108,10 +112,16 @@ namespace OpenBound.GameComponents.Interface.Text
             if (outlineColor != default)
             {
                 hasOutline = true;
-                OutlineColor = outlineColor;
+                OutlineBaseColor = OutlineColor = outlineColor;
             }
 
             UpdateText(text);
+        }
+
+        public void SetTransparency(float transparency)
+        {
+            Color = BaseColor * transparency;
+            OutlineColor = OutlineBaseColor * transparency;
         }
 
         public void UpdateAttatchedPosition()

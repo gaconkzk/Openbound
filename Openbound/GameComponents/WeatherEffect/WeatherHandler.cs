@@ -12,28 +12,18 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Common;
+using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
-    public enum WeatherEffectType
-    {
-        Electricity,
-        Force,
-        LightningSES1,
-        LightningSES2,
-        Mirror,
-        Random,
-        Tornado,
-        Weakness
-    }
-
     public class WeatherHandler
     {
         /// <summary>
         /// List of all instanced weathers on the scenario. Do not add elements in here. In order to add new elements and prevent
-        /// access/overwriting problems use <see cref="WeatherHandler.Add"/>.
+        /// access/overwriting problems use <see cref="Add"/>.
         /// </summary>
         public List<Weather> WeatherList;
 
@@ -46,18 +36,21 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedWeatherList = new List<Weather>();
         }
 
-        public void Add(WeatherEffectType weatherEffectType, Vector2 position, float rotation = 0)
+        public void Add(WeatherType weatherType, Vector2 position, float rotation = 0)
         {
             Weather weather = null;
 
-            switch (weatherEffectType)
+            switch (weatherType)
             {
-                case WeatherEffectType.Tornado:
-                    weather = new Tornado(position, 1);
+                case WeatherType.Tornado:
+                    weather = new Tornado(position);
                     break;
             }
 
-            CheckAndMergeWeatherEffects(ref weather);
+            //Return if the given weather is not implemented yet
+            if (weather == null) return;
+            
+            CheckAndMergeWeatherEffects(weather);
         }
 
         /// <summary>
@@ -65,7 +58,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// their (existing and new weather) collider overlap.
         /// </summary>
         /// <param name="weather">The weather to be added on the list.</param>
-        public void CheckAndMergeWeatherEffects(ref Weather weather)
+        public void CheckAndMergeWeatherEffects(Weather weather)
         {
             bool hasMerged;
 
@@ -74,7 +67,7 @@ namespace OpenBound.GameComponents.WeatherEffect
                 hasMerged = false;
                 foreach (Weather w in WeatherList.Except(unusedWeatherList))
                 {
-                    if (w.WeatherEffectType == weather.WeatherEffectType && w.Intersects(weather) && w != weather)
+                    if (w.WeatherType == weather.WeatherType && w.Intersects(weather) && w != weather)
                     {
                         weather = w.Merge(weather);
                         unusedWeatherList.Add(w);
@@ -89,9 +82,9 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <summary>
         /// Removes a weather from the list/scene.
         /// </summary>
-        public void RemoveWeather(WeatherEffectType weatherEffectType)
+        public void RemoveWeather(WeatherType weatherEffectType)
         {
-            unusedWeatherList.Add(WeatherList.Find((x) => x.WeatherEffectType == weatherEffectType));
+            unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType == weatherEffectType));
         }
 
         public void Update(GameTime gameTime)

@@ -98,6 +98,8 @@ namespace Openbound_Network_Object_Library.Common
 
         //Game Constants
         public static List<MobileType> ImplementedMobileList = new List<MobileType>() { MobileType.Armor, MobileType.Bigfoot, MobileType.Dragon, MobileType.Ice, MobileType.Knight, MobileType.Mage, MobileType.Random, MobileType.Trico, MobileType.Turtle };
+        public static List<WeatherType> ActiveWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Wind, WeatherType.Weakness, WeatherType.Mirror, WeatherType.Random };
+        public static List<WeatherType> RandomizableWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Wind, WeatherType.Weakness, WeatherType.Mirror };
 
         //Game Constants - Weather
         public const int WeatherMinimumWindForce = 0;
