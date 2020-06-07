@@ -14,12 +14,12 @@ namespace Openbound_Network_Object_Library.Entity
 {
     public enum WeatherType
     {
-        Force = 0, Hurricane = 1, Electricity = 2, Wind = 3,
+        Force = 0, Tornado = 1, Electricity = 2, Wind = 3,
         Thor = 4, Protection = 5, Ignorance = 6, Weakness = 7,
         Mirror = 8, Random = 9,
         DWeather = 10, FWeather = 11, TWeather = 12, BWeather = 13, GWeather = 14,
 
-        GForce = 50, GHurricane = 51, GElectricity = 52, GWind = 53,
+        GForce = 50, GTornado = 51, GElectricity = 52, GWind = 53,
         GThor = 54, GProtection = 55, GIgnorance = 56, GWeakness = 57,
         GMirror = 58, GRandom = 59,
         GDWeather = 60, GFWeather = 61, GTWeather = 62, GBWeather = 63, GGWeather = 64,

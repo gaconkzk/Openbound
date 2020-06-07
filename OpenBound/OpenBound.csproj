@@ -634,6 +634,7 @@
     <Compile Include="GameComponents\Input\InputHandler.cs" />
     <Compile Include="GameComponents\Interface\Builder\AnimatedButtonBuilder.cs" />
     <Compile Include="GameComponents\Interface\Builder\IconBuilder.cs" />
+    <Compile Include="GameComponents\Interface\IncomingWeather.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />

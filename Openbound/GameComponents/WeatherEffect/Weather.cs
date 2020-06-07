@@ -18,6 +18,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
+using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         public float Scale { get; protected set; }
         public Vector2 StartingPosition { get; protected set; }
 
-        public WeatherEffectType WeatherEffectType { get; private set; }
+        public WeatherType WeatherType { get; private set; }
 
         //Effects
 
@@ -94,7 +95,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         ///     This parameter has it's X and Y values added to the <see cref="collisionRectangleOffset"/> to calculate the external bounds of the collision rectangle.
         ///     The merging occurs when this box collides with another outerCollisionRectangle of a similar weather. 
         /// </param>
-        /// <param name="weatherEffectType">
+        /// <param name="weatherType">
         ///     This variable is defined by each weather element that inherits Weather.
         /// </param>
         /// <param name="scale">
@@ -103,7 +104,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <param name="rotation">
         ///     Defines the rotation of this element.
         /// </param>
-        public Weather(Vector2 startingPosition, Vector2 flipbookPivot, int numberOfFrames, Vector2 collisionRectangleOffset, Vector2 outerCollisionRectangleOffset, WeatherEffectType weatherEffectType, float scale, float rotation = 0)
+        public Weather(Vector2 startingPosition, Vector2 flipbookPivot, int numberOfFrames, Vector2 collisionRectangleOffset, Vector2 outerCollisionRectangleOffset, WeatherType weatherType, float scale, float rotation = 0)
         {
             flipbookList = new List<Flipbook>();
             ModifiedProjectileList = new List<Projectile>();
@@ -117,7 +118,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             this.rotation = rotation;
 
             StartingPosition = startingPosition;
-            WeatherEffectType = weatherEffectType;
+            WeatherType = weatherType;
             Scale = scale;
         }
 

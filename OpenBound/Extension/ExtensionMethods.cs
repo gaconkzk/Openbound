@@ -202,5 +202,12 @@ namespace OpenBound.Extension
         {
             return source.Intersects(new Rectangle((int)position.X, (int)position.Y, 1, 1));
         }
+        
+        //Queue
+        public static void ForEach<T>(this Queue<T> source, Action<T> action)
+        {
+            foreach (T t in source)
+                action(t);
+        }
     }
 }

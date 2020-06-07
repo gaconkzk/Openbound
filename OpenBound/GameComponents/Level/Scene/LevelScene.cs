@@ -272,7 +272,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     MatchMetadata = (MatchMetadata)answer;
 
                     //Weather Variations
-                    HUD.weatherDisplay.AppendWeatherToList(MatchMetadata.UpcomingWeatherList);
+                    HUD.weatherDisplay.AppendWeatherToList(MatchMetadata.IncomingWeatherList);
 
                     //Change Wind (If Necessary)
                     HUD.windCompass.ChangeWind(MatchMetadata.WindAngleDegrees, MatchMetadata.WindForce);

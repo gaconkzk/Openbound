@@ -4548,18 +4548,6 @@
 /processorParam:TextureFormat=Color
 /build:Interface/InGame/HUD/Blue/ActionBar/Background.png
 
-#begin Interface/InGame/HUD/Blue/ActionBar/IncomingWeatherPointer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Blue/ActionBar/IncomingWeatherPointer.png
-
 #begin Interface/InGame/HUD/Blue/ActionBar/MatchStatus.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4655,6 +4643,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Interface/InGame/HUD/Blue/ActionBar/StrenghtMetter.png
+
+#begin Interface/InGame/HUD/Blue/IncomingWeather/Pointer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/InGame/HUD/Blue/IncomingWeather/Pointer.png
 
 #begin Interface/InGame/HUD/Blue/WeatherDisplay/Frame.png
 /importer:TextureImporter
