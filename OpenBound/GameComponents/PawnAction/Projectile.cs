@@ -81,7 +81,10 @@ namespace OpenBound.GameComponents.PawnAction
         protected ShotType shotType;
 
         //Action handlers
-        public Action OnFinalizeExecution;
+        public Action OnFinalizeExecutionAction;
+        public Action OnExplodeAction;
+        public Action<int> OnDestroyGround;
+        public Action<int> OnDealDamage;
 
         //CanExplode
         private bool canCollide;
@@ -344,11 +347,15 @@ namespace OpenBound.GameComponents.PawnAction
         /// </summary>
         protected virtual void Explode()
         {
+            OnExplodeAction?.Invoke();
+
             if (ExplosionRadius > 0)
             {
                 int removedPixels = Topography.CreateErosion(FlipbookList[0].Position, ExplosionRadius);
                 ParticleBuilder.CreateGroundCollapseParticleEffect(removedPixels / 32, FlipbookList[0].Position, FlipbookList[0].Rotation);
                 PlayExplosionSFX();
+
+                OnDestroyGround?.Invoke(removedPixels / 32);
             }
 
             if (BaseDamage > 0)
@@ -373,6 +380,7 @@ namespace OpenBound.GameComponents.PawnAction
 
                         LevelScene.HUD.FloatingTextHandler.AddDamage(m, -damage);
 
+                        OnDealDamage?.Invoke(damage);
                         //MatchManager.Instance.NextPlayerTurn.HUD.FloatingTextHandler.AddDamage(x, -damage);
                     }
                 }

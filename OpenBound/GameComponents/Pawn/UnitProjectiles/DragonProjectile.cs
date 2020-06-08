@@ -91,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(pjList.First());
         }
@@ -154,7 +154,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * offset + FlipbookList[0].Position,
                     FlipbookList[0].Position, 0.3f * i);
 
-                dp3s.OnFinalizeExecution = OnFinalizeExecution;
+                dp3s.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
 
                 mobile.LastCreatedProjectileList.Add(dp3s);
             }
@@ -164,7 +164,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void OutofboundsDestroy()
         {
-            OnFinalizeExecution?.Invoke();
+            OnFinalizeExecutionAction?.Invoke();
             Destroy();
         }
     }
@@ -238,7 +238,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(pjList.First());
         }

@@ -70,7 +70,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -116,7 +116,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7f;
             offsetFactor = 0;
 
-            projectile.OnFinalizeExecution = OnFinalizeExecution;
+            projectile.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS2Mass;
@@ -275,7 +275,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
                 if (pjList.Count() == 0)
-                    OnFinalizeExecution?.Invoke();
+                    OnFinalizeExecutionAction?.Invoke();
             }
         }
     }

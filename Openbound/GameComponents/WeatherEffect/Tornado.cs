@@ -170,10 +170,5 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             return new Tornado((StartingPosition + weather.StartingPosition) / 2, Scale + weather.Scale);
         }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            base.Draw(gameTime, spriteBatch);
-        }
     }
 }

@@ -42,7 +42,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             for (int i = (int)-Parameter.ProjectileTurtleSSBubbleNumber / 2; i < Parameter.ProjectileTurtleSSBubbleNumber / 2; i++)
             {
                 TurtleProjectile3SS newProj = new TurtleProjectile3SS(mobile, position, force / Parameter.ProjectileTurtleSSDampeningFactor, rotation + angleOffset * i + angleOffset / 2);
-                newProj.OnFinalizeExecution = onFinalizeExecution;
+                newProj.OnFinalizeExecutionAction = onFinalizeExecution;
                 mobile.LastCreatedProjectileList.Add(newProj);
             }
         }
@@ -206,7 +206,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 case ProjectileAnimationState.Opening:
                     bubbleAnimation = ProjectileAnimationState.Opened;
                     SpecialEffectBuilder.TurtleProjectile3Division(FlipbookList[0].Position, FlipbookList[0].Rotation);
-                    TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecution);
+                    TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecutionAction);
                     PlayExplosionSFX();
                     GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
                     IsAbleToRefreshPosition = true;
@@ -230,7 +230,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -269,7 +269,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(mobile.ProjectileList.Union(mobile.LastCreatedProjectileList).First());
         }

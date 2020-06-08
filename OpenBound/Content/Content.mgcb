@@ -3576,6 +3576,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Weather/Force.png
 
+#begin Graphics/Special Effects/Weather/ForceParticle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Special Effects/Weather/ForceParticle.png
+
 #begin Graphics/Special Effects/Weather/LightningSE.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4079,18 +4091,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/Turtle/Shot3.png
-
-#begin Graphics/Weather/Electricity.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Weather/Electricity.png
 
 #begin Interface/AnimatedButtons/Buddy.png
 /importer:TextureImporter
