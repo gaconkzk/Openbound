@@ -725,6 +725,7 @@
     <Compile Include="GameComponents\Audio\AudioHandler.cs" />
     <Compile Include="GameComponents\WeatherEffect\Force.cs" />
     <Compile Include="GameComponents\WeatherEffect\Tornado.cs" />
+    <Compile Include="GameComponents\WeatherEffect\Weakness.cs" />
     <Compile Include="GameComponents\WeatherEffect\Weather.cs" />
     <Compile Include="GameComponents\WeatherEffect\WeatherHandler.cs" />
     <Compile Include="Launcher\LauncherRequestManager.cs" />

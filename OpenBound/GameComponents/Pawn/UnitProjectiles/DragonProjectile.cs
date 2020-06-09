@@ -56,6 +56,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             SpawnTime = spawnTime;
             FlipbookList[0].HideElement();
+            FlipbookList[0].Color = Color.Yellow;
 
             previousSESpawnPosition = FlipbookList[0].Position;
         }
@@ -73,7 +74,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 SpecialEffect se = SpecialEffectBuilder.DragonProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation, FlipbookList[0].LayerDepth);
                 se.Flipbook.Scale = Vector2.One / 3;
-                se.Flipbook.Color = Color.Yellow;
+                se.Flipbook.Color = FlipbookList[0].Color;
                 se.Flipbook.CurrentAnimationInstance.TimePerFrame = 1 / 60f;
             }
         }

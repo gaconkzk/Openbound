@@ -79,6 +79,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             base.Draw(gameTime, spriteBatch);
             trace.Draw(gameTime, spriteBatch);
         }
+
+        #region Weather
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
+        }
+        #endregion
+
     }
 
     public class TurtleProjectile2 : DummyProjectile
@@ -123,6 +131,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void OnBeginForceInteraction(Force force)
         {
             force.OnInteract(dProj);
+        }
+
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            weakness.OnInteract(dProj);
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
         }
         #endregion
 

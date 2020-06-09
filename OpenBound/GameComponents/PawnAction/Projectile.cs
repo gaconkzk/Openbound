@@ -244,6 +244,8 @@ namespace OpenBound.GameComponents.PawnAction
 
         public virtual void OnBeginForceInteraction(Force force) { }
 
+        public virtual void OnBeginWeaknessInteraction(Weakness weakness) { }
+
         public void SetBasePosition(Vector2 newPosition)
         {
             projectileInitialPosition = newPosition;
