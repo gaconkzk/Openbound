@@ -225,7 +225,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 foreach (SpecialEffect se in swordTrace)
                 {
-                    se.Flipbook.SetTransparency(initialAlpha);
+                    se.Flipbook.Color = FlipbookList[0].Color * initialAlpha;
                     initialAlpha -= Parameter.ProjectileKnightTraceAlphaDecay + swordTrace.Count * Parameter.ProjectileKnightTraceAlphaDecayFactor;
                 }
             }

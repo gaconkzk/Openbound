@@ -436,6 +436,11 @@ namespace OpenBound.Common
         public const float WeatherEffectForceDamageIncreaseFactor = 1.2f;
         public const float WeatherEffectForceDamageIncreaseValue = 10f;
         public const float WeatherEffectForceSpawnParticleStartingTime = 0.5f;
+
+        //Weakness
+        public const float WeatherEffectWeaknessDamageDecreaseFactor = 1.2f;
+        public const float WeatherEffectWeaknessDamageDecreaseValue = 10f;
+        public static Color WeatherEffectWeaknessColorModifier = new Color(30, 30, 30, 255);
         #endregion
     }
 }

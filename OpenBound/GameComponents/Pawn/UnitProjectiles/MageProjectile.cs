@@ -62,6 +62,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpecialEffectBuilder.MageProjectile1Explosion(FlipbookList[0].Position, 0);
         }
 
+        #region Weather
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
+        }
+        #endregion
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (SpawnTimeCounter < SpawnTime) return;
@@ -102,7 +110,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
 
         #region Weather
-
         protected override void CheckCollisionWithWeather()
         {
             foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
@@ -120,6 +127,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void OnBeginForceInteraction(Force force)
         {
             force.OnInteract(dProj);
+        }
+
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            weakness.OnInteract(dProj);
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
         }
         #endregion
 

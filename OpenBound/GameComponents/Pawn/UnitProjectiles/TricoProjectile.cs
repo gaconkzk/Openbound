@@ -142,6 +142,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             force.OnInteract(projectile);
         }
+
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            weakness.OnInteract(projectile);
+        }
         #endregion
 
         public override void OnSpawn()

@@ -62,7 +62,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Turtle,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -424,7 +424,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                WeatherHandler.Add(WeatherType.Force, new Vector2(200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Weakness, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
