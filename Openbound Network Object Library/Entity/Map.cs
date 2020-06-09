@@ -103,7 +103,7 @@ namespace Openbound_Network_Object_Library.Entity
         public float[] GroundParticlePivot;
 
         [JsonIgnore]
-        public int GroundParticleNumbers;
+        public int GroundParticleNumberOfFrames;
 
         [JsonIgnore]
         public List<int[]> SpawnPoints;
@@ -137,7 +137,7 @@ namespace Openbound_Network_Object_Library.Entity
 
         public Map() { }
 
-        private Map(int id, string name, GameMapType gameMapType, GameMap gameMap, int[] weatherPreset, int[,] spawnPoints, int groundParticleNumbers = 0, float[] groundParticlePivot = null)
+        private Map(int id, string name, GameMapType gameMapType, GameMap gameMap, int[] weatherPreset, int[,] spawnPoints, int groundParticleNumberOfFrames = 0, float[] groundParticlePivot = null)
         {
             ID = id;
             Name = name;
@@ -147,7 +147,7 @@ namespace Openbound_Network_Object_Library.Entity
             SpawnPoints = spawnPoints?.ToMatrix().ToList();
 
             this.weatherPreset = weatherPreset;
-            GroundParticleNumbers = groundParticleNumbers;
+            GroundParticleNumberOfFrames = groundParticleNumberOfFrames;
             GroundParticlePivot = groundParticlePivot;
         }
 

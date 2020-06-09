@@ -42,7 +42,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             for (int i = (int)-Parameter.ProjectileTurtleSSBubbleNumber / 2; i < Parameter.ProjectileTurtleSSBubbleNumber / 2; i++)
             {
                 TurtleProjectile3SS newProj = new TurtleProjectile3SS(mobile, position, force / Parameter.ProjectileTurtleSSDampeningFactor, rotation + angleOffset * i + angleOffset / 2);
-                newProj.OnFinalizeExecution = onFinalizeExecution;
+                newProj.OnFinalizeExecutionAction = onFinalizeExecution;
                 mobile.LastCreatedProjectileList.Add(newProj);
             }
         }
@@ -79,6 +79,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             base.Draw(gameTime, spriteBatch);
             trace.Draw(gameTime, spriteBatch);
         }
+
+        #region Weather
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
+        }
+        #endregion
+
     }
 
     public class TurtleProjectile2 : DummyProjectile
@@ -105,7 +113,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileTurtleS2WindInfluence;
         }
 
-        #region Weather/Tornado
+        #region Weather
         protected override void CheckCollisionWithWeather()
         {
             foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
@@ -117,6 +125,19 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     w.OnInteract(this);
                 }
             }
+        }
+
+        //Force
+        public override void OnBeginForceInteraction(Force force)
+        {
+            force.OnInteract(dProj);
+        }
+
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            weakness.OnInteract(dProj);
+            trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
         }
         #endregion
 
@@ -206,7 +227,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 case ProjectileAnimationState.Opening:
                     bubbleAnimation = ProjectileAnimationState.Opened;
                     SpecialEffectBuilder.TurtleProjectile3Division(FlipbookList[0].Position, FlipbookList[0].Rotation);
-                    TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecution);
+                    TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecutionAction);
                     PlayExplosionSFX();
                     GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
                     IsAbleToRefreshPosition = true;
@@ -230,7 +251,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -269,9 +290,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(mobile.ProjectileList.Union(mobile.LastCreatedProjectileList).First());
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+            SpecialEffectBuilder.TurtleProjectile3EExplosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

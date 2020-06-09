@@ -64,14 +64,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 KnightSatelliteProjectile ksp = new KnightSatelliteProjectile(knight, shotPos + offset * i,
                     FlipbookList[0].Position, 0.08f * Math.Abs(i));
-                ksp.OnFinalizeExecution = OnFinalizeExecution;
+                ksp.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
                 knight.LastCreatedProjectileList.Add(ksp);
             }
         }
 
         protected override void OutofboundsDestroy()
         {
-            OnFinalizeExecution?.Invoke();
+            OnFinalizeExecutionAction?.Invoke();
             Destroy();
         }
     }
@@ -145,14 +145,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 KnightSatelliteProjectile ksp = new KnightSatelliteProjectile(knight,
                     FlipbookList[0].Position + knight.Satellite.SSTargetOffset - Parameter.SatelliteSSAnimationMovementRange * ((float)Math.Cos(MathHelper.ToRadians(60 * i))),
                     FlipbookList[0].Position, 0, Parameter.SatelliteSSAnimationTotalMotionTime + i / (3f * Parameter.StelliteAttackSpeedFactor));
-                ksp.OnFinalizeExecution = OnFinalizeExecution;
+                ksp.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
                 knight.LastCreatedProjectileList.Add(ksp);
             }
         }
 
         protected override void OutofboundsDestroy()
         {
-            OnFinalizeExecution?.Invoke();
+            OnFinalizeExecutionAction?.Invoke();
             Destroy();
         }
     }
@@ -225,7 +225,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 foreach (SpecialEffect se in swordTrace)
                 {
-                    se.Flipbook.SetTransparency(initialAlpha);
+                    se.Flipbook.Color = FlipbookList[0].Color * initialAlpha;
                     initialAlpha -= Parameter.ProjectileKnightTraceAlphaDecay + swordTrace.Count * Parameter.ProjectileKnightTraceAlphaDecayFactor;
                 }
             }
@@ -263,7 +263,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //If this shot is the last one the satellite should reappear
             if (mobile.ProjectileList.Except(mobile.UnusedProjectile).Count() == 0)
             {
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
                 ((Knight)mobile).Satellite.Flipbook.ShowElement();
             }
         }

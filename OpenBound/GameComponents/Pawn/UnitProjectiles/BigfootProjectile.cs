@@ -90,7 +90,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(pjList.First());
         }
@@ -132,7 +132,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(pjList.First());
         }
@@ -174,7 +174,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(pjList.First());
         }

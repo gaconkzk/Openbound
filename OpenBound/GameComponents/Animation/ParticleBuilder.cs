@@ -14,6 +14,9 @@ namespace OpenBound.GameComponents.Animation
 {
     public class ParticleBuilder
     {
+        static readonly ParticleUpdateConfiguration groundParticleUpdateConfiguration = new ParticleUpdateConfiguration() { Rotate = true, SetScale = true, UseYAcceleration = true, UseXAcceleration = true };
+        static readonly ParticleUpdateConfiguration forceParticleUpdateConfiguration = new ParticleUpdateConfiguration() { SetScale = true, Fade = true, Rotate = true, UseXAcceleration = true, UseYAcceleration = true };
+       
         public static void CreateGroundCollapseParticleEffect(int numberOfParticles, Vector2 initialPosition, float angleTrajectory)
         {
             List<Flipbook> flipbookList = BuildGroundParticle(numberOfParticles);
@@ -28,27 +31,50 @@ namespace OpenBound.GameComponents.Animation
                 float angularSpread = angleTrajectory + disturbance;
 
                 flipbookList[i].Position = initialPosition;
+                flipbookList[i].Rotation = angularSpread;
 
-                Particle p = new Particle(flipbookList[i], new Vector2((float)Math.Cos(angularSpread), (float)Math.Sin(angularSpread)), windVector);
+                Particle p = new Particle(flipbookList[i], new Vector2((float)Math.Cos(angularSpread), (float)Math.Sin(angularSpread)), windVector, groundParticleUpdateConfiguration);
                 SpecialEffectHandler.Add(p);
             }
         }
 
+        public static void CreateForceCollapseParticleEffect(int numberOfParticles, Vector2 initialPosition, float angleTrajectory)
+        {
+            List<Flipbook> flipbookList = BuildForceParticle(numberOfParticles);
+
+            for (int i = 0; i < flipbookList.Count; i++)
+            {
+                float angle = (float)Parameter.Random.NextDouble() * MathHelper.TwoPi;
+                flipbookList[i].Position = initialPosition;
+                flipbookList[i].Rotation = angle;
+
+                Particle p = new Particle(flipbookList[i], new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)), Vector2.Zero, forceParticleUpdateConfiguration);
+                SpecialEffectHandler.Add(p);
+            }
+        }
+
+        private static List<Flipbook> BuildForceParticle(int particleNumber)
+        {
+            return BuildParticle(particleNumber, new Vector2(16, 16), "Graphics/Special Effects/Weather/ForceParticle", 8);
+        }
+
         private static List<Flipbook> BuildGroundParticle(int particleNumber)
         {
-            List<Flipbook> flipbookList = new List<Flipbook>();
-
             Map map = GameInformation.Instance.RoomMetadata.Map;
-            Vector2 pivot = map.GroundParticlePivot.ToVector2();
-            string groundParticlePath = $"Graphics/Maps/{map.GameMap}/Particle";
+            return BuildParticle(particleNumber, map.GroundParticlePivot.ToVector2(), $"Graphics/Maps/{map.GameMap}/Particle", map.GroundParticleNumberOfFrames);
+        }
+
+        private static List<Flipbook> BuildParticle(int particleNumber, Vector2 pivot, string particlePath, int numberOfFrames)
+        {
+            List<Flipbook> flipbookList = new List<Flipbook>();
 
             for (; particleNumber > 0; particleNumber--)
             {
                 AnimationInstance animationInstance = new AnimationInstance();
-                animationInstance.StartingFrame = animationInstance.EndingFrame = Parameter.Random.Next(0, map.GroundParticleNumbers);
+                animationInstance.StartingFrame = animationInstance.EndingFrame = Parameter.Random.Next(0, numberOfFrames);
 
                 flipbookList.Add(Flipbook.CreateFlipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
-                    groundParticlePath, animationInstance, false, DepthParameter.Projectile));
+                    particlePath, animationInstance, false, DepthParameter.Projectile));
             }
 
             return flipbookList;

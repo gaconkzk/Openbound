@@ -57,7 +57,7 @@ namespace OpenBound.GameComponents.PawnAction
                         curr.Rotation = (float)Helper.AngleBetween(curr.Position, prev.Position) + MathHelper.Pi / 2;
                     }
 
-                    traceList[i].Color = Color.MultiplyByFactor(new float[] { f, f, f, f });
+                    traceList[i].Color = Color * f;
                 }
             }
 

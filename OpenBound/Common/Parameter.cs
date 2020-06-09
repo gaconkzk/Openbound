@@ -215,13 +215,14 @@ namespace OpenBound.Common
         #endregion
 
         #region Special Effects
-        public const float GroundParticleMaximumRotatingSpeed = (float)Math.PI * 0.05f;
-        public const float GroundParticleMaximumScalingFactor = 0.0005f;
-        public const float GroundParticleInitialYSpeed = -0.5f;
-        public const float GroundParticleMaximumYSpeed = 2;
-        public const float GroundParticleMaximumXSpeed = 2;
-        public const float GroundParticleWindInfluenceFactor = 1f / 500000f;
-        public const float GroundParticleInitialYAcceleration = 0.0005f;
+        public const float GroundParticleMaximumRotatingSpeed = (float)Math.PI * 50f;
+        public const float GroundParticleMaximumScalingFactor = 0.5f;
+        public const float GroundParticleInitialAlphaFactor = 0.3f;
+        public const float GroundParticleInitialYSpeed = -500f;
+        public const float GroundParticleMaximumYSpeed = 2000;
+        public const float GroundParticleMaximumXSpeed = 2000;
+        public const float GroundParticleWindInfluenceFactor = 5f;
+        public const float GroundParticleInitialYAcceleration = 500f;
         public const int GroundParticleSpreadFactor = 5;
         #endregion
 
@@ -237,7 +238,7 @@ namespace OpenBound.Common
         public const int ProjectileArmorS2BaseDamage  = 200;
         public const int ProjectileArmorS2EBaseDamage =  80;
         public const int ProjectileArmorSSBaseDamage  = 150;
-        public const int ProjectileArmorSSEBaseDamage = 300;
+        public const int ProjectileArmorSSEBaseDamage =  50;
 
         public const float ProjectileArmorS1Mass = 14f;
         public const float ProjectileArmorS2Mass = 14f;
@@ -428,7 +429,18 @@ namespace OpenBound.Common
         public const float WeaterEffectRandomFlipbookUpdateTimer = 0.1f;
         public static float WeatherEffectVerticalScrollingUpdateSpeed = 50f;
 
+        //Tornado
         public static float WeatherEffectTornadoMinimumProjectileSpeed = 25f;
+
+        //Force
+        public const float WeatherEffectForceDamageIncreaseFactor = 1.2f;
+        public const float WeatherEffectForceDamageIncreaseValue = 10f;
+        public const float WeatherEffectForceSpawnParticleStartingTime = 0.5f;
+
+        //Weakness
+        public const float WeatherEffectWeaknessDamageDecreaseFactor = 1.2f;
+        public const float WeatherEffectWeaknessDamageDecreaseValue = 10f;
+        public static Color WeatherEffectWeaknessColorModifier = new Color(30, 30, 30, 255);
         #endregion
     }
 }

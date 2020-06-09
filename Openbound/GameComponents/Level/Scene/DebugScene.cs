@@ -62,7 +62,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Lightning,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -419,18 +419,18 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
-                WeatherHandler.Add(WeatherType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Force, new Vector2(-200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                WeatherHandler.Add(WeatherType.Tornado, new Vector2(200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Weakness, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
                 for(int i = 0; i < 8; i++)
-                    WeatherHandler.Add(WeatherType.Tornado, new Vector2(0, 0), i * MathHelper.Pi/4);
+                    WeatherHandler.Add(WeatherType.Force, new Vector2(0, 0), i * MathHelper.Pi/4);
                 //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi);
 
                 //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), -MathHelper.Pi - MathHelper.Pi / 4 );

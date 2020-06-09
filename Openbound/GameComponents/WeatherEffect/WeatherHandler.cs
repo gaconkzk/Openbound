@@ -45,6 +45,12 @@ namespace OpenBound.GameComponents.WeatherEffect
                 case WeatherType.Tornado:
                     weather = new Tornado(position);
                     break;
+                case WeatherType.Force:
+                    weather = new Force(position);
+                    break;
+                case WeatherType.Weakness:
+                    weather = new Weakness(position);
+                    break;
             }
 
             //Return if the given weather is not implemented yet

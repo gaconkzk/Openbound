@@ -81,10 +81,14 @@ namespace OpenBound.GameComponents.PawnAction
         protected ShotType shotType;
 
         //Action handlers
-        public Action OnFinalizeExecution;
+        public Action OnFinalizeExecutionAction;
+        public Action OnExplodeAction;
+        public Action OnBeingDestroyedAction;
+        public Action<int> OnDestroyGroundAction;
+        public Action<int> OnDealDamageAction;
 
         //CanExplode
-        private bool canCollide;
+        public bool CanCollide { get; private set; }
 
         //Debug
 #if Debug
@@ -93,7 +97,7 @@ namespace OpenBound.GameComponents.PawnAction
         public Projectile(Mobile owner, ShotType shotType, int explosionRadius, int baseDamage, Vector2 projectileInitialPosition = default, float angleModifier = 0, float forceModifier = 0, bool canCollide = true)
         {
             this.shotType = shotType;
-            this.canCollide = canCollide;
+            CanCollide = canCollide;
             BaseDamage = baseDamage;
             ExplosionRadius = explosionRadius;
 
@@ -238,6 +242,10 @@ namespace OpenBound.GameComponents.PawnAction
 
         public virtual void OnEndTornadoInteraction() { }
 
+        public virtual void OnBeginForceInteraction(Force force) { }
+
+        public virtual void OnBeginWeaknessInteraction(Weakness weakness) { }
+
         public void SetBasePosition(Vector2 newPosition)
         {
             projectileInitialPosition = newPosition;
@@ -280,7 +288,7 @@ namespace OpenBound.GameComponents.PawnAction
             bool hasExploded = false;
 
             //Check collision with ground
-            if (canCollide && Topography.CheckCollision(position))
+            if (CanCollide && Topography.CheckCollision(position))
             {
                 hasExploded = true;
                 Explode();
@@ -293,7 +301,7 @@ namespace OpenBound.GameComponents.PawnAction
                 //Check collision with mobiles
                 foreach (Mobile mobile in LevelScene.MobileList)
                 {
-                    if (canCollide && mobile.CollisionBox.CheckCollision(position))
+                    if (CanCollide && mobile.CollisionBox.CheckCollision(position))
                     {
                         Explode();
                         hasExploded = true;
@@ -318,6 +326,7 @@ namespace OpenBound.GameComponents.PawnAction
         /// </summary>
         protected virtual void Destroy()
         {
+            OnBeingDestroyedAction?.Invoke();
             mobile.UnusedProjectile.Add(this);
         }
 
@@ -344,11 +353,15 @@ namespace OpenBound.GameComponents.PawnAction
         /// </summary>
         protected virtual void Explode()
         {
+            OnExplodeAction?.Invoke();
+
             if (ExplosionRadius > 0)
             {
                 int removedPixels = Topography.CreateErosion(FlipbookList[0].Position, ExplosionRadius);
                 ParticleBuilder.CreateGroundCollapseParticleEffect(removedPixels / 32, FlipbookList[0].Position, FlipbookList[0].Rotation);
                 PlayExplosionSFX();
+
+                OnDestroyGroundAction?.Invoke(removedPixels / 32);
             }
 
             if (BaseDamage > 0)
@@ -373,6 +386,7 @@ namespace OpenBound.GameComponents.PawnAction
 
                         LevelScene.HUD.FloatingTextHandler.AddDamage(m, -damage);
 
+                        OnDealDamageAction?.Invoke(damage);
                         //MatchManager.Instance.NextPlayerTurn.HUD.FloatingTextHandler.AddDamage(x, -damage);
                     }
                 }

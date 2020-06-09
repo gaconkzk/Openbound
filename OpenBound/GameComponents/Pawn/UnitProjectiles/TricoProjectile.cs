@@ -70,7 +70,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -116,14 +116,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7f;
             offsetFactor = 0;
 
-            projectile.OnFinalizeExecution = OnFinalizeExecution;
+            projectile.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS2Mass;
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
         }
 
-        #region Weather/Tornado
+        #region Weather
         protected override void CheckCollisionWithWeather()
         {
             foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
@@ -135,6 +135,18 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     w.OnInteract(this);
                 }
             }
+        }
+
+        //Force
+        public override void OnBeginForceInteraction(Force force)
+        {
+            force.OnInteract(projectile);
+        }
+
+        //Weakness
+        public override void OnBeginWeaknessInteraction(Weakness weakness)
+        {
+            weakness.OnInteract(projectile);
         }
         #endregion
 
@@ -275,7 +287,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
                 if (pjList.Count() == 0)
-                    OnFinalizeExecution?.Invoke();
+                    OnFinalizeExecutionAction?.Invoke();
             }
         }
     }

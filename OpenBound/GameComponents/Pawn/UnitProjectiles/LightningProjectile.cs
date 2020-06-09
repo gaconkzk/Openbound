@@ -55,7 +55,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -94,7 +94,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 
@@ -133,7 +133,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
-                OnFinalizeExecution?.Invoke();
+                OnFinalizeExecutionAction?.Invoke();
         }
     }
 }
