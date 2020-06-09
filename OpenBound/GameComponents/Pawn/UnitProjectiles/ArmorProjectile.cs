@@ -171,7 +171,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                         rocketAnimation = ProjectileAnimationState.Opening;
                         FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimationState.Opening], true);
                         FlipbookList[0].AppendAnimationIntoCycle(rocketAnimationPresets[ProjectileAnimationState.Opened]);
-                        BaseDamage = Parameter.ProjectileArmorSSExplosionRadius;
+                        BaseDamage += Parameter.ProjectileArmorSSEBaseDamage;
                         ExplosionRadius = Parameter.ProjectileArmorSSEExplosionRadius;
                     }
                     break;

@@ -11,16 +11,19 @@
  */
 
 using Microsoft.Xna.Framework;
+using OpenBound.Common;
+using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
-using System.Collections.Generic;
 using Openbound_Network_Object_Library.Entity;
-using OpenBound.GameComponents.Animation;
-using OpenBound.Common;
 using System;
+using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
+    /// <summary>
+    /// Assisting type to store the time required to Force effect spawn a new particle
+    /// </summary>
     public class ForceProjectileState
     {
         public Projectile Projectile;
@@ -48,11 +51,13 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public void UpdateProjectiles(GameTime gameTime)
         {
-            for(int i = 0; i < forceInteraction.Count; i++)
+            //Foreach existing projectile that has interacted with the force
+            for (int i = 0; i < forceInteraction.Count; i++)
             {
-                if (forceInteraction[i].ParticleTimer >= 0)
+                //Spawn a new force particle special effect if its timer reaches zero
+                if (forceInteraction[i].ParticleTimer <= 0)
                 {
-                    forceInteraction[i].ParticleTimer = (float)Parameter.Random.NextDouble() / 16;
+                    forceInteraction[i].ParticleTimer = (Parameter.WeatherEffectForceSpawnParticleStartingTime + (float)Parameter.Random.NextDouble()) / 32f;
                     SpecialEffectBuilder.ForceRandomParticle(forceInteraction[i].Projectile.Position + new Vector2(30 * (0.5f - (float)Parameter.Random.NextDouble()), 30 * (0.5f - (float)Parameter.Random.NextDouble())));
                 }
                 else
@@ -72,20 +77,28 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void OnInteract(Projectile projectile)
         {
-            projectile.BaseDamage += 50;
+            //Passes this instance to any projectile's dependent projectile
+            projectile.OnBeginForceInteraction(this);
 
+            //If the project can't collide, it should not be taken into consideration for spawning/explosion effects
+            if (!projectile.CanCollide) return;
+
+            //If the projectile base damage = 0, it should not increase
+            if (projectile.BaseDamage != 0)
+                projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectForceDamageIncreaseFactor + Parameter.WeatherEffectForceDamageIncreaseValue);
+
+            //Once added to the list the projectile starts spawning force particles around it's flipbook
             forceInteraction.Add(new ForceProjectileState() { Projectile = projectile });
 
-            //Install itself on the projectile explosion event
-            projectile.OnExplodeAction += () =>
-            {
-                unusedProjectileList.Add(forceInteraction.Find((x) => x.Projectile == projectile));
-            };
+            //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
+            Action removeParticle = () => unusedProjectileList.Add(forceInteraction.Find((x) => x.Projectile == projectile));
+            projectile.OnExplodeAction += removeParticle;
+            projectile.OnBeingDestroyedAction += removeParticle;
 
+            //Install itself on the projectile ground destruction and dmg dealing
             Action<int> particleEffect = (p) => { ParticleBuilder.CreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
-
-            projectile.OnDestroyGround += particleEffect;
-            projectile.OnDealDamage += particleEffect;
+            projectile.OnDestroyGroundAction += particleEffect;
+            projectile.OnDealDamageAction += particleEffect;
         }
 
         public override void OnStopInteracting(Projectile projectile) { }

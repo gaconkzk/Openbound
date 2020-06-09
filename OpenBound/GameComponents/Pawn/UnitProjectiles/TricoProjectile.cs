@@ -123,7 +123,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileTricoS2WindInfluence;
         }
 
-        #region Weather/Tornado
+        #region Weather
         protected override void CheckCollisionWithWeather()
         {
             foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
@@ -135,6 +135,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     w.OnInteract(this);
                 }
             }
+        }
+
+        //Force
+        public override void OnBeginForceInteraction(Force force)
+        {
+            force.OnInteract(projectile);
         }
         #endregion
 

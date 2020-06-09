@@ -105,7 +105,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileTurtleS2WindInfluence;
         }
 
-        #region Weather/Tornado
+        #region Weather
         protected override void CheckCollisionWithWeather()
         {
             foreach (Weather w in LevelScene.WeatherHandler.WeatherList)
@@ -117,6 +117,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     w.OnInteract(this);
                 }
             }
+        }
+
+        //Force
+        public override void OnBeginForceInteraction(Force force)
+        {
+            force.OnInteract(dProj);
         }
         #endregion
 
@@ -272,6 +278,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
                 GameScene.Camera.TrackObject(mobile.ProjectileList.Union(mobile.LastCreatedProjectileList).First());
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+            SpecialEffectBuilder.TurtleProjectile3EExplosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

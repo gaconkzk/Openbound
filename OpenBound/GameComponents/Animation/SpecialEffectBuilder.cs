@@ -202,7 +202,17 @@ namespace OpenBound.GameComponents.Animation
 
         public static void TurtleProjectile3Explosion(Vector2 position, float rotation)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(92f, 95f), 157, 188, "Graphics/Special Effects/Tank/Turtle/Flame3",
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(90f, 93f), 159, 173, "Graphics/Special Effects/Tank/Turtle/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 28, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void TurtleProjectile3EExplosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(92f, 95f), 157, 188, "Graphics/Special Effects/Tank/Turtle/Flame3E",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 15, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
@@ -212,7 +222,7 @@ namespace OpenBound.GameComponents.Animation
 
         public static void TurtleProjectile3Division(Vector2 position, float rotation)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(78f, 65f), 186, 129, "Graphics/Special Effects/Tank/Turtle/Flame3E",
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(78f, 65f), 186, 129, "Graphics/Special Effects/Tank/Turtle/Flame3Divide",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 10, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
 
             SpecialEffect se = new SpecialEffect(fb, 1);

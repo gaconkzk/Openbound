@@ -16,6 +16,7 @@ namespace OpenBound.GameComponents.Animation
     {
         static readonly ParticleUpdateConfiguration groundParticleUpdateConfiguration = new ParticleUpdateConfiguration() { Rotate = true, SetScale = true, UseYAcceleration = true, UseXAcceleration = true };
         static readonly ParticleUpdateConfiguration forceParticleUpdateConfiguration = new ParticleUpdateConfiguration() { SetScale = true, Fade = true, Rotate = true, UseXAcceleration = true, UseYAcceleration = true };
+       
         public static void CreateGroundCollapseParticleEffect(int numberOfParticles, Vector2 initialPosition, float angleTrajectory)
         {
             List<Flipbook> flipbookList = BuildGroundParticle(numberOfParticles);
@@ -54,21 +55,13 @@ namespace OpenBound.GameComponents.Animation
 
         private static List<Flipbook> BuildForceParticle(int particleNumber)
         {
-            List<Flipbook> flipbookList = new List<Flipbook>();
+            return BuildParticle(particleNumber, new Vector2(16, 16), "Graphics/Special Effects/Weather/ForceParticle", 8);
+        }
 
-            Vector2 pivot = new Vector2(16, 16);
-            string groundParticlePath = $"Graphics/Special Effects/Weather/ForceParticle";
-
-            for (; particleNumber > 0; particleNumber--)
-            {
-                AnimationInstance animationInstance = new AnimationInstance();
-                animationInstance.StartingFrame = animationInstance.EndingFrame = Parameter.Random.Next(0, 8);
-
-                flipbookList.Add(Flipbook.CreateFlipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
-                    groundParticlePath, animationInstance, false, DepthParameter.Projectile));
-            }
-
-            return flipbookList;
+        private static List<Flipbook> BuildGroundParticle(int particleNumber)
+        {
+            Map map = GameInformation.Instance.RoomMetadata.Map;
+            return BuildParticle(particleNumber, map.GroundParticlePivot.ToVector2(), $"Graphics/Maps/{map.GameMap}/Particle", map.GroundParticleNumberOfFrames);
         }
 
         private static List<Flipbook> BuildParticle(int particleNumber, Vector2 pivot, string particlePath, int numberOfFrames)
@@ -82,26 +75,6 @@ namespace OpenBound.GameComponents.Animation
 
                 flipbookList.Add(Flipbook.CreateFlipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
                     particlePath, animationInstance, false, DepthParameter.Projectile));
-            }
-
-            return flipbookList;
-        }
-
-        private static List<Flipbook> BuildGroundParticle(int particleNumber)
-        {
-            List<Flipbook> flipbookList = new List<Flipbook>();
-
-            Map map = GameInformation.Instance.RoomMetadata.Map;
-            Vector2 pivot = map.GroundParticlePivot.ToVector2();
-            string groundParticlePath = $"Graphics/Maps/{map.GameMap}/Particle";
-
-            for (; particleNumber > 0; particleNumber--)
-            {
-                AnimationInstance animationInstance = new AnimationInstance();
-                animationInstance.StartingFrame = animationInstance.EndingFrame = Parameter.Random.Next(0, map.GroundParticleNumbers);
-
-                flipbookList.Add(Flipbook.CreateFlipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
-                    groundParticlePath, animationInstance, false, DepthParameter.Projectile));
             }
 
             return flipbookList;

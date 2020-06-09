@@ -3540,6 +3540,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Tank/Turtle/Flame3.png
 
+#begin Graphics/Special Effects/Tank/Turtle/Flame3Divide.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Special Effects/Tank/Turtle/Flame3Divide.png
+
 #begin Graphics/Special Effects/Tank/Turtle/Flame3E.png
 /importer:TextureImporter
 /processor:TextureProcessor
