@@ -51,6 +51,9 @@ namespace OpenBound.GameComponents.WeatherEffect
                 case WeatherType.Weakness:
                     weather = new Weakness(position);
                     break;
+                case WeatherType.Mirror:
+                    weather = new Mirror(position);
+                    break;
             }
 
             //Return if the given weather is not implemented yet

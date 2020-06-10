@@ -161,14 +161,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         List<SpecialEffect> swordTrace;
         Vector2 previousSESpawnPosition;
-        Vector2 initialPosition;
         float initialAlpha;
 
         public KnightSatelliteProjectile(Knight Mobile, Vector2 InitialPosition, Vector2 FinalPosition, double FreezeTime = 0, double SpawnTime = 0)
             : base(Mobile, ShotType.Satellite, Parameter.ProjectileKnightExplosionRadius, Parameter.ProjectileKnightSwordBaseDamage,
                   projectileInitialPosition: InitialPosition)
         {
-            previousSESpawnPosition = initialPosition = InitialPosition;
+            previousSESpawnPosition = InitialPosition;
             initialAlpha = Parameter.ProjectileKnightInitialAlpha;
 
             //Calculate the angle of the swords

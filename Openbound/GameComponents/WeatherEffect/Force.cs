@@ -35,6 +35,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         List<ForceProjectileState> forceInteraction;
         List<ForceProjectileState> unusedProjectileList;
 
+        protected Force(Vector2 position, WeatherType weatherType, float scale = 1, float rotation = 0) : base(position, new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), weatherType, scale, rotation)
+        {
+            forceInteraction = new List<ForceProjectileState>();
+            unusedProjectileList = new List<ForceProjectileState>();
+        }
+
         public Force(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
             forceInteraction = new List<ForceProjectileState>();
@@ -83,12 +89,11 @@ namespace OpenBound.GameComponents.WeatherEffect
             //If the project can't collide, it should not be taken into consideration for spawning/explosion effects
             if (!projectile.CanCollide) return;
 
-            //If the projectile base damage = 0, it should not increase
-            if (projectile.BaseDamage != 0)
-                projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectForceDamageIncreaseFactor + Parameter.WeatherEffectForceDamageIncreaseValue);
-
             //Once added to the list the projectile starts spawning force particles around it's flipbook
             forceInteraction.Add(new ForceProjectileState() { Projectile = projectile });
+
+            //Calculate new base damage for a projectile
+            CalculateDamage(projectile);
 
             //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
             Action removeParticle = () => unusedProjectileList.Add(forceInteraction.Find((x) => x.Projectile == projectile));
@@ -102,5 +107,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         }
 
         public override void OnStopInteracting(Projectile projectile) { }
+
+        public virtual void CalculateDamage(Projectile projectile)
+        {
+            //If the projectile base damage = 0, it should not increase
+            if (projectile.BaseDamage != 0)
+                projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectForceDamageIncreaseFactor + Parameter.WeatherEffectForceDamageIncreaseValue);
+        }
     }
 }
