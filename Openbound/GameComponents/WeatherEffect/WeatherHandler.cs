@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.WeatherEffect
                 case WeatherType.Weakness:
                     weather = new Weakness(position);
                     break;
-                case WeatherEffectType.LightningSES1:
+                case WeatherType.LightningSES1:
                     weather = new EletricityStrike(position, 1);
                     break;
             }

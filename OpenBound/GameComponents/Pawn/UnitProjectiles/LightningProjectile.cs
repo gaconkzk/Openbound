@@ -60,7 +60,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 invisibleProjectile.Position = new Vector2(Position.X, i);
                 if (invisibleProjectile.UpdateCollider(invisibleProjectile.Position))
                 {
-                    LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
+                    LevelScene.WeatherHandler.Add(WeatherType.LightningSES1, Position);
                     break;
                 }
             }
