@@ -50,18 +50,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-  
-            int mapTop = -Topography.MapHeight / 2;
-            bool pointFound = false;
-
-            DebugCrosshair xDebug = new DebugCrosshair(Color: Color.Red);
-            xDebug.Sprite.Scale *= 10;
-            DebugHandler.Instance.Add(xDebug);
             DummyProjectile invisibleProjectile = new DummyProjectile((Lightning)mobile, ShotType.Dummy, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage);
-
-
-
-
+            int mapTop = -Topography.MapHeight / 2;
 
             for (int i = mapTop; i < -mapTop; i++)
             {
@@ -75,34 +65,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 }
             }
   
-               // if (pointFound = Topography.CollidableForegroundMatrix[x[1]][x[0]])
-                //{                                                    
-                    //xDebug.Update(new Vector2(Position.X, i));
-               
-                        
-                   // mobile.LastCreatedProjectileList.Add(invisibleProjectile);
-                   // mobile.LastCreatedProjectileList.ForEach((z) => z.InitializeMovement());
-                    //break;
-                //}
-            
-
             base.Explode();
-
-            /*
-            if (!pointFound)
-            {
-                //xDebug.Update(new Vector2(Position.X, Position.Y));
-                invisibleProjectile = new LightningInvisibleProjectile((Lightning)mobile, Position);
-               // mobile.LastCreatedProjectileList.Add(invisibleProjectile);
-               // mobile.LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
-            }*/
-
-
-
-
-            //Topography.CollidableForegroundMatrix(Position, Topography.GetRelativePosition(Position));
-            //LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
-            //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
         }
 
         protected override void Destroy()
@@ -179,7 +142,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            //SpecialEffectBuilder.IceProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();
         }
 
