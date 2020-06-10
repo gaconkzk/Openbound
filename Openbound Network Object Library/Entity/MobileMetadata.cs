@@ -28,7 +28,7 @@ namespace Openbound_Network_Object_Library.Entity
     public enum ShotType
     {
         S1, S2, SS,
-        Satellite // This state should only be used for projectile's constructoor for identification
+        Satellite, Dummy // This state should only be used for projectile's constructoor for identification
     }
 
     public struct AimPreset

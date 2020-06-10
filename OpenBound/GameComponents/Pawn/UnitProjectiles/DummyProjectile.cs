@@ -11,8 +11,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
     public class DummyProjectile : Projectile
     {
-        public DummyProjectile(Mobile mobile, ShotType shotType, int explosionRadius, int baseDamage, bool canCollide = true, Vector2 projectileInitialPosition = default)
-            : base(mobile, shotType, explosionRadius, baseDamage, canCollide: canCollide, projectileInitialPosition: projectileInitialPosition)
+        public DummyProjectile(Mobile mobile, ShotType shotType, int explosionRadius, int baseDamage, bool canCollide = true)
+            : base(mobile, shotType, explosionRadius, baseDamage, canCollide: canCollide)
         {
             this.mobile = mobile;
 
