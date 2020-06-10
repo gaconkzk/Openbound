@@ -41,7 +41,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             //outerCollisionRectangle = new Rectangle(collisionRectangle.X - 10, collisionRectangle.Y - 10, collisionRectangle.Width + 10 * 2, collisionRectangle.Height + 10 * 2);
             // outerDebugRectangle.Update(outerCollisionRectangle);
 
-            this.Fade(gameTime, 10);
+            this.Fade(gameTime, 0.4f);
             //this.Fade(gameTime, 0.4f);
         }
 
