@@ -180,6 +180,10 @@ namespace OpenBound.GameComponents.PawnAction
                     if (st == ShotType.Satellite)
                         st = ShotType.S1;
                     break;
+                case MobileType.Lightning:
+                    if (st == ShotType.Dummy)
+                        return;
+                    break;
             }
 
             AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileExplosion(mobile.MobileType, st));

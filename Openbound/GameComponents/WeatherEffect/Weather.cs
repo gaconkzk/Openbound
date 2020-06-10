@@ -45,6 +45,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         protected Vector2 flipbookPivot;
         protected float rotation;
         protected int numberOfFrames;
+        protected float _initialTransparency = 1;
 
         public float Scale { get; protected set; }
         public Vector2 StartingPosition { get; protected set; }
@@ -68,6 +69,8 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         //Animation - RandomFlipbookFrame
         private float animationRandomFlipbookElapsedTime;
+
+        private float fadeAnimationElapsedTime;
 
 #if DEBUG
         //Debug
@@ -196,7 +199,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
         /// </summary>
         public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
-        
+
         /// <summary>
         /// Check if this Weather is interacting with a Projectile.
         /// </summary>
@@ -232,6 +235,19 @@ namespace OpenBound.GameComponents.WeatherEffect
                 flipbookList.ForEach((x) => x.JumpToRandomAnimationFrame());
                 animationRandomFlipbookElapsedTime = 0;
             }
+        }
+
+        /// <summary>
+        /// Fades the weather object after the timespan is ended.
+        /// </summary>
+        /// <param name="timespan"></param>
+        protected void Fade(GameTime gameTime, float timeLimit = 1)
+        {
+            //transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * timespawn;
+            //timespan -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float transparency = Math.Max(0, 1 - fadeAnimationElapsedTime / timeLimit);
+            flipbookList.ForEach(x => x.SetTransparency(transparency));
         }
 
         /// <summary>

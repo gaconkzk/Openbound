@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using Openbound_Network_Object_Library.Entity;
+using OpenBound.GameComponents.Pawn.Unit;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,6 +51,9 @@ namespace OpenBound.GameComponents.WeatherEffect
                     break;
                 case WeatherType.Weakness:
                     weather = new Weakness(position);
+                    break;
+                case WeatherEffectType.LightningSES1:
+                    weather = new EletricityStrike(position, 1);
                     break;
             }
 

@@ -13,9 +13,15 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Debug;
+using OpenBound.GameComponents.Level;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
+using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,8 +50,22 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
+            DummyProjectile invisibleProjectile = new DummyProjectile((Lightning)mobile, ShotType.Dummy, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage);
+            int mapTop = -Topography.MapHeight / 2;
+
+            for (int i = mapTop; i < -mapTop; i++)
+            {
+                int[] x = Topography.GetRelativePosition(new Vector2(Position.X, i)).ToArray();
+
+                invisibleProjectile.Position = new Vector2(Position.X, i);
+                if (invisibleProjectile.UpdateCollider(invisibleProjectile.Position))
+                {
+                    LevelScene.WeatherHandler.Add(WeatherEffectType.LightningSES1, Position);
+                    break;
+                }
+            }
+  
             base.Explode();
-            SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
         }
 
         protected override void Destroy()
@@ -122,7 +142,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            //SpecialEffectBuilder.IceProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();
         }
 
@@ -137,3 +156,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
     }
 }
+
+
+
