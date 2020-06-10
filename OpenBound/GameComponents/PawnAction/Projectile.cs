@@ -52,6 +52,7 @@ namespace OpenBound.GameComponents.PawnAction
         protected float force;
 
         public bool IsAbleToRefreshPosition;
+
         public bool IsExternallyRefreshingPosition;
 
         //Physics-related variables - Wind
@@ -250,9 +251,17 @@ namespace OpenBound.GameComponents.PawnAction
 
         public virtual void OnBeginWeaknessInteraction(Weakness weakness) { }
 
-        public void SetBasePosition(Vector2 newPosition)
+        public virtual void OnBeginMirrorInteraction()
         {
-            projectileInitialPosition = newPosition;
+            //This right-hand calculation represents the Y value that needs to be altered to recycle yMovement
+            projectileInitialPosition = Position
+                + new Vector2(0, projectileInitialPosition.Y - Position.Y);
+            xMovement.InverseMovement();
+        }
+
+        public void SetBasePosition()
+        {
+            projectileInitialPosition = Position;
             xSpeedComponent = (float)Math.Round(Math.Cos(CurrentFlipbookRotation), 3);
             ySpeedComponent = (float)Math.Round(Math.Sin(CurrentFlipbookRotation), 3);
             InitializeMovement();

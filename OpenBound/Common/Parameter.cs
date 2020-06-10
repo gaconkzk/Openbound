@@ -441,6 +441,10 @@ namespace OpenBound.Common
         public const float WeatherEffectWeaknessDamageDecreaseFactor = 1.2f;
         public const float WeatherEffectWeaknessDamageDecreaseValue = 10f;
         public static Color WeatherEffectWeaknessColorModifier = new Color(30, 30, 30, 255);
+
+        //Mirror
+        public const float WeatherEffectMirrorDamageIncreaseFactor = 1.1f;
+        public const float WeatherEffectMirrorDamageIncreaseValue = 5f;
         #endregion
     }
 }

@@ -419,27 +419,23 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
-                WeatherHandler.Add(WeatherType.Force, new Vector2(-200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Weakness, new Vector2(300, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
-                WeatherHandler.Add(WeatherType.Weakness, new Vector2(200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Force, new Vector2(200, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
-                for(int i = 0; i < 8; i++)
-                    WeatherHandler.Add(WeatherType.Force, new Vector2(0, 0), i * MathHelper.Pi/4);
-                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi);
-
-                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), -MathHelper.Pi - MathHelper.Pi / 4 );
-                //WeatherHandler.Add(WeatherEffectType.Tornado, new Vector2(0, 0), MathHelper.Pi / 4);
+                WeatherHandler.Add(WeatherType.Tornado, new Vector2(100, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F8))
             {
 
+                WeatherHandler.Add(WeatherType.Mirror, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);

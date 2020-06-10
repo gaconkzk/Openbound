@@ -10,6 +10,8 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using System;
+
 namespace OpenBound.GameComponents.Physics
 {
     /// <summary>
@@ -49,6 +51,13 @@ namespace OpenBound.GameComponents.Physics
         public float ProjectNextPosition(float TimeElapsed)
         {
             return (InitialSpeed + Acceleration * (CurrentTime + TimeElapsed)) * (CurrentTime + TimeElapsed);
+        }
+
+        public void InverseMovement()
+        {
+            InitialSpeed *= -1;
+            Acceleration *= -1;
+            CurrentTime = 0;
         }
     }
 }

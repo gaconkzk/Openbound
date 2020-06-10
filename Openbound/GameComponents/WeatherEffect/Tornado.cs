@@ -84,7 +84,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             projectile.IsExternallyRefreshingPosition = false;
 
             //Reset physics variables to maintain its consistency after the tornado
-            projectile.SetBasePosition(projectile.Position);
+            projectile.SetBasePosition();
 
             //Setup after-tornado behavior (if necessary)
             projectile.OnEndTornadoInteraction();

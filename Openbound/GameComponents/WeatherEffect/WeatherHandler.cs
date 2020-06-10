@@ -52,6 +52,9 @@ namespace OpenBound.GameComponents.WeatherEffect
                 case WeatherType.Weakness:
                     weather = new Weakness(position);
                     break;
+                case WeatherType.Mirror:
+                    weather = new Mirror(position);
+                    break;
                 case WeatherType.LightningSES1:
                     weather = new EletricityStrike(position, 1);
                     break;
