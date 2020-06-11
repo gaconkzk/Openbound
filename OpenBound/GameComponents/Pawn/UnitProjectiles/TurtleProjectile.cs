@@ -227,9 +227,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 case ProjectileAnimationState.Opening:
                     bubbleAnimation = ProjectileAnimationState.Opened;
                     SpecialEffectBuilder.TurtleProjectile3Division(FlipbookList[0].Position, FlipbookList[0].Rotation);
-                    TurtleProjectileEmitter.Shot3((Turtle)mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecutionAction);
+                    TurtleProjectileEmitter.Shot3((Turtle)Mobile, force, FlipbookList[0].Position, FlipbookList[0].Rotation, OnFinalizeExecutionAction);
                     PlayExplosionSFX();
-                    GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
+                    GameScene.Camera.TrackObject(Mobile.LastCreatedProjectileList.First());
                     IsAbleToRefreshPosition = true;
                     break;
                 case ProjectileAnimationState.Opened:
@@ -248,7 +248,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -287,12 +287,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
             else if (GameScene.Camera.TrackedObject == this)
-                GameScene.Camera.TrackObject(mobile.ProjectileList.Union(mobile.LastCreatedProjectileList).First());
+                GameScene.Camera.TrackObject(Mobile.ProjectileList.Union(Mobile.LastCreatedProjectileList).First());
         }
 
         protected override void Explode()
@@ -304,7 +304,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
-            mobile.LastCreatedProjectileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            Mobile.LastCreatedProjectileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
         }
     }
 }

@@ -67,7 +67,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -208,7 +208,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public TricoProjectile3(Trico mobile)
             : base(mobile, ShotType.SS, Parameter.ProjectileTricoSSExplosionRadius, Parameter.ProjectileTricoSSBaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
@@ -284,7 +284,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 base.Destroy();
 
-                List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+                List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
                 if (pjList.Count() == 0)
                     OnFinalizeExecutionAction?.Invoke();

@@ -78,10 +78,12 @@ namespace OpenBound.GameComponents.PawnAction
         protected double SpawnTime, FreezeTime;
 
         //Object References
-        protected Mobile mobile;
+        public Mobile Mobile { get; protected set; }
         protected ShotType shotType;
 
         //Action handlers
+        public Action OnBeforeUpdateAction;
+        public Action OnAfterUpdateAction;
         public Action OnFinalizeExecutionAction;
         public Action OnExplodeAction;
         public Action OnBeingDestroyedAction;
@@ -104,7 +106,7 @@ namespace OpenBound.GameComponents.PawnAction
 
             FlipbookList = new List<Flipbook>();
 
-            mobile = owner;
+            Mobile = owner;
 
             //Physics-relaetd variables
             yMovement = new AcceleratedMovement();
@@ -118,10 +120,10 @@ namespace OpenBound.GameComponents.PawnAction
             if (projectileInitialPosition != default)
                 this.projectileInitialPosition = previousPosition = projectileInitialPosition;
             else
-                this.projectileInitialPosition = previousPosition = mobile.SyncMobile.SyncProjectile.CannonPosition.ToVector2();
+                this.projectileInitialPosition = previousPosition = Mobile.SyncMobile.SyncProjectile.CannonPosition.ToVector2();
 
-            force = mobile.SyncMobile.SyncProjectile.ShotStrenght;
-            angle = mobile.SyncMobile.SyncProjectile.ShotAngle;
+            force = Mobile.SyncMobile.SyncProjectile.ShotStrenght;
+            angle = Mobile.SyncMobile.SyncProjectile.ShotAngle;
 
             angle += angleModifier;
             force += forceModifier;
@@ -149,6 +151,8 @@ namespace OpenBound.GameComponents.PawnAction
 
         public virtual void Update()
         {
+            OnBeforeUpdateAction?.Invoke();
+
             if (SpawnTimeCounter < SpawnTime || (SpawnTime == 0 && SpawnTimeCounter == 0))
             {
                 SpawnTimeCounter += Parameter.GameplayTimeFrameMaximumDeltaTime;
@@ -162,32 +166,32 @@ namespace OpenBound.GameComponents.PawnAction
 
             UpdatePosition();
             UpdateRotation();
+
+            OnAfterUpdateAction?.Invoke();
         }
 
         public void PlayLaunchSFX()
         {
             //Sound
-            AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileLaunch(mobile.MobileType, shotType));
+            AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileLaunch(Mobile.MobileType, shotType));
         }
 
         public void PlayExplosionSFX()
         {
             ShotType st = shotType;
 
+            if (st == ShotType.Dummy) return;
+
             //Change audio output in case the mobile projectile's parameter are changed to accomodate the SFX logic
-            switch (mobile.MobileType)
+            switch (Mobile.MobileType)
             {
                 case MobileType.Knight:
                     if (st == ShotType.Satellite)
                         st = ShotType.S1;
                     break;
-                case MobileType.Lightning:
-                    if (st == ShotType.Dummy)
-                        return;
-                    break;
             }
 
-            AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileExplosion(mobile.MobileType, st));
+            AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileExplosion(Mobile.MobileType, st));
         }
 
         public virtual void OnSpawn()
@@ -342,7 +346,7 @@ namespace OpenBound.GameComponents.PawnAction
         protected virtual void Destroy()
         {
             OnBeingDestroyedAction?.Invoke();
-            mobile.UnusedProjectile.Add(this);
+            Mobile.UnusedProjectile.Add(this);
         }
 
         protected virtual int CalculateDamage(Mobile mobile)

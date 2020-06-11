@@ -454,6 +454,13 @@ namespace OpenBound.Common
         //Mirror
         public const float WeatherEffectMirrorDamageIncreaseFactor = 1.1f;
         public const float WeatherEffectMirrorDamageIncreaseValue = 5f;
+
+        //Electricity
+        public const float WeatherEffectElectricityAngle = MathHelper.PiOver2;
+        public const int WeatherEffectElectricityBaseDamage = 0;
+        public const int WeatherEffectElectricityExplosionRadius = 10;
+        public const int WeatherEffectElectricityEExplosionRadius = 20;
+        public const int WeatherEffectElectricityEBaseDamage = 30;
         #endregion
     }
 }

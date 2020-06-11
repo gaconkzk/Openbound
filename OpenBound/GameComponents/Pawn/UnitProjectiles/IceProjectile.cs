@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -63,7 +63,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public IceProjectile2(Ice mobile) : base(mobile, ShotType.S2, Parameter.ProjectileIceS2ExplosionRadius, Parameter.ProjectileIceS2BaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -91,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -102,7 +102,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public IceProjectile3(Ice mobile) : base(mobile, ShotType.SS, Parameter.ProjectileIceSSExplosionRadius, Parameter.ProjectileIceSSBaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -130,7 +130,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

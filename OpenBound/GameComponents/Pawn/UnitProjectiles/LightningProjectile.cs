@@ -46,7 +46,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             base.Explode();
 
             ElectricityProjectile electricityProjectile =
-                new ElectricityProjectile(mobile, Position,
+                new ElectricityProjectile(Mobile, Position,
                     Parameter.ProjectileLightningS1ElectricityAngle,
                     Parameter.ProjectileLightningS1ElectricityExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
@@ -59,7 +59,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -75,7 +75,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile2(Lightning mobile) : base(mobile, ShotType.S2, Parameter.ProjectileLightningS2ExplosionRadius, Parameter.ProjectileLightningS2BaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -103,7 +103,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -114,7 +114,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile3(Lightning mobile) : base(mobile, ShotType.SS, Parameter.ProjectileLightningSSExplosionRadius, Parameter.ProjectileLightningSSBaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -141,7 +141,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

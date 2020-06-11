@@ -60,6 +60,9 @@ namespace OpenBound.GameComponents.WeatherEffect
                 case WeatherType.Mirror:
                     weather = new Mirror(position);
                     break;
+                case WeatherType.Electricity:
+                    weather = new Electricity(position);
+                    break;
             }
 
             //Return if the given weather is not implemented yet
