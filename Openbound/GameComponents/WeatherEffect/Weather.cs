@@ -132,6 +132,8 @@ namespace OpenBound.GameComponents.WeatherEffect
             StartingPosition = startingPosition;
             WeatherType = weatherType;
             Scale = scale;
+
+            flipbookList.ForEach((x) => x.SetTransparency(0));
         }
 
         /// <summary>
@@ -246,18 +248,30 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
-        /// <summary>
-        /// Fades the weather object after the timespan is ended.
-        /// </summary>
-        /// <param name="timespan"></param>
-        protected void Fade(GameTime gameTime, float timeLimit = 1)
+        public void SetTransparency(float transparency)
         {
-            //transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * timespawn;
-            //timespan -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-            fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            float transparency = Math.Max(0, 1 - fadeAnimationElapsedTime / timeLimit);
             flipbookList.ForEach(x => x.SetTransparency(transparency));
         }
+
+        /// <summary>
+        /// Slowly fades out the weather object depending on the timeSpan.
+        /// </summary>
+        /// <param name="timespan"></param>
+        public void FadeIn(GameTime gameTime, float timeLimit = 1)
+        {
+            fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            SetTransparency(MathHelper.Clamp(fadeAnimationElapsedTime / timeLimit, 0, 1));
+        }
+
+        /// <summary>
+        /// Slowly fades in the weather object depending on the timeSpan.
+        /// </summary>
+        /// <param name="timespan"></param>
+        public void FadeOut(GameTime gameTime, float timeLimit = 1) {
+            fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            SetTransparency(MathHelper.Clamp(1 - fadeAnimationElapsedTime / timeLimit, 0, 1));
+        }
+
 
         /// <summary>
         /// Makes the weatherEffect to move down and loop on screen

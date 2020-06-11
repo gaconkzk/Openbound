@@ -30,6 +30,14 @@ namespace OpenBound.GameComponents.Animation
             specialEffectToBeDestroyed = new List<SpecialEffect>();
         }
 
+        public static void AddRange(List<SpecialEffect> specialEffectList)
+        {
+            lock (toBeAddedSpecialEffect)
+            {
+                toBeAddedSpecialEffect.AddRange(specialEffectList);
+            }
+        }
+
         public static void Add(SpecialEffect specialEffect)
         {
             lock (toBeAddedSpecialEffect)

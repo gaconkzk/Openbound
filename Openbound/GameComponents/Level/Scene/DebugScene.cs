@@ -381,7 +381,7 @@ namespace OpenBound.GameComponents.Level.Scene
         }
 
 
-        Random r = new Random();
+        System.Random r = new System.Random();
 
         public override void Update(GameTime gameTime)
         {
@@ -439,9 +439,13 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F9))
             {
-                WeatherHandler.Add(WeatherType.Electricity, new Vector2(200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Electricity, new Vector2(-100, -Topography.MapHeight / 2));
             }
-            //optionsMenu.Update(GameTime, MouseState, PreviousMouseState, KeyboardState, PreviousKeyboardState);
+
+            if (InputHandler.IsBeingPressed(Keys.F10))
+            {
+                WeatherHandler.Add(WeatherType.Random, WeatherType.Weakness, new Vector2(0, -Topography.MapHeight / 2));
+            }
         }
 
         public override void Draw(GameTime gameTime)

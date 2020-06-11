@@ -436,10 +436,11 @@ namespace OpenBound.Common
 
         #region WeatherEffects
         public const float WeaterEffectRandomFlipbookUpdateTimer = 0.1f;
-        public static float WeatherEffectVerticalScrollingUpdateSpeed = 50f;
+        public const float WeatherEffectVerticalScrollingUpdateSpeed = 50f;
+        public const float WeatherEffectFadeTime = 1f;
 
         //Tornado
-        public static float WeatherEffectTornadoMinimumProjectileSpeed = 25f;
+        public const float WeatherEffectTornadoMinimumProjectileSpeed = 25f;
 
         //Force
         public const float WeatherEffectForceDamageIncreaseFactor = 1.2f;

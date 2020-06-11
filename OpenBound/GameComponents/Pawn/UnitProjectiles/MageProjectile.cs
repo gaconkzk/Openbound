@@ -143,6 +143,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             electricity.OnInteract(dProj);
             OnAfterUpdateAction = dProj.OnAfterUpdateAction;
         }
+
+        //Random
+        public override void OnBeginRandomInteraction(WeatherEffect.Random random)
+        {
+            random.OnInteract(dProj);
+        }
         #endregion
 
         public override void Update()
@@ -216,7 +222,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             foreach (Mobile m in LevelScene.MobileList)
             {
-                double distance = Mobile.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+                double distance = m.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
 
                 if (distance < Parameter.ProjectileMageSSEExplosionRadius)
                 {

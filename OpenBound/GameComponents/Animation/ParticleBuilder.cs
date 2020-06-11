@@ -32,6 +32,7 @@ namespace OpenBound.GameComponents.Animation
 
         private static void CreateGroundCollapseParticleEffect(int numberOfParticles, Vector2 initialPosition, float angleTrajectory)
         {
+            List<SpecialEffect> pList = new List<SpecialEffect>();
             List<Flipbook> flipbookList = BuildGroundParticle(numberOfParticles);
            
             float windAngle = LevelScene.MatchMetadata.WindAngleRadians;
@@ -46,13 +47,15 @@ namespace OpenBound.GameComponents.Animation
                 flipbookList[i].Position = initialPosition;
                 flipbookList[i].Rotation = angularSpread;
 
-                Particle p = new Particle(flipbookList[i], new Vector2((float)Math.Cos(angularSpread), (float)Math.Sin(angularSpread)), windVector, groundParticleUpdateConfiguration);
-                SpecialEffectHandler.Add(p);
+                pList.Add(new Particle(flipbookList[i], new Vector2((float)Math.Cos(angularSpread), (float)Math.Sin(angularSpread)), windVector, groundParticleUpdateConfiguration));
             }
+
+            SpecialEffectHandler.AddRange(pList);
         }
 
         private static void CreateForceCollapseParticleEffect(int numberOfParticles, Vector2 initialPosition, float angleTrajectory)
         {
+            List<SpecialEffect> pList = new List<SpecialEffect>();
             List<Flipbook> flipbookList = BuildForceParticle(numberOfParticles);
 
             for (int i = 0; i < flipbookList.Count; i++)
@@ -61,9 +64,10 @@ namespace OpenBound.GameComponents.Animation
                 flipbookList[i].Position = initialPosition;
                 flipbookList[i].Rotation = angle;
 
-                Particle p = new Particle(flipbookList[i], new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)), Vector2.Zero, forceParticleUpdateConfiguration);
-                SpecialEffectHandler.Add(p);
+                pList.Add(new Particle(flipbookList[i], new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)), Vector2.Zero, forceParticleUpdateConfiguration));
             }
+
+            SpecialEffectHandler.AddRange(pList);
         }
 
         private static List<Flipbook> BuildForceParticle(int particleNumber)

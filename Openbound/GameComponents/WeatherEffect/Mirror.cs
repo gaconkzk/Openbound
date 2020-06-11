@@ -26,11 +26,18 @@ namespace OpenBound.GameComponents.WeatherEffect
         public Mirror(Vector2 position, float scale = 1) : base(position, WeatherType.Mirror, scale)
         {
             Initialize("Graphics/Special Effects/Weather/Mirror", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+
+            SetTransparency(0);
         }
 
         public override Weather Merge(Weather weather)
         {
             return new Mirror((StartingPosition + weather.StartingPosition) / 2, Scale + weather.Scale);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
         }
 
         public override void OnInteract(Projectile projectile)

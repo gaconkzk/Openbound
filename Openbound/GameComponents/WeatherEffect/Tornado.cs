@@ -64,6 +64,8 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedProjectileList = new List<Projectile>();
 
             Initialize("Graphics/Special Effects/Weather/Tornado", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+
+            SetTransparency(0);
         }
 
         public override void OnInteract(Projectile projectile)
@@ -98,6 +100,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             VerticalScrollingUpdate(gameTime);
             UpdateProjectiles();
+            FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
         }
 
         private void UpdateProjectiles()

@@ -156,6 +156,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             electricity.OnInteract(projectile);
             OnAfterUpdateAction = projectile.OnAfterUpdateAction;
         }
+
+        //Random
+        public override void OnBeginRandomInteraction(WeatherEffect.Random random)
+        {
+            random.OnInteract(projectile);
+        }
         #endregion
 
         public override void OnSpawn()
