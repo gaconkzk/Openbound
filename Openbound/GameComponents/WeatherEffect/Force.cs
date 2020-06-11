@@ -92,7 +92,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             projectile.OnBeingDestroyedAction += removeParticle;
 
             //Install itself on the projectile ground destruction and dmg dealing
-            Action<int> particleEffect = (p) => { ParticleBuilder.CreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
+            Action<int> particleEffect = (p) => { ParticleBuilder.AsyncCreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
             projectile.OnDestroyGroundAction += particleEffect;
             projectile.OnDealDamageAction += particleEffect;
         }

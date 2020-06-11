@@ -11,8 +11,10 @@
  */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
@@ -52,7 +54,10 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             //Once added to the list the projectile starts spawning force particles around it's flipbook
             SpecialEffect se = SpecialEffectBuilder.ElectricityParticle(projectile.Position);
-            projectile.OnAfterUpdateAction += () => { se.Flipbook.Position = projectile.Position; };
+            projectile.OnAfterUpdateAction += () => {
+                se.Flipbook.Position = projectile.Position;
+                se.Flipbook.Rotation = projectile.CurrentFlipbookRotation;
+            };
 
             //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
             Action removeParticle = () => SpecialEffectHandler.Remove(se);
@@ -62,7 +67,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             projectile.OnExplodeAction += () =>
             {
                 ElectricityProjectile ep = new ElectricityProjectile(projectile.Mobile, projectile.Position,
-                    Parameter.WeatherEffectElectricityAngle,
+                    MathHelper.PiOver2,
                     Parameter.WeatherEffectElectricityExplosionRadius,
                     Parameter.WeatherEffectElectricityEExplosionRadius,
                     Parameter.WeatherEffectElectricityBaseDamage,
@@ -70,21 +75,11 @@ namespace OpenBound.GameComponents.WeatherEffect
                     isWeather: true);
 
                 ep.Update();
-            };
 
-            //Install itself on the projectile ground destruction and dmg dealing
-            /*Action<int> particleEffect = (p) => { ParticleBuilder.CreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
-            projectile.OnDestroyGroundAction += particleEffect;
-            projectile.OnDealDamageAction += particleEffect;*/
+                AudioHandler.PlaySoundEffect("Audio/SFX/Tank/Blast/LightningS1");
+            };
         }
 
         public override void OnStopInteracting(Projectile projectile) { }
-
-        public virtual void CalculateDamage(Projectile projectile)
-        {
-            //If the projectile base damage = 0, it should not increase
-            if (projectile.BaseDamage != 0)
-                projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectForceDamageIncreaseFactor + Parameter.WeatherEffectForceDamageIncreaseValue);
-        }
     }
 }

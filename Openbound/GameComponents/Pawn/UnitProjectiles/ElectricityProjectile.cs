@@ -18,9 +18,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     /// Creates a "electricity" dummy projectile. This projectile has its own movement rules being updated all at once.
     /// </summary>
     public class ElectricityProjectile : DummyProjectile
-    {   
+    {
         //Stores all mobiles affected by the proximity with the lightning
         HashSet<Mobile> mobileList;
+        List<Mobile> completeMobileList;
 
         //Lightning effect variables
         int extraExplosionRadius;
@@ -43,7 +44,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.parentPosition = parentPosition;
             this.isWeather = isWeather;
 
-            positionOffset = Vector2.Transform(Vector2.UnitX * 5, Matrix.CreateRotationZ(-lightningAngle));
+            positionOffset = Vector2.Transform(Vector2.UnitX * 3, Matrix.CreateRotationZ(-lightningAngle));
             mobileList = new HashSet<Mobile>();
         }
 
@@ -66,8 +67,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //because of its rotating feature
             if (isWeather)
             {
+                completeMobileList = LevelScene.MobileList.Where((x) => Math.Abs(x.Position.Y) - Math.Abs(Position.Y) <= extraExplosionRadius).ToList();
+
                 //Start at the first (possible) collidable position
-                int[] tmpPos = Topography.GetRelativePosition(Position);
                 Position = new Vector2(Position.X, Topography.FirstCollidableBlockY);
 
                 //Find the first possible exploding position
@@ -85,20 +87,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     Position -= positionOffset;
                 }
 
-                /*
-                Position = new Vector2(Position.X, Topography.FirstCollidableBlockY);
-
-                //Now that the first position has been found, start looking for all mobiles whithin the range of the lightning effect
-                while (Topography.IsInsideMapBoundaries(Position) && Position.Y <= explosionPosition.Y)
+                if (explosionPosition == parentPosition)
                 {
-                    //Check if there is any mobile whithin the extraExplosionRadius to receive the electrical extra dmaage
-                    CheckAffectedMobiles();
-
-                    Position -= positionOffset;
-                }*/
+                    explosionPosition = new Vector2(Position.X, Topography.MapHeight / 2);
+                }
             }
             else
             {
+                completeMobileList = LevelScene.MobileList;
+
                 //While it is still inside the map
                 while (Topography.IsInsideMapBoundaries(Position) && Position.Y >= Topography.FirstCollidableBlockY)
                 {
@@ -126,16 +123,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         /// </summary>
         public void CheckAffectedMobiles()
         {
-            foreach (Mobile m in LevelScene.MobileList)
+            foreach (Mobile m in completeMobileList)
             {
                 double distance = m.CollisionBox.GetSquaredDistance(FlipbookList[0].Position, ExplosionRadius);
 
                 if (distance < extraExplosionRadius * extraExplosionRadius)
                 {
-                    if (!mobileList.Contains(m))
-                    {
-                        mobileList.Add(m);
-                    }
+                    mobileList.Add(m);
                 }
             }
         }

@@ -139,6 +139,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             weakness.OnInteract(dProj);
             trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
         }
+
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //electricity.OnInteract(this);
+            electricity.OnInteract(dProj);
+            OnAfterUpdateAction = dProj.OnAfterUpdateAction;
+        }
         #endregion
 
         protected override void Explode()

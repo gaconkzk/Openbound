@@ -377,7 +377,7 @@ namespace OpenBound.GameComponents.PawnAction
             if (ExplosionRadius > 0)
             {
                 int removedPixels = Topography.CreateErosion(FlipbookList[0].Position, ExplosionRadius);
-                ParticleBuilder.CreateGroundCollapseParticleEffect(removedPixels / 32, FlipbookList[0].Position, FlipbookList[0].Rotation);
+                ParticleBuilder.AsyncCreateGroundCollapseParticleEffect(removedPixels / 32, FlipbookList[0].Position, FlipbookList[0].Rotation);
                 PlayExplosionSFX();
 
                 OnDestroyGroundAction?.Invoke(removedPixels / 32);

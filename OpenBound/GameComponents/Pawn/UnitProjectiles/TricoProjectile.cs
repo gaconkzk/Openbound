@@ -148,6 +148,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             weakness.OnInteract(projectile);
         }
+
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //electricity.OnInteract(this);
+            electricity.OnInteract(projectile);
+            OnAfterUpdateAction = projectile.OnAfterUpdateAction;
+        }
         #endregion
 
         public override void OnSpawn()
@@ -228,6 +236,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             SpawnTime = 0.5f;
         }
+
+        #region Weather
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //Clear the actions to prevent spawning multiple bolts
+            OnExplodeAction += () => { OnExplodeAction = default; };
+        }
+        #endregion
 
         protected override void UpdatePosition()
         {       
