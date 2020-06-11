@@ -14,7 +14,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public DummyProjectile(Mobile mobile, ShotType shotType, int explosionRadius, int baseDamage, bool canCollide = true)
             : base(mobile, shotType, explosionRadius, baseDamage, canCollide: canCollide)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -29,7 +29,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

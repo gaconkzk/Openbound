@@ -47,7 +47,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Explode();
 
-            Knight knight = (Knight)mobile;
+            Knight knight = (Knight)Mobile;
             knight.Satellite.Flipbook.HideElement();
 
             //Calculate the starting position of the shot
@@ -134,7 +134,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Explode();
 
-            Knight knight = (Knight)mobile;
+            Knight knight = (Knight)Mobile;
 
             //Play the satellite animation
             knight.Satellite.StartSSAnimation();
@@ -260,10 +260,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpecialEffectHandler.Remove(swordTrace);
 
             //If this shot is the last one the satellite should reappear
-            if (mobile.ProjectileList.Except(mobile.UnusedProjectile).Count() == 0)
+            if (Mobile.ProjectileList.Except(Mobile.UnusedProjectile).Count() == 0)
             {
                 OnFinalizeExecutionAction?.Invoke();
-                ((Knight)mobile).Satellite.Flipbook.ShowElement();
+                ((Knight)Mobile).Satellite.Flipbook.ShowElement();
             }
         }
     }

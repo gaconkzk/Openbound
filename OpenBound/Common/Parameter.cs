@@ -329,7 +329,7 @@ namespace OpenBound.Common
         //Knight
         //-- Satellite
         public const float ProjectileKnightDistanceBetweenShots  =   15f;
-        public const float ProjectileKnightSpeed                 =  900f;
+        public const float ProjectileKnightSpeed                 =  800f;
         public const float ProjectileKnightInitialAlpha          =  0.9f;
         public const float ProjectileKnightTraceDistanceOffset   =   45f;
         public const float ProjectileKnightTraceAlphaDecay       =  .04f;
@@ -454,6 +454,12 @@ namespace OpenBound.Common
         //Mirror
         public const float WeatherEffectMirrorDamageIncreaseFactor = 1.1f;
         public const float WeatherEffectMirrorDamageIncreaseValue = 5f;
+
+        //Electricity
+        public const int WeatherEffectElectricityBaseDamage = 0;
+        public const int WeatherEffectElectricityExplosionRadius = 10;
+        public const int WeatherEffectElectricityEExplosionRadius = 20;
+        public const int WeatherEffectElectricityEBaseDamage = 30;
         #endregion
     }
 }

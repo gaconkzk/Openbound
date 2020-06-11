@@ -7,7 +7,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 {
     public class LightningElectricity : Weather
     {
-        public LightningElectricity(Vector2 position, float angle) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(31, 31), 3, default, default, default, 1, angle)
+        public LightningElectricity(Vector2 position, float angle) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(31, 128), 3, default, default, default, 1, angle)
         {
             Initialize(@"Graphics/Special Effects/Tank/Lightning/Flame1", position, WeatherAnimationType.VariableAnimationFrame);
         }

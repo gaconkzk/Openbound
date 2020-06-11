@@ -11,9 +11,12 @@
  */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
+using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
@@ -26,42 +29,14 @@ namespace OpenBound.GameComponents.WeatherEffect
     /// </summary>
     public class Electricity : Weather
     {
-        List<WeatherProjectileParticleTimer> electricityInteraction;
-        List<WeatherProjectileParticleTimer> unusedProjectileList;
-
         public Electricity(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
-            electricityInteraction = new List<WeatherProjectileParticleTimer>();
-            unusedProjectileList = new List<WeatherProjectileParticleTimer>();
-
             Initialize("Graphics/Special Effects/Weather/Electricity", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
         }
 
         public override void Update(GameTime gameTime)
         {
             VerticalScrollingUpdate(gameTime);
-            UpdateProjectiles(gameTime);
-        }
-
-        public void UpdateProjectiles(GameTime gameTime)
-        {
-            //Foreach existing projectile that has interacted with the force
-            for (int i = 0; i < electricityInteraction.Count; i++)
-            {
-                //Spawn a new force particle special effect if its timer reaches zero
-                if (electricityInteraction[i].ParticleTimer <= 0)
-                {
-                    electricityInteraction[i].ParticleTimer = (Parameter.WeatherEffectForceSpawnParticleStartingTime + (float)Parameter.Random.NextDouble()) / 32f;
-                    SpecialEffectBuilder.ForceRandomParticle(electricityInteraction[i].Projectile.Position);
-                }
-                else
-                {
-                    electricityInteraction[i].ParticleTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-            }
-
-            unusedProjectileList.ForEach((x) => electricityInteraction.Remove(x));
-            unusedProjectileList.Clear();
         }
 
         public override Weather Merge(Weather weather)
@@ -78,29 +53,33 @@ namespace OpenBound.GameComponents.WeatherEffect
             if (!projectile.CanCollide) return;
 
             //Once added to the list the projectile starts spawning force particles around it's flipbook
-            electricityInteraction.Add(new WeatherProjectileParticleTimer() { Projectile = projectile });
-
-            //Calculate new base damage for a projectile
-            CalculateDamage(projectile);
+            SpecialEffect se = SpecialEffectBuilder.ElectricityParticle(projectile.Position);
+            projectile.OnAfterUpdateAction += () => {
+                se.Flipbook.Position = projectile.Position;
+                se.Flipbook.Rotation = projectile.CurrentFlipbookRotation;
+            };
 
             //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
-            Action removeParticle = () => unusedProjectileList.Add(electricityInteraction.Find((x) => x.Projectile == projectile));
+            Action removeParticle = () => SpecialEffectHandler.Remove(se);
             projectile.OnExplodeAction += removeParticle;
             projectile.OnBeingDestroyedAction += removeParticle;
 
-            //Install itself on the projectile ground destruction and dmg dealing
-            Action<int> particleEffect = (p) => { ParticleBuilder.CreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
-            projectile.OnDestroyGroundAction += particleEffect;
-            projectile.OnDealDamageAction += particleEffect;
+            projectile.OnExplodeAction += () =>
+            {
+                ElectricityProjectile ep = new ElectricityProjectile(projectile.Mobile, projectile.Position,
+                    MathHelper.PiOver2,
+                    Parameter.WeatherEffectElectricityExplosionRadius,
+                    Parameter.WeatherEffectElectricityEExplosionRadius,
+                    Parameter.WeatherEffectElectricityBaseDamage,
+                    Parameter.WeatherEffectElectricityEBaseDamage,
+                    isWeather: true);
+
+                ep.Update();
+
+                AudioHandler.PlaySoundEffect("Audio/SFX/Tank/Blast/LightningS1");
+            };
         }
 
         public override void OnStopInteracting(Projectile projectile) { }
-
-        public virtual void CalculateDamage(Projectile projectile)
-        {
-            //If the projectile base damage = 0, it should not increase
-            if (projectile.BaseDamage != 0)
-                projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectForceDamageIncreaseFactor + Parameter.WeatherEffectForceDamageIncreaseValue);
-        }
     }
 }

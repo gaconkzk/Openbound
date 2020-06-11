@@ -105,12 +105,8 @@ Legend:
    - As explained in Assets.1.1, some mobiles were suposed to make no sound. However, a placeholder is being played.
 
 2. Mobiles
-   - Dragon and Knight were slightly changed in order to make'em balanced.
    - There is no restrictions concerning mobiles. Dragon and Knight are now available to pick.
-     - Dragon
-       - SS was altered to make it more useful.
-     - Mage
-       - S1, S2 sprites are the same as in the original game. However, it's not exacly as it should be. I intend to address this issue later.
+   - Dragon, Knight and Lightning were slightly changed in order to make'em balanced. More information can be seen in General.7
 
 3. Game Mechanics
    - The server can broadcast the number of expected servers.
@@ -120,7 +116,9 @@ Legend:
 4. Interface
    - There are blended interface elements between S1 and S2 clients. Mobile's picklist for instance.
    - The InGame/Wind Compass has a richer animation than the original client.
-   - Upcoming weather system has also a improved animation.
+   - Incoming weather system has also a improved animation.
+   - The incoming weather pointer shown atop of the screen can predict all incoming weather shown on the IncomingWeather menu. They also have a fade-in animation.
+   - Some weather effects (tornado/force/mirror...) have a "infinite-scrolling" animation to make it look more "animated".
 
 5. Technical Information
    - The resolution can be chanced. However, big resolutions that surpass the stage's foreground/background sprite size can break the camera and the parallaxing. Keep in mind that there is no solution to that since it is limited by its sprites dimensions.
@@ -132,16 +130,23 @@ Legend:
 6. Networking
    - All clients are fed with the same information at the same time, meaning that it is expected to have no delay between clients.
 
+7. Mobile Alterations
+  - Dragon
+    - SS was altered to make it more useful. Now there are different freezetimes for each summoned drake.
+  - Lightning
+    - Lightning shots works like the season 2 GB. The main projectile creates erosion and deals a fraction of the total damage, while the electricity/discharge deals extra damage.
+  - [Aesthetic] Various
+    - All mobile's projectile that uses Trace or HelicoidalTrace (Mage/Turtle S1, S2) looks different, even if the sprites are the same as the ones used in the original game. I intend to address this issue later.
+  
 <h3>Known bugs</h3>
 
 1. Client
    - It is possible to freeze the match by passing the turn (there is a button on the interface for that).
    - The mobiles are unbalanced (INTENDED)
    - [Testing] A few mobile projectiles and mobile animations are unsynched.
-   - [Testing] There is a slightly improbable chance of a projectile deal different damage on different clients.
    - Weather animations are not fps proof. A laggy player can have different wind settings.
    - Maximum resolution can not be greater than 1600 width OR 1600 height.
-   - Tactical map offset can be bigger than 
+   - Tactical map offset can be bigger than the actual map.
 
 2. Server
    - There is no verification check on teams equality when a game is being started (INTENDED).

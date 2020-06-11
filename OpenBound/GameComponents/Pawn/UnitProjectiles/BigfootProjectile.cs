@@ -87,7 +87,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -101,7 +101,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public BigfootProjectile2(Bigfoot mobile, int forceModifier, float spawnTime)
             : base(mobile, ShotType.S2, Parameter.ProjectileBigfootS2ExplosionRadius, Parameter.ProjectileBigfootS2BaseDamage, forceModifier: forceModifier)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -129,7 +129,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -143,7 +143,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public BigfootProjectile3(Bigfoot mobile, float angleModifier, float spawnTime)
             : base(mobile, ShotType.SS, Parameter.ProjectileBigfootSSExplosionRadius, Parameter.ProjectileBigfootSSBaseDamage, angleModifier: angleModifier)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -171,7 +171,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

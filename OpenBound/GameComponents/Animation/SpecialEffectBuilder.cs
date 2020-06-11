@@ -41,6 +41,15 @@ namespace OpenBound.GameComponents.Animation
                     SpecialEffectHandler.Remove(se);
             };
         }
+
+        public static SpecialEffect ElectricityParticle(Vector2 position)
+        {
+            SpecialEffect se = new SpecialEffect(Flipbook.CreateFlipbook(position, new Vector2(16, 16), 32, 32, "Graphics/Special Effects/Weather/ElectricityParticle",
+                new AnimationInstance() { EndingFrame = 8, TimePerFrame = 1 / 15f, AnimationType = AnimationType.Cycle }, false, DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi), 0);
+            se.Flipbook.JumpToRandomAnimationFrame();
+            SpecialEffectHandler.Add(se);
+            return se;
+        }
         #endregion
 
         #region Common

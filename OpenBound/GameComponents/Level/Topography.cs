@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
+using System.Linq;
 
 namespace OpenBound.GameComponents.Level
 {
@@ -25,6 +26,7 @@ namespace OpenBound.GameComponents.Level
 
         public static int MapHeight => CollidableForegroundMatrix.Length;
         public static int MapWidth => CollidableForegroundMatrix[0].Length;
+        public static int FirstCollidableBlockY = int.MinValue;
 
         //Object Reference
         private static Sprite foreground;
@@ -119,6 +121,15 @@ namespace OpenBound.GameComponents.Level
                     index1D++;
                     StageMatrix[h][w] = tmp;
                     CollidableForegroundMatrix[h][w] = tmp.A > 0;
+                }
+            }
+
+            //Extract first collidable block y
+            for (int h = 0; h < CollidableForegroundMatrix.Length; h++)
+            {
+                if (CollidableForegroundMatrix[h].ToList().Any((x) => x)) { 
+                    FirstCollidableBlockY = GetTransformedPosition(new Vector2(0, h))[1];
+                    break;
                 }
             }
 

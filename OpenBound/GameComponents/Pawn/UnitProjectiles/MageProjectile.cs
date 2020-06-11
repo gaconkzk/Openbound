@@ -135,6 +135,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             weakness.OnInteract(dProj);
             trace.Color = Parameter.WeatherEffectWeaknessColorModifier;
         }
+
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //electricity.OnInteract(this);
+            electricity.OnInteract(dProj);
+            OnAfterUpdateAction = dProj.OnAfterUpdateAction;
+        }
         #endregion
 
         public override void Update()
@@ -208,7 +216,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             foreach (Mobile m in LevelScene.MobileList)
             {
-                double distance = mobile.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+                double distance = Mobile.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
 
                 if (distance < Parameter.ProjectileMageSSEExplosionRadius)
                 {
@@ -221,7 +229,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

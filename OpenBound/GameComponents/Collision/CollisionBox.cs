@@ -16,6 +16,7 @@ using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
+using System;
 
 namespace OpenBound.GameComponents.Collision
 {
@@ -119,12 +120,18 @@ namespace OpenBound.GameComponents.Collision
                 0 <= T2 && T2 <= Vector2.Dot(BC, BC);
         }
 
+        
+        public double GetDistance(Vector2 point, int radius)
+        {
+            return Math.Sqrt(GetSquaredDistance(point, radius));
+        }
+
         /// <summary>
         /// Get the distance between a circumference and the CollisionBox.
         /// </summary>
         /// <param name="Point"></param>
         /// <param name="Radius"></param>
-        public double GetDistance(Vector2 Point, int Radius)
+        public double GetSquaredDistance(Vector2 Point, int Radius)
         {
             /* http://www.migapro.com/circle-and-rotated-rectangle-collision-detection/ */
 
@@ -161,7 +168,7 @@ namespace OpenBound.GameComponents.Collision
 #endif
 
             // Determine collision
-            return Helper.EuclideanDistance(rPos, closestPosition);// < Radius;
+            return Helper.SquaredEuclideanDistance(rPos, closestPosition);// < Radius;
         }
 
         public void Update()

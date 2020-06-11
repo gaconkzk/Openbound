@@ -16,6 +16,8 @@ using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
+using System;
+using System.Linq;
 
 namespace OpenBound
 {

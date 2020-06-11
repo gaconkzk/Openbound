@@ -67,7 +67,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -148,6 +148,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             weakness.OnInteract(projectile);
         }
+
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //electricity.OnInteract(this);
+            electricity.OnInteract(projectile);
+            OnAfterUpdateAction = projectile.OnAfterUpdateAction;
+        }
         #endregion
 
         public override void OnSpawn()
@@ -208,7 +216,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public TricoProjectile3(Trico mobile)
             : base(mobile, ShotType.SS, Parameter.ProjectileTricoSSExplosionRadius, Parameter.ProjectileTricoSSBaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
@@ -228,6 +236,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             SpawnTime = 0.5f;
         }
+
+        #region Weather
+        //Electricity
+        public override void OnBeginElectricityInteraction(Electricity electricity)
+        {
+            //Clear the actions to prevent spawning multiple bolts
+            OnExplodeAction += () => { OnExplodeAction = default; };
+        }
+        #endregion
 
         protected override void UpdatePosition()
         {       
@@ -284,7 +301,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 base.Destroy();
 
-                List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+                List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
                 if (pjList.Count() == 0)
                     OnFinalizeExecutionAction?.Invoke();

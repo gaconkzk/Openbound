@@ -50,7 +50,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -65,7 +65,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S2, Parameter.ProjectileArmorS2ExplosionRadius, Parameter.ProjectileArmorS2BaseDamage)
         {
             primaryExplosion = true;
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -97,7 +97,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 base.Destroy();
 
-                List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+                List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
                 if (pjList.Count() == 0)
                     OnFinalizeExecutionAction?.Invoke();
@@ -136,7 +136,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public ArmorProjectile3(Armor mobile)
             : base(mobile, ShotType.SS, Parameter.ProjectileArmorSSExplosionRadius, Parameter.ProjectileArmorSSBaseDamage)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             rocketAnimation = ProjectileAnimationState.Closed;
             totalTravelledTime = 0;
@@ -196,7 +196,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();

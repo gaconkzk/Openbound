@@ -32,7 +32,10 @@ namespace OpenBound.GameComponents.Animation
 
         public static void Add(SpecialEffect specialEffect)
         {
-            toBeAddedSpecialEffect.Add(specialEffect);
+            lock (toBeAddedSpecialEffect)
+            {
+                toBeAddedSpecialEffect.Add(specialEffect);
+            }
         }
 
         public static void Remove(SpecialEffect specialEffect)
@@ -47,8 +50,11 @@ namespace OpenBound.GameComponents.Animation
 
         public static void Update(GameTime gameTime)
         {
-            specialEffectList.AddRange(toBeAddedSpecialEffect);
-            toBeAddedSpecialEffect.Clear();
+            lock (toBeAddedSpecialEffect)
+            {
+                specialEffectList.AddRange(toBeAddedSpecialEffect);
+                toBeAddedSpecialEffect.Clear();
+            }
 
             specialEffectToBeDestroyed.ForEach((x) => specialEffectList.Remove(x));
             specialEffectToBeDestroyed.Clear();

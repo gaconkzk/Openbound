@@ -89,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
@@ -122,7 +122,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public DragonProjectile3(Dragon mobile) : base(mobile, ShotType.SS, 0, 0)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -151,16 +151,16 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 float angle = MathHelper.ToRadians(20 * (i - 4 / 2)) - MathHelper.PiOver2;
 
                 DragonProjectile3SS dp3s = new DragonProjectile3SS(
-                    (Dragon)mobile,
+                    (Dragon)Mobile,
                     new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * offset + FlipbookList[0].Position,
                     FlipbookList[0].Position, 0.3f * i);
 
                 dp3s.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
 
-                mobile.LastCreatedProjectileList.Add(dp3s);
+                Mobile.LastCreatedProjectileList.Add(dp3s);
             }
 
-            GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
+            GameScene.Camera.TrackObject(Mobile.LastCreatedProjectileList.First());
         }
 
         protected override void OutofboundsDestroy()
@@ -177,7 +177,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public DragonProjectile3SS(Dragon mobile, Vector2 initialPosition, Vector2 finalPosition, float spawnTime)
             : base(mobile, ShotType.SS, Parameter.ProjectileDragonSSExplosionRadius, Parameter.ProjectileDragonSSBaseDamage, projectileInitialPosition: initialPosition)
         {
-            this.mobile = mobile;
+            this.Mobile = mobile;
 
             //Calculate the angle of the swords
             double angle = (float)Helper.AngleBetween(finalPosition, initialPosition);
@@ -236,7 +236,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Destroy();
 
-            List<Projectile> pjList = mobile.ProjectileList.Except(mobile.UnusedProjectile).ToList();
+            List<Projectile> pjList = Mobile.ProjectileList.Except(Mobile.UnusedProjectile).ToList();
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
