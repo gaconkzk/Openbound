@@ -38,10 +38,13 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedProjectileList = new List<WeatherProjectileParticleTimer>();
 
             Initialize("Graphics/Special Effects/Weather/Force", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+            
+            SetTransparency(0);
         }
 
         public override void Update(GameTime gameTime)
         {
+            FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
             VerticalScrollingUpdate(gameTime);
             UpdateProjectiles(gameTime);
         }

@@ -35,12 +35,15 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedProjectileList = new List<Projectile>();
 
             Initialize("Graphics/Special Effects/Weather/Weakness", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+
+            SetTransparency(0);
         }
 
         public override void Update(GameTime gameTime)
         {
             VerticalScrollingUpdate(gameTime);
             UpdateProjectiles();
+            FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
         }
 
         public void UpdateProjectiles()

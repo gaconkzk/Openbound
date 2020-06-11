@@ -12,9 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using OpenBound.Common;
 using Openbound_Network_Object_Library.Entity;
-using OpenBound.GameComponents.Pawn.Unit;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,10 +20,12 @@ namespace OpenBound.GameComponents.WeatherEffect
 {
     public class WeatherHandler
     {
-        /// <summary>
+        List<Weather> toBeAddedWeatherList;
+
+        /// <Summary>
         /// List of all instanced weathers on the scenario. Do not add elements in here. In order to add new elements and prevent
-        /// access/overwriting problems use <see cref="Add"/>.
-        /// </summary>
+        /// access/overwriting problems use <cref see="Add"/>.
+        /// </Summary>
         public List<Weather> WeatherList;
 
         //List of weathers that are going to be removed
@@ -33,42 +33,53 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public WeatherHandler()
         {
+            toBeAddedWeatherList = new List<Weather>();
             WeatherList = new List<Weather>();
             unusedWeatherList = new List<Weather>();
         }
 
         public void Add(Weather weather)
         {
-            WeatherList.Add(weather);
+            toBeAddedWeatherList.Add(weather);
+        }
+
+        public void Add(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position, float rotation = 0)
+        {
+            Weather weather = CreateWeather(weatherType, extraWeatherType, position);
+
+            //Return if the given weather is not implemented yet
+            if (weather == null) return;
+
+            if (weatherType == WeatherType.Random)
+                CheckAndMergeWeatherEffects(weather);
+            else
+                toBeAddedWeatherList.Add(weather);
         }
 
         public void Add(WeatherType weatherType, Vector2 position, float rotation = 0)
         {
-            Weather weather = null;
+            Add(weatherType, default, position, rotation);
+        }
 
+        public static Weather CreateWeather(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position)
+        {
             switch (weatherType)
             {
                 case WeatherType.Tornado:
-                    weather = new Tornado(position);
-                    break;
+                    return new Tornado(position);
                 case WeatherType.Force:
-                    weather = new Force(position);
-                    break;
+                    return new Force(position);
                 case WeatherType.Weakness:
-                    weather = new Weakness(position);
-                    break;
+                    return new Weakness(position);
                 case WeatherType.Mirror:
-                    weather = new Mirror(position);
-                    break;
+                    return new Mirror(position);
                 case WeatherType.Electricity:
-                    weather = new Electricity(position);
-                    break;
+                    return new Electricity(position);
+                case WeatherType.Random:
+                    return new Random(position, extraWeatherType);
+                default:
+                    return null;
             }
-
-            //Return if the given weather is not implemented yet
-            if (weather == null) return;
-            
-            CheckAndMergeWeatherEffects(weather);
         }
 
         /// <summary>
@@ -105,12 +116,20 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType == weatherEffectType));
         }
 
+        public void RemoveWeather(Weather weather)
+        {
+            unusedWeatherList.Add(weather);
+        }
+
         public void Update(GameTime gameTime)
         {
             WeatherList.ForEach((x) => x.Update(gameTime));
 
             unusedWeatherList.ForEach((x) => WeatherList.Remove((x)));
             unusedWeatherList.Clear();
+
+            WeatherList.AddRange(toBeAddedWeatherList);
+            toBeAddedWeatherList.Clear();
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

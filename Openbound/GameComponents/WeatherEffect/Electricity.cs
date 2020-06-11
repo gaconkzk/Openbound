@@ -32,11 +32,14 @@ namespace OpenBound.GameComponents.WeatherEffect
         public Electricity(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
             Initialize("Graphics/Special Effects/Weather/Electricity", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+
+            SetTransparency(0);
         }
 
         public override void Update(GameTime gameTime)
         {
             VerticalScrollingUpdate(gameTime);
+            FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
         }
 
         public override Weather Merge(Weather weather)

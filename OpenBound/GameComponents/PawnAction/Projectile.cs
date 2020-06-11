@@ -24,6 +24,7 @@ using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
+using Random = OpenBound.GameComponents.WeatherEffect.Random;
 
 namespace OpenBound.GameComponents.PawnAction
 {
@@ -86,7 +87,7 @@ namespace OpenBound.GameComponents.PawnAction
         public Action OnAfterUpdateAction;
         public Action OnFinalizeExecutionAction;
         public Action OnExplodeAction;
-        public Action OnBeingDestroyedAction;
+        public System.Action OnBeingDestroyedAction;
         public Action<int> OnDestroyGroundAction;
         public Action<int> OnDealDamageAction;
 
@@ -236,7 +237,7 @@ namespace OpenBound.GameComponents.PawnAction
 
         public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
         public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
-        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)System.Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
         public float CurrentFlipbookRotation => FlipbookList[0].Rotation;
 
         protected virtual void CheckCollisionWithWeather()
@@ -262,6 +263,8 @@ namespace OpenBound.GameComponents.PawnAction
                 + new Vector2(0, projectileInitialPosition.Y - Position.Y);
             xMovement.InverseMovement();
         }
+
+        public virtual void OnBeginRandomInteraction(Random random) { }
 
         public virtual void OnBeginElectricityInteraction(Electricity electricity) { }
 
