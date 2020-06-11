@@ -412,9 +412,16 @@ namespace OpenBound.Common
         public const int ProjectileLightningS2ExplosionRadius = 25;
         public const int ProjectileLightningSSExplosionRadius = 25;
 
-        public const int ProjectileLightningS1BaseDamage = 150 / 2;
-        public const int ProjectileLightningS2BaseDamage = 200 / 2;
-        public const int ProjectileLightningSSBaseDamage = 300 / 2;
+        public const int ProjectileLightningS1ElectricityExplosionRadius = 25;
+        public const int ProjectileLightningS1ElectricityEExplosionRadius = 35;
+        public const float ProjectileLightningS1ElectricityAngle = MathHelper.PiOver2;
+
+        public const int ProjectileLightningS1BaseDamage = 75;
+        public const int ProjectileLightningS2BaseDamage = 200;
+        public const int ProjectileLightningSSBaseDamage = 300;
+
+        public const int ProjectileLightningS1ElectricityBaseDamage = 75;
+        public const int ProjectileLightningS1ElectricityEBaseDamage = 35;
 
         public const float ProjectileLightningS1Mass = 14f;
         public const float ProjectileLightningS2Mass = 14f;

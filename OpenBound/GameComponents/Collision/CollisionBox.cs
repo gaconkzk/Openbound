@@ -124,7 +124,6 @@ namespace OpenBound.GameComponents.Collision
         /// </summary>
         /// <param name="Point"></param>
         /// <param name="Radius"></param>
-        /// <returns>Returns true if it intersects.</returns>
         public double GetDistance(Vector2 Point, int Radius)
         {
             /* http://www.migapro.com/circle-and-rotated-rectangle-collision-detection/ */

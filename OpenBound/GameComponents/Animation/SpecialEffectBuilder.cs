@@ -260,6 +260,7 @@ namespace OpenBound.GameComponents.Animation
         #endregion
         #region Lightning
 
+        /*
         public static void LightningProjectileThunder(Vector2 position, float rotation = 0)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
@@ -284,7 +285,7 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffectHandler.Add(se);
             SpecialEffectHandler.Add(se2);
-        }
+        }*/
 
         #endregion
         /*

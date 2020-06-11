@@ -37,6 +37,11 @@ namespace OpenBound.GameComponents.WeatherEffect
             unusedWeatherList = new List<Weather>();
         }
 
+        public void Add(Weather weather)
+        {
+            WeatherList.Add(weather);
+        }
+
         public void Add(WeatherType weatherType, Vector2 position, float rotation = 0)
         {
             Weather weather = null;
@@ -54,9 +59,6 @@ namespace OpenBound.GameComponents.WeatherEffect
                     break;
                 case WeatherType.Mirror:
                     weather = new Mirror(position);
-                    break;
-                case WeatherType.LightningSES1:
-                    weather = new EletricityStrike(position, 1);
                     break;
             }
 

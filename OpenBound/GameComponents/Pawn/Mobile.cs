@@ -485,6 +485,28 @@ namespace OpenBound.GameComponents.Pawn
             else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
         }
 
+        public void ReceiveShock(int damage)
+        {
+            ChangeFlipbookState(MobileFlipbookState.BeingShocked, true);
+
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(MobileFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
+
+            //Damage Handling - The damage should deplete the shield first
+            MobileMetadata.CurrentShield -= damage;
+
+            if (MobileMetadata.CurrentShield < 0)
+            {
+                MobileMetadata.CurrentHealth += MobileMetadata.CurrentShield;
+                MobileMetadata.CurrentShield = 0;
+
+                if (MobileMetadata.CurrentHealth == 0)
+                    MobileMetadata.CurrentHealth = 0;
+            }
+
+            LevelScene.HUD.FloatingTextHandler.AddDamage(this, -damage);
+        }
+
         public void ReceiveDamage(int damage)
         {
             //Play the "BeingDamaged" animation, then enqueue the stand animation
@@ -512,6 +534,8 @@ namespace OpenBound.GameComponents.Pawn
                 if (MobileMetadata.CurrentHealth == 0)
                     MobileMetadata.CurrentHealth = 0;
             }
+
+            LevelScene.HUD.FloatingTextHandler.AddDamage(this, -damage);
         }
 
         public void RequestShoot()

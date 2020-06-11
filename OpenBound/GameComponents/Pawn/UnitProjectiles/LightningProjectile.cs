@@ -11,17 +11,12 @@
  */
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Debug;
-using OpenBound.GameComponents.Level;
-using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
-using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,28 +39,22 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //Physics/Trajectory setups
             mass = Parameter.ProjectileLightningS1Mass;
             windInfluence = Parameter.ProjectileLightningS1WindInfluence;
-
-            SpawnTime = 0.7f;
         }
 
         protected override void Explode()
         {
-            DummyProjectile invisibleProjectile = new DummyProjectile((Lightning)mobile, ShotType.Dummy, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage);
-            int mapTop = -Topography.MapHeight / 2;
-
-            for (int i = mapTop; i < -mapTop; i++)
-            {
-                int[] x = Topography.GetRelativePosition(new Vector2(Position.X, i)).ToArray();
-
-                invisibleProjectile.Position = new Vector2(Position.X, i);
-                if (invisibleProjectile.UpdateCollider(invisibleProjectile.Position))
-                {
-                    LevelScene.WeatherHandler.Add(WeatherType.LightningSES1, Position);
-                    break;
-                }
-            }
-  
             base.Explode();
+
+            ElectricityProjectile electricityProjectile =
+                new ElectricityProjectile(mobile, Position,
+                    Parameter.ProjectileLightningS1ElectricityAngle,
+                    Parameter.ProjectileLightningS1ElectricityExplosionRadius,
+                    Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
+                    Parameter.ProjectileLightningS1ElectricityBaseDamage,
+                    Parameter.ProjectileLightningS1ElectricityEBaseDamage);
+
+            electricityProjectile.Position = Position;
+            electricityProjectile.Update();
         }
 
         protected override void Destroy()
@@ -76,6 +65,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
+        }
+
+        public override void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
+        {
+            base.Draw(GameTime, SpriteBatch);
         }
     }
 
@@ -103,7 +97,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
+            //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
             base.Explode();
         }
 

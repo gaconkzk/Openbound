@@ -689,6 +689,7 @@
     <Compile Include="GameComponents\Pawn\Local\LocalMovement.cs" />
     <Compile Include="GameComponents\Pawn\Remote\RemoteMovement.cs" />
     <Compile Include="GameComponents\Pawn\Rider.cs" />
+    <Compile Include="GameComponents\Pawn\UnitProjectiles\ElectricityProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\TricoProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ArmorProjectile.cs" />
@@ -725,7 +726,7 @@
     <Compile Include="GameComponents\Audio\AudioHandler.cs" />
     <Compile Include="GameComponents\WeatherEffect\Mirror.cs" />
     <Compile Include="GameComponents\WeatherEffect\Force.cs" />
-    <Compile Include="GameComponents\WeatherEffect\EletricityStrike.cs" />
+    <Compile Include="GameComponents\WeatherEffect\LightningElectricity.cs" />
     <Compile Include="GameComponents\WeatherEffect\Tornado.cs" />
     <Compile Include="GameComponents\WeatherEffect\Weakness.cs" />
     <Compile Include="GameComponents\WeatherEffect\Weather.cs" />

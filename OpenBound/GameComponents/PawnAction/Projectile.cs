@@ -393,12 +393,6 @@ namespace OpenBound.GameComponents.PawnAction
                         if (previousHealth > 0 && m.MobileMetadata.CurrentHealth <= 0)
                             m.RequestDeath();
 
-                        //This is the right implementation, but it would bug by repeating the same floating text for
-                        //all the players each turn, wich is why im just gonna print on the enemy hud
-                        //LevelScene.MobileList.ForEach((y) => y.HUD.FloatingTextHandler.AddDamage(x, -damage));
-
-                        LevelScene.HUD.FloatingTextHandler.AddDamage(m, -damage);
-
                         OnDealDamageAction?.Invoke(damage);
                         //MatchManager.Instance.NextPlayerTurn.HUD.FloatingTextHandler.AddDamage(x, -damage);
                     }
