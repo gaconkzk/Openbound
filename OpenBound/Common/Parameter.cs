@@ -416,6 +416,8 @@ namespace OpenBound.Common
         public const int ProjectileLightningS1ElectricityEExplosionRadius = 35;
         public const float ProjectileLightningS1ElectricityAngle = MathHelper.PiOver2;
 
+        public const float ProjectileLightningElectricityFadeTime = 0.4f;
+
         public const int ProjectileLightningS1BaseDamage = 75;
         public const int ProjectileLightningS2BaseDamage = 200;
         public const int ProjectileLightningSSBaseDamage = 300;

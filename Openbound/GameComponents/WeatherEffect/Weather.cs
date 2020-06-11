@@ -37,6 +37,15 @@ namespace OpenBound.GameComponents.WeatherEffect
         VariableAnimationFrame,
     }
 
+    /// <summary>
+    /// Assisting type to store the time required to Force effect spawn a new particle
+    /// </summary>
+    public class WeatherProjectileParticleTimer
+    {
+        public Projectile Projectile;
+        public float ParticleTimer;
+    }
+
     public abstract class Weather
     {
         //Weather properties

@@ -259,6 +259,8 @@ namespace OpenBound.GameComponents.PawnAction
             xMovement.InverseMovement();
         }
 
+        public virtual void OnBeginElectricityInteraction(Electricity electricity) { }
+
         public void SetBasePosition()
         {
             projectileInitialPosition = Position;

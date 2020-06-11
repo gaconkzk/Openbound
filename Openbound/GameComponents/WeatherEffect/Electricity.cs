@@ -21,23 +21,20 @@ using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
-    public class Force : Weather
+    /// <summary>
+    /// Assisting type to store the time required to Force effect spawn a new particle
+    /// </summary>
+    public class Electricity : Weather
     {
-        List<WeatherProjectileParticleTimer> forceInteraction;
+        List<WeatherProjectileParticleTimer> electricityInteraction;
         List<WeatherProjectileParticleTimer> unusedProjectileList;
 
-        protected Force(Vector2 position, WeatherType weatherType, float scale = 1, float rotation = 0) : base(position, new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), weatherType, scale, rotation)
+        public Electricity(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
-            forceInteraction = new List<WeatherProjectileParticleTimer>();
-            unusedProjectileList = new List<WeatherProjectileParticleTimer>();
-        }
-
-        public Force(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
-        {
-            forceInteraction = new List<WeatherProjectileParticleTimer>();
+            electricityInteraction = new List<WeatherProjectileParticleTimer>();
             unusedProjectileList = new List<WeatherProjectileParticleTimer>();
 
-            Initialize("Graphics/Special Effects/Weather/Force", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
+            Initialize("Graphics/Special Effects/Weather/Electricity", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
         }
 
         public override void Update(GameTime gameTime)
@@ -49,45 +46,45 @@ namespace OpenBound.GameComponents.WeatherEffect
         public void UpdateProjectiles(GameTime gameTime)
         {
             //Foreach existing projectile that has interacted with the force
-            for (int i = 0; i < forceInteraction.Count; i++)
+            for (int i = 0; i < electricityInteraction.Count; i++)
             {
                 //Spawn a new force particle special effect if its timer reaches zero
-                if (forceInteraction[i].ParticleTimer <= 0)
+                if (electricityInteraction[i].ParticleTimer <= 0)
                 {
-                    forceInteraction[i].ParticleTimer = (Parameter.WeatherEffectForceSpawnParticleStartingTime + (float)Parameter.Random.NextDouble()) / 32f;
-                    SpecialEffectBuilder.ForceRandomParticle(forceInteraction[i].Projectile.Position + new Vector2(30 * (0.5f - (float)Parameter.Random.NextDouble()), 30 * (0.5f - (float)Parameter.Random.NextDouble())));
+                    electricityInteraction[i].ParticleTimer = (Parameter.WeatherEffectForceSpawnParticleStartingTime + (float)Parameter.Random.NextDouble()) / 32f;
+                    SpecialEffectBuilder.ForceRandomParticle(electricityInteraction[i].Projectile.Position);
                 }
                 else
                 {
-                    forceInteraction[i].ParticleTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    electricityInteraction[i].ParticleTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
 
-            unusedProjectileList.ForEach((x) => forceInteraction.Remove(x));
+            unusedProjectileList.ForEach((x) => electricityInteraction.Remove(x));
             unusedProjectileList.Clear();
         }
 
         public override Weather Merge(Weather weather)
         {
-            return new Force((StartingPosition + weather.StartingPosition) / 2, Scale + weather.Scale);
+            return new Electricity((StartingPosition + weather.StartingPosition) / 2, Scale + weather.Scale);
         }
 
         public override void OnInteract(Projectile projectile)
         {
             //Passes this instance to any projectile's dependent projectile
-            projectile.OnBeginForceInteraction(this);
+            projectile.OnBeginElectricityInteraction(this);
 
             //If the project can't collide, it should not be taken into consideration for spawning/explosion effects
             if (!projectile.CanCollide) return;
 
             //Once added to the list the projectile starts spawning force particles around it's flipbook
-            forceInteraction.Add(new WeatherProjectileParticleTimer() { Projectile = projectile });
+            electricityInteraction.Add(new WeatherProjectileParticleTimer() { Projectile = projectile });
 
             //Calculate new base damage for a projectile
             CalculateDamage(projectile);
 
             //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
-            Action removeParticle = () => unusedProjectileList.Add(forceInteraction.Find((x) => x.Projectile == projectile));
+            Action removeParticle = () => unusedProjectileList.Add(electricityInteraction.Find((x) => x.Projectile == projectile));
             projectile.OnExplodeAction += removeParticle;
             projectile.OnBeingDestroyedAction += removeParticle;
 

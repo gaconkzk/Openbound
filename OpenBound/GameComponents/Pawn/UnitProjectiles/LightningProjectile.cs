@@ -52,8 +52,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityBaseDamage,
                     Parameter.ProjectileLightningS1ElectricityEBaseDamage);
-
-            electricityProjectile.Position = Position;
             electricityProjectile.Update();
         }
 
