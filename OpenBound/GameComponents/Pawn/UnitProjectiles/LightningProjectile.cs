@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
@@ -95,8 +96,19 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            //SpecialEffectBuilder.LightningProjectileThunder(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
             base.Explode();
+
+            for (int i = 0; i <= 3; i++)
+            {
+                ElectricityProjectile electricityProjectile = new ElectricityProjectile(mobile, Position,
+                  Parameter.ProjectileLightningS2AnglesOffset[i],
+                  Parameter.ProjectileLightningS2ElectricityExplosionRadius,
+                  Parameter.ProjectileLightningS2ElectricityEExplosionRadius,
+                  Parameter.ProjectileLightningS2ElectricityBaseDamage,
+                  Parameter.ProjectileLightningS2ElectricityEBaseDamage);
+                electricityProjectile.Update();
+            }
+           
         }
 
         protected override void Destroy()
@@ -129,12 +141,30 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mass = Parameter.ProjectileLightningSSMass;
             windInfluence = Parameter.ProjectileLightningSSWindInfluence;
 
-            SpawnTime = 0.7;
+            SpawnTime = 0;
         }
 
         protected override void Explode()
         {
+            SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();
+
+            foreach (Mobile m in LevelScene.MobileList)
+            {
+                double distance = m.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+
+                if (distance < Parameter.ProjectileLightningSSEExplosionRadius)
+                {
+                    ElectricityProjectile electricityProjectile =
+                      new ElectricityProjectile(mobile, m.Position,
+                          Parameter.ProjectileLightningSSElectricityAngle,
+                          Parameter.ProjectileLightningSSElectricityExplosionRadius,
+                          Parameter.ProjectileLightningSSElectricityEExplosionRadius,
+                          Parameter.ProjectileLightningSSElectricityBaseDamage,
+                          Parameter.ProjectileLightningSSElectricityEBaseDamage);
+                    electricityProjectile.Update();
+                }
+            }
         }
 
         protected override void Destroy()
