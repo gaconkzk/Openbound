@@ -406,11 +406,11 @@ namespace OpenBound.Common
         public const float ProjectileTurtleSSBubbleNumber = 6;
         public const float ProjectileTurtleSSDampeningFactor = 3f;
 
-
         //Lightning
         public const int ProjectileLightningS1ExplosionRadius = 25;
         public const int ProjectileLightningS2ExplosionRadius = 25;
         public const int ProjectileLightningSSExplosionRadius = 25;
+        public const int ProjectileLightningSSEExplosionRadius = 100;
 
         public const int ProjectileLightningS1ElectricityExplosionRadius = 25;
         public const int ProjectileLightningS1ElectricityEExplosionRadius = 35;
@@ -419,11 +419,32 @@ namespace OpenBound.Common
         public const float ProjectileLightningElectricityFadeTime = 0.4f;
 
         public const int ProjectileLightningS1BaseDamage = 75;
-        public const int ProjectileLightningS2BaseDamage = 200;
-        public const int ProjectileLightningSSBaseDamage = 300;
+        public const int ProjectileLightningS2BaseDamage = 50;
+        public const int ProjectileLightningSSBaseDamage = 200;
 
         public const int ProjectileLightningS1ElectricityBaseDamage = 75;
         public const int ProjectileLightningS1ElectricityEBaseDamage = 35;
+
+        public const int ProjectileLightningS2ElectricityExplosionRadius = 25;
+        public const int ProjectileLightningS2ElectricityEExplosionRadius = 35;
+
+        public const int ProjectileLightningS2ElectricityBaseDamage = 100;
+        public const int ProjectileLightningS2ElectricityEBaseDamage = 35;
+
+        public const int ProjectileLightningSSElectricityExplosionRadius = 25;
+        public const int ProjectileLightningSSElectricityEExplosionRadius = 35;
+
+        public const int ProjectileLightningSSElectricityBaseDamage = 75;
+        public const int ProjectileLightningSSElectricityEBaseDamage = 35;
+
+        public const float ProjectileLightningSSElectricityAngle = MathHelper.PiOver2;
+        public static readonly float[] ProjectileLightningS2AnglesOffset = new float[4]
+        {
+            MathHelper.PiOver4,
+            3 * MathHelper.PiOver4,
+            5 * MathHelper.PiOver4,
+            7 * MathHelper.PiOver4
+        };
 
         public const float ProjectileLightningS1Mass = 14f;
         public const float ProjectileLightningS2Mass = 14f;

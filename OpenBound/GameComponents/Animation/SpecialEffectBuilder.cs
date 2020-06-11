@@ -260,32 +260,23 @@ namespace OpenBound.GameComponents.Animation
         #endregion
         #region Lightning
 
-        /*
-        public static void LightningProjectileThunder(Vector2 position, float rotation = 0)
+        public static void LightningProjectile3Explosion(Vector2 position)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
-                new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(196, 193), 324, 326, "Graphics/Special Effects/Tank/Lightning/Flame2",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 17, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX);
 
-            Flipbook fb2 = Flipbook.CreateFlipbook(new Vector2(position.X, position.Y - 256), new Vector2(31, 256), 64, 256, "Graphics/Special Effects/Tank/Lightning/Flame1",
-          new AnimationInstance() { StartingFrame = 1, EndingFrame = 3, TimePerFrame = 1 / 3f }, true, DepthParameter.ProjectileSFX, 0);
-
-            SpecialEffect se = new SpecialEffect(fb, 3);
-            SpecialEffect se2 = new SpecialEffect(fb2, 3);
-
+            SpecialEffect se = new SpecialEffect(fb, 1);
 
             float transparency = 1f;
-            Action<SpecialEffect, GameTime> transparencyEffect = (specialEffect, gameTime) =>
+            se.UpdateAction += (specialEffect, gameTime) =>
             {
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * 1.5f;
+                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds / 25;
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 se.Flipbook.SetTransparency(transparency);
             };
 
-            se.UpdateAction += transparencyEffect;
-            se2.UpdateAction += transparencyEffect;
-
             SpecialEffectHandler.Add(se);
-            SpecialEffectHandler.Add(se2);
-        }*/
+        }
 
         #endregion
         /*
