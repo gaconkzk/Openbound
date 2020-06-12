@@ -12,11 +12,13 @@
 
 using GunboundImageFix.Common;
 using GunboundImageFix.Entity;
+using GunboundImageFix.Helper;
 using GunboundImageProcessing.ImageUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 
 namespace GunboundImageFix.Utils
 {
@@ -27,12 +29,18 @@ namespace GunboundImageFix.Utils
     public class SingleLayerSpritesheetMaker
     {
         List<ImportedImage> imgList;
+        private RestartHelper _restartHelper = new RestartHelper();
 
         public void CreateSpritesheet()
         {
             Console.WriteLine("\n\nSelect the main layer image files including TXT: \n");
             imgList = FileImportManager.ReadMultipleImagesWithPivot();
+            Start();
+            _restartHelper.RestartFunction(Start);
+        }
 
+        private void Start()
+        {
             (int, int) maxImageSize = (imgList.Max((x) => x.Image.Width), imgList.Max((x) => x.Image.Height));
             (int, int) maxImagePivot = (imgList.Max((x) => x.Pivot.Item1), imgList.Max((x) => x.Pivot.Item2));
             (int, int) minImagePivot = (imgList.Min((x) => x.Pivot.Item1), imgList.Min((x) => x.Pivot.Item2));
@@ -67,6 +75,9 @@ namespace GunboundImageFix.Utils
             }
 
             ImageProcessing.CreateImage(nCM).Save(Parameters.SpritesheetOutputDirectory + @"output.png");
+            ExplorerHelper.OpenDirectory(Parameters.SpritesheetOutputDirectory);
+            Thread.Sleep(1500);
+            PaintHelper.OpenPictureFromOutputFolder(@"output.png");
         }
     }
 }
