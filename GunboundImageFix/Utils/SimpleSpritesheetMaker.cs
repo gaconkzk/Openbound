@@ -20,28 +20,38 @@ using System.Threading;
 using GunboundImageFix.Entity;
 using GunboundImageFix.Common;
 using System.Linq;
+using GunboundImageFix.Helper;
 
 namespace GunboundImageFix.Utils
 {
     class SimpleSpritesheetMaker
     {
+        private List<ImportedImage> _imgList;
+        private RestartHelper _restartHelper = new RestartHelper();
         public void CreateSpritesheet()
         {
-            List<ImportedImage> imgList = FileImportManager.ReadMultipleImages();
+            _imgList = FileImportManager.ReadMultipleImages();
 
-            int width = imgList[0].Image.Width;
-            int height = imgList[0].Image.Height;
+            Start();
+            _restartHelper.RestartFunction(Start);
+        }
+
+        private void Start()
+        {
+
+            int width = _imgList[0].Image.Width;
+            int height = _imgList[0].Image.Height;
 
             Console.WriteLine("--Sprites per Line: ");
 
             int spritesPerLine = int.Parse(Console.ReadLine());
 
-            Color[][] newImageMatrix = ImageProcessing.CreateBlankColorMatrix((width + 2) * spritesPerLine, (height + 2) * (int)Math.Ceiling(imgList.Count / (double)spritesPerLine));
+            Color[][] newImageMatrix = ImageProcessing.CreateBlankColorMatrix((width + 2) * spritesPerLine, (height + 2) * (int)Math.Ceiling(_imgList.Count / (double)spritesPerLine));
 
             int accX = 1;
             int accY = 1;
             int index = 0;
-            foreach (ImportedImage img in imgList)
+            foreach (ImportedImage img in _imgList)
             {
                 ImageProcessing.AddImageIntoMatrix(newImageMatrix, img.Image, accX, accY);
 
@@ -55,6 +65,9 @@ namespace GunboundImageFix.Utils
             }
 
             ImageProcessing.CreateImage(newImageMatrix).Save(Parameters.SpritesheetOutputDirectory + @"output.png");
+            ExplorerHelper.OpenDirectory(Parameters.SpritesheetOutputDirectory);
+            Thread.Sleep(1500);
+            PaintHelper.OpenPictureFromOutputFolder(@"output.png");
         }
     }
 }

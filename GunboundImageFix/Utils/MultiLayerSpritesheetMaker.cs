@@ -12,11 +12,13 @@
 
 using GunboundImageFix.Common;
 using GunboundImageFix.Entity;
+using GunboundImageFix.Helper;
 using GunboundImageProcessing.ImageUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 
 namespace GunboundImageFix.Utils
 {
@@ -26,15 +28,25 @@ namespace GunboundImageFix.Utils
     /// </summary>
     public class MultiLayerSpritesheetMaker
     {
-        List<ImportedImage> imgListSFX, imgList;
+        private List<ImportedImage> _imgListSFX, _imgList;
+        private RestartHelper _restartHelper = new RestartHelper();
 
         public void CreateSpritesheet()
         {
             Console.WriteLine("\n\nSelect the main layer image files including the TXT file: \n");
-            imgList = FileImportManager.ReadMultipleImagesWithPivot();
+            _imgList = FileImportManager.ReadMultipleImagesWithPivot();
 
             Console.WriteLine("\n\nSelect the alternative layer image files including the TXT file: \n");
-            imgListSFX = FileImportManager.ReadMultipleImagesWithPivot();
+            _imgListSFX = FileImportManager.ReadMultipleImagesWithPivot();
+
+            Start();
+            _restartHelper.RestartFunction(Start);
+        }
+
+        public void Start()
+        {
+            List<ImportedImage> imgListSFX = _imgListSFX.ToList();
+            List<ImportedImage> imgList = _imgList.ToList();
 
             int[] imagePerLayer = new int[] { imgList.Count, imgListSFX.Count };
 
@@ -107,6 +119,10 @@ namespace GunboundImageFix.Utils
             });
 
             ImageProcessing.CreateImage(nCM1).Save(Parameters.SpritesheetOutputDirectory + @"output.png");
+
+            ExplorerHelper.OpenDirectory(Parameters.SpritesheetOutputDirectory);
+            Thread.Sleep(1500);
+            PaintHelper.OpenPictureFromOutputFolder(@"output.png");
         }
     }
 }
