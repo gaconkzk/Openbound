@@ -71,7 +71,7 @@ namespace OpenBound.GameComponents.Animation
 
         private void UpdateTimespan(GameTime gameTime)
         {
-            timespan -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            timespan -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (timespan < 0)
                 SpecialEffectHandler.Remove(this);

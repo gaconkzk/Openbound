@@ -95,11 +95,11 @@ namespace OpenBound.GameComponents.Pawn.Remote
                 if (Mobile.SyncMobile.ContainsAction(SynchronizableAction.UnableToMove))
                 {
                     Mobile.PlayUnableToMoveSE();
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.UnableToMove, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
                 }
                 else
                 {
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.Stand, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.Stand, true);
                 }
 
                 if (IsReadyToDequeue)

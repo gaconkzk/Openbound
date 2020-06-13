@@ -87,7 +87,7 @@ namespace OpenBound.GameComponents.PawnAction
         public Action OnAfterUpdateAction;
         public Action OnFinalizeExecutionAction;
         public Action OnExplodeAction;
-        public System.Action OnBeingDestroyedAction;
+        public Action OnBeingDestroyedAction;
         public Action<int> OnDestroyGroundAction;
         public Action<int> OnDealDamageAction;
 
@@ -237,7 +237,7 @@ namespace OpenBound.GameComponents.PawnAction
 
         public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
         public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
-        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)System.Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
         public float CurrentFlipbookRotation => FlipbookList[0].Rotation;
 
         protected virtual void CheckCollisionWithWeather()

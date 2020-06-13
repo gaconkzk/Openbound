@@ -61,7 +61,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public WeatherType WeatherType { get; private set; }
 
-        //Effects
+        public Color BaseColor;
 
         /// <summary>
         /// List of modified/under behavior modification projectiles.
@@ -133,7 +133,9 @@ namespace OpenBound.GameComponents.WeatherEffect
             WeatherType = weatherType;
             Scale = scale;
 
-            flipbookList.ForEach((x) => x.SetTransparency(0));
+            BaseColor = Color.White;
+
+            SetTransparency(0);
         }
 
         /// <summary>
@@ -250,7 +252,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public void SetTransparency(float transparency)
         {
-            flipbookList.ForEach(x => x.SetTransparency(transparency));
+            flipbookList.ForEach(x => x.Color = BaseColor * transparency);
         }
 
         /// <summary>
@@ -260,6 +262,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         public void FadeIn(GameTime gameTime, float timeLimit = 1)
         {
             fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             SetTransparency(MathHelper.Clamp(fadeAnimationElapsedTime / timeLimit, 0, 1));
         }
 
@@ -298,6 +301,12 @@ namespace OpenBound.GameComponents.WeatherEffect
                 flipbookList.Remove(lE);
                 flipbookList.Insert(0, lE);
             }
+        }
+
+        public void SetColor(Color color)
+        {
+            BaseColor = color;
+            flipbookList.ForEach((x) => x.Color = color);
         }
 
         /// <summary>

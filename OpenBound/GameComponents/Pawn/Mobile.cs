@@ -163,13 +163,13 @@ namespace OpenBound.GameComponents.Pawn
         public virtual void PlayMovementSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
-                AudioHandler.PlayUniqueSoundEffect(movingSE, () => MobileFlipbook.State == MobileFlipbookState.Moving, pitch: pitch, pan: pan);
+                AudioHandler.PlayUniqueSoundEffect(movingSE, () => MobileFlipbook.State == ActorFlipbookState.Moving, pitch: pitch, pan: pan);
         }
 
         public virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
-                AudioHandler.PlayUniqueSoundEffect(unableToMoveSE, () => MobileFlipbook.State == MobileFlipbookState.UnableToMove, pitch: pitch, pan: pan);
+                AudioHandler.PlayUniqueSoundEffect(unableToMoveSE, () => MobileFlipbook.State == ActorFlipbookState.UnableToMove, pitch: pitch, pan: pan);
         }
 
         public virtual void Die()
@@ -177,7 +177,7 @@ namespace OpenBound.GameComponents.Pawn
             if (!IsAlive) return;
 
             DeathAnimation.Add(this);
-            ChangeFlipbookState(MobileFlipbookState.Dead, true);
+            ChangeFlipbookState(ActorFlipbookState.Dead, true);
             IsAlive = false;
         }
 
@@ -373,11 +373,11 @@ namespace OpenBound.GameComponents.Pawn
                 LevelScene.HUD.StrenghtBar.PerformStep(GameTime);
 
                 if (SelectedShotType == ShotType.S1)
-                    ChangeFlipbookState(MobileFlipbookState.ChargingS1, true);
+                    ChangeFlipbookState(ActorFlipbookState.ChargingS1, true);
                 else if (SelectedShotType == ShotType.S2)
-                    ChangeFlipbookState(MobileFlipbookState.ChargingS2, true);
+                    ChangeFlipbookState(ActorFlipbookState.ChargingS2, true);
                 else if (SelectedShotType == ShotType.SS)
-                    ChangeFlipbookState(MobileFlipbookState.ChargingSS, true);
+                    ChangeFlipbookState(ActorFlipbookState.ChargingSS, true);
             }
             else if (InputHandler.IsBeingReleased(Keys.Space) || LevelScene.HUD.StrenghtBar.IsFull)
             {
@@ -391,31 +391,31 @@ namespace OpenBound.GameComponents.Pawn
         {
             if (SyncMobile != null && SyncMobile.ContainsAction(SynchronizableAction.ChargingShot))
             {
-                if (SelectedShotType == ShotType.S1) ChangeFlipbookState(MobileFlipbookState.ChargingS1, true);
-                else if (SelectedShotType == ShotType.S2) ChangeFlipbookState(MobileFlipbookState.ChargingS2, true);
-                else if (SelectedShotType == ShotType.SS) ChangeFlipbookState(MobileFlipbookState.ChargingSS, true);
+                if (SelectedShotType == ShotType.S1) ChangeFlipbookState(ActorFlipbookState.ChargingS1, true);
+                else if (SelectedShotType == ShotType.S2) ChangeFlipbookState(ActorFlipbookState.ChargingS2, true);
+                else if (SelectedShotType == ShotType.SS) ChangeFlipbookState(ActorFlipbookState.ChargingSS, true);
             }
         }
 
-        private bool IsStateMoving(MobileFlipbookState state) => state == MobileFlipbookState.MovingLowHealth || state == MobileFlipbookState.Moving;
-        private bool IsStateStand(MobileFlipbookState state) => state == MobileFlipbookState.Stand || state == MobileFlipbookState.StandLowHealth;
-        private bool IsStateShooting(MobileFlipbookState state) => state == MobileFlipbookState.ShootingS1 || state == MobileFlipbookState.ShootingS2 || state == MobileFlipbookState.ShootingSS;
-        private bool IsStateCharging(MobileFlipbookState state) => state == MobileFlipbookState.ChargingS1 || state == MobileFlipbookState.ChargingS2 || state == MobileFlipbookState.ChargingSS;
-        private bool IsStateBeingDamaged(MobileFlipbookState state) => state == MobileFlipbookState.BeingDamaged1 || state == MobileFlipbookState.BeingDamaged2 || state == MobileFlipbookState.DepletingShield || state == MobileFlipbookState.BeingFrozen || state == MobileFlipbookState.BeingShocked;
-        private bool IsStateEmoting(MobileFlipbookState state) => state == MobileFlipbookState.Emotion1 || state == MobileFlipbookState.Emotion2;
-        private bool IsStateDead(MobileFlipbookState state) => state == MobileFlipbookState.Dead;
-        private bool IsStateFalling(MobileFlipbookState state) => state == MobileFlipbookState.Falling;
-        private bool IsStateUnableToMove(MobileFlipbookState state) => state == MobileFlipbookState.UnableToMove;
-        private bool IsStateUsingItem(MobileFlipbookState state) => state == MobileFlipbookState.UsingItem;
+        private bool IsStateMoving(ActorFlipbookState state) => state == ActorFlipbookState.MovingLowHealth || state == ActorFlipbookState.Moving;
+        private bool IsStateStand(ActorFlipbookState state) => state == ActorFlipbookState.Stand || state == ActorFlipbookState.StandLowHealth;
+        private bool IsStateShooting(ActorFlipbookState state) => state == ActorFlipbookState.ShootingS1 || state == ActorFlipbookState.ShootingS2 || state == ActorFlipbookState.ShootingSS;
+        private bool IsStateCharging(ActorFlipbookState state) => state == ActorFlipbookState.ChargingS1 || state == ActorFlipbookState.ChargingS2 || state == ActorFlipbookState.ChargingSS;
+        private bool IsStateBeingDamaged(ActorFlipbookState state) => state == ActorFlipbookState.BeingDamaged1 || state == ActorFlipbookState.BeingDamaged2 || state == ActorFlipbookState.DepletingShield || state == ActorFlipbookState.BeingFrozen || state == ActorFlipbookState.BeingShocked;
+        private bool IsStateEmoting(ActorFlipbookState state) => state == ActorFlipbookState.Emotion1 || state == ActorFlipbookState.Emotion2;
+        private bool IsStateDead(ActorFlipbookState state) => state == ActorFlipbookState.Dead;
+        private bool IsStateFalling(ActorFlipbookState state) => state == ActorFlipbookState.Falling;
+        private bool IsStateUnableToMove(ActorFlipbookState state) => state == ActorFlipbookState.UnableToMove;
+        private bool IsStateUsingItem(ActorFlipbookState state) => state == ActorFlipbookState.UsingItem;
 
-        public void ChangeFlipbookState(MobileFlipbookState NewState, bool Force = false)
+        public void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
         {
             if (IsHealthCritical)
             {
-                if (NewState == MobileFlipbookState.Stand)
-                    NewState = MobileFlipbookState.StandLowHealth;
-                else if (NewState == MobileFlipbookState.Moving)
-                    NewState = MobileFlipbookState.MovingLowHealth;
+                if (NewState == ActorFlipbookState.Stand)
+                    NewState = ActorFlipbookState.StandLowHealth;
+                else if (NewState == ActorFlipbookState.Moving)
+                    NewState = ActorFlipbookState.MovingLowHealth;
             }
 
             if (NewState == MobileFlipbook.State) return;
@@ -464,33 +464,33 @@ namespace OpenBound.GameComponents.Pawn
         {
             if (MobileMetadata.BaseShield == 0) return;
 
-            if (MobileFlipbook.StatePresets.ContainsKey(MobileFlipbookState.DepletingShield))
+            if (MobileFlipbook.StatePresets.ContainsKey(ActorFlipbookState.DepletingShield))
             {
-                ChangeFlipbookState(MobileFlipbookState.DepletingShield, true);
+                ChangeFlipbookState(ActorFlipbookState.DepletingShield, true);
             }
             else
             {
                 switch (Parameter.Random.Next(0, 2))
                 {
                     case 0:
-                        ChangeFlipbookState(MobileFlipbookState.BeingDamaged1, true);
+                        ChangeFlipbookState(ActorFlipbookState.BeingDamaged1, true);
                         break;
                     case 1:
-                        ChangeFlipbookState(MobileFlipbookState.BeingDamaged2, true);
+                        ChangeFlipbookState(ActorFlipbookState.BeingDamaged2, true);
                         break;
                 }
             }
 
-            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(MobileFlipbookState.StandLowHealth);
-            else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
         }
 
         public void ReceiveShock(int damage)
         {
-            ChangeFlipbookState(MobileFlipbookState.BeingShocked, true);
+            ChangeFlipbookState(ActorFlipbookState.BeingShocked, true);
 
-            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(MobileFlipbookState.StandLowHealth);
-            else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
 
             //Damage Handling - The damage should deplete the shield first
             MobileMetadata.CurrentShield -= damage;
@@ -513,15 +513,15 @@ namespace OpenBound.GameComponents.Pawn
             switch (Parameter.Random.Next(0, 2))
             {
                 case 0:
-                    ChangeFlipbookState(MobileFlipbookState.BeingDamaged1, true);
+                    ChangeFlipbookState(ActorFlipbookState.BeingDamaged1, true);
                     break;
                 case 1:
-                    ChangeFlipbookState(MobileFlipbookState.BeingDamaged2, true);
+                    ChangeFlipbookState(ActorFlipbookState.BeingDamaged2, true);
                     break;
             }
 
-            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(MobileFlipbookState.StandLowHealth);
-            else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
 
             //Damage Handling - The damage should deplete the shield first
             MobileMetadata.CurrentShield -= damage;
@@ -571,14 +571,14 @@ namespace OpenBound.GameComponents.Pawn
         {
             //Animation
             if (SelectedShotType == ShotType.S1)
-                ChangeFlipbookState(MobileFlipbookState.ShootingS1, true);
+                ChangeFlipbookState(ActorFlipbookState.ShootingS1, true);
             else if (SelectedShotType == ShotType.S2)
-                ChangeFlipbookState(MobileFlipbookState.ShootingS2, true);
+                ChangeFlipbookState(ActorFlipbookState.ShootingS2, true);
             else if (SelectedShotType == ShotType.SS)
-                ChangeFlipbookState(MobileFlipbookState.ShootingSS, true);
+                ChangeFlipbookState(ActorFlipbookState.ShootingSS, true);
 
-            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(MobileFlipbookState.StandLowHealth);
-            else MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
 
             //Initialize Projectiles
             LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
