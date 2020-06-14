@@ -17,12 +17,26 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
+    public class LightningBaseProjectile : BeamDummyProjectile
+    {
+        public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage)
+            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage) { }
+
+        protected override void Explode()
+        {
+            base.Explode();
+
+            LevelScene.WeatherHandler.Add(new LightningElectricity(Position, MathHelper.PiOver2 * 3 - beamAngle));
+        }
+    }
+
 
     public class LightningProjectile1 : Projectile
     {
@@ -46,8 +60,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Explode();
 
-            ElectricityProjectile electricityProjectile =
-                new ElectricityProjectile(Mobile, Position,
+            LightningBaseProjectile electricityProjectile =
+                new LightningBaseProjectile(Mobile, Position,
                     Parameter.ProjectileLightningS1ElectricityAngle,
                     Parameter.ProjectileLightningS1ElectricityExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
@@ -100,7 +114,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             for (int i = 0; i <= 3; i++)
             {
-                ElectricityProjectile electricityProjectile = new ElectricityProjectile(Mobile, Position,
+                LightningBaseProjectile electricityProjectile = new LightningBaseProjectile(Mobile, Position,
                   Parameter.ProjectileLightningS2AnglesOffset[i],
                   Parameter.ProjectileLightningS2ElectricityExplosionRadius,
                   Parameter.ProjectileLightningS2ElectricityEExplosionRadius,
@@ -155,8 +169,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 if (distance < Parameter.ProjectileLightningSSEExplosionRadius)
                 {
-                    ElectricityProjectile electricityProjectile =
-                      new ElectricityProjectile(Mobile, m.Position,
+                    BeamDummyProjectile electricityProjectile =
+                      new BeamDummyProjectile(Mobile, m.Position,
                           Parameter.ProjectileLightningSSElectricityAngle,
                           Parameter.ProjectileLightningSSElectricityExplosionRadius,
                           Parameter.ProjectileLightningSSElectricityEExplosionRadius,

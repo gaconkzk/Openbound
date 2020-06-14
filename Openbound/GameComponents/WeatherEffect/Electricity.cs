@@ -69,7 +69,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             projectile.OnExplodeAction += () =>
             {
-                ElectricityProjectile ep = new ElectricityProjectile(projectile.Mobile, projectile.Position,
+                BeamDummyProjectile ep = new BeamDummyProjectile(projectile.Mobile, projectile.Position,
                     MathHelper.PiOver2,
                     Parameter.WeatherEffectElectricityExplosionRadius,
                     Parameter.WeatherEffectElectricityEExplosionRadius,

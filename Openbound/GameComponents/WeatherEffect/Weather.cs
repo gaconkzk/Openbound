@@ -206,7 +206,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <summary>
         /// Check if this <see cref="outerCollisionRectangle"/> intersects with another weather's <see cref="outerCollisionRectangle"/>.
         /// </summary>
-        public bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
+        public virtual bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
 
         /// <summary>
         /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
@@ -313,7 +313,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// Check if a projectile is able to interact with the weather.
         /// </summary>
         /// <returns>Returns <see cref="true"/> if the interaction has started, otherwise returns <see cref="false"/>.</returns>
-        public bool CheckProjectileInteraction(Projectile projectile)
+        public virtual bool CheckProjectileInteraction(Projectile projectile)
         {
             if (collisionRectangle.Intersects(projectile.Position) && !ModifiedProjectileList.Contains(projectile))
             {

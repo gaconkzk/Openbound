@@ -377,7 +377,7 @@ namespace OpenBound.Common
         public static Vector2 ProjectileTricoSSExplosionOffset = new Vector2(20, 0);
 
         //Turtle
-        public const int ProjectileTurtleS1ExplosionRadius = 250;
+        public const int ProjectileTurtleS1ExplosionRadius = 25;
         public const int ProjectileTurtleS2ExplosionRadius = 25;
         public const int ProjectileTurtleS2EExplosionRadius = 20;
         public const int ProjectileTurtleSSExplosionRadius = 25;
@@ -490,6 +490,11 @@ namespace OpenBound.Common
         public static Color NeonRed         = new Color(255, 007, 058, 255 / 4);
         public static Color NeonWhiteWhite  = new Color(255, 255, 255, 255 / 4);
         public static Color[] ColorGradient = new Color[] { NeonGreen, NeonBlue, NeonYellow, NeonRed, NeonWhiteWhite };
+
+        public const int ProjectileThorExplosionRadius = 25;
+        public const int ProjectileThorBaseDamage = 60;
+        public const int ProjectileThorBaseDamagePerLevel = 25;
+        public static int[] ThorExperienceTable = new int[] { 800, 1400, 2000, 2400, 3000 };
         #endregion
     }
 }

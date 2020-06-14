@@ -12,19 +12,19 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
-using OpenBound.GameComponents.Level.Scene;
+using OpenBound.GameComponents.Pawn.UnitProjectiles;
+using OpenBound.GameComponents.PawnAction;
 using System;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Pawn
 {
-    public class Thor
+    public class ThorSatellite
     {
         static Dictionary<ActorFlipbookState, AnimationInstance> thorStatePresets = new Dictionary<ActorFlipbookState, AnimationInstance>()
         {
@@ -43,6 +43,9 @@ namespace OpenBound.GameComponents.Pawn
         //Cannon position
         Vector2 cannonPosition;
 
+        //Rotation Movement
+        List<Projectile> targetList;
+
         //Oscilation movement
         Vector2 oscilatingPositionOffset;
         float oscilatingElapsedTime1, oscilatingElapsedTime2;
@@ -51,32 +54,32 @@ namespace OpenBound.GameComponents.Pawn
         Sprite levelText;
         NumericSpriteFont levelSpriteFont, experienceSpriteFont;
 
-        //Debug
-        DebugCrosshair dc;
+        //Thor status
+        public int Level { get; private set; }
+        public int CurrentExperience { get; private set; }
 
-        public Thor(Vector2 position)
+        public ThorSatellite()
         {
-            this.position = position;
+            targetList = new List<Projectile>();
 
             oscilatingPositionOffset = new Vector2(3, 0);
             cannonOffset = new Vector2(50, 0);
 
             flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, 0);
 
-            levelSpriteFont      = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator,      1, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false, StartingValue: 1);
+            levelSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator, 1, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false, StartingValue: 1);
             experienceSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false);
 
             levelText = new Sprite("Interface/Spritefont/HUD/Blue/ThorLevelLV", Vector2.Zero, layerDepth: DepthParameter.MobileSatellite);
             levelText.Pivot = Vector2.Zero;
-
-            dc = new DebugCrosshair(Color.Cyan);
-            DebugHandler.Instance.Add(dc);
         }
 
-        public void Shot()
+        public void Shot(Vector2 position)
         {
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.ShootingS1], true);
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.Active]);
+
+            SpecialEffectBuilder.ThorShot((cannonPosition + position) / 2, Parameter.NeonGreen, (float)Helper.EuclideanDistance(cannonPosition, position) / 256, (float)Helper.AngleBetween(cannonPosition, position) - MathHelper.PiOver2);
         }
 
         public void Activate()
@@ -92,14 +95,6 @@ namespace OpenBound.GameComponents.Pawn
         public void Update(GameTime gameTime)
         {
             UpdatePosition(gameTime);
-            UpdateThorRotation(gameTime);
-
-            flipbook.Rotation = (float)Helper.AngleBetween(Cursor.Instance.CurrentFlipbook.Position, flipbook.Position);
-            if (InputHandler.IsBeingReleased(MKeys.Left))
-            {
-                Shot();
-                SpecialEffectBuilder.ThorShot((cannonPosition + Cursor.Instance.CurrentFlipbook.Position) / 2, Parameter.NeonGreen, (float)Helper.EuclideanDistance(cannonPosition, Cursor.Instance.CurrentFlipbook.Position) / 256, (float)Helper.AngleBetween(cannonPosition, Cursor.Instance.CurrentFlipbook.Position) - MathHelper.PiOver2);
-            }
         }
 
         public void SetPosition(Vector2 newPosition)
@@ -108,17 +103,23 @@ namespace OpenBound.GameComponents.Pawn
             movementElapsedTime = 0;
         }
 
-        private void UpdateThorRotation(GameTime gameTime)
+        public void Attatch(Projectile projectile)
         {
-            dc.Update(
-                cannonPosition = position + positionMovement + 
-                Vector2.Transform(
-                    cannonOffset, 
-                    Matrix.CreateRotationZ(
-                        (float)Helper.AngleBetween(Cursor.Instance.CurrentFlipbook.Position, position + positionMovement)
-                        )
-                    )
-                );
+            targetList.Add(projectile);
+            projectile.OnExplodeAction += () =>
+            {
+                targetList.Remove(projectile);
+
+                Shot(projectile.Position);
+
+                ThorProjectile tp = new ThorProjectile(
+                    projectile.Mobile,
+                    this,
+                    projectile.Position,
+                    -(float)Helper.AngleBetween(position + positionMovement, projectile.Position));
+
+                tp.Update();
+            };
         }
 
         private void UpdatePosition(GameTime gameTime)
@@ -137,8 +138,8 @@ namespace OpenBound.GameComponents.Pawn
             {
                 movementElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2;
 
-                tmpPositionOffset =  positionMovement * (float)Math.Sin(movementElapsedTime);
-                
+                tmpPositionOffset = positionMovement * (float)Math.Sin(movementElapsedTime);
+
                 if (movementElapsedTime >= MathHelper.PiOver2)
                 {
                     position += positionMovement;
@@ -150,9 +151,23 @@ namespace OpenBound.GameComponents.Pawn
 
             flipbook.Position = position + tmpOscilatingPosition + tmpPositionOffset;
 
+            //Update rotation
+            if (targetList.Count > 0)
+            {
+                flipbook.Rotation = (float)Helper.AngleBetween(targetList[0].Position, flipbook.Position);
+
+                cannonPosition = position + positionMovement +
+                    Vector2.Transform(
+                       cannonOffset,
+                       Matrix.CreateRotationZ(
+                           (float)Helper.AngleBetween(
+                               targetList[0].Position,
+                               position + positionMovement)));
+            }
+
             //Update texts
-            levelSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(50, 30);
-            experienceSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(50, 45);
+            levelSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(70, 40);
+            experienceSpriteFont.Position = levelSpriteFont.Position + new Vector2(0, 15);
             levelText.Position = levelSpriteFont.Position - new Vector2(30, -1);
             levelSpriteFont.Update(gameTime);
             experienceSpriteFont.Update(gameTime);

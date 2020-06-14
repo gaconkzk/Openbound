@@ -50,7 +50,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             //Return if the given weather is not implemented yet
             if (weather == null) return;
 
-            if (weatherType == WeatherType.Random)
+            if (weatherType != WeatherType.Random)
                 CheckAndMergeWeatherEffects(weather);
             else
                 toBeAddedWeatherList.Add(weather);
@@ -77,6 +77,8 @@ namespace OpenBound.GameComponents.WeatherEffect
                     return new Electricity(position);
                 case WeatherType.Random:
                     return new Random(position, extraWeatherType);
+                case WeatherType.Thor:
+                    return new Thor(position);
                 default:
                     return null;
             }

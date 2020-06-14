@@ -60,6 +60,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
         //Weather
         public static WeatherHandler WeatherHandler;
+        public static ThorSatellite ThorSatellite;
 
         //Visual interface
         public static HUD HUD;
@@ -71,6 +72,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             MobileList = new List<Mobile>();
             WeatherHandler = new WeatherHandler();
+            ThorSatellite = new ThorSatellite();
 
             //Popup related
             isLeaveGamePopupRendered = false;
@@ -440,6 +442,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 HUD.Update(gameTime);
             }
 
+            ThorSatellite.Update(gameTime);
+
             DeathAnimation.Update(gameTime);
             SpecialEffectHandler.Update(gameTime);
         }
@@ -457,6 +461,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
                 HUD.Draw(gameTime, spriteBatch);
             }
+
+            ThorSatellite.Draw(gameTime, spriteBatch);
 
             DeathAnimation.Draw(gameTime, spriteBatch);
             SpecialEffectHandler.Draw(gameTime, spriteBatch);

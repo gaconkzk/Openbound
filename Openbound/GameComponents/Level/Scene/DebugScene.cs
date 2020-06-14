@@ -470,45 +470,39 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F12))
             {
-                t.Shot();
+
             }
 
             if (InputHandler.IsBeingPressed(Keys.F2))
             {
-                t.Activate();
+
             }
 
             if (InputHandler.IsBeingPressed(Keys.F3))
             {
-                t.Deactivate();
+
             }
 
             if (InputHandler.IsBeingPressed(Keys.D1))
             {
                 Vector2 nPos = (new Vector2((float)Parameter.Random.NextDouble(), (float)Parameter.Random.NextDouble()) - (Vector2.One / 2)) * Vector2.One * 1000;
-                t.SetPosition(nPos);
+                WeatherHandler.Add(WeatherType.Thor, nPos);
                 Console.WriteLine(nPos);
             }
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
-
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
 
             }
-
-            t.Update(gameTime);
         }
-
-        Thor t = new Thor(Vector2.Zero);
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            t?.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
