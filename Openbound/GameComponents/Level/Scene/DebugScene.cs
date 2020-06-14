@@ -483,6 +483,23 @@ namespace OpenBound.GameComponents.Level.Scene
                 t.Deactivate();
             }
 
+            if (InputHandler.IsBeingPressed(Keys.D1))
+            {
+                Vector2 nPos = (new Vector2((float)Parameter.Random.NextDouble(), (float)Parameter.Random.NextDouble()) - (Vector2.One / 2)) * Vector2.One * 1000;
+                t.SetPosition(nPos);
+                Console.WriteLine(nPos);
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D2))
+            {
+
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D3))
+            {
+
+            }
+
             t.Update(gameTime);
         }
 

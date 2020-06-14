@@ -37,10 +37,19 @@ namespace OpenBound.GameComponents.Pawn
         Vector2 cannonOffset;
 
         //Movement Animation
-        Vector2 position;
-        Vector2 positionOffset;
+        Vector2 position, positionMovement;
+        float movementElapsedTime;
+
+        //Cannon position
         Vector2 cannonPosition;
-        float elapsedTime1, elapsedTime2;
+
+        //Oscilation movement
+        Vector2 oscilatingPositionOffset;
+        float oscilatingElapsedTime1, oscilatingElapsedTime2;
+
+        //Numeric fields
+        Sprite levelText;
+        NumericSpriteFont levelSpriteFont, experienceSpriteFont;
 
         //Debug
         DebugCrosshair dc;
@@ -49,10 +58,16 @@ namespace OpenBound.GameComponents.Pawn
         {
             this.position = position;
 
-            positionOffset = new Vector2(3, 0);
+            oscilatingPositionOffset = new Vector2(3, 0);
             cannonOffset = new Vector2(50, 0);
 
             flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, 0);
+
+            levelSpriteFont      = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator,      1, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false, StartingValue: 1);
+            experienceSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false);
+
+            levelText = new Sprite("Interface/Spritefont/HUD/Blue/ThorLevelLV", Vector2.Zero, layerDepth: DepthParameter.MobileSatellite);
+            levelText.Pivot = Vector2.Zero;
 
             dc = new DebugCrosshair(Color.Cyan);
             DebugHandler.Instance.Add(dc);
@@ -79,34 +94,76 @@ namespace OpenBound.GameComponents.Pawn
             UpdatePosition(gameTime);
             UpdateThorRotation(gameTime);
 
-            flipbook.Rotation = (float)Helper.AngleBetween(Cursor.Instance.CurrentFlipbook.Position, position);
+            flipbook.Rotation = (float)Helper.AngleBetween(Cursor.Instance.CurrentFlipbook.Position, flipbook.Position);
             if (InputHandler.IsBeingReleased(MKeys.Left))
             {
                 Shot();
-                SpecialEffectBuilder.ThorShot((cannonPosition + Cursor.Instance.CurrentFlipbook.Position) / 2, Parameter.NeonGreen, (float)Helper.EuclideanDistance(cannonPosition, Cursor.Instance.CurrentFlipbook.Position) / 256, (float)Helper.AngleBetween(flipbook.Position, Cursor.Instance.CurrentFlipbook.Position) - MathHelper.PiOver2);
+                SpecialEffectBuilder.ThorShot((cannonPosition + Cursor.Instance.CurrentFlipbook.Position) / 2, Parameter.NeonGreen, (float)Helper.EuclideanDistance(cannonPosition, Cursor.Instance.CurrentFlipbook.Position) / 256, (float)Helper.AngleBetween(cannonPosition, Cursor.Instance.CurrentFlipbook.Position) - MathHelper.PiOver2);
             }
+        }
+
+        public void SetPosition(Vector2 newPosition)
+        {
+            positionMovement = newPosition - position;
+            movementElapsedTime = 0;
         }
 
         private void UpdateThorRotation(GameTime gameTime)
         {
-            dc.Update(cannonPosition = position + Vector2.Transform(cannonOffset, Matrix.CreateRotationZ(flipbook.Rotation)));
+            dc.Update(
+                cannonPosition = position + positionMovement + 
+                Vector2.Transform(
+                    cannonOffset, 
+                    Matrix.CreateRotationZ(
+                        (float)Helper.AngleBetween(Cursor.Instance.CurrentFlipbook.Position, position + positionMovement)
+                        )
+                    )
+                );
         }
 
         private void UpdatePosition(GameTime gameTime)
         {
-            elapsedTime1 += (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.Pi / 4;
-            elapsedTime2 = elapsedTime1 / 2;
+            //Updating oscilating movement
+            oscilatingElapsedTime1 += (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.Pi / 4;
+            oscilatingElapsedTime2 = oscilatingElapsedTime1 / 2;
 
-            Vector2 positionOffset = Vector2.Transform(this.positionOffset, Matrix.CreateRotationZ(elapsedTime1 / MathHelper.Pi));
+            MathHelper.WrapAngle(oscilatingElapsedTime1);
 
-            MathHelper.WrapAngle(elapsedTime1);
+            Vector2 tmpOscilatingPosition = Vector2.Transform(oscilatingPositionOffset, Matrix.CreateRotationZ(oscilatingElapsedTime1 / MathHelper.Pi)) * new Vector2((float)Math.Sin(oscilatingElapsedTime1), (float)Math.Cos(oscilatingElapsedTime2));
 
-            flipbook.Position = position + new Vector2(positionOffset.X * (float)Math.Sin(elapsedTime1), positionOffset.Y * (float)Math.Cos(elapsedTime2));
+            //Update movement position
+            Vector2 tmpPositionOffset = Vector2.Zero;
+            if (positionMovement != Vector2.Zero)
+            {
+                movementElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds * MathHelper.PiOver2;
+
+                tmpPositionOffset =  positionMovement * (float)Math.Sin(movementElapsedTime);
+                
+                if (movementElapsedTime >= MathHelper.PiOver2)
+                {
+                    position += positionMovement;
+                    positionMovement = Vector2.Zero;
+                    flipbook.Position = position + tmpOscilatingPosition;
+                    return;
+                }
+            }
+
+            flipbook.Position = position + tmpOscilatingPosition + tmpPositionOffset;
+
+            //Update texts
+            levelSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(50, 30);
+            experienceSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(50, 45);
+            levelText.Position = levelSpriteFont.Position - new Vector2(30, -1);
+            levelSpriteFont.Update(gameTime);
+            experienceSpriteFont.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             flipbook.Draw(gameTime, spriteBatch);
+            levelSpriteFont.Draw(gameTime, spriteBatch);
+            experienceSpriteFont.Draw(gameTime, spriteBatch);
+            levelText.Draw(null, spriteBatch);
         }
     }
 }

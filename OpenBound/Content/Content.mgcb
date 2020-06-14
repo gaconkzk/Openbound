@@ -6648,6 +6648,30 @@
 /processorParam:TextureFormat=Color
 /build:Interface/Spritefont/HUD/Blue/Damage.png
 
+#begin Interface/Spritefont/HUD/Blue/Defense.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/Defense.png
+
+#begin Interface/Spritefont/HUD/Blue/DefenseDEF.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/DefenseDEF.png
+
 #begin Interface/Spritefont/HUD/Blue/Delay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -6707,6 +6731,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Interface/Spritefont/HUD/Blue/Scoreboard.png
+
+#begin Interface/Spritefont/HUD/Blue/ThorLevel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/ThorLevel.png
+
+#begin Interface/Spritefont/HUD/Blue/ThorLevelLV.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/ThorLevelLV.png
 
 #begin Interface/Spritefont/HUD/Blue/WindCompass.png
 /importer:TextureImporter
