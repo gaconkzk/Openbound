@@ -162,6 +162,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             random.OnInteract(projectile);
         }
+
+        //Thor
+        public override void OnBeginThorInteraction(Thor thor)
+        {
+            thor.OnInteract(projectile);
+        }
         #endregion
 
         public override void OnSpawn()
@@ -222,7 +228,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public TricoProjectile3(Trico mobile)
             : base(mobile, ShotType.SS, Parameter.ProjectileTricoSSExplosionRadius, Parameter.ProjectileTricoSSBaseDamage)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
@@ -248,6 +254,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void OnBeginElectricityInteraction(Electricity electricity)
         {
             //Clear the actions to prevent spawning multiple bolts
+            OnExplodeAction += () => { OnExplodeAction = default; };
+        }
+
+        //Electricity
+        public override void OnBeginThorInteraction(Thor thor)
+        {
+            base.OnBeginThorInteraction(thor);
+
+            //Clear the actions to prevent spawning multiple thor shots
             OnExplodeAction += () => { OnExplodeAction = default; };
         }
         #endregion

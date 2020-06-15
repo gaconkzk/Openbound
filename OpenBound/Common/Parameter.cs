@@ -492,8 +492,8 @@ namespace OpenBound.Common
         public static Color[] ColorGradient = new Color[] { NeonGreen, NeonBlue, NeonYellow, NeonRed, NeonWhiteWhite };
 
         public const int ProjectileThorExplosionRadius = 25;
-        public const int ProjectileThorBaseDamage = 60;
-        public const int ProjectileThorBaseDamagePerLevel = 25;
+        public const int ProjectileThorBaseDamage = 40;
+        public const int ProjectileThorBaseDamagePerLevel = 20;
         public static int[] ThorExperienceTable = new int[] { 800, 1400, 2000, 2400, 3000 };
         #endregion
     }

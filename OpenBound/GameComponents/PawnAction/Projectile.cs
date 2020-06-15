@@ -264,6 +264,11 @@ namespace OpenBound.GameComponents.PawnAction
             xMovement.InverseMovement();
         }
 
+        public virtual void OnBeginThorInteraction(Thor thor)
+        {
+            LevelScene.ThorSatellite.Attatch(this);
+        }
+
         public virtual void OnBeginRandomInteraction(Random random) { }
 
         public virtual void OnBeginElectricityInteraction(Electricity electricity) { }

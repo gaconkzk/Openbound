@@ -160,7 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();
 
             foreach (Mobile m in LevelScene.MobileList)
@@ -169,8 +169,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 if (distance < Parameter.ProjectileLightningSSEExplosionRadius)
                 {
-                    BeamDummyProjectile electricityProjectile =
-                      new BeamDummyProjectile(Mobile, m.Position,
+                    LightningBaseProjectile electricityProjectile =
+                      new LightningBaseProjectile(Mobile, m.Position,
                           Parameter.ProjectileLightningSSElectricityAngle,
                           Parameter.ProjectileLightningSSElectricityExplosionRadius,
                           Parameter.ProjectileLightningSSElectricityEExplosionRadius,

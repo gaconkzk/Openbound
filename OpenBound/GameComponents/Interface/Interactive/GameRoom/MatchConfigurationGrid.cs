@@ -124,7 +124,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
                     new NumericSpriteFont(FontType.GameRoomPingCounterWhite, 1,
                     DepthParameter.InterfaceButton,
                     Position: lineOffset,
-                    AttachToCamera: false));
+                    attachToCamera: false));
 
                 interrogationSpriteList.Add(new Sprite("Interface/Spritefont/GameRoom/Interrogation",
                     position: lineOffset + new Vector2(4, 4),

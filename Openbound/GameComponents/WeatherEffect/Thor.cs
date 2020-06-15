@@ -18,18 +18,20 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override bool CheckProjectileInteraction(Projectile projectile) {
             if (ModifiedProjectileList.Contains(projectile)) return false;
-
-            ModifiedProjectileList.Add(projectile);
+            
             OnInteract(projectile);
+            ModifiedProjectileList.Add(projectile);
 
             return true;
         }
 
-        public override bool Intersects(Weather weather) { return true; }
+        public override bool Intersects(Projectile projectile) => true;
+
+        public override bool Intersects(Weather weather) => true;
 
         public override Weather Merge(Weather weather) { return this; }
 
-        public override void OnInteract(Projectile projectile) { LevelScene.ThorSatellite.Attatch(projectile); }
+        public override void OnInteract(Projectile projectile) { projectile.OnBeginThorInteraction(this); }
 
         public override void OnStopInteracting(Projectile projectile) { }
 

@@ -66,7 +66,7 @@ namespace OpenBound.GameComponents.Interface
             redArrow.SetTransparency(0);
 
             numericSpriteFont = new NumericSpriteFont(FontType.HUDBlueWindCompass, 2, DepthParameter.HUDL1 + 0.03f, PositionOffset: position - new Vector2(0, 10),
-                TextAnchor: TextAnchor.Middle, StartingValue: 0, AttachToCamera: true);
+                textAnchor: TextAnchor.Middle, StartingValue: 0, attachToCamera: true);
         }
 
         public void ChangeWind(int degrees, int windForce)

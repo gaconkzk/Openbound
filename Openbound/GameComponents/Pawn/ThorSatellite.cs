@@ -21,6 +21,7 @@ using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -52,23 +53,29 @@ namespace OpenBound.GameComponents.Pawn
 
         //Numeric fields
         Sprite levelText;
-        NumericSpriteFont levelSpriteFont, experienceSpriteFont;
+        NumericSpriteFont levelSpriteFont;
+        CurrencySpriteFont experienceSpriteFont;
+
+        //Cannon Projectile interpolated color
+        Color beamColor;
 
         //Thor status
-        public int Level { get; private set; }
-        public int CurrentExperience { get; private set; }
+        public int Level => (int)levelSpriteFont.CurrentValue;
+        public int CurrentExperience => experienceSpriteFont.FinalValue;
 
         public ThorSatellite()
         {
             targetList = new List<Projectile>();
+
+            beamColor = Parameter.NeonGreen;
 
             oscilatingPositionOffset = new Vector2(3, 0);
             cannonOffset = new Vector2(50, 0);
 
             flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, 0);
 
-            levelSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator, 1, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false, StartingValue: 1);
-            experienceSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, TextAnchor: TextAnchor.Right, AttachToCamera: false);
+            levelSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator, 1, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false, StartingValue: 1);
+            experienceSpriteFont = new CurrencySpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false);
 
             levelText = new Sprite("Interface/Spritefont/HUD/Blue/ThorLevelLV", Vector2.Zero, layerDepth: DepthParameter.MobileSatellite);
             levelText.Pivot = Vector2.Zero;
@@ -79,7 +86,7 @@ namespace OpenBound.GameComponents.Pawn
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.ShootingS1], true);
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.Active]);
 
-            SpecialEffectBuilder.ThorShot((cannonPosition + position) / 2, Parameter.NeonGreen, (float)Helper.EuclideanDistance(cannonPosition, position) / 256, (float)Helper.AngleBetween(cannonPosition, position) - MathHelper.PiOver2);
+            SpecialEffectBuilder.ThorShot((cannonPosition + position) / 2, beamColor, (float)Helper.EuclideanDistance(cannonPosition, position) / 256, (float)Helper.AngleBetween(cannonPosition, position) - MathHelper.PiOver2);
         }
 
         public void Activate()
@@ -103,14 +110,50 @@ namespace OpenBound.GameComponents.Pawn
             movementElapsedTime = 0;
         }
 
+        public void GainExperience(int damageDealt)
+        {
+            if (damageDealt == 0) return;
+
+            experienceSpriteFont.AddValue(damageDealt);
+
+            for (int i = 0; i < Parameter.ThorExperienceTable.Count(); i++)
+            {
+                if (experienceSpriteFont.FinalValue > Parameter.ThorExperienceTable[i] && i + 1 != Parameter.ThorExperienceTable.Count()) continue;
+
+                if (experienceSpriteFont.FinalValue >= Parameter.ThorExperienceTable.Last())
+                    levelSpriteFont.UpdateValue(i + 2);
+                else
+                    levelSpriteFont.UpdateValue(i + 1);
+
+                int extraColor = i + 1;
+
+                if (extraColor == Parameter.ThorExperienceTable.Count())
+                    extraColor = i;
+
+                //Interpolating color values
+                float ciV1 = experienceSpriteFont.FinalValue - damageDealt;
+                float ciV2 = Parameter.ThorExperienceTable[i];
+
+                if (i != 0)
+                {
+                    ciV1 = Math.Max(0, ciV1 - Parameter.ThorExperienceTable[i - 1]);
+                    ciV2 -= Parameter.ThorExperienceTable[i - 1];
+                }
+
+                beamColor = Color.Lerp(
+                    Parameter.ColorGradient[i],
+                    Parameter.ColorGradient[extraColor],
+                    ciV1 / ciV2);
+                break;
+            }
+        }
+
         public void Attatch(Projectile projectile)
         {
             targetList.Add(projectile);
             projectile.OnExplodeAction += () =>
             {
                 targetList.Remove(projectile);
-
-                Shot(projectile.Position);
 
                 ThorProjectile tp = new ThorProjectile(
                     projectile.Mobile,

@@ -268,19 +268,19 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
         #region Lightning
-        public static void LightningProjectile3Explosion(Vector2 position)
+        public static void LightningProjectile3Explosion(Vector2 position, float rotation)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(196, 193), 324, 326, "Graphics/Special Effects/Tank/Lightning/Flame2",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 17, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX);
+                  Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(196, 193), 324, 326, "Graphics/Special Effects/Tank/Lightning/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 20, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, rotation + MathHelper.PiOver2);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 
-            float transparency = 1f;
+           // float transparency = 1f;
             se.UpdateAction += (specialEffect, gameTime) =>
             {
-                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds / 25;
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                se.Flipbook.SetTransparency(transparency);
+                se.Flipbook.Rotation -= MathHelper.TwoPi * (float)gameTime.ElapsedGameTime.TotalSeconds / 25;
+                //transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //se.Flipbook.SetTransparency(transparency);
             };
 
             SpecialEffectHandler.Add(se);

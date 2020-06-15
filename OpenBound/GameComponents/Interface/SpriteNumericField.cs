@@ -528,8 +528,8 @@ namespace OpenBound.GameComponents.Interface
     public class NumericSpriteFont : SpriteNumericField
     {
         public NumericSpriteFont(FontType FontType, int NumericFieldLength, float LayerDepth, Vector2 Position = default,
-            Vector2 PositionOffset = default, TextAnchor TextAnchor = TextAnchor.Left, int StartingValue = 0, bool AttachToCamera = true)
-            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, TextAnchor, StartingValue, AttachToCamera)
+            Vector2 PositionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int StartingValue = 0, bool attachToCamera = true)
+            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, textAnchor, StartingValue, attachToCamera)
         { }
 
         public void UpdateValue(int Value)
@@ -546,7 +546,7 @@ namespace OpenBound.GameComponents.Interface
 
     public class CurrencySpriteFont : SpriteNumericField
     {
-        private int finalValue;
+        public int FinalValue { get; private set; }
         private float incrementFactor;
         private float elapsedTime;
 
@@ -554,19 +554,19 @@ namespace OpenBound.GameComponents.Interface
             Vector2 positionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int startingValue = 0, bool attachToCamera = true)
             : base(fontType, numericFieldLength, layerDepth, position, positionOffset, textAnchor, startingValue, attachToCamera)
         {
-            finalValue = startingValue;
+            FinalValue = startingValue;
             elapsedTime = 0;
         }
 
         public void AddValue(int Value)
         {
-            finalValue += Value;
-            incrementFactor = (finalValue - CurrentValue) / Parameter.InterfaceNumericTextFieldFactorNumber;
+            FinalValue += Value;
+            incrementFactor = (FinalValue - CurrentValue) / Parameter.InterfaceNumericTextFieldFactorNumber;
         }
 
         public override void Update(GameTime GameTime)
         {
-            if (Math.Abs(finalValue) != Math.Abs(CurrentValue))
+            if (Math.Abs(FinalValue) != Math.Abs(CurrentValue))
             {
                 elapsedTime += (float)GameTime.ElapsedGameTime.TotalSeconds;
 
@@ -576,7 +576,7 @@ namespace OpenBound.GameComponents.Interface
 
                     CurrentValue += incrementFactor;
 
-                    if (Math.Abs(CurrentValue) > Math.Abs(finalValue)) CurrentValue = finalValue;
+                    if (Math.Abs(CurrentValue) > Math.Abs(FinalValue)) CurrentValue = FinalValue;
 
                     ReassignTextValue();
                 }

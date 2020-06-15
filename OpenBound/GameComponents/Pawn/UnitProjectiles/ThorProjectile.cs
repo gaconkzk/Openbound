@@ -20,5 +20,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //Special effects + thor animation
             thor.Shot(Position);
         }
+
+        protected override int CalculateDamage(Mobile mobile)
+        {
+            int exp = base.CalculateDamage(mobile);
+            thor.GainExperience(exp);
+            return exp;
+        }
     }
 }

@@ -22,6 +22,7 @@ using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Random = OpenBound.GameComponents.WeatherEffect.Random;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
@@ -149,9 +150,15 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
 
         //Random
-        public override void OnBeginRandomInteraction(WeatherEffect.Random random)
+        public override void OnBeginRandomInteraction(Random random)
         {
             random.OnInteract(dProj);
+        }
+
+        //Thor
+        public override void OnBeginThorInteraction(Thor thor)
+        {
+            thor.OnInteract(dProj);
         }
         #endregion
 

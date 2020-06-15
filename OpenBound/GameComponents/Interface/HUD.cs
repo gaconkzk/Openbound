@@ -97,12 +97,12 @@ namespace OpenBound.GameComponents.Interface
                 //Team Score - Left
                 spriteNumericFieldList.Add(new NumericSpriteFont(FontType.HUDBlueScoreboard, 1, DepthParameter.HUDL5,
                     PositionOffset: ((this.mobile.Owner.PlayerTeam == PlayerTeam.Red) ? new Vector2(318, -5) : new Vector2(392, -5)) + origin,
-                    StartingValue: 2, TextAnchor: TextAnchor.Right));
+                    StartingValue: 2, textAnchor: TextAnchor.Right));
 
                 //Team Score - Right
                 spriteNumericFieldList.Add(new NumericSpriteFont(FontType.HUDBlueScoreboard, 1, DepthParameter.HUDL5,
                     PositionOffset: ((this.mobile.Owner.PlayerTeam == PlayerTeam.Blue) ? new Vector2(318, -5) : new Vector2(392, -5)) + origin,
-                    StartingValue: 2, TextAnchor: TextAnchor.Right));
+                    StartingValue: 2, textAnchor: TextAnchor.Right));
 
                 //GoldCounter
                 spriteNumericFieldList.Add(new CurrencySpriteFont(FontType.HUDBlueGold, 6, DepthParameter.HUDL5,
@@ -152,11 +152,11 @@ namespace OpenBound.GameComponents.Interface
             spriteList.Add(matchStatus);
 
             currentAngle = new NumericSpriteFont(FontType.HUDBlueCurrentAngle, 3, DepthParameter.HUDL5,
-                PositionOffset: new Vector2(-149, -26) + origin, TextAnchor: TextAnchor.Right);
+                PositionOffset: new Vector2(-149, -26) + origin, textAnchor: TextAnchor.Right);
             spriteNumericFieldList.Add(currentAngle);
 
             previousAngle = new NumericSpriteFont(FontType.HUDBluePreviousAngle, 3, DepthParameter.HUDL5,
-                PositionOffset: new Vector2(-185, -20) + origin, TextAnchor: TextAnchor.Right);
+                PositionOffset: new Vector2(-185, -20) + origin, textAnchor: TextAnchor.Right);
             spriteNumericFieldList.Add(previousAngle);
 
             //Menu Buttons

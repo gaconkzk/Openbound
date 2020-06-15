@@ -54,7 +54,6 @@ namespace OpenBound.GameComponents.WeatherEffect
         protected Vector2 flipbookPivot;
         protected float rotation;
         protected int numberOfFrames;
-        protected float _initialTransparency = 1;
 
         public float Scale { get; protected set; }
         public Vector2 StartingPosition { get; protected set; }
@@ -211,7 +210,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <summary>
         /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
         /// </summary>
-        public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
+        public virtual bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
 
         /// <summary>
         /// Check if this Weather is interacting with a Projectile.

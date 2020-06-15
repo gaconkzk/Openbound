@@ -149,6 +149,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             random.OnInteract(dProj);
         }
+
+        //Thor
+        public override void OnBeginThorInteraction(Thor thor)
+        {
+            thor.OnInteract(dProj);
+        }
         #endregion
 
         public override void Update()

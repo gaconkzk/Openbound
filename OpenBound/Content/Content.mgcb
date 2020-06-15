@@ -3468,7 +3468,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Tank/Lightning/Flame1.png
 
-#begin Graphics/Special Effects/Tank/Lightning/Flame2.png
+#begin Graphics/Special Effects/Tank/Lightning/Flame3.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3478,7 +3478,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Special Effects/Tank/Lightning/Flame2.png
+/build:Graphics/Special Effects/Tank/Lightning/Flame3.png
 
 #begin Graphics/Special Effects/Tank/Mage/Flame1.png
 /importer:TextureImporter
