@@ -34,7 +34,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         
         public override void OnBeingRemoved(Weather incomingWeather)
         {
-            if (incomingWeather.WeatherType != WeatherType.Thor)
+            if (incomingWeather == null || incomingWeather.WeatherType != WeatherType.Thor)
                 LevelScene.ThorSatellite.Deactivate();
         }
 

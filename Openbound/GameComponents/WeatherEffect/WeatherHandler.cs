@@ -130,7 +130,11 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             foreach(Weather w in unusedWeatherList)
             {
-                w.OnBeingRemoved(toBeAddedWeatherList?[0]);
+                if (toBeAddedWeatherList.Count() == 0)
+                    w.OnBeingRemoved(null);
+                else
+                    w.OnBeingRemoved(toBeAddedWeatherList[0]);
+
                 WeatherList.Remove(w);
             }
 
