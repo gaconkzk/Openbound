@@ -3,6 +3,7 @@ using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Level.Scene;
+using OpenBound.GameComponents.Interface;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
@@ -11,6 +12,8 @@ namespace OpenBound.GameComponents.WeatherEffect
         public Thor(Vector2 position) : base(default, default, 0, default, default, WeatherType.Thor, 0)
         {
             LevelScene.ThorSatellite.SetPosition(position);
+            LevelScene.ThorSatellite.Activate();
+
             SetTransparency(0);
         }
 
@@ -27,6 +30,12 @@ namespace OpenBound.GameComponents.WeatherEffect
             };
 
             return true;
+        }
+        
+        public override void OnBeingRemoved(Weather incomingWeather)
+        {
+            if (incomingWeather.WeatherType != WeatherType.Thor)
+                LevelScene.ThorSatellite.Deactivate();
         }
 
         public override bool Intersects(Projectile projectile) => true;

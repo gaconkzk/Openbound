@@ -168,7 +168,6 @@ namespace OpenBound.GameComponents.Interface
             //Active Weathers
             if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(ActiveWeather.Weather))
             {
-                Console.WriteLine($"{(int)ActiveWeather.Position[0]}");
                 LevelScene.WeatherHandler.Add(ActiveWeather.Weather, ActiveWeather.ExtraWeather, Topography.FromNormalizedPositionToRelativePosition(ActiveWeather.Position));
 
                 if (incomingWeatherPointers.Count > 0 && 

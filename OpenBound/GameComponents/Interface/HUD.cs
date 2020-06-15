@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Interface
 
         //Weather effects
         public WindCompass windCompass;
-        public WeatherDisplay weatherDisplay;
+        public WeatherDisplay WeatherDisplay;
 
         //Static popups
         private Button gameOptionsButton;
@@ -204,7 +204,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
 
             //Weather Display
-            weatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
+            WeatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
 
             //Delayboard
             Delayboard = new Delayboard(mobileList, new Vector2(origin.X - spriteList[0].SpriteWidth / 2, origin.Y - spriteList[0].SpriteHeight / 2));
@@ -283,7 +283,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass.Update(gameTime);
 
             //Incoming Weather
-            weatherDisplay.Update(gameTime);
+            WeatherDisplay.Update(gameTime);
         }
 
         public void UpdatePreviousShotMarker()
@@ -322,7 +322,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass.Draw(spriteBatch);
 
             //IncomingWeather
-            weatherDisplay.Draw(gameTime, spriteBatch);
+            WeatherDisplay.Draw(gameTime, spriteBatch);
         }
     }
 }

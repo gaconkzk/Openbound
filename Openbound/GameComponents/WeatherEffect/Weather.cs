@@ -231,6 +231,11 @@ namespace OpenBound.GameComponents.WeatherEffect
         }
 
         /// <summary>
+        /// Event called whenever this weather is not beign used anymore.
+        /// </summary>
+        public virtual void OnBeingRemoved(Weather incomingWeather) { }
+
+        /// <summary>
         /// Defines how a merge happen between two similar Weathers
         /// </summary>
         public abstract Weather Merge(Weather weather);

@@ -108,6 +108,14 @@ namespace Openbound_Network_Object_Library.Common
         public const int WeatherWindAngleDisturbance = 6;
         public const double WeatherWindAngleDisturbanceChance = 0.5;
 
+        //Game Constants - Weather - Thor
+        //Thor pos calculation: MinimumOffset + Random(0, 1) * MaximumOffset
+        public const float WeatherThorMinimumOffsetX = 0.1f;
+        public const float WeatherThorMaximumOffsetX = 0.8f;
+
+        public const float WeatherThorMinimumOffsetY = 0.3f;
+        public const float WeatherThorMaximumOffsetY = 0.6f;
+
         //Map Address
         public const int ChangeMapLeft = -2;
         public const int ChangeMapRight = -1;

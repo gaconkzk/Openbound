@@ -14,8 +14,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Debug;
-using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
@@ -45,7 +43,13 @@ namespace OpenBound.GameComponents.Pawn
         Vector2 cannonPosition;
 
         //Rotation Movement
+
+        /// <summary>
+        /// Thor's target list. The very first element is focused by thor rotating animation.
+        /// If this list is empty, thor faces <see cref="lastFocusedPosition"/> position.
+        /// </summary>
         List<Projectile> targetList;
+        Vector2 lastFocusedPosition;
 
         //Oscilation movement
         Vector2 oscilatingPositionOffset;
@@ -81,8 +85,14 @@ namespace OpenBound.GameComponents.Pawn
 
             levelText = new Sprite("Interface/Spritefont/HUD/Blue/ThorLevelLV", Vector2.Zero, layerDepth: DepthParameter.MobileSatellite);
             levelText.Pivot = Vector2.Zero;
+
+            lastFocusedPosition = Vector2.Zero;
         }
 
+        /// <summary>
+        /// Play the Shot animation and spawn a beam on the targetting position.
+        /// </summary>
+        /// <param name="position"></param>
         public void Shot(Vector2 position)
         {
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.ShootingS1], true);
@@ -91,11 +101,17 @@ namespace OpenBound.GameComponents.Pawn
             SpecialEffectBuilder.ThorShot((cannonPosition + position) / 2, beamColor, (float)Helper.EuclideanDistance(cannonPosition, position) / 256, (float)Helper.AngleBetween(cannonPosition, position) - MathHelper.PiOver2);
         }
 
+        /// <summary>
+        /// Change thor's flipbook to it's activated animation.
+        /// </summary>
         public void Activate()
         {
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.Active], true);
         }
 
+        /// <summary>
+        /// Change thor's flipbook to it's deactivated animation.
+        /// </summary>
         public void Deactivate()
         {
             flipbook.AppendAnimationIntoCycle(thorStatePresets[ActorFlipbookState.Stand], true);
@@ -150,9 +166,14 @@ namespace OpenBound.GameComponents.Pawn
             }
         }
 
+        /// <summary>
+        /// Attatches thor effects to a projectile.
+        /// </summary>
+        /// <param name="projectile"></param>
         public void Attatch(Projectile projectile)
         {
             targetList.Add(projectile);
+
             projectile.OnExplodeAction += () =>
             {
                 targetList.Remove(projectile);
@@ -164,6 +185,8 @@ namespace OpenBound.GameComponents.Pawn
                     -(float)Helper.AngleBetween(position + positionMovement, projectile.Position));
 
                 tp.Update();
+
+                lastFocusedPosition = projectile.Position;
             };
         }
 
@@ -197,18 +220,16 @@ namespace OpenBound.GameComponents.Pawn
             flipbook.Position = position + tmpOscilatingPosition + tmpPositionOffset;
 
             //Update rotation
-            if (targetList.Count > 0)
-            {
-                flipbook.Rotation = (float)Helper.AngleBetween(targetList[0].Position, flipbook.Position);
+            Vector2 facingPosition = targetList.Count == 0 ? lastFocusedPosition : targetList[0].Position;
+            flipbook.Rotation = (float)Helper.AngleBetween(facingPosition, flipbook.Position);
 
-                cannonPosition = position + positionMovement +
-                    Vector2.Transform(
-                       cannonOffset,
-                       Matrix.CreateRotationZ(
-                           (float)Helper.AngleBetween(
-                               targetList[0].Position,
-                               position + positionMovement)));
-            }
+            cannonPosition = position + positionMovement +
+                Vector2.Transform(
+                   cannonOffset,
+                   Matrix.CreateRotationZ(
+                       (float)Helper.AngleBetween(
+                           facingPosition,
+                           position + positionMovement)));
 
             //Update texts
             levelSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(70, 40);
