@@ -6,13 +6,13 @@ using OpenBound.GameComponents.PawnAction;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
+    /// <summary>
+    /// Lightning special effect. This "fake weather" is only used by lightning's projectiles and electricity weather.
+    /// </summary>
     public class LightningElectricity : Weather
     {
-        float elapsedTime;
         public LightningElectricity(Vector2 position, float angle) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(31, 128), 3, default, default, default, 1, angle)
         {
-            elapsedTime = 0;
-
             Initialize(@"Graphics/Special Effects/Tank/Lightning/Flame1", position, WeatherAnimationType.VariableAnimationFrame);
         }
 
@@ -22,12 +22,10 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void Update(GameTime gameTime)
         {
-            elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            FadeOut(gameTime, Parameter.ProjectileLightningElectricityFadeTime);
 
-            if (elapsedTime > Parameter.ProjectileLightningElectricityFadeTime)
+            if (fadeAnimationElapsedTime == Parameter.ProjectileLightningElectricityFadeTime)
                 LevelScene.WeatherHandler.RemoveWeather(this);
-            else
-                FadeOut(gameTime, Parameter.ProjectileLightningElectricityFadeTime);
         }
 
         public override Weather Merge(Weather weather) { return this; }

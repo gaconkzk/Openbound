@@ -91,6 +91,13 @@ namespace OpenBound.GameComponents.PawnAction
         public Action<int> OnDestroyGroundAction;
         public Action<int> OnDealDamageAction;
 
+        //Weather
+
+        /// <summary>
+        /// Stores all weather types that this project is under influence to avoid repeated effects
+        /// </summary>
+        public List<WeatherType> WeatherInfluenceList;
+
         //CanExplode
         public bool CanCollide { get; private set; }
 
@@ -108,6 +115,9 @@ namespace OpenBound.GameComponents.PawnAction
             FlipbookList = new List<Flipbook>();
 
             Mobile = owner;
+
+            //Weather
+            WeatherInfluenceList = new List<WeatherType>();
 
             //Physics-relaetd variables
             yMovement = new AcceleratedMovement();

@@ -1033,6 +1033,12 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Shoot/TurtleSS.mp3
 
+#begin Audio/SFX/Weather/Mirror.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SFX/Weather/Mirror.mp3
+
 #begin Debug/DebugCrosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor

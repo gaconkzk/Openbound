@@ -63,7 +63,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Trico,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -406,16 +406,19 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
                 WeatherHandler.Add(WeatherType.Mirror, new Vector2(-500, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Mirror, new Vector2(-300, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
                 WeatherHandler.Add(WeatherType.Weakness, new Vector2(-400, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Weakness, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
                 WeatherHandler.Add(WeatherType.Force, new Vector2(-300, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Force, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F8))
@@ -426,6 +429,7 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.F9))
             {
                 WeatherHandler.Add(WeatherType.Electricity, new Vector2(-100, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Electricity, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F10))
@@ -485,7 +489,13 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D1))
             {
-                Vector2 nPos = (new Vector2((float)Parameter.Random.NextDouble(), (float)Parameter.Random.NextDouble()) - (Vector2.One / 2)) * Vector2.One * 1000;
+                float p1 = (float)Parameter.Random.NextDouble();
+                float p2 = (float)Parameter.Random.NextDouble();
+                //x ranging from 0.1f to 0.9f and
+                //y ranging from 0.4f to 0.9f, 1 - weatherMetadata.Position[1] is necessary because y axis is inverted
+                p1 = 0.1f + p1 * 0.9f;
+                p2 = (0.1f + p2 * 0.3f);
+                Vector2 nPos = Topography.FromNormalizedPositionToRelativePosition(new float[] { p1, p2 });
                 WeatherHandler.Add(WeatherType.Thor, nPos);
                 Console.WriteLine(nPos);
             }

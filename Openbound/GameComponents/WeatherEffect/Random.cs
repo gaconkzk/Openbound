@@ -51,10 +51,8 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
-        public override Weather Merge(Weather weather)
-        {
-            return this;
-        }
+        //Ideally random weather shouldn't merge.
+        public override Weather Merge(Weather weather) { return this; }
 
         public override void OnInteract(Projectile projectile)
         {

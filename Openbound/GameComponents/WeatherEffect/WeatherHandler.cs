@@ -115,7 +115,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// </summary>
         public void RemoveWeather(WeatherType weatherEffectType)
         {
-            unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType == weatherEffectType));
+            unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType != weatherEffectType));
         }
 
         public void RemoveWeather(Weather weather)

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using OpenBound.Common;
+using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Audio;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
@@ -19,6 +21,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             //Special effects + thor animation
             thor.Shot(Position);
+
+            AudioHandler.PlaySoundEffect("Audio/SFX/Tank/Blast/AdukaS2");
         }
 
         protected override int CalculateDamage(Mobile mobile)

@@ -24,20 +24,6 @@ using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
-    public class LightningBaseProjectile : BeamDummyProjectile
-    {
-        public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage)
-            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage) { }
-
-        protected override void Explode()
-        {
-            base.Explode();
-
-            LevelScene.WeatherHandler.Add(new LightningElectricity(Position, MathHelper.PiOver2 * 3 - beamAngle));
-        }
-    }
-
-
     public class LightningProjectile1 : Projectile
     {
         public LightningProjectile1(Lightning mobile) : base(mobile, ShotType.S1, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage)
@@ -67,6 +53,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityBaseDamage,
                     Parameter.ProjectileLightningS1ElectricityEBaseDamage);
+
             electricityProjectile.Update();
         }
 
@@ -90,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile2(Lightning mobile) : base(mobile, ShotType.S2, Parameter.ProjectileLightningS2ExplosionRadius, Parameter.ProjectileLightningS2BaseDamage)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -140,7 +127,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile3(Lightning mobile) : base(mobile, ShotType.SS, Parameter.ProjectileLightningSSExplosionRadius, Parameter.ProjectileLightningSSBaseDamage)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(

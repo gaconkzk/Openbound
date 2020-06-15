@@ -12,21 +12,17 @@
 
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
-using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Level;
+using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
-using System;
-using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
     public class Mirror : Force
     {
-        public Mirror(Vector2 position, float scale = 1) : base(position, WeatherType.Mirror, scale)
+        public Mirror(Vector2 position, float scale = 1) : base(position + new Vector2(0, 1000), WeatherType.Mirror, scale)
         {
             Initialize("Graphics/Special Effects/Weather/Mirror", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
-
             SetTransparency(0);
         }
 
@@ -37,11 +33,15 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void Update(GameTime gameTime)
         {
+            UpdateProjectiles(gameTime);
             FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
         }
 
         public override void OnInteract(Projectile projectile)
         {
+            //Sound Effect
+            AudioHandler.PlaySoundEffect("Audio/SFX/Weather/Mirror");
+
             //Force interactions
             base.OnInteract(projectile);
 
@@ -55,7 +55,5 @@ namespace OpenBound.GameComponents.WeatherEffect
             if (projectile.BaseDamage != 0)
                 projectile.BaseDamage = (int)(projectile.BaseDamage * Parameter.WeatherEffectMirrorDamageIncreaseFactor + Parameter.WeatherEffectMirrorDamageIncreaseValue);
         }
-
-        public override void OnStopInteracting(Projectile projectile) { }
     }
 }

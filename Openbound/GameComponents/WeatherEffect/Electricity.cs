@@ -11,7 +11,6 @@
  */
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
@@ -20,19 +19,14 @@ using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
-using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
-    /// <summary>
-    /// Assisting type to store the time required to Force effect spawn a new particle
-    /// </summary>
     public class Electricity : Weather
     {
-        public Electricity(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
+        public Electricity(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Electricity, scale, 0)
         {
             Initialize("Graphics/Special Effects/Weather/Electricity", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
-
             SetTransparency(0);
         }
 
@@ -49,6 +43,9 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void OnInteract(Projectile projectile)
         {
+            //Checks if the projectile is already under influence of this weather 
+            if (CheckWeatherInfluence(projectile)) return;
+
             //Passes this instance to any projectile's dependent projectile
             projectile.OnBeginElectricityInteraction(this);
 
@@ -57,7 +54,8 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             //Once added to the list the projectile starts spawning force particles around it's flipbook
             SpecialEffect se = SpecialEffectBuilder.ElectricityParticle(projectile.Position);
-            projectile.OnAfterUpdateAction += () => {
+            projectile.OnAfterUpdateAction += () =>
+            {
                 se.Flipbook.Position = projectile.Position;
                 se.Flipbook.Rotation = projectile.CurrentFlipbookRotation;
             };
@@ -69,7 +67,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
             projectile.OnExplodeAction += () =>
             {
-                BeamDummyProjectile ep = new BeamDummyProjectile(projectile.Mobile, projectile.Position,
+                LightningBaseProjectile ep = new LightningBaseProjectile(projectile.Mobile, projectile.Position,
                     MathHelper.PiOver2,
                     Parameter.WeatherEffectElectricityExplosionRadius,
                     Parameter.WeatherEffectElectricityEExplosionRadius,
@@ -82,7 +80,5 @@ namespace OpenBound.GameComponents.WeatherEffect
                 AudioHandler.PlaySoundEffect("Audio/SFX/Tank/Blast/LightningS1");
             };
         }
-
-        public override void OnStopInteracting(Projectile projectile) { }
     }
 }

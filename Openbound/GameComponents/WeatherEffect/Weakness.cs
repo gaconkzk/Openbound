@@ -25,15 +25,9 @@ namespace OpenBound.GameComponents.WeatherEffect
     /// Assisting type to store the time required to Force effect spawn a new particle
     /// </summary>
     public class Weakness : Weather
-    {
-        List<Projectile> weaknessProjectile;
-        List<Projectile> unusedProjectileList;
-
+    { 
         public Weakness(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
-            weaknessProjectile = new List<Projectile>();
-            unusedProjectileList = new List<Projectile>();
-
             Initialize("Graphics/Special Effects/Weather/Weakness", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
 
             SetTransparency(0);
@@ -42,14 +36,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         public override void Update(GameTime gameTime)
         {
             VerticalScrollingUpdate(gameTime);
-            UpdateProjectiles();
             FadeIn(gameTime, Parameter.WeatherEffectFadeTime);
-        }
-
-        public void UpdateProjectiles()
-        {
-            unusedProjectileList.ForEach((x) => weaknessProjectile.Remove(x));
-            unusedProjectileList.Clear();
         }
 
         public override Weather Merge(Weather weather)
@@ -59,6 +46,9 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void OnInteract(Projectile projectile)
         {
+            //Checks if the projectile is already under influence of this weather 
+            if (CheckWeatherInfluence(projectile)) return;
+
             //Passes this instance to any projectile's dependent projectile
             projectile.OnBeginWeaknessInteraction(this);
 
@@ -67,13 +57,6 @@ namespace OpenBound.GameComponents.WeatherEffect
                 projectile.BaseDamage = (int)(projectile.BaseDamage / Parameter.WeatherEffectForceDamageIncreaseFactor - Parameter.WeatherEffectForceDamageIncreaseValue);
 
             projectile.FlipbookList[0].Color = Parameter.WeatherEffectWeaknessColorModifier;
-
-            //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
-            Action removeParticle = () => unusedProjectileList.Add(weaknessProjectile.Find((x) => x == projectile));
-            projectile.OnExplodeAction += removeParticle;
-            projectile.OnBeingDestroyedAction += removeParticle;
         }
-
-        public override void OnStopInteracting(Projectile projectile) { }
     }
 }

@@ -72,7 +72,9 @@ namespace OpenBound.GameComponents.Pawn
             oscilatingPositionOffset = new Vector2(3, 0);
             cannonOffset = new Vector2(50, 0);
 
-            flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, 0);
+            position = new Vector2(0, -500);
+
+            flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, MathHelper.PiOver2);
 
             levelSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator, 1, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false, StartingValue: 1);
             experienceSpriteFont = new CurrencySpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false);

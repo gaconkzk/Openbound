@@ -142,7 +142,8 @@ namespace OpenBound.GameComponents.Level
         /// <param name="normalizedWorldPosition">Numbers in this array must be normalzized between 0 and 1.</param>
         public static Vector2 FromNormalizedPositionToRelativePosition(float[] normalizedWorldPosition)
         {
-            return (normalizedWorldPosition.ToVector2() - new Vector2(0.5f, 0.5f)) * MapSize;
+            Vector2 newPos = (normalizedWorldPosition.ToVector2() - new Vector2(0.5f, 0.5f)) * MapSize;
+            return new Vector2((int)newPos.X, (int)newPos.Y);
         }
 
         public static int[] GetRelativePosition(Vector2 Position)

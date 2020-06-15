@@ -145,4 +145,17 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
     }
+
+    public class LightningBaseProjectile : BeamDummyProjectile
+    {
+        public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
+            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage, isWeather) { }
+
+        protected override void Explode()
+        {
+            base.Explode();
+
+            LevelScene.WeatherHandler.Add(new LightningElectricity(Position, MathHelper.PiOver2 * 3 - beamAngle));
+        }
+    }
 }
