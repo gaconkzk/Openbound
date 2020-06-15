@@ -117,17 +117,17 @@ namespace OpenBound.GameComponents.Pawn
                     // Add new movement based on tank speed
                     RemainingStepsThisTurn--;
                     Mobile.Position += new Vector2(-(int)TankSpeed, -i);
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.Moving, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.Moving, true);
                     if (Mobile.IsPlayable) LevelScene.HUD.MovementBar.PerformStep();
                 }
             }
             else
             {
                 //Sync
-                if (Mobile.MobileFlipbook.State != MobileFlipbookState.UnableToMove)
+                if (Mobile.MobileFlipbook.State != ActorFlipbookState.UnableToMove)
                     Mobile.ForceSynchronize = true;
 
-                Mobile.ChangeFlipbookState(MobileFlipbookState.UnableToMove, true);
+                Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
                 Mobile.PlayUnableToMoveSE();
             }
 
@@ -205,7 +205,7 @@ namespace OpenBound.GameComponents.Pawn
                 IsMoving = false;
                 //desiredPosition.Y = Mobile.Position.Y;
 
-                Mobile.ChangeFlipbookState(MobileFlipbookState.Falling, true);
+                Mobile.ChangeFlipbookState(ActorFlipbookState.Falling, true);
             }
             else
             {
@@ -214,7 +214,7 @@ namespace OpenBound.GameComponents.Pawn
                 {
                     IsFalling = false;
                     windForceAccumulator = 0;
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.Stand, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.Stand, true);
                 }
             }
         }

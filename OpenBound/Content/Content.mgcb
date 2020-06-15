@@ -1033,6 +1033,12 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Shoot/TurtleSS.mp3
 
+#begin Audio/SFX/Weather/Mirror.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SFX/Weather/Mirror.mp3
+
 #begin Debug/DebugCrosshair.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1091,6 +1097,30 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Consolas16.spritefont
+
+#begin Graphics/Entity/Thor/Spritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Entity/Thor/Spritesheet.png
+
+#begin Graphics/Entity/Thor/ThorLaser.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Entity/Thor/ThorLaser.png
 
 #begin Graphics/Maps/Adiumroot/Background.png
 /importer:TextureImporter
@@ -3444,7 +3474,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Tank/Lightning/Flame1.png
 
-#begin Graphics/Special Effects/Tank/Lightning/Flame2.png
+#begin Graphics/Special Effects/Tank/Lightning/Flame3.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -3454,7 +3484,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Special Effects/Tank/Lightning/Flame2.png
+/build:Graphics/Special Effects/Tank/Lightning/Flame3.png
 
 #begin Graphics/Special Effects/Tank/Mage/Flame1.png
 /importer:TextureImporter
@@ -6624,6 +6654,30 @@
 /processorParam:TextureFormat=Color
 /build:Interface/Spritefont/HUD/Blue/Damage.png
 
+#begin Interface/Spritefont/HUD/Blue/Defense.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/Defense.png
+
+#begin Interface/Spritefont/HUD/Blue/DefenseDEF.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/DefenseDEF.png
+
 #begin Interface/Spritefont/HUD/Blue/Delay.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -6683,6 +6737,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Interface/Spritefont/HUD/Blue/Scoreboard.png
+
+#begin Interface/Spritefont/HUD/Blue/ThorLevel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/ThorLevel.png
+
+#begin Interface/Spritefont/HUD/Blue/ThorLevelLV.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/HUD/Blue/ThorLevelLV.png
 
 #begin Interface/Spritefont/HUD/Blue/WindCompass.png
 /importer:TextureImporter

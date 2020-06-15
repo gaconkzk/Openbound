@@ -249,8 +249,8 @@ namespace OpenBound.GameComponents.Interface
             if (mobile.IsPlayable)
             {
                 crosshairAngleList = new List<NumericSpriteFont>(){
-                    new NumericSpriteFont(FontType.HUDBlueCrosshairTrueAngle, 3, Parameter.HUDCrosshairAngleIndicator, TextAnchor: TextAnchor.Middle, AttachToCamera: false),
-                    new NumericSpriteFont(FontType.HUDBlueCrosshairFalseAngle, 3, Parameter.HUDCrosshairAngleIndicator, TextAnchor: TextAnchor.Middle, AttachToCamera: false)
+                    new NumericSpriteFont(FontType.HUDBlueCrosshairTrueAngle, 3, Parameter.HUDCrosshairAngleIndicator, textAnchor: TextAnchor.Middle, attachToCamera: false),
+                    new NumericSpriteFont(FontType.HUDBlueCrosshairFalseAngle, 3, Parameter.HUDCrosshairAngleIndicator, textAnchor: TextAnchor.Middle, attachToCamera: false)
                 };
 
                 selectedCrosshairAngle = crosshairAngleList[0];

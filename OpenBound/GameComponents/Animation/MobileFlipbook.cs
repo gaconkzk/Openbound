@@ -20,9 +20,13 @@ using System.Linq;
 
 namespace OpenBound.GameComponents.Animation
 {
-    public enum MobileFlipbookState
+    public enum ActorFlipbookState
     {
         Stand, //Normal
+
+        Active, //Used only by thor
+
+        //Mobile-exclusive flipbook states
         StandLowHealth, //WNormal
 
         Moving, //Move
@@ -60,379 +64,379 @@ namespace OpenBound.GameComponents.Animation
 
     public class MobileFlipbook
     {
-        static readonly Dictionary<MobileType, Dictionary<MobileFlipbookState, AnimationInstance>> MobileStatePresets = new Dictionary<MobileType, Dictionary<MobileFlipbookState, AnimationInstance>>()
+        static readonly Dictionary<MobileType, Dictionary<ActorFlipbookState, AnimationInstance>> MobileStatePresets = new Dictionary<MobileType, Dictionary<ActorFlipbookState, AnimationInstance>>()
         {
             {
                 MobileType.Random,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand, new AnimationInstance() { StartingFrame = 000, EndingFrame = 011, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.Stand, new AnimationInstance() { StartingFrame = 000, EndingFrame = 011, TimePerFrame = 1/20f } },
                 }
             },
             #region Armor
             {
                 MobileType.Armor,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 020, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 151, EndingFrame = 171, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 020, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 151, EndingFrame = 171, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 021, EndingFrame = 039, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 169, EndingFrame = 189, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 021, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 169, EndingFrame = 189, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 349, EndingFrame = 378, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 312, EndingFrame = 349, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 349, EndingFrame = 378, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 312, EndingFrame = 349, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 378, EndingFrame = 405, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 404, EndingFrame = 430, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 049, EndingFrame = 069, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 378, EndingFrame = 405, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 404, EndingFrame = 430, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 049, EndingFrame = 069, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 040, EndingFrame = 049, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 040, EndingFrame = 049, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 291, EndingFrame = 318, TimePerFrame = 1/26f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 291, EndingFrame = 318, TimePerFrame = 1/26f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 429, EndingFrame = 454, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 429, EndingFrame = 454, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 230, EndingFrame = 250, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 230, EndingFrame = 250, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 071, EndingFrame = 089, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 071, EndingFrame = 089, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 131, EndingFrame = 149, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 131, EndingFrame = 149, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 456, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 456, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Bigfoot
             {
                 MobileType.Bigfoot,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 045, EndingFrame = 064, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 044, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 065, EndingFrame = 104, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 045, EndingFrame = 064, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 044, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 065, EndingFrame = 104, TimePerFrame = 1/17f } },
                     //
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 105, EndingFrame = 124, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 105, EndingFrame = 124, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 354, EndingFrame = 393, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 394, EndingFrame = 418, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 419, EndingFrame = 441, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 147, EndingFrame = 166, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 301, EndingFrame = 301, TimePerFrame = 0f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 394, EndingFrame = 418, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 419, EndingFrame = 441, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 147, EndingFrame = 166, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 301, EndingFrame = 301, TimePerFrame = 0f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 212, EndingFrame = 233, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 125, EndingFrame = 146, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 212, EndingFrame = 233, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 125, EndingFrame = 146, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 254, EndingFrame = 273, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 125, EndingFrame = 146, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 254, EndingFrame = 273, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 125, EndingFrame = 146, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 254, EndingFrame = 273, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 274, EndingFrame = 293, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 254, EndingFrame = 273, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 274, EndingFrame = 293, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 234, EndingFrame = 253, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 234, EndingFrame = 253, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 202, EndingFrame = 211, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 202, EndingFrame = 211, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 187, EndingFrame = 201, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 187, EndingFrame = 201, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Dragon
             {
                 MobileType.Dragon,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 278, EndingFrame = 297, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 479, EndingFrame = 503, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 504, EndingFrame = 528, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 388, EndingFrame = 407, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 448, EndingFrame = 448, TimePerFrame = 0f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 479, EndingFrame = 503, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 504, EndingFrame = 528, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 388, EndingFrame = 407, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 448, EndingFrame = 448, TimePerFrame = 0f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 328, EndingFrame = 342, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 328, EndingFrame = 342, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 343, EndingFrame = 357, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 115, EndingFrame = 134, TimePerFrame = 1/21f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 343, EndingFrame = 357, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 115, EndingFrame = 134, TimePerFrame = 1/21f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 449, EndingFrame = 463, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 464, EndingFrame = 478, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 449, EndingFrame = 463, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 464, EndingFrame = 478, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 141, EndingFrame = 160, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 141, EndingFrame = 160, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 263, EndingFrame = 277, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 263, EndingFrame = 277, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 248, EndingFrame = 262, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 248, EndingFrame = 262, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Mage
             {
                 MobileType.Mage,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 322, EndingFrame = 340, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 341, EndingFrame = 365, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 366, EndingFrame = 390, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 120, EndingFrame = 139, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 167, EndingFrame = 167, TimePerFrame = 0f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 341, EndingFrame = 365, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 366, EndingFrame = 390, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 120, EndingFrame = 139, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 167, EndingFrame = 167, TimePerFrame = 0f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 204, EndingFrame = 222, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 204, EndingFrame = 222, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 303, EndingFrame = 321, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/21f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 303, EndingFrame = 321, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/21f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 391, EndingFrame = 409, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 391, EndingFrame = 409, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 119, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 243, EndingFrame = 262, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 243, EndingFrame = 262, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 179, EndingFrame = 203, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 179, EndingFrame = 203, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 160, EndingFrame = 178, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 160, EndingFrame = 178, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 411, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 411, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Ice
             {
                 MobileType.Ice,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/18f } },
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 055, EndingFrame = 074, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 055, EndingFrame = 074, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 075, EndingFrame = 094, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 075, EndingFrame = 094, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 203, EndingFrame = 222, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 363, EndingFrame = 387, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 388, EndingFrame = 412, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 273, EndingFrame = 292, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 135, EndingFrame = 135, TimePerFrame = 0f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 363, EndingFrame = 387, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 388, EndingFrame = 412, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 273, EndingFrame = 292, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 135, EndingFrame = 135, TimePerFrame = 0f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 223, EndingFrame = 237, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 114, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 223, EndingFrame = 237, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 114, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 238, EndingFrame = 252, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/21f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 238, EndingFrame = 252, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/21f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 313, EndingFrame = 327, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 328, EndingFrame = 347, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 313, EndingFrame = 327, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 328, EndingFrame = 347, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 253, EndingFrame = 272, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 253, EndingFrame = 272, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 190, EndingFrame = 202, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 190, EndingFrame = 202, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 293, EndingFrame = 312, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 293, EndingFrame = 312, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 469, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Knight
             {
                 MobileType.Knight,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 182, EndingFrame = 199, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 182, EndingFrame = 199, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 037, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 200, EndingFrame = 217, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 037, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 200, EndingFrame = 217, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 103, EndingFrame = 122, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 103, EndingFrame = 122, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 218, EndingFrame = 247, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 308, EndingFrame = 332, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 333, EndingFrame = 357, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 288, EndingFrame = 307, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 308, EndingFrame = 332, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 333, EndingFrame = 357, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 288, EndingFrame = 307, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 216, EndingFrame = 216, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 068, EndingFrame = 087, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 088, EndingFrame = 102, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 068, EndingFrame = 087, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 088, EndingFrame = 102, TimePerFrame = 1/14f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 038, EndingFrame = 052, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 038, EndingFrame = 052, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 358, EndingFrame = 372, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 358, EndingFrame = 372, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 053, EndingFrame = 067, TimePerFrame = 1/14f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 248, EndingFrame = 267, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 248, EndingFrame = 267, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 268, EndingFrame = 287, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 268, EndingFrame = 287, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 123, EndingFrame = 141, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 123, EndingFrame = 141, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 373, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 373, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Trico
             {
                 MobileType.Trico,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
                     //Done
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 070, EndingFrame = 084, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 190, EndingFrame = 209, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 070, EndingFrame = 084, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 190, EndingFrame = 209, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 145, EndingFrame = 159, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 210, EndingFrame = 229, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 145, EndingFrame = 159, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 210, EndingFrame = 229, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 160, EndingFrame = 174, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 160, EndingFrame = 174, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 115, EndingFrame = 129, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 334, EndingFrame = 358, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 230, EndingFrame = 244, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 137, EndingFrame = 137, TimePerFrame = 1f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 334, EndingFrame = 358, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 230, EndingFrame = 244, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 137, EndingFrame = 137, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 055, EndingFrame = 069, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/26f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 055, EndingFrame = 069, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/26f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 263, EndingFrame = 276, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 278, EndingFrame = 293, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 263, EndingFrame = 276, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 278, EndingFrame = 293, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 245, EndingFrame = 262, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 245, EndingFrame = 262, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 189, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 189, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 294, EndingFrame = 308, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 294, EndingFrame = 308, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 415, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 415, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #region Turtle
             {
                 MobileType.Turtle,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 042, EndingFrame = 061, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 042, EndingFrame = 061, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 041, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 062, EndingFrame = 083, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 041, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 062, EndingFrame = 083, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 084, EndingFrame = 103, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 084, EndingFrame = 103, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 309, EndingFrame = 333, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 374, EndingFrame = 398, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 399, EndingFrame = 423, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 249, EndingFrame = 268, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 171, EndingFrame = 171, TimePerFrame = 1f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 374, EndingFrame = 398, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 399, EndingFrame = 423, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 249, EndingFrame = 268, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 171, EndingFrame = 171, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 189, EndingFrame = 208, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 104, EndingFrame = 123, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 189, EndingFrame = 208, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 104, EndingFrame = 123, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 334, EndingFrame = 353, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 354, EndingFrame = 373, TimePerFrame = 1/26f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 334, EndingFrame = 353, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 354, EndingFrame = 373, TimePerFrame = 1/26f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 424, EndingFrame = 443, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 444, EndingFrame = 463, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 424, EndingFrame = 443, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 444, EndingFrame = 463, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 269, EndingFrame = 288, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 269, EndingFrame = 288, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 289, EndingFrame = 308, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 289, EndingFrame = 308, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 164, EndingFrame = 183, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 164, EndingFrame = 183, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 464, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 464, TimePerFrame = 1/18f } },
                 }
             },
                #region lightning
                {
                 MobileType.Lightning,
-                new Dictionary<MobileFlipbookState, AnimationInstance>()
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
-                    { MobileFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
-                    { MobileFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 040, EndingFrame = 059, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
-                    { MobileFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 039, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 060, EndingFrame = 079, TimePerFrame = 1/17f } },
 
-                    { MobileFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 080, EndingFrame = 099, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
-                    { MobileFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 325, EndingFrame = 349, TimePerFrame = 1/29f } },
 
-                    { MobileFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 370, EndingFrame = 394, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 395, EndingFrame = 419, TimePerFrame = 1/24f } },
-                    { MobileFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 115, EndingFrame = 134, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 156, EndingFrame = 156, TimePerFrame = 1f } },
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 370, EndingFrame = 394, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 395, EndingFrame = 419, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 115, EndingFrame = 134, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 156, EndingFrame = 156, TimePerFrame = 1f } },
 
-                    { MobileFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 295, EndingFrame = 309, TimePerFrame = 1/19f } },
-                    { MobileFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 310, EndingFrame = 324, TimePerFrame = 1/26f } },
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 295, EndingFrame = 309, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 310, EndingFrame = 324, TimePerFrame = 1/26f } },
 
-                    { MobileFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/14f } },
-                    { MobileFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 195, EndingFrame = 209, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 100, EndingFrame = 114, TimePerFrame = 1/20f } },
 
-                    { MobileFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 210, EndingFrame = 234, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 210, EndingFrame = 234, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 194, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 175, EndingFrame = 194, TimePerFrame = 1/19f } },
 
-                    { MobileFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 155, EndingFrame = 174, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 155, EndingFrame = 174, TimePerFrame = 1/18f } },
 
-                    { MobileFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 444, TimePerFrame = 1/18f } },
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 444, TimePerFrame = 1/18f } },
                 }
             },
             #endregion
             #endregion
         };
 
-        public MobileFlipbookState State { get; private set; }
+        public ActorFlipbookState State { get; private set; }
 
         public Flipbook Flipbook;
 
-        public Dictionary<MobileFlipbookState, AnimationInstance> StatePresets;
+        public Dictionary<ActorFlipbookState, AnimationInstance> StatePresets;
 
         public Vector2 Position
         {
@@ -521,8 +525,8 @@ namespace OpenBound.GameComponents.Animation
             }
 
             mb.StatePresets = MobileStatePresets[MobileType];
-            mb.State = MobileFlipbookState.Moving;
-            mb.ChangeState(MobileFlipbookState.Stand);
+            mb.State = ActorFlipbookState.Moving;
+            mb.ChangeState(ActorFlipbookState.Stand);
 
             //            if (mb.FlipbookSFX != null)
             //              mb.FlipbookSFX.Color = Color.;
@@ -542,13 +546,13 @@ namespace OpenBound.GameComponents.Animation
             Flipbook.SetCurrentFrame(param);
         }
 
-        public void EnqueueAnimation(MobileFlipbookState NewState)
+        public void EnqueueAnimation(ActorFlipbookState NewState)
         {
-            if (State == MobileFlipbookState.Dead) return;
+            if (State == ActorFlipbookState.Dead) return;
             Flipbook.AppendAnimationIntoCycle(StatePresets[NewState]);
         }
 
-        public void ChangeState(MobileFlipbookState NewState, bool Force = false)
+        public void ChangeState(ActorFlipbookState NewState, bool Force = false)
         {
             AnimationInstance selectedPreset;
 

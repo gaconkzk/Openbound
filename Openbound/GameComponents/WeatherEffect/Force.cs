@@ -24,21 +24,19 @@ namespace OpenBound.GameComponents.WeatherEffect
     public class Force : Weather
     {
         List<WeatherProjectileParticleTimer> forceInteraction;
-        List<WeatherProjectileParticleTimer> unusedProjectileList;
 
+        /// <summary>
+        /// This constructor must only be used by Mirror. If you intend to instantiate force, use the other one.
+        /// </summary>
         protected Force(Vector2 position, WeatherType weatherType, float scale = 1, float rotation = 0) : base(position, new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), weatherType, scale, rotation)
         {
             forceInteraction = new List<WeatherProjectileParticleTimer>();
-            unusedProjectileList = new List<WeatherProjectileParticleTimer>();
         }
 
         public Force(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
         {
             forceInteraction = new List<WeatherProjectileParticleTimer>();
-            unusedProjectileList = new List<WeatherProjectileParticleTimer>();
-
-            Initialize("Graphics/Special Effects/Weather/Force", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
-            
+            Initialize("Graphics/Special Effects/Weather/Force", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);            
             SetTransparency(0);
         }
 
@@ -49,7 +47,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             UpdateProjectiles(gameTime);
         }
 
-        public void UpdateProjectiles(GameTime gameTime)
+        public virtual void UpdateProjectiles(GameTime gameTime)
         {
             //Foreach existing projectile that has interacted with the force
             for (int i = 0; i < forceInteraction.Count; i++)
@@ -65,9 +63,6 @@ namespace OpenBound.GameComponents.WeatherEffect
                     forceInteraction[i].ParticleTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
-
-            unusedProjectileList.ForEach((x) => forceInteraction.Remove(x));
-            unusedProjectileList.Clear();
         }
 
         public override Weather Merge(Weather weather)
@@ -77,6 +72,9 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public override void OnInteract(Projectile projectile)
         {
+            //Checks if the projectile is already under influence of this weather 
+            if (CheckWeatherInfluence(projectile)) return;
+
             //Passes this instance to any projectile's dependent projectile
             projectile.OnBeginForceInteraction(this);
 
@@ -90,17 +88,20 @@ namespace OpenBound.GameComponents.WeatherEffect
             CalculateDamage(projectile);
 
             //Install itself on the projectile explosion event forcing every exploding projectile to be removed from the spawning list
-            Action removeParticle = () => unusedProjectileList.Add(forceInteraction.Find((x) => x.Projectile == projectile));
+            Action removeParticle = () => { OnStopInteracting(projectile); };
             projectile.OnExplodeAction += removeParticle;
             projectile.OnBeingDestroyedAction += removeParticle;
 
             //Install itself on the projectile ground destruction and dmg dealing
-            Action<int> particleEffect = (p) => { ParticleBuilder.AsyncCreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation); };
+            Action<int> particleEffect = (p) =>
+            {
+                forceInteraction.Remove(forceInteraction.Find((x) => x.Projectile == projectile));
+                ParticleBuilder.AsyncCreateForceCollapseParticleEffect(p, projectile.Position, projectile.CurrentFlipbookRotation);
+            };
+
             projectile.OnDestroyGroundAction += particleEffect;
             projectile.OnDealDamageAction += particleEffect;
         }
-
-        public override void OnStopInteracting(Projectile projectile) { }
 
         public virtual void CalculateDamage(Projectile projectile)
         {

@@ -26,6 +26,7 @@ using System.Threading;
 using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.WeatherEffect;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.GameComponents.Pawn;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -62,7 +63,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Turtle,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -342,37 +343,37 @@ namespace OpenBound.GameComponents.Level.Scene
 
             int i = 0;
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Stand, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.StandLowHealth, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Stand, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.StandLowHealth, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Moving, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.MovingLowHealth, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Moving, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.MovingLowHealth, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.UnableToMove, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.UnableToMove, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Emotion1, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Emotion2, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Emotion1, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Emotion2, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.BeingDamaged1, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.BeingDamaged2, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.BeingShocked, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.BeingFrozen, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.BeingDamaged1, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.BeingDamaged2, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.BeingShocked, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.BeingFrozen, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ChargingS1, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ShootingS1, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ChargingS1, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ShootingS1, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ChargingS2, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ShootingS2, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ChargingS2, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ShootingS2, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ChargingSS, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.ShootingSS, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ChargingSS, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.ShootingSS, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.UsingItem, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.UsingItem, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Dead, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Dead, true);
 
-            mFlipbook[i++].ChangeState(MobileFlipbookState.Falling, true);
-            mFlipbook[i++].ChangeState(MobileFlipbookState.All, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.Falling, true);
+            mFlipbook[i++].ChangeState(ActorFlipbookState.All, true);
         }
 
         public override void Initialize(GraphicsDevice GraphicsDevice, SpriteBatch SpriteBatch)
@@ -395,21 +396,6 @@ namespace OpenBound.GameComponents.Level.Scene
                 //MobileList.ForEach((x) => x.Movement.RemainingStepsThisTurn = 100000);
             }
 
-            if (InputHandler.IsBeingPressed(Keys.F2))
-            {
-                new Thread(() =>
-                {
-                    lock (MobileList)
-                        MobileList[r.Next(0, 8)].Die();
-
-                }).Start();
-            }
-
-            if (InputHandler.IsBeingPressed(Keys.F3))
-            {
-                PopupHandler.Add(new PopupGameResults());
-            }
-
             if (InputHandler.IsBeingPressed(Keys.F4))
             {
                 MatchMetadata.WindForce = r.Next(0, 35);
@@ -420,16 +406,19 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.F5))
             {
                 WeatherHandler.Add(WeatherType.Mirror, new Vector2(-500, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Mirror, new Vector2(-300, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F6))
             {
                 WeatherHandler.Add(WeatherType.Weakness, new Vector2(-400, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Weakness, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F7))
             {
                 WeatherHandler.Add(WeatherType.Force, new Vector2(-300, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Force, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F8))
@@ -440,11 +429,84 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.F9))
             {
                 WeatherHandler.Add(WeatherType.Electricity, new Vector2(-100, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Electricity, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F10))
             {
                 WeatherHandler.Add(WeatherType.Random, WeatherType.Weakness, new Vector2(0, -Topography.MapHeight / 2));
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.F11))
+            {
+                Color green = new Color(57, 255, 20, 255 / 4);
+                Color blue = new Color(27, 3, 163, 255 / 4);
+                Color red = new Color(255, 7, 58, 255 / 4);
+                Color white = new Color(255, 255, 255, 255 / 4);
+                Color yellow = new Color(204, 255, 0, 255 / 4);
+
+                Vector2 position = Vector2.Zero;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(green, blue, i/9f), 6, 0);
+                    position += Vector2.UnitX * 15;
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(blue, yellow, i / 9f), 6, 0);
+                    position += Vector2.UnitX * 15;
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(yellow, red, i / 9f), 6, 0);
+                    position += Vector2.UnitX * 15;
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(red, white, i / 9f), 6, 0);
+                    position += Vector2.UnitX * 15;
+                }
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.F12))
+            {
+
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.F2))
+            {
+
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.F3))
+            {
+
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D1))
+            {
+                float p1 = (float)Parameter.Random.NextDouble();
+                float p2 = (float)Parameter.Random.NextDouble();
+                //x ranging from 0.1f to 0.9f and
+                //y ranging from 0.4f to 0.9f, 1 - weatherMetadata.Position[1] is necessary because y axis is inverted
+                p1 = 0.1f + p1 * 0.9f;
+                p2 = (0.1f + p2 * 0.3f);
+                Vector2 nPos = Topography.FromNormalizedPositionToRelativePosition(new float[] { p1, p2 });
+                WeatherHandler.Add(WeatherType.Thor, nPos);
+                Console.WriteLine(nPos);
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D2))
+            {
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D3))
+            {
+
             }
         }
 

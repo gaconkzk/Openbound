@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Pawn.Local
                 }
                 else
                 {
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.UnableToMove, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
                     Mobile.PlayUnableToMoveSE();
                     return;
                 }
@@ -70,7 +70,7 @@ namespace OpenBound.GameComponents.Pawn.Local
                 }
                 else
                 {
-                    Mobile.ChangeFlipbookState(MobileFlipbookState.UnableToMove, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
                     Mobile.PlayUnableToMoveSE();
                     return;
                 }
@@ -81,7 +81,7 @@ namespace OpenBound.GameComponents.Pawn.Local
             }
 
             if ((InputHandler.IsCKUp(Keys.Left) && InputHandler.IsCKUp(Keys.Right)) || !IsAbleToMove)
-                Mobile.ChangeFlipbookState(MobileFlipbookState.Stand);
+                Mobile.ChangeFlipbookState(ActorFlipbookState.Stand);
         }
     }
 }

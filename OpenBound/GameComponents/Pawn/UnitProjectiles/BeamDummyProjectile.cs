@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
     /// <summary>
-    /// Creates a "electricity" dummy projectile. This projectile has its own movement rules being updated all at once.
+    /// Creates a beam dummy projectile. This projectile has its own movement rules being updated all at once.
     /// </summary>
-    public class ElectricityProjectile : DummyProjectile
+    public class BeamDummyProjectile : DummyProjectile
     {
         //Stores all mobiles affected by the proximity with the lightning
         HashSet<Mobile> mobileList;
@@ -26,7 +26,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         //Lightning effect variables
         int extraExplosionRadius;
         int extraDamage;
-        float lightningAngle;
+        protected float beamAngle;
         
         //Position of parent projectile
         Vector2 parentPosition;
@@ -35,16 +35,16 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         //Behavior variables
         bool isWeather;
 
-        public ElectricityProjectile(Mobile mobile, Vector2 parentPosition, float lightningAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
+        public BeamDummyProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
             : base(mobile, ShotType.Dummy, explosionRadius, baseDamage)
         {
             this.extraExplosionRadius = extraExplosionRadius;
             this.extraDamage = extraDamage;
-            this.lightningAngle = lightningAngle;
+            this.beamAngle = beamAngle;
             this.parentPosition = parentPosition;
             this.isWeather = isWeather;
 
-            positionOffset = Vector2.Transform(Vector2.UnitX * 3, Matrix.CreateRotationZ(-lightningAngle));
+            positionOffset = Vector2.Transform(Vector2.UnitX * 3, Matrix.CreateRotationZ(-beamAngle));
             mobileList = new HashSet<Mobile>();
         }
 
@@ -138,14 +138,24 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Explode();
 
-            //Creates the lightning effect
-            LevelScene.WeatherHandler.Add(new LightningElectricity(Position, MathHelper.PiOver2 * 3 - lightningAngle));
-
             //Deals damage to any mobile whithin the extra damage area
             foreach (Mobile m in mobileList)
             {
                 m.ReceiveShock(extraDamage);
             }
+        }
+    }
+
+    public class LightningBaseProjectile : BeamDummyProjectile
+    {
+        public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
+            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage, isWeather) { }
+
+        protected override void Explode()
+        {
+            base.Explode();
+
+            LevelScene.WeatherHandler.Add(new LightningElectricity(Position, MathHelper.PiOver2 * 3 - beamAngle));
         }
     }
 }

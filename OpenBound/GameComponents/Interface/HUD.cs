@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Interface
 
         //Weather effects
         public WindCompass windCompass;
-        public WeatherDisplay weatherDisplay;
+        public WeatherDisplay WeatherDisplay;
 
         //Static popups
         private Button gameOptionsButton;
@@ -97,12 +97,12 @@ namespace OpenBound.GameComponents.Interface
                 //Team Score - Left
                 spriteNumericFieldList.Add(new NumericSpriteFont(FontType.HUDBlueScoreboard, 1, DepthParameter.HUDL5,
                     PositionOffset: ((this.mobile.Owner.PlayerTeam == PlayerTeam.Red) ? new Vector2(318, -5) : new Vector2(392, -5)) + origin,
-                    StartingValue: 2, TextAnchor: TextAnchor.Right));
+                    StartingValue: 2, textAnchor: TextAnchor.Right));
 
                 //Team Score - Right
                 spriteNumericFieldList.Add(new NumericSpriteFont(FontType.HUDBlueScoreboard, 1, DepthParameter.HUDL5,
                     PositionOffset: ((this.mobile.Owner.PlayerTeam == PlayerTeam.Blue) ? new Vector2(318, -5) : new Vector2(392, -5)) + origin,
-                    StartingValue: 2, TextAnchor: TextAnchor.Right));
+                    StartingValue: 2, textAnchor: TextAnchor.Right));
 
                 //GoldCounter
                 spriteNumericFieldList.Add(new CurrencySpriteFont(FontType.HUDBlueGold, 6, DepthParameter.HUDL5,
@@ -152,11 +152,11 @@ namespace OpenBound.GameComponents.Interface
             spriteList.Add(matchStatus);
 
             currentAngle = new NumericSpriteFont(FontType.HUDBlueCurrentAngle, 3, DepthParameter.HUDL5,
-                PositionOffset: new Vector2(-149, -26) + origin, TextAnchor: TextAnchor.Right);
+                PositionOffset: new Vector2(-149, -26) + origin, textAnchor: TextAnchor.Right);
             spriteNumericFieldList.Add(currentAngle);
 
             previousAngle = new NumericSpriteFont(FontType.HUDBluePreviousAngle, 3, DepthParameter.HUDL5,
-                PositionOffset: new Vector2(-185, -20) + origin, TextAnchor: TextAnchor.Right);
+                PositionOffset: new Vector2(-185, -20) + origin, textAnchor: TextAnchor.Right);
             spriteNumericFieldList.Add(previousAngle);
 
             //Menu Buttons
@@ -204,7 +204,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
 
             //Weather Display
-            weatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
+            WeatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
 
             //Delayboard
             Delayboard = new Delayboard(mobileList, new Vector2(origin.X - spriteList[0].SpriteWidth / 2, origin.Y - spriteList[0].SpriteHeight / 2));
@@ -283,7 +283,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass.Update(gameTime);
 
             //Incoming Weather
-            weatherDisplay.Update(gameTime);
+            WeatherDisplay.Update(gameTime);
         }
 
         public void UpdatePreviousShotMarker()
@@ -322,7 +322,7 @@ namespace OpenBound.GameComponents.Interface
             windCompass.Draw(spriteBatch);
 
             //IncomingWeather
-            weatherDisplay.Draw(gameTime, spriteBatch);
+            WeatherDisplay.Draw(gameTime, spriteBatch);
         }
     }
 }

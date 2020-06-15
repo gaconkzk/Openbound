@@ -118,7 +118,7 @@ namespace OpenBound.GameComponents.Interface
                 }
 
                 //Turn Counter
-                NumericSpriteFont turnCounterSF = new NumericSpriteFont(delayCounterFontType, 1, DepthParameter.HUDForeground, TextAnchor: TextAnchor.Left, StartingValue: mobileList.IndexOf(mob));
+                NumericSpriteFont turnCounterSF = new NumericSpriteFont(delayCounterFontType, 1, DepthParameter.HUDForeground, textAnchor: TextAnchor.Left, StartingValue: mobileList.IndexOf(mob));
 
                 //Ranking
                 Sprite playerRankingIcon = IconBuilder.Instance.BuildPlayerRank(mob.Owner.PlayerRank, DepthParameter.HUDForeground);
@@ -128,7 +128,7 @@ namespace OpenBound.GameComponents.Interface
                 SpriteText nicknameST = new SpriteText(FontTextType.Consolas10, mob.Owner.Nickname, entryColor, Alignment.Left, DepthParameter.HUDL2, default, Color.Black);
 
                 //Delay
-                NumericSpriteFont delayCounterSF = new NumericSpriteFont(FontType.HUDBlueDelay, 5, DepthParameter.HUDForeground, TextAnchor: TextAnchor.Right, StartingValue: mob.SyncMobile.Delay);
+                NumericSpriteFont delayCounterSF = new NumericSpriteFont(FontType.HUDBlueDelay, 5, DepthParameter.HUDForeground, textAnchor: TextAnchor.Right, StartingValue: mob.SyncMobile.Delay);
 
                 //Creating Scoreboard Entry
                 playerScoreboardEntryList.Add(new PlayerScoreboardEntry()

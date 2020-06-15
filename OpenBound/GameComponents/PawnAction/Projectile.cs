@@ -87,9 +87,16 @@ namespace OpenBound.GameComponents.PawnAction
         public Action OnAfterUpdateAction;
         public Action OnFinalizeExecutionAction;
         public Action OnExplodeAction;
-        public System.Action OnBeingDestroyedAction;
+        public Action OnBeingDestroyedAction;
         public Action<int> OnDestroyGroundAction;
         public Action<int> OnDealDamageAction;
+
+        //Weather
+
+        /// <summary>
+        /// Stores all weather types that this project is under influence to avoid repeated effects
+        /// </summary>
+        public List<WeatherType> WeatherInfluenceList;
 
         //CanExplode
         public bool CanCollide { get; private set; }
@@ -108,6 +115,9 @@ namespace OpenBound.GameComponents.PawnAction
             FlipbookList = new List<Flipbook>();
 
             Mobile = owner;
+
+            //Weather
+            WeatherInfluenceList = new List<WeatherType>();
 
             //Physics-relaetd variables
             yMovement = new AcceleratedMovement();
@@ -237,7 +247,7 @@ namespace OpenBound.GameComponents.PawnAction
 
         public Vector2 SpeedVector => new Vector2(xMovement.CurrentSpeed, yMovement.CurrentSpeed);
         public Vector2 InitialSpeedVector => new Vector2(xMovement.InitialSpeed, yMovement.InitialSpeed);
-        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)System.Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
+        public Vector2 CurrentFlipbookAngleVector => new Vector2((float)Math.Cos(FlipbookList[0].Rotation), (float)Math.Sin(FlipbookList[0].Rotation));
         public float CurrentFlipbookRotation => FlipbookList[0].Rotation;
 
         protected virtual void CheckCollisionWithWeather()
@@ -262,6 +272,11 @@ namespace OpenBound.GameComponents.PawnAction
             projectileInitialPosition = Position
                 + new Vector2(0, projectileInitialPosition.Y - Position.Y);
             xMovement.InverseMovement();
+        }
+
+        public virtual void OnBeginThorInteraction(Thor thor)
+        {
+            LevelScene.ThorSatellite.Attatch(this);
         }
 
         public virtual void OnBeginRandomInteraction(Random random) { }

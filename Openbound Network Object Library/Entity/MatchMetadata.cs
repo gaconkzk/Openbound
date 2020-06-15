@@ -105,6 +105,15 @@ namespace Openbound_Network_Object_Library.Entity
 
                 if (weatherMetadata.Weather == WeatherType.Random)
                     RandomizeExtraWeather(weatherMetadata);
+
+                if (weatherMetadata.Weather == WeatherType.Thor)
+                {
+                    //Force thor to spawn in the upper side of the screen from
+                    //x ranging from 0.1f to 0.9f and
+                    //y ranging from 0.3f to 0.9f
+                    weatherMetadata.Position[0] = NetworkObjectParameters.WeatherThorMinimumOffsetX + weatherMetadata.Position[0] * NetworkObjectParameters.WeatherThorMaximumOffsetX;
+                    weatherMetadata.Position[1] = NetworkObjectParameters.WeatherThorMinimumOffsetY + weatherMetadata.Position[1] * NetworkObjectParameters.WeatherThorMaximumOffsetY;
+                }
             }
         }
 

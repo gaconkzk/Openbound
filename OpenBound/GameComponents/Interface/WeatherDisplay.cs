@@ -147,7 +147,7 @@ namespace OpenBound.GameComponents.Interface
 
             displayingWeatherList.Add(weather);
 
-            if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(weather.Weather))
+            if (weather.Weather != WeatherType.Thor && NetworkObjectParameters.ActiveWeatherEffectList.Contains(weather.Weather))
                 incomingWeatherPointers.Enqueue(new IncomingWeatherPointer(weather));
 
             if (displayingWeatherList.Count > 5)
@@ -163,12 +163,11 @@ namespace OpenBound.GameComponents.Interface
         {
             //Wipe any other weather if it has changed
             if (previousWeather.Weather != ActiveWeather.Weather)
-                LevelScene.WeatherHandler.RemoveWeather(previousWeather.Weather);
+                LevelScene.WeatherHandler.RemoveWeather(ActiveWeather.Weather);
 
             //Active Weathers
             if (NetworkObjectParameters.ActiveWeatherEffectList.Contains(ActiveWeather.Weather))
             {
-                Console.WriteLine($"{(int)ActiveWeather.Position[0]}");
                 LevelScene.WeatherHandler.Add(ActiveWeather.Weather, ActiveWeather.ExtraWeather, Topography.FromNormalizedPositionToRelativePosition(ActiveWeather.Position));
 
                 if (incomingWeatherPointers.Count > 0 && 

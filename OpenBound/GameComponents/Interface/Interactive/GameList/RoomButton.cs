@@ -116,14 +116,14 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameList
                 1, DepthParameter.InterfaceButtonText,
                 Position: buttonPosition + new Vector2(91, -24),
                 StartingValue: roomMetadata.NumberOfPlayers,
-                AttachToCamera: false);
+                attachToCamera: false);
             spriteFontList.Add(nsf);
 
             NumericSpriteFont nsf2 = new NumericSpriteFont(FontType.GameListPlayerCounter,
                 1, DepthParameter.InterfaceButtonText,
                 Position: buttonPosition + new Vector2(105, -24),
                 StartingValue: (int)roomMetadata.Size,
-                AttachToCamera: false);
+                attachToCamera: false);
             spriteFontList.Add(nsf2);
 
             //IsPasswordProtected

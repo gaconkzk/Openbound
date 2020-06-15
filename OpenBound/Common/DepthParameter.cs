@@ -38,6 +38,7 @@ namespace OpenBound.Common
         public const float MobileSatellite            = Mobile + 0.01f;
 
         public const float Projectile                 = Mobile + 0.02f;
+        public const float ProjectileSFXBase          = Mobile + 0.021f;
         public const float ProjectileSFX              = Mobile + 0.03f;
 
         //Croshair

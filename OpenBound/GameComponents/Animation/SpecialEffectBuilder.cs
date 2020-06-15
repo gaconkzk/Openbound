@@ -268,31 +268,67 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
         #region Lightning
-
-        public static void LightningProjectile3Explosion(Vector2 position)
+        public static void LightningProjectile3Explosion(Vector2 position, float rotation)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(196, 193), 324, 326, "Graphics/Special Effects/Tank/Lightning/Flame2",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 17, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX);
+                  Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(196, 193), 324, 326, "Graphics/Special Effects/Tank/Lightning/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 20, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, rotation + MathHelper.PiOver2);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 
-            float transparency = 1f;
+           // float transparency = 1f;
             se.UpdateAction += (specialEffect, gameTime) =>
             {
-                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds / 25;
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                se.Flipbook.SetTransparency(transparency);
+                se.Flipbook.Rotation -= MathHelper.TwoPi * (float)gameTime.ElapsedGameTime.TotalSeconds / 25;
+                //transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                //se.Flipbook.SetTransparency(transparency);
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+        #endregion
+
+        #region Thor
+        private static void ThorShotColorBase(Vector2 position, Color baseColor, float scale, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), false, DepthParameter.ProjectileSFXBase, rotation);
+            fb.Scale = new Vector2(3, scale);
+
+            SpecialEffect se = new SpecialEffect(fb, 1f);
+
+            float elapsedTime = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                elapsedTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.Color = baseColor * elapsedTime;
             };
 
             SpecialEffectHandler.Add(se);
         }
 
-        #endregion
-        /*
-        public static void BuildMobileItem(Mobile mobile)
+        private static void ThorShotBase(Vector2 position, float scale, float rotation)
         {
-            SpecialEffect.Add(new SpecialEffect(Flipbook.CreateFlipbook(mobile.MobileFlipbook.Flipbook.Position, new Vector2(42, 71), 157, 123, "Graphics/SpecialEffects/MobileUseItem",
-                new AnimationInstance() { AnimationType = AnimationType.Foward, StartingFrame = 0, EndingFrame = 18, TimePerFrame = 1 / 36f }, false, 1, Rotation: mobile.MobileFlipbook.Flipbook.Rotation), 1));
-        }*/
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), false, DepthParameter.ProjectileSFX, rotation);
+            Vector2 originalScale = new Vector2(3, scale);
+            fb.Scale = originalScale;
+
+            SpecialEffect se = new SpecialEffect(fb, 1f);
+
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency * 2);
+                se.Flipbook.Scale = new Vector2(se.Flipbook.Scale.X * transparency, originalScale.Y - ((originalScale.Y * (1 - transparency)) / (originalScale.Y * 2)));
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void ThorShot(Vector2 position, Color baseColor, float scale, float rotation)
+        {
+            ThorShotColorBase(position, baseColor, scale, rotation);
+            ThorShotBase(position, scale, rotation);
+        }
+        #endregion
     }
 }

@@ -47,6 +47,10 @@ namespace OpenBound.GameComponents.Interface
         HUDBlueCrosshairTrueAngle,
         HUDBlueCrosshairFalseAngle,
         HUDBlueWindCompass,
+        
+        //Thor
+        HUDBlueThorLevelIndicator,
+        HUDBlueThorExperienceIndicator,
     }
 
     public enum TextAnchor
@@ -86,6 +90,9 @@ namespace OpenBound.GameComponents.Interface
             { FontType.HUDBlueScoreboard, "HUD/Blue/Scoreboard" },
 
             { FontType.HUDBlueWindCompass, "Interface/Spritefont/HUD/Blue/WindCompass" },
+
+            { FontType.HUDBlueThorLevelIndicator, "Interface/Spritefont/HUD/Blue/ThorLevel" },
+            { FontType.HUDBlueThorExperienceIndicator, "Interface/Spritefont/HUD/Blue/Defense" },
         };
 
         private static readonly Dictionary<FontType, Dictionary<Number, Rectangle>> numericTextFieldStatePresets
@@ -309,6 +316,33 @@ namespace OpenBound.GameComponents.Interface
                         { Number.N9, new Rectangle(9  * 13, 0, 13, 19) },
                     }
                 },
+                {
+                    FontType.HUDBlueThorLevelIndicator, new Dictionary<Number, Rectangle>()
+                    {
+                        { Number.N1, new Rectangle(0  * 9, 0, 9, 12) },
+                        { Number.N2, new Rectangle(1  * 9, 0, 9, 12) },
+                        { Number.N3, new Rectangle(2  * 9, 0, 9, 12) },
+                        { Number.N4, new Rectangle(3  * 9, 0, 9, 12) },
+                        { Number.N5, new Rectangle(4  * 9, 0, 9, 12) },
+                        { Number.N6, new Rectangle(5  * 9, 0, 9, 12) },
+                    }
+                },
+                {
+                    FontType.HUDBlueThorExperienceIndicator, new Dictionary<Number, Rectangle>()
+                    {
+                        { Number.N0, new Rectangle(0     , 0, 8, 9) },
+                        { Number.N1, new Rectangle(1  * 8, 0, 8, 9) },
+                        { Number.N2, new Rectangle(2  * 8, 0, 8, 9) },
+                        { Number.N3, new Rectangle(3  * 8, 0, 8, 9) },
+                        { Number.N4, new Rectangle(4  * 8, 0, 8, 9) },
+                        { Number.N5, new Rectangle(5  * 8, 0, 8, 9) },
+                        { Number.N6, new Rectangle(6  * 8, 0, 8, 9) },
+                        { Number.N7, new Rectangle(7  * 8, 0, 8, 9) },
+                        { Number.N8, new Rectangle(8  * 8, 0, 8, 9) },
+                        { Number.N9, new Rectangle(9  * 8, 0, 8, 9) },
+                        { Number.NM, new Rectangle(10 * 8, 0, 8, 9) },
+                    }
+                },
                 #endregion
             };
 
@@ -494,8 +528,8 @@ namespace OpenBound.GameComponents.Interface
     public class NumericSpriteFont : SpriteNumericField
     {
         public NumericSpriteFont(FontType FontType, int NumericFieldLength, float LayerDepth, Vector2 Position = default,
-            Vector2 PositionOffset = default, TextAnchor TextAnchor = TextAnchor.Left, int StartingValue = 0, bool AttachToCamera = true)
-            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, TextAnchor, StartingValue, AttachToCamera)
+            Vector2 PositionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int StartingValue = 0, bool attachToCamera = true)
+            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, textAnchor, StartingValue, attachToCamera)
         { }
 
         public void UpdateValue(int Value)
@@ -512,7 +546,7 @@ namespace OpenBound.GameComponents.Interface
 
     public class CurrencySpriteFont : SpriteNumericField
     {
-        private int finalValue;
+        public int FinalValue { get; private set; }
         private float incrementFactor;
         private float elapsedTime;
 
@@ -520,19 +554,19 @@ namespace OpenBound.GameComponents.Interface
             Vector2 positionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int startingValue = 0, bool attachToCamera = true)
             : base(fontType, numericFieldLength, layerDepth, position, positionOffset, textAnchor, startingValue, attachToCamera)
         {
-            finalValue = startingValue;
+            FinalValue = startingValue;
             elapsedTime = 0;
         }
 
         public void AddValue(int Value)
         {
-            finalValue += Value;
-            incrementFactor = (finalValue - CurrentValue) / Parameter.InterfaceNumericTextFieldFactorNumber;
+            FinalValue += Value;
+            incrementFactor = (FinalValue - CurrentValue) / Parameter.InterfaceNumericTextFieldFactorNumber;
         }
 
         public override void Update(GameTime GameTime)
         {
-            if (Math.Abs(finalValue) != Math.Abs(CurrentValue))
+            if (Math.Abs(FinalValue) != Math.Abs(CurrentValue))
             {
                 elapsedTime += (float)GameTime.ElapsedGameTime.TotalSeconds;
 
@@ -542,7 +576,7 @@ namespace OpenBound.GameComponents.Interface
 
                     CurrentValue += incrementFactor;
 
-                    if (Math.Abs(CurrentValue) > Math.Abs(finalValue)) CurrentValue = finalValue;
+                    if (Math.Abs(CurrentValue) > Math.Abs(FinalValue)) CurrentValue = FinalValue;
 
                     ReassignTextValue();
                 }

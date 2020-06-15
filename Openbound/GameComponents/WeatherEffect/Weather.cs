@@ -54,14 +54,13 @@ namespace OpenBound.GameComponents.WeatherEffect
         protected Vector2 flipbookPivot;
         protected float rotation;
         protected int numberOfFrames;
-        protected float _initialTransparency = 1;
 
         public float Scale { get; protected set; }
         public Vector2 StartingPosition { get; protected set; }
 
         public WeatherType WeatherType { get; private set; }
 
-        //Effects
+        public Color BaseColor;
 
         /// <summary>
         /// List of modified/under behavior modification projectiles.
@@ -79,7 +78,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         //Animation - RandomFlipbookFrame
         private float animationRandomFlipbookElapsedTime;
 
-        private float fadeAnimationElapsedTime;
+        protected float fadeAnimationElapsedTime;
 
 #if DEBUG
         //Debug
@@ -133,7 +132,9 @@ namespace OpenBound.GameComponents.WeatherEffect
             WeatherType = weatherType;
             Scale = scale;
 
-            flipbookList.ForEach((x) => x.SetTransparency(0));
+            BaseColor = Color.White;
+
+            SetTransparency(0);
         }
 
         /// <summary>
@@ -204,12 +205,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <summary>
         /// Check if this <see cref="outerCollisionRectangle"/> intersects with another weather's <see cref="outerCollisionRectangle"/>.
         /// </summary>
-        public bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
+        public virtual bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
 
         /// <summary>
         /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
         /// </summary>
-        public bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
+        public virtual bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
 
         /// <summary>
         /// Check if this Weather is interacting with a Projectile.
@@ -224,7 +225,15 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// <summary>
         /// Define what happens when a projectille stop interacting with the <see cref="outerCollisionRectangle"/>
         /// </summary>
-        public abstract void OnStopInteracting(Projectile projectile);
+        public virtual void OnStopInteracting(Projectile projectile)
+        {
+            ModifiedProjectileList.Remove(projectile);
+        }
+
+        /// <summary>
+        /// Event called whenever this weather is not beign used anymore.
+        /// </summary>
+        public virtual void OnBeingRemoved(Weather incomingWeather) { }
 
         /// <summary>
         /// Defines how a merge happen between two similar Weathers
@@ -248,9 +257,30 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
+        /// <summary>
+        /// Check projectile's influences. In case it is being influenced by this weather, do nothing.
+        /// </summary>
+        public bool CheckWeatherInfluence(Projectile projectile)
+        {
+            //If the project is under influence of a weather of the same time, does not interact
+            if (!projectile.WeatherInfluenceList.Contains(WeatherType))
+            {
+                projectile.WeatherInfluenceList.Add(WeatherType);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Changes the transparency of the flipbooklist of the weather.
+        /// </summary>
+        /// <param name="transparency"></param>
         public void SetTransparency(float transparency)
         {
-            flipbookList.ForEach(x => x.SetTransparency(transparency));
+            flipbookList.ForEach(x => x.Color = BaseColor * transparency);
         }
 
         /// <summary>
@@ -260,6 +290,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         public void FadeIn(GameTime gameTime, float timeLimit = 1)
         {
             fadeAnimationElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             SetTransparency(MathHelper.Clamp(fadeAnimationElapsedTime / timeLimit, 0, 1));
         }
 
@@ -300,17 +331,32 @@ namespace OpenBound.GameComponents.WeatherEffect
             }
         }
 
+        public void SetColor(Color color)
+        {
+            BaseColor = color;
+            flipbookList.ForEach((x) => x.Color = color);
+        }
+
         /// <summary>
         /// Check if a projectile is able to interact with the weather.
+        /// If it is, <see cref="OnInteract(Projectile)"/> is automatically called.
+        /// If the weather isn't interacting anymore, <see cref="OnStopInteracting(Projectile)"/> is automatically called.
         /// </summary>
         /// <returns>Returns <see cref="true"/> if the interaction has started, otherwise returns <see cref="false"/>.</returns>
-        public bool CheckProjectileInteraction(Projectile projectile)
+        public virtual bool CheckProjectileInteraction(Projectile projectile)
         {
-            if (collisionRectangle.Intersects(projectile.Position) && !ModifiedProjectileList.Contains(projectile))
+            bool isUnderInfluence = ModifiedProjectileList.Contains(projectile);
+            bool innerIntersection = collisionRectangle.Intersects(projectile.Position);
+
+            if (innerIntersection && !isUnderInfluence)
             {
                 ModifiedProjectileList.Add(projectile);
                 OnInteract(projectile);
                 return true;
+            }
+            else if (outerCollisionRectangle.Intersects(projectile.Position) && !innerIntersection && isUnderInfluence)
+            {
+                OnStopInteracting(projectile);
             }
 
             return false;

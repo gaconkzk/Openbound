@@ -56,10 +56,14 @@ namespace OpenBound.GameComponents.Input
             Keys.Space,
             //Close Game
             Keys.LeftAlt, Keys.F4,
+
             //Debug functions
             Keys.F1, Keys.F2,  Keys.F3,  Keys.F4,
             Keys.F5, Keys.F6,  Keys.F7,  Keys.F8,
-            Keys.F9, Keys.F10, Keys.F11, Keys.F12
+            Keys.F9, Keys.F10, Keys.F11, Keys.F12,
+
+            Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5,
+            Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.D0,
         };
 
         private static List<MKeys> inputMKeyList = new List<MKeys>()

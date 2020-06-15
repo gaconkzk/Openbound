@@ -17,13 +17,13 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
-
     public class LightningProjectile1 : Projectile
     {
         public LightningProjectile1(Lightning mobile) : base(mobile, ShotType.S1, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage)
@@ -46,13 +46,14 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             base.Explode();
 
-            ElectricityProjectile electricityProjectile =
-                new ElectricityProjectile(Mobile, Position,
+            LightningBaseProjectile electricityProjectile =
+                new LightningBaseProjectile(Mobile, Position,
                     Parameter.ProjectileLightningS1ElectricityAngle,
                     Parameter.ProjectileLightningS1ElectricityExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityEExplosionRadius,
                     Parameter.ProjectileLightningS1ElectricityBaseDamage,
                     Parameter.ProjectileLightningS1ElectricityEBaseDamage);
+
             electricityProjectile.Update();
         }
 
@@ -76,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile2(Lightning mobile) : base(mobile, ShotType.S2, Parameter.ProjectileLightningS2ExplosionRadius, Parameter.ProjectileLightningS2BaseDamage)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -100,7 +101,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             for (int i = 0; i <= 3; i++)
             {
-                ElectricityProjectile electricityProjectile = new ElectricityProjectile(mobile, Position,
+                LightningBaseProjectile electricityProjectile = new LightningBaseProjectile(Mobile, Position,
                   Parameter.ProjectileLightningS2AnglesOffset[i],
                   Parameter.ProjectileLightningS2ElectricityExplosionRadius,
                   Parameter.ProjectileLightningS2ElectricityEExplosionRadius,
@@ -126,7 +127,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public LightningProjectile3(Lightning mobile) : base(mobile, ShotType.SS, Parameter.ProjectileLightningSSExplosionRadius, Parameter.ProjectileLightningSSBaseDamage)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
@@ -146,7 +147,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
-            SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position);
+            SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();
 
             foreach (Mobile m in LevelScene.MobileList)
@@ -155,8 +156,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 if (distance < Parameter.ProjectileLightningSSEExplosionRadius)
                 {
-                    ElectricityProjectile electricityProjectile =
-                      new ElectricityProjectile(mobile, m.Position,
+                    LightningBaseProjectile electricityProjectile =
+                      new LightningBaseProjectile(Mobile, m.Position,
                           Parameter.ProjectileLightningSSElectricityAngle,
                           Parameter.ProjectileLightningSSElectricityExplosionRadius,
                           Parameter.ProjectileLightningSSElectricityEExplosionRadius,

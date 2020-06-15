@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.GameComponents.Level.Scene;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             //Return if the given weather is not implemented yet
             if (weather == null) return;
 
-            if (weatherType == WeatherType.Random)
+            if (weatherType != WeatherType.Random)
                 CheckAndMergeWeatherEffects(weather);
             else
                 toBeAddedWeatherList.Add(weather);
@@ -77,6 +78,8 @@ namespace OpenBound.GameComponents.WeatherEffect
                     return new Electricity(position);
                 case WeatherType.Random:
                     return new Random(position, extraWeatherType);
+                case WeatherType.Thor:
+                    return new Thor(position);
                 default:
                     return null;
             }
@@ -105,7 +108,7 @@ namespace OpenBound.GameComponents.WeatherEffect
                 }
             } while (hasMerged);
 
-            WeatherList.Add(weather);
+            toBeAddedWeatherList.Add(weather);
         }
 
         /// <summary>
@@ -113,7 +116,7 @@ namespace OpenBound.GameComponents.WeatherEffect
         /// </summary>
         public void RemoveWeather(WeatherType weatherEffectType)
         {
-            unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType == weatherEffectType));
+            unusedWeatherList.AddRange(WeatherList.Where((x) => x.WeatherType != weatherEffectType));
         }
 
         public void RemoveWeather(Weather weather)
@@ -125,7 +128,12 @@ namespace OpenBound.GameComponents.WeatherEffect
         {
             WeatherList.ForEach((x) => x.Update(gameTime));
 
-            unusedWeatherList.ForEach((x) => WeatherList.Remove((x)));
+            foreach(Weather w in unusedWeatherList)
+            {
+                w.OnBeingRemoved(toBeAddedWeatherList?[0]);
+                WeatherList.Remove(w);
+            }
+
             unusedWeatherList.Clear();
 
             WeatherList.AddRange(toBeAddedWeatherList);

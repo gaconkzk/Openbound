@@ -98,8 +98,8 @@ namespace Openbound_Network_Object_Library.Common
 
         //Game Constants
         public static List<MobileType> ImplementedMobileList = new List<MobileType>() { MobileType.Armor, MobileType.Bigfoot, MobileType.Dragon, MobileType.Ice, MobileType.Knight, MobileType.Mage, MobileType.Random, MobileType.Trico, MobileType.Turtle };
-        public static List<WeatherType> ActiveWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Wind, WeatherType.Weakness, WeatherType.Mirror, WeatherType.Random };
-        public static List<WeatherType> RandomizableWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Wind, WeatherType.Weakness, WeatherType.Mirror };
+        public static List<WeatherType> ActiveWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Weakness, WeatherType.Mirror, WeatherType.Random, WeatherType.Thor };
+        public static List<WeatherType> RandomizableWeatherEffectList = new List<WeatherType>() { WeatherType.Force, WeatherType.Tornado, WeatherType.Electricity, WeatherType.Weakness, WeatherType.Mirror };
 
         //Game Constants - Weather
         public const int WeatherMinimumWindForce = 0;
@@ -107,6 +107,14 @@ namespace Openbound_Network_Object_Library.Common
         public const int WeatherWindForceDisturbance = 4;
         public const int WeatherWindAngleDisturbance = 6;
         public const double WeatherWindAngleDisturbanceChance = 0.5;
+
+        //Game Constants - Weather - Thor
+        //Thor pos calculation: MinimumOffset + Random(0, 1) * MaximumOffset
+        public const float WeatherThorMinimumOffsetX = 0.1f;
+        public const float WeatherThorMaximumOffsetX = 0.8f;
+
+        public const float WeatherThorMinimumOffsetY = 0.3f;
+        public const float WeatherThorMaximumOffsetY = 0.6f;
 
         //Map Address
         public const int ChangeMapLeft = -2;
