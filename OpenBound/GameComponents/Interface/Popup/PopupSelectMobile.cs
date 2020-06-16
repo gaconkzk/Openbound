@@ -40,7 +40,7 @@ namespace OpenBound.GameComponents.Interface.Popup
             {MobileType.Lightning,    new Rectangle(102 * 10, 0, 102, 80) },
             {MobileType.Mage,         new Rectangle(102 * 11, 0, 102, 80) },
             {MobileType.Nak,          new Rectangle(102 * 12, 0, 102, 80) },
-            {MobileType.Raon, new Rectangle(102 * 13, 0, 102, 80) },
+            {MobileType.Raon,         new Rectangle(102 * 13, 0, 102, 80) },
             {MobileType.Trico,        new Rectangle(102 * 14, 0, 102, 80) },
             {MobileType.Turtle,       new Rectangle(102 * 15, 0, 102, 80) },
             {MobileType.Random,       new Rectangle(102 * 16, 0, 102, 80) },
