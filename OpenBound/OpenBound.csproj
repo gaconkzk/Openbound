@@ -706,6 +706,7 @@
     <Compile Include="GameComponents\Pawn\Unit\Bigfoot.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Ice.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Lightning.cs" />
+    <Compile Include="GameComponents\Pawn\Unit\Raon.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Trico.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Turtle.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Mage.cs" />
