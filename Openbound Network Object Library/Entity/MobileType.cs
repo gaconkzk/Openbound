@@ -50,7 +50,7 @@ namespace Openbound_Network_Object_Library.Entity
         Princess,
         Phoenix,
 
-        RaonLauncher, //10
+        Raon, //10
 
         ShadowWalker,
 

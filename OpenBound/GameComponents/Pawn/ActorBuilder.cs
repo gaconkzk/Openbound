@@ -34,6 +34,7 @@ namespace OpenBound.GameComponents.Pawn
                 case MobileType.Trico:   return new Trico(player, position);
                 case MobileType.Turtle:  return new Turtle(player, position);
                 case MobileType.Lightning: return new Lightning(player, position);
+                case MobileType.Raon: return new Raon(player, position);
             }
 
             return null;
