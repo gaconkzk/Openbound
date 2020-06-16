@@ -691,6 +691,7 @@
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
+    <Compile Include="GameComponents\Pawn\UnitProjectiles\RaonProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ThorProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\TricoProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ArmorProjectile.cs" />
