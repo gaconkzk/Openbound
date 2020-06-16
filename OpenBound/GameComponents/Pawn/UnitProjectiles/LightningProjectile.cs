@@ -100,7 +100,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             for (int i = 0; i <= 3; i++)
             {
-                ElectricityProjectile electricityProjectile = new ElectricityProjectile(mobile, Position,
+                ElectricityProjectile electricityProjectile = new ElectricityProjectile(Mobile, Position,
                   Parameter.ProjectileLightningS2AnglesOffset[i],
                   Parameter.ProjectileLightningS2ElectricityExplosionRadius,
                   Parameter.ProjectileLightningS2ElectricityEExplosionRadius,
@@ -156,7 +156,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 if (distance < Parameter.ProjectileLightningSSEExplosionRadius)
                 {
                     ElectricityProjectile electricityProjectile =
-                      new ElectricityProjectile(mobile, m.Position,
+                      new ElectricityProjectile(Mobile, m.Position,
                           Parameter.ProjectileLightningSSElectricityAngle,
                           Parameter.ProjectileLightningSSElectricityExplosionRadius,
                           Parameter.ProjectileLightningSSElectricityEExplosionRadius,
