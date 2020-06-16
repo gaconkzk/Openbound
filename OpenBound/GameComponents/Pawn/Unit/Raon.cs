@@ -30,12 +30,12 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
             MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Raon, position);
 
-            Movement.CollisionOffset = 25;
+            Movement.CollisionOffset = 22;
             Movement.MaximumStepsPerTurn = 90;
 
             Crosshair = new Crosshair(this);
 
-            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 40, 33), new Vector2(0, 10));
+            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(2, 0));
         }
 
         public override void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
@@ -46,11 +46,11 @@ namespace OpenBound.GameComponents.Pawn.Unit
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(null);
+                LastCreatedProjectileList.Add(new RaonProjectile1(this));
             else if (SelectedShotType == ShotType.S2)
-                LastCreatedProjectileList.Add(null);
+                LastCreatedProjectileList.Add(new RaonProjectile2(this));
             else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(null);
+                LastCreatedProjectileList.Add(new RaonProjectile3(this));
 
             base.Shoot();
         }

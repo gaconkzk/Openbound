@@ -178,7 +178,7 @@ namespace OpenBound.GameComponents.Interface
                     {
                         {
                             ShotType.S1,
-                            new CrosshairPreset() { CannonOffsetDistance = -25, CannonOffsetRotation = MathHelper.ToRadians(30), CrosshairPointerOffset = 29f }
+                            new CrosshairPreset() { CannonOffsetDistance = -29, CannonOffsetRotation = MathHelper.ToRadians(35), CrosshairPointerOffset = 29f }
                         },
                     }
                 },

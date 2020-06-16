@@ -5988,7 +5988,7 @@
 /processorParam:TextureFormat=Color
 /build:Interface/InGame/HUD/Crosshair/Pointer.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherS1Ally.png
+#begin Interface/InGame/HUD/Crosshair/RaonS1Ally.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -5998,9 +5998,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherS1Ally.png
+/build:Interface/InGame/HUD/Crosshair/RaonS1Ally.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherS1Enemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonS1Enemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6010,9 +6010,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherS1Enemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonS1Enemy.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherS2Ally.png
+#begin Interface/InGame/HUD/Crosshair/RaonS2Ally.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6022,9 +6022,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherS2Ally.png
+/build:Interface/InGame/HUD/Crosshair/RaonS2Ally.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherS2Enemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonS2Enemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6034,9 +6034,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherS2Enemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonS2Enemy.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherSSAlly.png
+#begin Interface/InGame/HUD/Crosshair/RaonSSAlly.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6046,9 +6046,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherSSAlly.png
+/build:Interface/InGame/HUD/Crosshair/RaonSSAlly.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonLauncherSSEnemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonSSEnemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6058,7 +6058,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonLauncherSSEnemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonSSEnemy.png
 
 #begin Interface/InGame/HUD/Crosshair/TricoS1Ally.png
 /importer:TextureImporter
