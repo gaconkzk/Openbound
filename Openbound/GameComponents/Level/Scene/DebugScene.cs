@@ -27,6 +27,7 @@ using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.WeatherEffect;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Pawn;
+using OpenBound.GameComponents.Interface.Text;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -53,7 +54,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 CrosshairAngle = 10,
                 Delay = 500,
                 //Facing = Facing.Left,
-                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Raon),
+                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Lightning),
                 Owner = new Player()
                 {
                     CharacterGender = Gender.Feminine,
@@ -63,7 +64,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Raon,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -339,7 +340,7 @@ namespace OpenBound.GameComponents.Level.Scene
             mFlipbook = new List<MobileFlipbook>();
 
             for (int k = 0; k < 21; k++)
-                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Raon, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
+                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Lightning, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
 
             int i = 0;
 
@@ -508,12 +509,18 @@ namespace OpenBound.GameComponents.Level.Scene
             {
 
             }
+
+            tsb.Update();
         }
+
+        TextBox tsb = new TextBox(new Vector2(0, -200), new Vector2(300, 300));
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
+
+            tsb.Draw(gameTime, spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);

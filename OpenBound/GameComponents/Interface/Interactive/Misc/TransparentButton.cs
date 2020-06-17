@@ -11,6 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Interface.Interactive.Misc
@@ -31,6 +32,11 @@ namespace OpenBound.GameComponents.Interface.Interactive.Misc
             : base(ButtonType.Dummy, 0, default, buttonOffset, buildDummyButtonPreset(interactionArea))
         {
 
+        }
+
+        public void SetInteractionArea(Rectangle rectangle)
+        {
+            ButtonSprite.SourceRectangle = rectangle;
         }
     }
 }

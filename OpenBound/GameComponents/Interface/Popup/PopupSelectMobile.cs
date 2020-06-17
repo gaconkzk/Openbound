@@ -40,7 +40,7 @@ namespace OpenBound.GameComponents.Interface.Popup
             {MobileType.Lightning,    new Rectangle(102 * 10, 0, 102, 80) },
             {MobileType.Mage,         new Rectangle(102 * 11, 0, 102, 80) },
             {MobileType.Nak,          new Rectangle(102 * 12, 0, 102, 80) },
-            {MobileType.Raon,         new Rectangle(102 * 13, 0, 102, 80) },
+            {MobileType.RaonLauncher, new Rectangle(102 * 13, 0, 102, 80) },
             {MobileType.Trico,        new Rectangle(102 * 14, 0, 102, 80) },
             {MobileType.Turtle,       new Rectangle(102 * 15, 0, 102, 80) },
             {MobileType.Random,       new Rectangle(102 * 16, 0, 102, 80) },
@@ -112,7 +112,7 @@ namespace OpenBound.GameComponents.Interface.Popup
             //Append Functionality to the buttons and SpriteTexts, Map Buttons with current MobileTypes
             List<MobileType> mTL = new List<MobileType>(){
                 MobileType.Armor, MobileType.Bigfoot,      MobileType.Trico,   MobileType.Dragon,
-                MobileType.Frank, MobileType.Raon,         MobileType.Mage,    MobileType.ASate,     MobileType.Knight, MobileType.JFrog, MobileType.BlueWhale,
+                MobileType.Frank, MobileType.RaonLauncher, MobileType.Mage,    MobileType.ASate,     MobileType.Knight, MobileType.JFrog, MobileType.BlueWhale,
                 MobileType.Aduka, MobileType.Kalsiddon,    MobileType.JD,      MobileType.Lightning, MobileType.Wolf,   MobileType.Grub,
                 MobileType.Nak,   MobileType.Maya,         MobileType.Phoenix, MobileType.Tiburon,   MobileType.Boomer, MobileType.Ice,   MobileType.Turtle,
                 MobileType.Random

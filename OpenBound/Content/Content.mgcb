@@ -3522,42 +3522,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Special Effects/Tank/Mage/Flame3.png
 
-#begin Graphics/Special Effects/Tank/Raon/Flame1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Special Effects/Tank/Raon/Flame1.png
-
-#begin Graphics/Special Effects/Tank/Raon/Flame2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Special Effects/Tank/Raon/Flame2.png
-
-#begin Graphics/Special Effects/Tank/Raon/Flame3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Special Effects/Tank/Raon/Flame3.png
-
 #begin Graphics/Special Effects/Tank/Trico/Flame1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -4097,78 +4061,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/Random/CharacterSpritesheet.png
-
-#begin Graphics/Tank/Raon/Bullet1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/Bullet1.png
-
-#begin Graphics/Tank/Raon/Bullet2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/Bullet2.png
-
-#begin Graphics/Tank/Raon/Bullet3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/Bullet3.png
-
-#begin Graphics/Tank/Raon/CharacterSpritesheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/CharacterSpritesheet.png
-
-#begin Graphics/Tank/Raon/Mine/MineS2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/Mine/MineS2.png
-
-#begin Graphics/Tank/Raon/Mine/MineSS.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/Tank/Raon/Mine/MineSS.png
 
 #begin Graphics/Tank/Trico/Bullet1.png
 /importer:TextureImporter
@@ -6018,7 +5910,7 @@
 /processorParam:TextureFormat=Color
 /build:Interface/InGame/HUD/Crosshair/Pointer.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonS1Ally.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherS1Ally.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6028,9 +5920,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonS1Ally.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherS1Ally.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonS1Enemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherS1Enemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6040,9 +5932,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonS1Enemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherS1Enemy.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonS2Ally.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherS2Ally.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6052,9 +5944,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonS2Ally.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherS2Ally.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonS2Enemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherS2Enemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6064,9 +5956,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonS2Enemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherS2Enemy.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonSSAlly.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherSSAlly.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6076,9 +5968,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonSSAlly.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherSSAlly.png
 
-#begin Interface/InGame/HUD/Crosshair/RaonSSEnemy.png
+#begin Interface/InGame/HUD/Crosshair/RaonLauncherSSEnemy.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -6088,7 +5980,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Interface/InGame/HUD/Crosshair/RaonSSEnemy.png
+/build:Interface/InGame/HUD/Crosshair/RaonLauncherSSEnemy.png
 
 #begin Interface/InGame/HUD/Crosshair/TricoS1Ally.png
 /importer:TextureImporter
@@ -7229,6 +7121,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Interface/StaticButtons/ServerList/Server.png
+
+#begin Interface/StaticButtons/TextBox/Scroll.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/StaticButtons/TextBox/Scroll.png
+
+#begin Interface/TextBox/ScrollBarBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/TextBox/ScrollBarBackground.png
+
+#begin Interface/TextBox/ScrollBarBlock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/TextBox/ScrollBarBlock.png
+
+#begin Interface/TextBox/TextBoxBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/TextBox/TextBoxBackground.png
 
 #begin Misc/Dummy.png
 /importer:TextureImporter

@@ -49,6 +49,9 @@ namespace OpenBound.GameComponents.Interface.Interactive
         RenameButton,
         ChangeMapLeftArrow, ChangeMapRightArrow,
 
+        //Scroll Bar
+        ScrollBarLeft, ScrollBarRight, ScrollBarUp, ScrollBarDown,
+
         //Popup
         CreateGameSolo, CreateGameTag, CreateGameJewel, CreateGameScore,
         CreateGame1v1, CreateGame2v2, CreateGame3v3, CreateGame4v4,
@@ -253,6 +256,60 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Hoover,    new Rectangle(18*1, 0, 18, 18) },
                             { ButtonAnimationState.Clicked,   new Rectangle(18*2, 0, 18, 18) },
                             { ButtonAnimationState.Disabled,  new Rectangle(18*3, 0, 18, 18) },
+                        }
+                    }
+                },
+                #endregion
+                #region Scroll Bar
+                {
+                    ButtonType.ScrollBarDown,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/TextBox/Scroll",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(23 * 0, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Activated, new Rectangle(23 * 0, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(23 * 0, 23 * 1, 23, 23) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ScrollBarUp,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/TextBox/Scroll",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(23 * 1, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Activated, new Rectangle(23 * 1, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(23 * 1, 23 * 1, 23, 23) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ScrollBarLeft,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/TextBox/Scroll",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(23 * 2, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Activated, new Rectangle(23 * 2, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(23 * 2, 23 * 1, 23, 23) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ScrollBarRight,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/TextBox/Scroll",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(23 * 3, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Activated, new Rectangle(23 * 3, 23 * 0, 23, 23) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(23 * 3, 23 * 1, 23, 23) },
                         }
                     }
                 },
@@ -814,7 +871,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
         public bool ShouldRender;
 
 #if DEBUG
-        protected List<DebugCrosshair> debugCrosshairList;
+        public List<DebugCrosshair> DebugCrosshairList;
 #endif
 
         public Button(ButtonType buttonType, float layerDepth, Action<object> onClick, Vector2 buttonOffset = default, ButtonPreset buttonPreset = default)
@@ -826,7 +883,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
             buttonAnimationState = ButtonAnimationState.Disabled;
 
             ButtonSprite = new Sprite(buttonPreset.SpritePath, layerDepth: layerDepth);
-            ButtonSprite.Pivot = new Vector2(buttonInstances.First().Value.Width / 2, buttonInstances.First().Value.Height / 2);
+            ButtonSprite.Pivot = new Vector2(buttonInstances.First().Value.Width, buttonInstances.First().Value.Height) / 2;
             ButtonOffset = buttonOffset;
             cursor = Cursor.Instance;
             isBeingPressed = false;
@@ -841,14 +898,14 @@ namespace OpenBound.GameComponents.Interface.Interactive
             ShouldRender = true;
 
 #if DEBUG
-            debugCrosshairList = new List<DebugCrosshair>()
+            DebugCrosshairList = new List<DebugCrosshair>()
             {
                 new DebugCrosshair(Color.White),new DebugCrosshair(Color.White),
                 new DebugCrosshair(Color.White),new DebugCrosshair(Color.White),
                 new DebugCrosshair(Color.Red),
             };
 
-            DebugHandler.Instance.AddRange(debugCrosshairList);
+            DebugHandler.Instance.AddRange(DebugCrosshairList);
 #endif
         }
 
@@ -879,7 +936,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
             ButtonSprite.SourceRectangle = buttonInstances[buttonAnimationState = NewState];
         }
 
-        protected Rectangle CalculateCollisionRectangle()
+        protected virtual Rectangle CalculateCollisionRectangle()
         {
             return new Rectangle(
                 (int)ButtonSprite.Position.X - (int)ButtonSprite.Pivot.X,
@@ -887,7 +944,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                 ButtonSprite.SourceRectangle.Width, ButtonSprite.SourceRectangle.Height);
         }
 
-        public void UpdateAttatchedPosition()
+        public virtual void UpdateAttatchedPosition()
         {
             ButtonSprite.Position = ButtonOffset - GameScene.Camera.CameraOffset;
         }
@@ -957,11 +1014,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
             }
 
 #if DEBUG
-            debugCrosshairList[0].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y));
-            debugCrosshairList[1].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y + collisionRectangle.Height));
-            debugCrosshairList[2].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y + collisionRectangle.Height));
-            debugCrosshairList[3].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y));
-            debugCrosshairList[4].Update(ButtonSprite.Position);
+            DebugCrosshairList[0].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y));
+            DebugCrosshairList[1].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y + collisionRectangle.Height));
+            DebugCrosshairList[2].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y + collisionRectangle.Height));
+            DebugCrosshairList[3].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y));
+            DebugCrosshairList[4].Update(ButtonSprite.Position);
 #endif
         }
 

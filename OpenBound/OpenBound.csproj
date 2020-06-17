@@ -660,7 +660,9 @@
     <Compile Include="GameComponents\Interface\Delayboard.cs" />
     <Compile Include="GameComponents\Interface\Interactive\SliderBar.cs" />
     <Compile Include="GameComponents\Interface\Text\CompositeSpriteText.cs" />
+    <Compile Include="GameComponents\Interface\Text\TextBox.cs" />
     <Compile Include="GameComponents\Interface\Text\TextField.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\General\ScrollBar.cs" />
     <Compile Include="GameComponents\Interface\WeatherDisplay.cs" />
     <Compile Include="GameComponents\Interface\WindCompass.cs" />
     <Compile Include="GameComponents\Level\Scene\Menu\GameList.cs" />
@@ -691,7 +693,6 @@
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
-    <Compile Include="GameComponents\Pawn\UnitProjectiles\RaonProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ThorProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\TricoProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ArmorProjectile.cs" />
@@ -709,7 +710,6 @@
     <Compile Include="GameComponents\Pawn\Unit\Ice.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Lightning.cs" />
     <Compile Include="GameComponents\Pawn\ThorSatellite.cs" />
-    <Compile Include="GameComponents\Pawn\Unit\Raon.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Trico.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Turtle.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Mage.cs" />

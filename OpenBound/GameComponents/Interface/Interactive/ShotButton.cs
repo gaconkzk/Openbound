@@ -146,16 +146,16 @@ namespace OpenBound.GameComponents.Interface.Interactive
             }
 
 #if DEBUG
-            debugCrosshairList[0].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y));
-            debugCrosshairList[1].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y + collisionRectangle.Height));
-            debugCrosshairList[2].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y + collisionRectangle.Height));
-            debugCrosshairList[3].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y));
+            DebugCrosshairList[0].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y));
+            DebugCrosshairList[1].Update(new Vector2(collisionRectangle.X, collisionRectangle.Y + collisionRectangle.Height));
+            DebugCrosshairList[2].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y + collisionRectangle.Height));
+            DebugCrosshairList[3].Update(new Vector2(collisionRectangle.X + collisionRectangle.Width, collisionRectangle.Y));
 #endif
         }
 
         public override void Update()
         {
-            ButtonSprite.Position = ButtonOffset - GameScene.Camera.CameraOffset;
+            UpdateAttatchedPosition();
             UpdateMouse();
             if (OtherButtons[0] == this) UpdateKeyboard();
         }

@@ -220,9 +220,9 @@ namespace Openbound_Network_Object_Library.Entity
                     { ShotType.SS, new AimPreset(10, 50, 10, 50) },
                 }
             },
-            //Raon
+            //RaonLauncher
             {
-                MobileType.Raon,
+                MobileType.RaonLauncher,
                 new Dictionary<ShotType, AimPreset>()
                 {
                     { ShotType.S1, new AimPreset(10, 50, 10, 50) },
@@ -270,7 +270,7 @@ namespace Openbound_Network_Object_Library.Entity
             { MobileType.Lightning,    new DelayPreset() { Base = 700, Shot1 = 750, Shot2 = 800, SS = 1300 } }, // Lightning 700 750 800 1300
             { MobileType.Mage,         new DelayPreset() { Base = 700, Shot1 = 750, Shot2 = 900, SS = 1300 } }, // Mage      700 750 900 1300
             { MobileType.Nak,          new DelayPreset() { Base = 710, Shot1 = 760, Shot2 = 910, SS = 1310 } }, // Nak       710 760 910 1310
-            { MobileType.Raon,         new DelayPreset() { Base = 700, Shot1 = 750, Shot2 = 900, SS = 1300 } }, // Raon      700 750 900 1300
+            { MobileType.RaonLauncher, new DelayPreset() { Base = 700, Shot1 = 750, Shot2 = 900, SS = 1300 } }, // Raon      700 750 900 1300
             { MobileType.Trico,        new DelayPreset() { Base = 690, Shot1 = 740, Shot2 = 890, SS = 1290 } }, // Trico     690 740 890 1290
             { MobileType.Turtle,       new DelayPreset() { Base = 690, Shot1 = 740, Shot2 = 890, SS = 1290 } }, // Turtle    690 740 890 1290
         };
@@ -303,7 +303,7 @@ namespace Openbound_Network_Object_Library.Entity
 
             { MobileType.Princess,     new MobileStatus(){ Attack = 30, Defence = 50, Energy = 20, Mobility = 40, Delay = 50 } },
             { MobileType.Random,       new MobileStatus(){ Attack = 30, Defence = 30, Energy = 30, Mobility = 30, Delay = 30 } },
-            { MobileType.Raon        , new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 40, Delay = 60 } },
+            { MobileType.RaonLauncher, new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 40, Delay = 60 } },
             { MobileType.ShadowWalker, new MobileStatus(){ Attack = 40, Defence = 20, Energy = 50, Mobility = 40, Delay = 30 } },
             { MobileType.Tiburon,      new MobileStatus(){ Attack = 40, Defence = 40, Energy = 30, Mobility = 50, Delay = 40 } },
 
@@ -340,7 +340,7 @@ namespace Openbound_Network_Object_Library.Entity
                 case MobileType.Lightning: return new MobileMetadata(mobileType, 760, 0, 35, 220, 20);
                 case MobileType.Mage: return new MobileMetadata(mobileType, 760, 0, 35, 220, 20);
                 case MobileType.Nak: return new MobileMetadata(mobileType, 1100, 0, 35, 0, 0);
-                case MobileType.Raon: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
+                case MobileType.RaonLauncher: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
                 case MobileType.Trico: return new MobileMetadata(mobileType, 1100, 10, 70, 0, 0);
                 case MobileType.Turtle: return new MobileMetadata(mobileType, 950, 10, 70, 0, 0);
             }

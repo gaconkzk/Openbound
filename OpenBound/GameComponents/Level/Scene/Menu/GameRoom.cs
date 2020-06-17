@@ -48,7 +48,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             { MobileType.Mage,         new Rectangle(111 * 11, 0, 111, 86) },
             { MobileType.Nak,          new Rectangle(111 * 12, 0, 111, 86) },
             { MobileType.Random,       new Rectangle(111 * 13, 0, 111, 86) },
-            { MobileType.Raon,         new Rectangle(111 * 14, 0, 111, 86) },
+            { MobileType.RaonLauncher, new Rectangle(111 * 14, 0, 111, 86) },
             { MobileType.Trico,        new Rectangle(111 * 15, 0, 111, 86) },
         };
 
