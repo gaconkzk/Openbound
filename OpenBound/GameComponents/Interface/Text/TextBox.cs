@@ -21,14 +21,16 @@ namespace OpenBound.GameComponents.Interface.Text
         Sprite background;
 
         Vector2 boxTextArea, elementYOffset;
-        int maximumLines;
+        int maximumRenderableLines;
+        int maximumNumberOfLines;
         int startingRenderingIndex, finalRenderingIndex;
 
         int selectedIndex;
 
-        public TextBox(Vector2 position, Vector2 boxSize, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
+        public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
         {
             boxTextArea = boxSize;
+            this.maximumNumberOfLines = maximumNumberOfLines;
 
             if (hasScrollBar)
             {
@@ -53,28 +55,33 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             List<CompositeSpriteText> cst = CompositeSpriteText.CreateChatMessage(player, text, (int)boxTextArea.X, 1);
             
-            if (maximumLines == 0)
+            if (maximumRenderableLines == 0)
             {
                 elementYOffset = cst[0].ElementDimensions * Vector2.UnitY;
-                maximumLines = (int)(boxTextArea.Y / elementYOffset.Y);
+                maximumRenderableLines = (int)(boxTextArea.Y / elementYOffset.Y);
             }
 
             if (scrollBar != null)
             {
                 compositeSpriteTextList.AddRange(cst);
 
-                if (compositeSpriteTextList.Count >= maximumLines && !scrollBar.IsEnabled)
+                if (compositeSpriteTextList.Count >= maximumRenderableLines && !scrollBar.IsEnabled)
                     scrollBar.Enable();
 
-                if (selectedIndex + 1 == compositeSpriteTextList.Count - 1)
-                    selectedIndex++;
+                if (selectedIndex + cst.Count + 1 == compositeSpriteTextList.Count)
+                    selectedIndex += cst.Count;
                 else
                     scrollBar.SetScrollPercentagePosition((float)(selectedIndex + 1) / compositeSpriteTextList.Count);
+                //
+
+                int excludedElements = Math.Max(compositeSpriteTextList.Count - maximumNumberOfLines, 0);
+                selectedIndex = Math.Max(0, selectedIndex - excludedElements);
+                compositeSpriteTextList.RemoveRange(0, excludedElements);
             }
             else
             {
                 compositeSpriteTextList.AddRange(cst);
-                compositeSpriteTextList.RemoveRange(0, Math.Max(compositeSpriteTextList.Count - maximumLines - 1, 0));
+                compositeSpriteTextList.RemoveRange(0, Math.Max(compositeSpriteTextList.Count - maximumRenderableLines - 1, 0));
             }
         }
 
@@ -96,8 +103,8 @@ namespace OpenBound.GameComponents.Interface.Text
 
             //Updating selected index
 
-            startingRenderingIndex = Math.Max(selectedIndex - maximumLines + 1, 0);
-            finalRenderingIndex = Math.Min(startingRenderingIndex + maximumLines, compositeSpriteTextList.Count);
+            startingRenderingIndex = Math.Max(selectedIndex - maximumRenderableLines + 1, 0);
+            finalRenderingIndex = Math.Min(startingRenderingIndex + maximumRenderableLines, compositeSpriteTextList.Count);
 
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++)
             {
