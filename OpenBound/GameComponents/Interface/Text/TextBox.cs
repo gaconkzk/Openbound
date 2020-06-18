@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Interface.Text
         int maximumLines;
         int startingRenderingIndex, finalRenderingIndex;
 
-        protected int GetSelectedIndex => Math.Max(0, (int)(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count) - 1);
+        int selectedIndex;
 
         public TextBox(Vector2 position, Vector2 boxSize, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
         {
@@ -35,6 +35,7 @@ namespace OpenBound.GameComponents.Interface.Text
                 scrollBar = new ScrollBar(position + new Vector2(boxSize.X, 0), boxSize, scrollBackgroundAlpha);
                 boxTextArea -= new Vector2(scrollBar.ElementWidth, 0);
                 scrollBar.Disable();
+                scrollBar.AddOnChangeAction(OnBeingDragged);
             }
             else
             {
@@ -60,21 +61,26 @@ namespace OpenBound.GameComponents.Interface.Text
 
             if (scrollBar != null)
             {
-                float currentCont = GetSelectedIndex;
-
                 compositeSpriteTextList.AddRange(cst);
 
-                if (compositeSpriteTextList.Count >= maximumLines)
+                if (compositeSpriteTextList.Count >= maximumLines && !scrollBar.IsEnabled)
                     scrollBar.Enable();
 
-                if (currentCont + 1 != compositeSpriteTextList.Count - 1)
-                    scrollBar.SetScrollPercentagePosition((currentCont + 1) / compositeSpriteTextList.Count);
+                if (selectedIndex + 1 == compositeSpriteTextList.Count - 1)
+                    selectedIndex++;
+                else
+                    scrollBar.SetScrollPercentagePosition((float)(selectedIndex + 1) / compositeSpriteTextList.Count);
             }
             else
             {
                 compositeSpriteTextList.AddRange(cst);
                 compositeSpriteTextList.RemoveRange(0, Math.Max(compositeSpriteTextList.Count - maximumLines - 1, 0));
             }
+        }
+
+        public void OnBeingDragged(object button)
+        {
+            selectedIndex = Math.Max((int)(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count) - 1, 0);
         }
 
         public void Update()
@@ -87,9 +93,10 @@ namespace OpenBound.GameComponents.Interface.Text
         public void UpdateTextPosition()
         {
             if (compositeSpriteTextList.Count == 0) return;
-            
-            if (scrollBar != null)
-                startingRenderingIndex = (int)Math.Max(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count - maximumLines, 0);
+
+            //Updating selected index
+
+            startingRenderingIndex = Math.Max(selectedIndex - maximumLines + 1, 0);
             finalRenderingIndex = Math.Min(startingRenderingIndex + maximumLines, compositeSpriteTextList.Count);
 
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++)
@@ -101,7 +108,11 @@ namespace OpenBound.GameComponents.Interface.Text
 
             //Tint selected line
             if (scrollBar != null)
-                compositeSpriteTextList[GetSelectedIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+            {
+                compositeSpriteTextList[selectedIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                compositeSpriteTextList[startingRenderingIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                compositeSpriteTextList[Math.Max(finalRenderingIndex - 1, 0)].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

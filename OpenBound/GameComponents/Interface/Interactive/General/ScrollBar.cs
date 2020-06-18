@@ -22,6 +22,8 @@ namespace OpenBound.GameComponents.Interface.General
 
         float maxScroll, minScroll, scrollSize;
 
+        public bool IsEnabled { get; private set; }
+
         //Debug Variables
 #if DEBUG
         DebugLine dL1 = new DebugLine(Color.Red);
@@ -78,7 +80,15 @@ namespace OpenBound.GameComponents.Interface.General
             scrollButtonDown.OnBeingDragged += (b) => { UpdateScrollPosition(-scrollSize / 100f); };
 
             UpdateScrollPosition(float.MaxValue);
-            //Interface/TextBox/TextBoxBackground
+            
+            IsEnabled = true;
+        }
+
+        public void AddOnChangeAction(Action<object> action)
+        {
+            scrollBarTB.OnBeingDragged += action;
+            scrollButtonUp.OnBeingDragged += action;
+            scrollButtonDown.OnBeingDragged += action;
         }
 
         public void SetScrollPercentagePosition(float newPosition)
@@ -122,6 +132,9 @@ namespace OpenBound.GameComponents.Interface.General
 
         public void Disable()
         {
+            if (!IsEnabled) return;
+
+            IsEnabled = false;
             scrollButtonUp.Disable();
             scrollButtonDown.Disable();
             scrollBar.SetTransparency(0);
@@ -130,6 +143,9 @@ namespace OpenBound.GameComponents.Interface.General
 
         public void Enable()
         {
+            if (IsEnabled) return;
+
+            IsEnabled = true;
             scrollButtonUp.Enable();
             scrollButtonDown.Enable();
             scrollBar.SetTransparency(1);

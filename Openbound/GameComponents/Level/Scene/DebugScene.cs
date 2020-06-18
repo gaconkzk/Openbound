@@ -504,7 +504,8 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
                 for(int i = 0; i < 100; i++)
-                    tsb.AppendText(sMobList[0].Owner, textBase += "0");
+                    //tsb.AppendText(sMobList[0].Owner, textBase += "0");
+                tsb.AppendText(sMobList[0].Owner, textBase + number++);
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
