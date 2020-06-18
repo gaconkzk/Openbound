@@ -124,9 +124,9 @@ namespace OpenBound.GameComponents.Interface.Text
 
             SpriteText st = line.Last();
             int i = 0;
-            while (i < text.Length - 1)
+            while (i < text.Length)
             {
-                for (; i < text.Length - 1 && line.Sum((x) => x.MeasureSize.X) < maxWidth; i++)
+                for (; i < text.Length && line.Sum((x) => x.MeasureSize.X) < maxWidth; i++)
                 {
                     st.Text += text[i];
                 }

@@ -509,15 +509,20 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
+                tsb.AppendText(sMobList[0].Owner, textBase + number);
+            }
 
+            if (InputHandler.IsBeingPressed(Keys.D4))
+            {
             }
 
             tsb.Update();
         }
 
         string textBase = "1234567890-=abcdefghi";
+        float number = 0;
 
-        TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300));
+        TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300), 0.7f, 0.3f, true);
 
         public override void Draw(GameTime gameTime)
         {

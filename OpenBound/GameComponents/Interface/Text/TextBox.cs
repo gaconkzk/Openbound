@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Interface.General;
@@ -25,43 +26,60 @@ namespace OpenBound.GameComponents.Interface.Text
 
         protected int GetSelectedIndex => Math.Max(0, (int)(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count) - 1);
 
-        public TextBox(Vector2 position, Vector2 boxSize)
+        public TextBox(Vector2 position, Vector2 boxSize, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
         {
-            scrollBar = new ScrollBar(position + new Vector2(boxSize.X, 0), boxSize);
+            boxTextArea = boxSize;
 
-            boxTextArea = boxSize - new Vector2(scrollBar.ElementWidth, 0);
+            if (hasScrollBar)
+            {
+                scrollBar = new ScrollBar(position + new Vector2(boxSize.X, 0), boxSize, scrollBackgroundAlpha);
+                boxTextArea -= new Vector2(scrollBar.ElementWidth, 0);
+                scrollBar.Disable();
+            }
+            else
+            {
+                boxTextArea -= new Vector2(8, 0);
+            }
 
-            background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: 0.7f);
-            background.SetTransparency(0.3f);
+            background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: DepthParameter.InterfaceButton);
+            background.SetTransparency(backgroundAlpha);
             background.Scale *= boxSize;
 
             compositeSpriteTextList = new List<CompositeSpriteText>();
-            scrollBar.Disable();
         }
 
         public void AppendText(Player player, string text)
         {
-            //float previousPosition = elementYOffset.Y * compositeSpriteTextList.Count;
-            //float 
-
-            compositeSpriteTextList.AddRange(CompositeSpriteText.CreateChatMessage(player, text, (int)boxTextArea.X, 1));
-
+            List<CompositeSpriteText> cst = CompositeSpriteText.CreateChatMessage(player, text, (int)boxTextArea.X, 1);
+            
             if (maximumLines == 0)
             {
-                elementYOffset = compositeSpriteTextList[0].ElementDimensions * Vector2.UnitY;
+                elementYOffset = cst[0].ElementDimensions * Vector2.UnitY;
                 maximumLines = (int)(boxTextArea.Y / elementYOffset.Y);
             }
-            else if (compositeSpriteTextList.Count >= maximumLines)
-            {
-                scrollBar.Enable();
-            }
 
-            //scrollBar.UpdateScrollPosition(scrollBar.NormalizedCurrentScrollPercentage - currentScroll);
+            if (scrollBar != null)
+            {
+                float currentCont = GetSelectedIndex;
+
+                compositeSpriteTextList.AddRange(cst);
+
+                if (compositeSpriteTextList.Count >= maximumLines)
+                    scrollBar.Enable();
+
+                if (currentCont + 1 != compositeSpriteTextList.Count - 1)
+                    scrollBar.SetScrollPercentagePosition((currentCont + 1) / compositeSpriteTextList.Count);
+            }
+            else
+            {
+                compositeSpriteTextList.AddRange(cst);
+                compositeSpriteTextList.RemoveRange(0, Math.Max(compositeSpriteTextList.Count - maximumLines - 1, 0));
+            }
         }
 
         public void Update()
         {
-            scrollBar.Update();
+            scrollBar?.Update();
             background.UpdateAttatchmentPosition();
             UpdateTextPosition();
         }
@@ -69,8 +87,9 @@ namespace OpenBound.GameComponents.Interface.Text
         public void UpdateTextPosition()
         {
             if (compositeSpriteTextList.Count == 0) return;
-
-            startingRenderingIndex = (int)Math.Max(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count - maximumLines, 0);
+            
+            if (scrollBar != null)
+                startingRenderingIndex = (int)Math.Max(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count - maximumLines, 0);
             finalRenderingIndex = Math.Min(startingRenderingIndex + maximumLines, compositeSpriteTextList.Count);
 
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++)
@@ -81,12 +100,13 @@ namespace OpenBound.GameComponents.Interface.Text
             }
 
             //Tint selected line
-            compositeSpriteTextList[GetSelectedIndex].ReplaceTextColor(Color.White, Color.Red);
+            if (scrollBar != null)
+                compositeSpriteTextList[GetSelectedIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            scrollBar.Draw(gameTime, spriteBatch);
+            scrollBar?.Draw(gameTime, spriteBatch);
             background.Draw(gameTime, spriteBatch);
 
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++)

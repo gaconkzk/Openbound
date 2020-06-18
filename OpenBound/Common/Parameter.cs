@@ -160,6 +160,9 @@ namespace OpenBound.Common
         //-- GameRoom - SelectMobile
         public static readonly Color TextColorPopupSelectMobilePortrait = new Color(0, 56, 107);
 
+        //-- Chat
+        public static readonly Color TextColorTextBoxSelectedMessage = Color.LightGray;
+
         //-- Loading Screen - Minimap
         public static readonly Color TextColorTeamRed = new Color(246, 161, 98);
         public static readonly Color TextColorTeamBlue = new Color(98, 149, 230);
