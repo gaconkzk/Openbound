@@ -44,6 +44,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
+            SpecialEffectBuilder.JDProjectile1Explosion(FlipbookList[0].Position, 0);
             base.Explode();
 
         }
@@ -83,6 +84,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
+            SpecialEffectBuilder.JDProjectile2Explosion(FlipbookList[0].Position, 0);
             base.Explode();
         }
 
@@ -121,6 +123,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         protected override void Explode()
         {
+            SpecialEffectBuilder.JDProjectile3Explosion(FlipbookList[0].Position, 0);
             base.Explode();
         }
 

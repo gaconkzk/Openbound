@@ -296,6 +296,26 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffectHandler.Add(se);
         }
+
+        public static void JDProjectile2Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(97, 87), 172, 172, "Graphics/Special Effects/Tank/JD/Flame2",
+                new AnimationInstance { StartingFrame = 0, EndingFrame = 18, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void JDProjectile3Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(186, 179), 364, 353, "Graphics/Special Effects/Tank/JD/Flame3",
+                new AnimationInstance { StartingFrame = 0, EndingFrame = 29, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
         #endregion
 
         #region Thor
