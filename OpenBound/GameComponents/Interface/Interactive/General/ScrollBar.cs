@@ -10,19 +10,33 @@ using System;
 
 namespace OpenBound.GameComponents.Interface.General
 {
+    /// <summary>
+    /// Scrollbar interface element. This class is hardcoded for a single button type. It can be attatch it to any component element
+    /// </summary>
     public class ScrollBar
     {
+        //Scroll buttons
         Button scrollButtonUp, scrollButtonDown;
         Sprite scrollBackground;
 
+        //Scroll Bar
         Sprite scrollBar;
         TransparentButton scrollBarTB;
 
         Vector2 position, boxSize;
 
-        float maxScroll, minScroll, scrollSize;
+        //Maximum and minimum possible pixel for the scroll bar
+        float maxScroll, minScroll;
 
+        float scrollSize;
+
+        
         public bool IsEnabled { get; private set; }
+
+        /// <summary>
+        /// Values ranges from 0 to 1.
+        /// </summary>
+        public float NormalizedCurrentScrollPercentage { get; private set; }
 
         //Debug Variables
 #if DEBUG
@@ -32,10 +46,6 @@ namespace OpenBound.GameComponents.Interface.General
         DebugCrosshair d2 = new DebugCrosshair(Color.Blue);
         DebugCrosshair d3 = new DebugCrosshair(Color.Blue);
 #endif
-
-        public int ElementWidth => scrollButtonUp.ButtonSprite.SourceRectangle.X + 5;
-
-        public float NormalizedCurrentScrollPercentage { get; private set; }
 
         public ScrollBar(Vector2 position, Vector2 boxSize, float scrollBackgroundAlpha)
         {
@@ -62,7 +72,8 @@ namespace OpenBound.GameComponents.Interface.General
             scrollBarTB = new TransparentButton((scrollButtonUp.ButtonOffset + scrollButtonDown.ButtonOffset) / 2, new Rectangle(0, 0, scrollButtonUp.ButtonSprite.SourceRectangle.Width, (int)boxSize.Y - scrollButtonUp.ButtonSprite.SourceRectangle.Height * 2 + 2));
             scrollBarTB.ButtonSprite.Pivot += scrollBarTB.ButtonSprite.Pivot * Vector2.UnitX;
 
-            scrollBarTB.OnBeingDragged += (b) => { SetScrollPosition(Cursor.Instance.CurrentFlipbook.Position.Y + GameScene.Camera.CameraOffset.Y); };
+            scrollBarTB.OnBeingDragged += OnBeingDraggedAction;
+            scrollBarTB.OnBeingReleased += OnBeingReleasedAction;
 
 #if DEBUG
             DebugHandler.Instance.Add(dL1);
@@ -84,31 +95,68 @@ namespace OpenBound.GameComponents.Interface.General
             IsEnabled = true;
         }
 
-        public void AddOnChangeAction(Action<object> action)
+        /// <summary>
+        /// Returns the element width
+        /// </summary>
+        public int ElementWidth => scrollButtonUp.ButtonSprite.SourceRectangle.X + 5;
+
+        #region Action Handlers
+        public void OnBeingDraggedAction(object button)
+        {
+            SetScrollPosition(Cursor.Instance.CurrentFlipbook.Position.Y + GameScene.Camera.CameraOffset.Y);
+            scrollBar.SourceRectangle = new Rectangle(0, 11, 25, 11);
+        }
+
+        public void OnBeingReleasedAction(object button)
+        {
+            scrollBar.SourceRectangle = new Rectangle(0, 0, 25, 11);
+        }
+
+        /// <summary>
+        /// Install an action into <see cref="scrollBarTB"/>, <see cref="scrollButtonUp"/> and <see cref="scrollButtonDown"/>.
+        /// </summary>
+        /// <param name="action">The <see cref="object"/> on the action is the button element.</param>
+        public void InstallOnChangeAction(Action<object> action)
         {
             scrollBarTB.OnBeingDragged += action;
             scrollButtonUp.OnBeingDragged += action;
             scrollButtonDown.OnBeingDragged += action;
         }
+        #endregion
 
+        /// <summary>
+        /// Sets the percentage to a specified amount.
+        /// </summary>
+        /// <param name="newPosition">Values ranges from 0 (closeer to upper button) to 1 (closer to bottom button).</param>
         public void SetScrollPercentagePosition(float newPosition)
         {
             scrollBar.PositionOffset = new Vector2(scrollBar.PositionOffset.X, Math.Min(minScroll, maxScroll) + scrollSize * newPosition);
             CalculateNormalizedPosition();
         }
 
+        /// <summary>
+        /// Sets the scroll position into a interface-relative parameter.
+        /// </summary>
+        /// <param name="newPosition">Values ranges from scrollButtonUp.ButtonOffset.Y to scrollButtonDown.ButtonOffset.Y</param>
         public void SetScrollPosition(float newPosition)
         {
             scrollBar.PositionOffset = new Vector2(scrollBar.PositionOffset.X, newPosition);
             CalculateNormalizedPosition();
         }
 
+        /// <summary>
+        /// Adds a value (pixel-based) into the current scroll position.
+        /// </summary>
+        /// <param name="newOffset">Positive values makes the bar go up, negative values makes it go down</param>
         public void UpdateScrollPosition(float newOffset)
         {
             scrollBar.PositionOffset -= new Vector2(0, newOffset);
             CalculateNormalizedPosition();
         }
 
+        /// <summary>
+        /// Calculates the new position and updates value of <see cref="NormalizedCurrentScrollPercentage"/>.
+        /// </summary>
         private void CalculateNormalizedPosition()
         {
             float min, max;
@@ -130,6 +178,9 @@ namespace OpenBound.GameComponents.Interface.General
             NormalizedCurrentScrollPercentage = (scrollBar.PositionOffset.Y - min) / (max - min);
         }
 
+        /// <summary>
+        /// Disables the interface element.
+        /// </summary>
         public void Disable()
         {
             if (!IsEnabled) return;
@@ -141,6 +192,9 @@ namespace OpenBound.GameComponents.Interface.General
             scrollBarTB.Disable();
         }
 
+        /// <summary>
+        /// Enables the interface element.
+        /// </summary>
         public void Enable()
         {
             if (IsEnabled) return;
@@ -161,8 +215,6 @@ namespace OpenBound.GameComponents.Interface.General
 
             scrollBar.UpdateAttatchmentPosition();
             scrollBarTB.Update();
-
-            //scrollBarTB.ButtonOffset = scrollBar.PositionOffset;
 
 #if DEBUG
             dL1.Update(position - GameScene.Camera.CameraOffset, position + boxSize * Vector2.UnitY - GameScene.Camera.CameraOffset);
