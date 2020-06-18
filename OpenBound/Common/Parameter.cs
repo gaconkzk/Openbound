@@ -455,6 +455,25 @@ namespace OpenBound.Common
         public const float ProjectileLightningSSWindInfluence = 1.2f;
         #endregion
 
+        #region JD
+        //JD
+        public const int ProjectileJDS1ExplosionRadius = 25;
+        public const int ProjectileJDS2ExplosionRadius = 25;
+        public const int ProjectileJDSSExplosionRadius = 25;
+
+        public const int ProjectileJDS1BaseDamage = 150;
+        public const int ProjectileJDS2BaseDamage = 200;
+        public const int ProjectileJDSSBaseDamage = 300;
+
+        public const float ProjectileJDS1Mass = 14f;
+        public const float ProjectileJDS2Mass = 14f;
+        public const float ProjectileJDSSMass = 14f;
+
+        public const float ProjectileJDS1WindInfluence = 1.2f;
+        public const float ProjectileJDS2WindInfluence = 1.2f;
+        public const float ProjectileJDSSWindInfluence = 1.2f;
+        #endregion
+
         #region WeatherEffects
         public const float WeaterEffectRandomFlipbookUpdateTimer = 0.1f;
         public const float WeatherEffectVerticalScrollingUpdateSpeed = 50f;

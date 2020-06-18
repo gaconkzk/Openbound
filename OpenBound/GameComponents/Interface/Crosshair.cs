@@ -183,6 +183,18 @@ namespace OpenBound.GameComponents.Interface
                     }
                 },
                 #endregion
+                #region JD
+                {
+                    MobileType.JD,
+                    new Dictionary<ShotType, CrosshairPreset>()
+                    {
+                        {
+                            ShotType.S1,
+                            new CrosshairPreset() { CannonOffsetDistance = -32, CannonOffsetRotation = MathHelper.ToRadians(45), CrosshairPointerOffset = 29f }
+                        },
+                    }
+                },
+                #endregion
             };
 
         public Vector2 CannonPosition { get; private set; }

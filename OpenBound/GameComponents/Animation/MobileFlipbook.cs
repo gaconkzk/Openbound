@@ -470,6 +470,46 @@ namespace OpenBound.GameComponents.Animation
                 }
             },
             #endregion
+            #region JD
+                  {
+                MobileType.JD,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 027, EndingFrame = 046, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 026, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 047, EndingFrame = 070, TimePerFrame = 1/17f } },
+
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 071, EndingFrame = 090, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 256, EndingFrame = 295, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 256, EndingFrame = 295, TimePerFrame = 1/29f } },
+
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 373, EndingFrame = 397, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 398, EndingFrame = 422, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 236, EndingFrame = 246, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 157, EndingFrame = 157, TimePerFrame = 1f } },
+
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 200, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 091, EndingFrame = 110, TimePerFrame = 1/26f } },
+
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 210, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 91,  EndingFrame = 110, TimePerFrame = 1/20f } },
+
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 211, EndingFrame = 235, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 171, EndingFrame = 190, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 151, EndingFrame = 170, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 447, TimePerFrame = 1/18f } },
+                }
+            },
+            #endregion
         };
 
         public ActorFlipbookState State { get; private set; }
@@ -565,6 +605,11 @@ namespace OpenBound.GameComponents.Animation
                 case MobileType.Raon:
                     mb.Flipbook = Flipbook.CreateFlipbook(
                         Position, new Vector2(64, 95), 2200 / 20, 2340 / 18, spritePath,
+                        new AnimationInstance(), true, DepthParameter.Mobile);
+                    break;
+                case MobileType.JD:
+                    mb.Flipbook = Flipbook.CreateFlipbook(
+                        Position, new Vector2(57, 95), 2260 / 20, 3266 / 23, spritePath,
                         new AnimationInstance(), true, DepthParameter.Mobile);
                     break;
             }
