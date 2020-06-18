@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Interface.Interactive;
+using OpenBound.GameComponents.Interface.Interactive.Misc;
 using OpenBound.GameComponents.Level.Scene;
 using System;
 
@@ -14,10 +15,11 @@ namespace OpenBound.GameComponents.Interface.General
         Sprite scrollBackground;
 
         Sprite scrollBar;
+        TransparentButton scrollBarTB;
 
         Vector2 position, boxSize;
 
-        float maxScroll, minScroll;
+        float maxScroll, minScroll, scrollSize;
 
         //Debug Variables
 #if DEBUG
@@ -27,6 +29,8 @@ namespace OpenBound.GameComponents.Interface.General
         DebugCrosshair d2 = new DebugCrosshair(Color.Blue);
         DebugCrosshair d3 = new DebugCrosshair(Color.Blue);
 #endif
+
+        public int ElementWidth => scrollButtonUp.ButtonSprite.SourceRectangle.X + 5;
 
         public float NormalizedCurrentScrollPercentage { get; private set; }
 
@@ -51,6 +55,11 @@ namespace OpenBound.GameComponents.Interface.General
             scrollBar = new Sprite("Interface/TextBox/ScrollBarBlock", scrollButtonDown.ButtonOffset, layerDepth: 0.9f, sourceRectangle: new Rectangle(0, 0, 25, 11));
             scrollBar.Pivot = new Vector2(12.5f, 5.5f) + pivotOffset;
 
+            scrollBarTB = new TransparentButton((scrollButtonUp.ButtonOffset + scrollButtonDown.ButtonOffset) / 2, new Rectangle(0, 0, (int)scrollButtonUp.ButtonSprite.SourceRectangle.Width, (int)boxSize.Y - scrollButtonUp.ButtonSprite.SourceRectangle.Height * 2 + 2));
+            scrollBarTB.ButtonSprite.Pivot += scrollBarTB.ButtonSprite.Pivot * Vector2.UnitX;
+
+            scrollBarTB.OnBeingDragged += (b) => { SetScrollPosition(Cursor.Instance.CurrentFlipbook.Position.Y + GameScene.Camera.CameraOffset.Y); };
+
 #if DEBUG
             DebugHandler.Instance.Add(dL1);
             DebugHandler.Instance.Add(dL2);
@@ -59,28 +68,39 @@ namespace OpenBound.GameComponents.Interface.General
             DebugHandler.Instance.Add(d3);
 #endif
 
-            scrollButtonUp.OnBeingDragged += (b) => { UpdateScrollPosition(1); };
-
-            scrollButtonDown.OnBeingDragged += (b) => { UpdateScrollPosition(-1); };
-
             minScroll = scrollButtonUp.ButtonOffset.Y + scrollButtonUp.ButtonSprite.Pivot.Y + 2;
             maxScroll = scrollButtonDown.ButtonOffset.Y - scrollButtonDown.ButtonSprite.Pivot.Y - 2;
+            scrollSize = (int)Math.Sqrt(minScroll * minScroll + maxScroll * maxScroll);
 
-            UpdateScrollPosition(float.MinValue);
+            scrollButtonUp.OnBeingDragged += (b) => { UpdateScrollPosition(scrollSize / 100f); };
+            scrollButtonDown.OnBeingDragged += (b) => { UpdateScrollPosition(-scrollSize / 100f); };
+
+            UpdateScrollPosition(float.MaxValue);
             //Interface/TextBox/TextBoxBackground
+        }
+
+        public void SetScrollPosition(float newPosition)
+        {
+            scrollBar.PositionOffset = new Vector2(scrollBar.PositionOffset.X, newPosition);
+            CalculateNormalizedPosition();
         }
 
         public void UpdateScrollPosition(float newOffset)
         {
             scrollBar.PositionOffset -= new Vector2(0, newOffset);
+            CalculateNormalizedPosition();
+        }
 
+        private void CalculateNormalizedPosition()
+        {
             float min, max;
 
             if (minScroll > maxScroll)
             {
                 max = minScroll;
                 min = maxScroll;
-            } else
+            }
+            else
             {
                 max = maxScroll;
                 min = minScroll;
@@ -92,6 +112,22 @@ namespace OpenBound.GameComponents.Interface.General
             NormalizedCurrentScrollPercentage = (scrollBar.PositionOffset.Y - min) / (max - min);
         }
 
+        public void Disable()
+        {
+            scrollButtonUp.Disable();
+            scrollButtonDown.Disable();
+            scrollBar.SetTransparency(0);
+            scrollBarTB.Disable();
+        }
+
+        public void Enable()
+        {
+            scrollButtonUp.Enable();
+            scrollButtonDown.Enable();
+            scrollBar.SetTransparency(1);
+            scrollBarTB.Enable();
+        }
+
         public void Update()
         {
             scrollButtonUp.Update();
@@ -100,6 +136,9 @@ namespace OpenBound.GameComponents.Interface.General
             scrollBackground.UpdateAttatchmentPosition();
 
             scrollBar.UpdateAttatchmentPosition();
+            scrollBarTB.Update();
+
+            //scrollBarTB.ButtonOffset = scrollBar.PositionOffset;
 
 #if DEBUG
             dL1.Update(position - GameScene.Camera.CameraOffset, position + boxSize * Vector2.UnitY - GameScene.Camera.CameraOffset);

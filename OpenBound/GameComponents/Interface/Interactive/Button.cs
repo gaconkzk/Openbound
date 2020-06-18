@@ -271,6 +271,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Normal,    new Rectangle(23 * 0, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Activated, new Rectangle(23 * 0, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Clicked,   new Rectangle(23 * 0, 23 * 1, 23, 23) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(23 * 0, 23 * 1, 23, 23) },
                         }
                     }
                 },
@@ -284,6 +285,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Normal,    new Rectangle(23 * 1, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Activated, new Rectangle(23 * 1, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Clicked,   new Rectangle(23 * 1, 23 * 1, 23, 23) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(23 * 1, 23 * 1, 23, 23) },
                         }
                     }
                 },
@@ -297,6 +299,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Normal,    new Rectangle(23 * 2, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Activated, new Rectangle(23 * 2, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Clicked,   new Rectangle(23 * 2, 23 * 1, 23, 23) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(23 * 2, 23 * 1, 23, 23) },
                         }
                     }
                 },
@@ -310,6 +313,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Normal,    new Rectangle(23 * 3, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Activated, new Rectangle(23 * 3, 23 * 0, 23, 23) },
                             { ButtonAnimationState.Clicked,   new Rectangle(23 * 3, 23 * 1, 23, 23) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(23 * 3, 23 * 1, 23, 23) },
                         }
                     }
                 },

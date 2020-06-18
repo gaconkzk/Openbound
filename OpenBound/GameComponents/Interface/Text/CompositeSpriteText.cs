@@ -12,7 +12,10 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Common;
+using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
+using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,6 +109,38 @@ namespace OpenBound.GameComponents.Interface.Text
         }
         #endregion
 
+        public static List<CompositeSpriteText> CreateChatMessage(Player player, string text, int maxWidth, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            //Add player nickname painted with a random color
+
+            //Load the first line with the player nickname
+            List<SpriteText> line = new List<SpriteText>() {
+                new SpriteText(FontTextType.Consolas10, "[", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
+                new SpriteText(FontTextType.Consolas10, player.Nickname, Helper.TextToColor(player.Nickname), Alignment.Left, layerDepth, outlineColor: Color.Black),
+                new SpriteText(FontTextType.Consolas10, "]: ", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
+            };
+
+            SpriteText st = line.Last();
+            int i = 0;
+            while (i < text.Length - 1)
+            {
+                for (; i < text.Length - 1 && line.Sum((x) => x.MeasureSize.X) < maxWidth; i++)
+                {
+                    st.Text += text[i];
+                }
+
+                cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+
+                line = new List<SpriteText>();
+                st = new SpriteText(FontTextType.Consolas10, "", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black);
+                line.Add(st);
+            }
+
+            return cstList;
+        }
+
         public static CompositeSpriteText CreateCompositeSpriteText(List<List<SpriteText>> spriteTextMatrix, Alignment alignment, Vector2 position, Vector2 elementOffset)
         {
             return new CompositeSpriteText(spriteTextMatrix, alignment, position, elementOffset);
@@ -147,6 +182,19 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             position = positionOffset;
             spriteTextMatrix.ForEach((x) => x.ForEach((y) => y.UpdateAttatchedPosition()));
+        }
+
+        public void ReplaceTextColor(Color from, Color to)
+        {
+            spriteTextMatrix.ForEach((x) => x.ForEach((y) =>
+            {
+                if (from == y.Color) y.Color = to;
+            }));
+        }
+
+        public void ResetTextColor()
+        {
+            spriteTextMatrix.ForEach((x) => x.ForEach((y) => y.Color = y.BaseColor));
         }
 
         private void RecalculatePosition()

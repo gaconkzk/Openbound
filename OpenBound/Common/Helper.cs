@@ -11,6 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
+using OpenBound.Extension;
 using System;
 
 namespace OpenBound.Common
@@ -73,6 +74,25 @@ namespace OpenBound.Common
             float x = xA - xB;
             float y = yA - yB;
             return x * x + y * y;
+        }
+
+        public static Color TextToColor(string text)
+        {
+            uint color = 0x0;
+
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                color ^= text[i];
+                color = color.RotateLeft(8);
+            }
+
+            Color c = new Color(color);
+            c.A = (byte)(20 + c.A * 1.2);
+            c.R = (byte)(20 + c.R * 1.2);
+            c.B = (byte)(20 + c.B * 1.2);
+            c.G = (byte)(20 + c.G * 1.2);
+
+            return c;
         }
     }
 }
