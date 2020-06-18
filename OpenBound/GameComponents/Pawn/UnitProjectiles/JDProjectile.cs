@@ -45,6 +45,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
+
         }
 
         protected override void Destroy()

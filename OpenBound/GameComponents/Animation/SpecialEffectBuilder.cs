@@ -286,6 +286,17 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
         #endregion
+        #region JD
+        public static void JDProjectile1Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(95, 91), 157, 160, "Graphics/Special Effects/Tank/JD/Flame1",
+                new AnimationInstance { StartingFrame = 0, EndingFrame = 13, TimePerFrame = 1 / 20f}, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+        #endregion
 
         #region Thor
         private static void ThorShotColorBase(Vector2 position, Color baseColor, float scale, float rotation)
