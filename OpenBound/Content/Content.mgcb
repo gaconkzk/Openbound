@@ -1098,6 +1098,16 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Consolas16.spritefont
 
+#begin Fonts/Font Awesome 5 Free-Solid-900.otf
+/copy:Fonts/Font Awesome 5 Free-Solid-900.otf
+
+#begin Fonts/FontAwesome10.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/FontAwesome10.spritefont
+
 #begin Graphics/Entity/Thor/Spritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

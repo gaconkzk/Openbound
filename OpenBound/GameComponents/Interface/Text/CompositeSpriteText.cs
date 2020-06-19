@@ -109,6 +109,32 @@ namespace OpenBound.GameComponents.Interface.Text
         }
         #endregion
 
+        public static List<CompositeSpriteText> CreateCustomMessage(string text, uint textColor, uint textBorderColor, FontTextType FontTextType, int maxWidth, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            int i = 0;
+            while(i < text.Length)
+            {
+                List<SpriteText> line = new List<SpriteText>();
+
+                SpriteText st = new SpriteText(FontTextType, "", new Color(textColor), Alignment.Left, layerDepth, outlineColor: new Color(textBorderColor));
+
+                line.Add(st);
+
+                for (; i < text.Length && st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + text[i])).X < maxWidth; i++)
+                {
+                    st.Text += text[i];
+                }
+
+                if (st.Text.Length == 0) continue;
+
+                cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+            }
+
+            return cstList;
+        }
+
         public static List<CompositeSpriteText> CreateChatMessage(Player player, string text, int maxWidth, float layerDepth)
         {
             List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
@@ -126,7 +152,9 @@ namespace OpenBound.GameComponents.Interface.Text
             int i = 0;
             while (i < text.Length)
             {
-                for (; i < text.Length && line.Sum((x) => x.MeasureSize.X) < maxWidth; i++)
+                List<SpriteText> lineProjection = line.Except(new List<SpriteText>() { st }).ToList();
+
+                for (; i < text.Length && lineProjection.Sum((x) => x.MeasureSize.X) + st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + text[i])).X < maxWidth; i++)
                 {
                     st.Text += text[i];
                 }

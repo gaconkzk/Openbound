@@ -503,14 +503,20 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
-                for(int i = 0; i < 100; i++)
+                for (int i = 0; i < 100; i++)
                     //tsb.AppendText(sMobList[0].Owner, textBase += "0");
-                tsb.AsyncAppendPlayerText(sMobList[0].Owner, textBase + number++);
+                tsb.AsyncAppendPlayerText(sMobList[0].Owner, textBase += "0");
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
-                tsb.AsyncAppendPlayerText(sMobList[0].Owner, textBase + number);
+                string text = "";
+                for (int i = 0xF000; i < 0xFFFF; i++)
+                    text += (char)i + " " ;
+
+                tsb.AsyncAppendCustomMessage(text, Color.White.PackedValue, Color.Black.PackedValue, FontTextType.FontAwesome10);
+
+                Console.WriteLine(number);
             }
 
             if (InputHandler.IsBeingPressed(Keys.D4))
@@ -520,8 +526,8 @@ namespace OpenBound.GameComponents.Level.Scene
             tsb.Update();
         }
 
-        string textBase = "1234567890-=abcdefghi";
-        float number = 0;
+        string textBase = "abcdefgh";
+        int number = 0;
 
         TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300), 500, 0.5f, 0.8f, true);
 

@@ -14,16 +14,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
+using System;
+using System.Text;
 
 namespace OpenBound.GameComponents.Interface.Text
 {
     public enum FontTextType
     {
         Arial12,
+
         Consolas10,
         Consolas10Bold,
         Consolas11,
         Consolas16,
+
+        FontAwesome10,
     }
 
     public enum Alignment
@@ -115,6 +120,8 @@ namespace OpenBound.GameComponents.Interface.Text
                 OutlineBaseColor = OutlineColor = outlineColor;
             }
 
+            this.text = "";
+
             UpdateText(text);
         }
 
@@ -122,6 +129,19 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             Color = BaseColor * transparency;
             OutlineColor = OutlineBaseColor * transparency;
+        }
+
+        public string GenerateTextWithSupportedCharacters(string text)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach(char c in text)
+            {
+                if (SpriteFont.Characters.Contains(c))
+                    sb.Append(c);
+            }
+
+            return sb.ToString();
         }
 
         public void UpdateAttatchedPosition()
@@ -136,10 +156,10 @@ namespace OpenBound.GameComponents.Interface.Text
 
         private void UpdateText(string Text)
         {
-            text = Text;
+            text = GenerateTextWithSupportedCharacters(Text);
 
             //Fixing the origin
-            Vector2 size = SpriteFont.MeasureString(Text);
+            Vector2 size = SpriteFont.MeasureString(text);
 
             if (Alignment == Alignment.Left)
                 Origin = Vector2.Zero;

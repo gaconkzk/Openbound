@@ -23,6 +23,13 @@ namespace OpenBound.GameComponents.Interface.Text
         public string Text;
     }
 
+    public struct CustomMessage
+    {
+        public string Text;
+        public uint TextColor, TextBorderColor;
+        public FontTextType FontTextType;
+    }
+
     public class TextBox
     {
         //Text being rendered
@@ -49,7 +56,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
         //Asynchronous text handling thread objects
         Thread textHandlerThread;
-        Queue<PlayerMessage> playerMessageQueue;
+        Queue<object> playerMessageQueue;
 
         public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
         {
@@ -64,11 +71,12 @@ namespace OpenBound.GameComponents.Interface.Text
                 scrollBar.Disable();
                 scrollBar.InstallOnChangeAction(OnBeingDragged);
             }
+            /*
             else
             {
                 //Reduce a few pixels to avoid overflow by the numbers
                 boxTextArea -= new Vector2(8, 0);
-            }
+            }*/
 
             background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: DepthParameter.InterfaceButton);
             background.SetTransparency(backgroundAlpha);
@@ -76,7 +84,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
             compositeSpriteTextList = new List<CompositeSpriteText>();
             toBeAddedCompositeSpriteTextList = new List<CompositeSpriteText>();
-            playerMessageQueue = new Queue<PlayerMessage>();
+            playerMessageQueue = new Queue<object>();
 
             //Create text producer thread
             textHandlerThread = new Thread(TextProcessingThread);
@@ -90,7 +98,8 @@ namespace OpenBound.GameComponents.Interface.Text
         }
 
         /// <summary>
-        /// Text processing thread producer. All the texts are produced by this thread and stored on the <see cref="toBeAddedCompositeSpriteTextList"/> for further screen integration via <see cref="UpdateReceivedTexts"/>.
+        /// Text processing thread producer. All the texts are produced by this thread and stored on the <see cref="toBeAddedCompositeSpriteTextList"/>
+        /// for further screen integration via <see cref="UpdateReceivedTexts"/>.
         /// </summary>
         private void TextProcessingThread()
         {
@@ -100,8 +109,20 @@ namespace OpenBound.GameComponents.Interface.Text
                 lock (playerMessageQueue)
                 {
                     if (playerMessageQueue.Count == 0) continue;
-                    PlayerMessage pm = playerMessageQueue.Dequeue();
-                    List<CompositeSpriteText> cstList = CompositeSpriteText.CreateChatMessage(pm.Player, pm.Text, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+
+                    object text = playerMessageQueue.Dequeue();
+
+                    List<CompositeSpriteText> cstList = null;
+
+                    switch (text)
+                    {
+                        case PlayerMessage pm:
+                            cstList = CompositeSpriteText.CreateChatMessage(pm.Player, pm.Text, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+                            break;
+                        case CustomMessage cm:
+                            cstList = CompositeSpriteText.CreateCustomMessage(cm.Text, cm.TextColor, cm.TextBorderColor, cm.FontTextType, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+                            break;
+                    }
 
                     lock (toBeAddedCompositeSpriteTextList)
                         toBeAddedCompositeSpriteTextList.AddRange(cstList);
@@ -118,6 +139,17 @@ namespace OpenBound.GameComponents.Interface.Text
             {
                 playerMessageQueue.Enqueue(new PlayerMessage() { Player = player, Text = text });
             }         
+        }
+
+        /// <summary>
+        /// Generates a text addition request to the producer thread.
+        /// </summary>
+        public void AsyncAppendCustomMessage(string text, uint textColor, uint textBorderColor, FontTextType fontTextType)
+        {
+            lock (playerMessageQueue)
+            {
+                playerMessageQueue.Enqueue(new CustomMessage() { FontTextType = fontTextType, TextColor = textColor, TextBorderColor = textBorderColor, Text = text });
+            }
         }
 
         /// <summary>

@@ -131,6 +131,7 @@
     <Compile Include="Utils\MinimapThumbGenerator.cs" />
     <Compile Include="Utils\FileNameFixer.cs" />
     <Compile Include="Utils\PivotFileManager.cs" />
+    <Compile Include="Utils\SpritefontRangeBuilder.cs" />
     <Compile Include="Utils\SpriteImportManager.cs" />
     <Compile Include="Utils\MultiLayerSpritesheetMaker.cs" />
     <Compile Include="Utils\SingleLayerSpritesheetMaker.cs" />
@@ -156,6 +157,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="DLL\ImgTools.dll" />
+    <Content Include="Resources\FontAwesome5.3ValidElements.txt" />
     <None Include="LICENCE.GPL" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
