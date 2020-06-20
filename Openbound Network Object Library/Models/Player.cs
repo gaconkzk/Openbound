@@ -117,5 +117,10 @@ namespace Openbound_Network_Object_Library.Models
         {
             PlayerNavigation = PlayerNavigation.InGameMenus;
         }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode();
+        }
     }
 }

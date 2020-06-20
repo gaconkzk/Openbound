@@ -1,36 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Interface.General;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.Interface.Text
 {
-    /// <summary>
-    /// Player message struct. So far, it is only being used in here. Eventually ill drop it on NetworkObjectLibrary
-    /// </summary>
-    public struct PlayerMessage
-    {
-        public Player Player;
-        public string Text;
-    }
-
-    public struct CustomMessage
-    {
-        public string Text;
-        public uint TextColor, TextBorderColor;
-        public FontTextType FontTextType;
-    }
-
-    public class TextBox
+    public class TextBox : IDisposable
     {
         //Text being rendered
         List<CompositeSpriteText> toBeAddedCompositeSpriteTextList;
@@ -54,15 +36,26 @@ namespace OpenBound.GameComponents.Interface.Text
         //Selected element index
         int selectedIndex;
 
+        //Text Field
+        TextField textField;
+        Sprite textfieldBackground;
+        Vector2 textFieldOffset;
+
+        //Action Handlers
+        public Action<PlayerMessage> OnSendMessage;
+
         //Asynchronous text handling thread objects
         Thread textHandlerThread;
         Queue<object> playerMessageQueue;
+        bool isThreadEnabled;
 
-        public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true)
+        public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true, Vector2 textFieldOffset = default, float textFieldBackground = 0.3f, bool hasTextField = true, Action<PlayerMessage> onSendMessage = default, int maximumTextLength = 50)
         {
             boxTextArea = boxSize;
+            OnSendMessage = onSendMessage;
             this.maximumNumberOfLines = maximumNumberOfLines;
-
+            this.textFieldOffset = textFieldOffset;
+            
             if (hasScrollBar)
             {
                 //Instance, disable, add a action handler to scroll bar and reduce the text area proportional to textbar size.
@@ -71,12 +64,15 @@ namespace OpenBound.GameComponents.Interface.Text
                 scrollBar.Disable();
                 scrollBar.InstallOnChangeAction(OnBeingDragged);
             }
-            /*
-            else
+
+            if (hasTextField)
             {
-                //Reduce a few pixels to avoid overflow by the numbers
-                boxTextArea -= new Vector2(8, 0);
-            }*/
+                textField = new TextField(default, (int)(boxSize.X - textFieldOffset.X * 2), 30, maximumTextLength, FontTextType.Consolas10, Color.White, layerDepth: DepthParameter.InterfaceButtonText, outlineColor: Color.Black);
+                textField.OnPressKey[Keys.Enter] = SendMessage;
+                textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", position + new Vector2(0, boxSize.Y) + new Vector2(0, textFieldOffset.Y), layerDepth: DepthParameter.InterfaceButton);
+                textfieldBackground.SetTransparency(backgroundAlpha);
+                textfieldBackground.Scale *= new Vector2(boxSize.X, 30);
+            }
 
             background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: DepthParameter.InterfaceButton);
             background.SetTransparency(backgroundAlpha);
@@ -90,11 +86,17 @@ namespace OpenBound.GameComponents.Interface.Text
             textHandlerThread = new Thread(TextProcessingThread);
             textHandlerThread.Name = "TextHandlerThread";
             textHandlerThread.Start();
+            isThreadEnabled = true;
         }
 
-        ~TextBox()
+        private void SendMessage(object textField)
         {
-            textHandlerThread.Abort();
+            TextField t = (TextField)textField;
+
+            Player p = GameInformation.Instance.PlayerInformation;
+            OnSendMessage(new PlayerMessage() { Player = new Player() { ID = p.ID, Nickname = p.Nickname }, Text = t.Text.Text });
+            
+            t.ClearText();
         }
 
         /// <summary>
@@ -103,7 +105,7 @@ namespace OpenBound.GameComponents.Interface.Text
         /// </summary>
         private void TextProcessingThread()
         {
-            while (true)
+            while (isThreadEnabled)
             {
                 Thread.Sleep(10);
                 lock (playerMessageQueue)
@@ -117,10 +119,13 @@ namespace OpenBound.GameComponents.Interface.Text
                     switch (text)
                     {
                         case PlayerMessage pm:
-                            cstList = CompositeSpriteText.CreateChatMessage(pm.Player, pm.Text, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+                            cstList = CompositeSpriteText.CreateChatMessage(pm, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
                             break;
                         case CustomMessage cm:
-                            cstList = CompositeSpriteText.CreateCustomMessage(cm.Text, cm.TextColor, cm.TextBorderColor, cm.FontTextType, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+                            cstList = CompositeSpriteText.CreateCustomMessage(cm, (int)boxTextArea.X, DepthParameter.InterfaceButtonText);
+                            break;
+                        case List<CustomMessage> cmL:
+                            cstList = CompositeSpriteText.CreateCustomMessage(cmL, DepthParameter.InterfaceButtonText);
                             break;
                     }
 
@@ -133,23 +138,22 @@ namespace OpenBound.GameComponents.Interface.Text
         /// <summary>
         /// Generates a text addition request to the producer thread.
         /// </summary>
-        public void AsyncAppendPlayerText(Player player, string text)
+        public void AsyncAppendText(object message)
         {
             lock (playerMessageQueue)
             {
-                playerMessageQueue.Enqueue(new PlayerMessage() { Player = player, Text = text });
-            }         
+                playerMessageQueue.Enqueue(message);
+            }
         }
 
-        /// <summary>
-        /// Generates a text addition request to the producer thread.
-        /// </summary>
-        public void AsyncAppendCustomMessage(string text, uint textColor, uint textBorderColor, FontTextType fontTextType)
+        public void EnableTextField()
         {
-            lock (playerMessageQueue)
-            {
-                playerMessageQueue.Enqueue(new CustomMessage() { FontTextType = fontTextType, TextColor = textColor, TextBorderColor = textBorderColor, Text = text });
-            }
+            textField.Enable();
+        }
+
+        public void DisableTextField()
+        {
+            textField.Disable();
         }
 
         /// <summary>
@@ -201,18 +205,20 @@ namespace OpenBound.GameComponents.Interface.Text
             selectedIndex = Math.Max((int)(scrollBar.NormalizedCurrentScrollPercentage * compositeSpriteTextList.Count) - 1, 0);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             scrollBar?.Update();
             background.UpdateAttatchmentPosition();
             UpdateReceivedTexts();
             UpdateTextPosition();
+            textField?.Update(gameTime);
+            textfieldBackground?.UpdateAttatchmentPosition();
         }
 
         /// <summary>
         /// Removes the new processed texts and adds em' to the renderable list
         /// </summary>
-        public void UpdateReceivedTexts()
+        private void UpdateReceivedTexts()
         {
             lock (toBeAddedCompositeSpriteTextList)
             {
@@ -226,8 +232,11 @@ namespace OpenBound.GameComponents.Interface.Text
         /// <summary>
         /// Updates only the texts that are being rendered on screen.
         /// </summary>
-        public void UpdateTextPosition()
+        private void UpdateTextPosition()
         {
+            //Textfield
+            textField.Position = background.Position + boxTextArea * Vector2.UnitY + textFieldOffset;
+
             if (compositeSpriteTextList.Count == 0) return;
 
             //Updating selected index
@@ -250,13 +259,22 @@ namespace OpenBound.GameComponents.Interface.Text
             }
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            scrollBar?.Draw(gameTime, spriteBatch);
-            background.Draw(gameTime, spriteBatch);
+            scrollBar?.Draw(null, spriteBatch);
+            background.Draw(null, spriteBatch);
 
             //Draw only the necessary elements. The indexes are beingcalculated on UpdateTextPosition method.
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++) compositeSpriteTextList[i].Draw(spriteBatch);
+
+            textField?.Draw(spriteBatch);
+            textfieldBackground?.Draw(null, spriteBatch);
+        }
+
+        public void Dispose()
+        {
+            isThreadEnabled = false;
+            textField.Dispose();
         }
     }
 }

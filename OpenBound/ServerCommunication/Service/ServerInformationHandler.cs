@@ -13,6 +13,7 @@
 using OpenBound.Common;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Extension;
 using System;
@@ -56,7 +57,8 @@ namespace OpenBound.ServerCommunication.Service
                 GameInformation.Instance.PlayerInformation);
         }
 
-        #region Room
+        #region GameList
+        //Room
         public static void CreateRoom(RoomMetadata roomMetadata)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
@@ -81,6 +83,28 @@ namespace OpenBound.ServerCommunication.Service
                 );
         }
 
+        public static void SendGameListMessage(PlayerMessage message)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerChatGameListSendPlayerMessage,
+                message);
+        }
+
+        public static void SendChatConnectionRequest(int channelID)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerChatGameListEnter,
+                channelID);
+        }
+
+        public static void SendChatDisconnectionRequest()
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerChatGameListLeave, null);
+        }
+        #endregion
+
+        #region GameRoom
         public static void ChangePrimaryMobile(MobileType mobileType)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
@@ -89,18 +113,10 @@ namespace OpenBound.ServerCommunication.Service
                 );
         }
 
-        internal static void StartMatch()
+        public static void ChangeTeam()
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-               NetworkObjectParameters.GameServerInGameStartMatch,
-               null
-               );
-        }
-
-        public static void RequestNextPlayerTurn()
-        {
-            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerInGameRequestNextPlayerTurn,
+                NetworkObjectParameters.GameServerRoomChangeTeam,
                 null
                 );
         }
@@ -121,6 +137,16 @@ namespace OpenBound.ServerCommunication.Service
                 );
         }
 
+        public static void ChangeMap(int mapIndex)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerRoomChangeMap,
+                mapIndex
+                );
+        }
+        #endregion
+
+        #region LoadingScreen
         public static void UpdateLoadingScreenPercentage(int loadingPercentage)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
@@ -135,6 +161,24 @@ namespace OpenBound.ServerCommunication.Service
                 NetworkObjectParameters.GameServerRoomStartInGameScene,
                 null
                 );
+        }
+        #endregion
+
+        #region InGame
+        public static void RequestNextPlayerTurn()
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerInGameRequestNextPlayerTurn,
+                null
+                );
+        }
+
+        public static void StartMatch()
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+               NetworkObjectParameters.GameServerInGameStartMatch,
+               null
+               );
         }
 
         public static void SynchronizeMobileStatus(SyncMobile syncMobile)
@@ -158,22 +202,6 @@ namespace OpenBound.ServerCommunication.Service
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
                 NetworkObjectParameters.GameServerInGameRequestDeath,
                 syncMobile
-                );
-        }
-
-        public static void ChangeTeam()
-        {
-            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerRoomChangeTeam,
-                null
-                );
-        }
-
-        public static void ChangeMap(int mapIndex)
-        {
-            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerRoomChangeMap,
-                mapIndex
                 );
         }
         #endregion

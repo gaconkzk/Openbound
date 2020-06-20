@@ -16,15 +16,16 @@ using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Input;
+using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Interface.Text
 {
-    public class TextField
+    public class TextField : IDisposable
     {
-        public Vector2 position { get; set; }
+        private Vector2 position;
         public Vector2 Position
         {
             get => position;
@@ -36,7 +37,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
         //Control
         public bool IsActive { get; set; }
-        public bool IsEnabled { get; private set; }
+        bool isEnabled;
 
         //Collision Box preset
         private int boxWidth, boxHeight;
@@ -53,8 +54,12 @@ namespace OpenBound.GameComponents.Interface.Text
         //Tabing Index
         public List<TextField> TabIndex;
 
+        //Positioning
+        private Vector2 alignmentOffset;
+
         //Event
         Action<object> OnActive { get; set; }
+        public Dictionary<Keys, Action<object>> OnPressKey { get; set; }
 
 #if DEBUG
         DebugRectangle debugRectangle;
@@ -73,8 +78,13 @@ namespace OpenBound.GameComponents.Interface.Text
             //Text
             Text = new SpriteText(fontTextType, "", color, Alignment.Left, layerDepth, default, outlineColor);
             textPointer = new SpriteText(fontTextType, "|", Parameter.NameplateGuildColor, Alignment.Left, layerDepth + 0.01f, default, Parameter.NameplateGuildOutlineColor);
+            alignmentOffset = Text.MeasureSubstring(" ");
 
-            IsEnabled = true;
+            DeactivateElement();
+
+            isEnabled = true;
+
+            OnPressKey = new Dictionary<Keys, Action<object>>();
 
 #if DEBUG
             debugRectangle = new DebugRectangle(Color.CornflowerBlue);
@@ -82,12 +92,12 @@ namespace OpenBound.GameComponents.Interface.Text
 #endif
         }
 
-        public void UpdatePostion(Vector2 positionOffset)
+        private void UpdatePostion(Vector2 positionOffset)
         {
-            position = positionOffset;
+            position = new Vector2((int)positionOffset.X, (int)positionOffset.Y);
 
             collisionRectangle = new Rectangle((int)position.X, (int)position.Y, boxWidth, boxHeight);
-            Text.Position = position;
+            Text.Position = position + new Vector2(0, (int)(-alignmentOffset.Y / 2 + boxHeight / 2));
 
 #if DEBUG
             debugRectangle.Update(
@@ -103,7 +113,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
         public void Update(GameTime gameTime)
         {
-            if (!IsEnabled) return;
+            if (!isEnabled) return;
 
             CheckMouseIntersection();
             UpdateBlinkingBar(gameTime);
@@ -122,23 +132,49 @@ namespace OpenBound.GameComponents.Interface.Text
             }
         }
 
+        public void Enable()
+        {
+            isEnabled = true;
+        }
+
+        public void Disable()
+        {
+            isEnabled = false;
+            DeactivateElement();
+        }
+
+        private void DeactivateElement()
+        {
+            Text.Color = Parameter.TextColorTextBoxSelectedMessage;
+            IsActive = false;
+            Uninstall();
+        }
+
         private void ActivateElement()
         {
+            if (IsActive) return;
+
             if (TabIndex != null)
             {
-                TabIndex.ForEach((x) =>
+                foreach (TextField tf in TabIndex)
                 {
-                    x.IsActive = false;
-                    Game1.Instance.Window.TextInput -= x.GetKeyboardInput;
-                });
-            }
-            else
-            {
-                Game1.Instance.Window.TextInput -= GetKeyboardInput;
+                    tf.DeactivateElement();
+                }
             }
 
-            IsActive = true;
+            Text.Color = Color.White;
             OnActive?.Invoke(this);
+            IsActive = true;
+            Install();
+        }
+
+        public void Uninstall()
+        {
+            Game1.Instance.Window.TextInput -= GetKeyboardInput;
+        }
+
+        public void Install()
+        {
             Game1.Instance.Window.TextInput += GetKeyboardInput;
         }
 
@@ -195,22 +231,12 @@ namespace OpenBound.GameComponents.Interface.Text
             keyInputTimer = 0.10f;
         }
 
-        public void Enable()
-        {
-            IsEnabled = true;
-        }
-
-        public void Disable()
-        {
-            IsEnabled = false;
-        }
-
         private void UpdateBlinkingBar(GameTime gameTime)
         {
             Vector2 blinkingMeasured = textPointer.SpriteFont.MeasureString(textPointer.Text);
             Vector2 textPointerMeasured = Text.SpriteFont.MeasureString(Text.Text.Substring(0, textPointerLocation));
 
-            textPointer.Position = Position + new Vector2(textPointerMeasured.X - blinkingMeasured.X / 2, 0);
+            textPointer.Position = Position + new Vector2(textPointerMeasured.X - blinkingMeasured.X / 2, 0) + new Vector2(0, -alignmentOffset.Y / 2 + boxHeight / 2);
 
             textPointerBlinkingTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             textPointerBlinkingTime = textPointerBlinkingTime % 1;
@@ -222,9 +248,19 @@ namespace OpenBound.GameComponents.Interface.Text
             if (IsActive && textPointerBlinkingTime < 0.5) textPointer.Draw(spriteBatch);
         }
 
+        public void ClearText()
+        {
+            Text.Text = "";
+            textPointerLocation = 0;
+        }
+
         private void GetKeyboardInput(object gameWindow, TextInputEventArgs pressedKey)
         {
             if (!IsActive) return;
+
+            if (OnPressKey.ContainsKey(pressedKey.Key))
+                OnPressKey[pressedKey.Key].Invoke(this);
+
             //Backspace
             if (pressedKey.Key == Keys.Back)
             {
@@ -246,9 +282,8 @@ namespace OpenBound.GameComponents.Interface.Text
                 if (currentIndex > TabIndex.Count - 1)
                     currentIndex = 0;
 
-                Game1.Instance.Window.TextInput -= GetKeyboardInput;
+                DeactivateElement();
                 TabIndex[currentIndex].ActivateElement();
-                IsActive = false;
             }
             else if (pressedKey.Character < 32 || pressedKey.Character > 254)
             {
@@ -263,6 +298,11 @@ namespace OpenBound.GameComponents.Interface.Text
                 Text.Text = before + pressedKey.Character + after;
                 textPointerLocation++;
             }
+        }
+
+        public void Dispose()
+        {
+            Uninstall();
         }
     }
 }

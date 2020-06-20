@@ -39,8 +39,8 @@ namespace OpenBound.Common
         public static string PopupCreateRoomScoreText = "The first team to destroy the remaining\n" +
                                                         "number of vehicles shown on the scoreboard\n" +
                                                         "wins.";
-        public static string PopupCreateRoomSoloText = "The last team standing in the arena wins.";
-        public static string PopupCreateRoomTagText = "Each player has two vehicles, the second\n" +
+        public static string PopupCreateRoomSoloText =  "The last team standing in the arena wins.";
+        public static string PopupCreateRoomTagText =   "Each player has two vehicles, the second\n" +
                                                         "mobile have half of its original HP. The\n" +
                                                         "last team standing in the arena\n" +
                                                         "wins.";

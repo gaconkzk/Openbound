@@ -21,6 +21,7 @@ using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
+using Openbound_Network_Object_Library.Entity.Text;
 
 namespace OpenBound.GameComponents.Interface.Popup
 {

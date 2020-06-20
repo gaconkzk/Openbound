@@ -14,6 +14,13 @@ using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
+    public enum BeamEmitterType
+    {
+        Lightning,
+        Weather,
+        Thor,
+    }
+
     /// <summary>
     /// Creates a beam dummy projectile. This projectile has its own movement rules being updated all at once.
     /// </summary>
@@ -32,17 +39,23 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         Vector2 parentPosition;
         Vector2 positionOffset;
 
-        //Behavior variables
-        bool isWeather;
+        //Thor exclusive variable
+        Vector2 finalPosition;
 
-        public BeamDummyProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
+        //Behavior variables
+        BeamEmitterType beamEmitterType;
+
+        public BeamDummyProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, BeamEmitterType beamEmitterType, Vector2? finalPosition = null)
             : base(mobile, ShotType.Dummy, explosionRadius, baseDamage)
         {
             this.extraExplosionRadius = extraExplosionRadius;
             this.extraDamage = extraDamage;
             this.beamAngle = beamAngle;
             this.parentPosition = parentPosition;
-            this.isWeather = isWeather;
+            this.beamEmitterType = beamEmitterType;
+
+            if (finalPosition != null)
+                this.finalPosition = (Vector2)finalPosition;
 
             positionOffset = Vector2.Transform(Vector2.UnitX * 3, Matrix.CreateRotationZ(-beamAngle));
             mobileList = new HashSet<Mobile>();
@@ -65,57 +78,95 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             //The weather needs to have a top-bottom collision checking approach. On the other hand,
             //the Lightning projectile collision starts at the project itself and then checks farther positions
             //because of its rotating feature
-            if (isWeather)
+            switch (beamEmitterType)
             {
-                completeMobileList = LevelScene.MobileList.Where((x) => Math.Abs(x.Position.Y) - Math.Abs(Position.Y) <= extraExplosionRadius).ToList();
-
-                //Start at the first (possible) collidable position
-                Position = new Vector2(Position.X, Topography.FirstCollidableBlockY);
-
-                //Find the first possible exploding position
-                while (Topography.IsInsideMapBoundaries(Position))
-                {
-                    CheckAffectedMobiles();
-
-                    //If it collides with the ground, stop right there
-                    if (Topography.CheckCollision(Position))
-                    {
-                        explosionPosition = Position;
-                        break;
-                    }
-
-                    Position -= positionOffset;
-                }
-
-                if (explosionPosition == parentPosition)
-                {
-                    explosionPosition = new Vector2(Position.X, Topography.MapHeight / 2);
-                }
-            }
-            else
-            {
-                completeMobileList = LevelScene.MobileList;
-
-                //While it is still inside the map
-                while (Topography.IsInsideMapBoundaries(Position) && Position.Y >= Topography.FirstCollidableBlockY)
-                {
-                    //Check if there is any mobile whithin the extraExplosionRadius to receive the electrical extra dmaage
-                    CheckAffectedMobiles();
-
-                    //If it collides with the ground or with another mobile, reset all previous affected mobiles and save the new explosion position
-                    if (Topography.CheckCollision(Position) || LevelScene.MobileList.Any((m) => m.CollisionBox.CheckCollision(Position)))
-                    {
-                        mobileList.Clear();
-                        explosionPosition = Position;
-                    }
-
-                    Position += positionOffset;
-                }
+                case BeamEmitterType.Weather:
+                    WeatherUpdateBehavior(ref explosionPosition);
+                    break;
+                case BeamEmitterType.Lightning:
+                    LightningUpdateBehavior(ref explosionPosition);
+                    break;
+                case BeamEmitterType.Thor:
+                    ThorUpdateBehavior(ref explosionPosition);
+                    break;
             }
 
             //In the end, move the projectile to the last "explodable" spot and explode it
             Position = explosionPosition;
             Explode();
+        }
+
+        private void LightningUpdateBehavior(ref Vector2 explosionPosition)
+        {
+            completeMobileList = LevelScene.MobileList;
+
+            //While it is still inside the map
+            while (Topography.IsInsideMapBoundaries(Position) && Position.Y >= Topography.FirstCollidableBlockY)
+            {
+                //Check if there is any mobile whithin the extraExplosionRadius to receive the electrical extra dmaage
+                CheckAffectedMobiles();
+
+                //If it collides with the ground or with another mobile, reset all previous affected mobiles and save the new explosion position
+                if (Topography.CheckCollision(Position) || LevelScene.MobileList.Any((m) => m.CollisionBox.CheckCollision(Position)))
+                {
+                    mobileList.Clear();
+                    explosionPosition = Position;
+                }
+
+                Position += positionOffset;
+            }
+        }
+
+        private void ThorUpdateBehavior(ref Vector2 explosionPosition)
+        {
+            completeMobileList = LevelScene.MobileList;
+
+            //While it is still inside the map
+            while (
+                Topography.IsInsideMapBoundaries(Position) &&
+                Position.Y >= Topography.FirstCollidableBlockY &&
+                Helper.SquaredEuclideanDistance(finalPosition, Position) > Parameter.ProjectileThorBeamDistanceThreshold)
+            {
+                //Check if there is any mobile whithin the extraExplosionRadius to receive the electrical extra dmaage
+                CheckAffectedMobiles();
+
+                //If it collides with the ground or with another mobile, reset all previous affected mobiles and save the new explosion position
+                if (Topography.CheckCollision(Position) || LevelScene.MobileList.Any((m) => m.CollisionBox.CheckCollision(Position)))
+                {
+                    mobileList.Clear();
+                    explosionPosition = Position;
+                }
+
+                Position += positionOffset;
+            }
+        }
+
+        private void WeatherUpdateBehavior(ref Vector2 explosionPosition)
+        {
+            completeMobileList = LevelScene.MobileList.Where((x) => Math.Abs(x.Position.Y) - Math.Abs(Position.Y) <= extraExplosionRadius).ToList();
+
+            //Start at the first (possible) collidable position
+            Position = new Vector2(Position.X, Topography.FirstCollidableBlockY);
+
+            //Find the first possible exploding position
+            while (Topography.IsInsideMapBoundaries(Position))
+            {
+                CheckAffectedMobiles();
+
+                //If it collides with the ground, stop right there
+                if (Topography.CheckCollision(Position))
+                {
+                    explosionPosition = Position;
+                    break;
+                }
+
+                Position -= positionOffset;
+            }
+
+            if (explosionPosition == parentPosition)
+            {
+                explosionPosition = new Vector2(Position.X, Topography.MapHeight / 2);
+            }
         }
 
         /// <summary>
@@ -149,7 +200,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     public class LightningBaseProjectile : BeamDummyProjectile
     {
         public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
-            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage, isWeather) { }
+            : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage, BeamEmitterType.Lightning) { }
 
         protected override void Explode()
         {

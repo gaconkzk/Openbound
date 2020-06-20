@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Common;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.FileOutput;
 using System;
 
@@ -479,6 +480,7 @@ namespace OpenBound.Common
         //Mirror
         public const float WeatherEffectMirrorDamageIncreaseFactor = 1.1f;
         public const float WeatherEffectMirrorDamageIncreaseValue = 5f;
+        public const float WeatherEffectMirrorDistanceFromTopReduction = 2/3f;
 
         //Electricity
         public const int WeatherEffectElectricityBaseDamage = 0;
@@ -497,6 +499,7 @@ namespace OpenBound.Common
         public const int ProjectileThorExplosionRadius = 25;
         public const int ProjectileThorBaseDamage = 40;
         public const int ProjectileThorBaseDamagePerLevel = 20;
+        public const int ProjectileThorBeamDistanceThreshold = 2000;
         public static int[] ThorExperienceTable = new int[] { 800, 1400, 2000, 2400, 3000 };
         #endregion
     }

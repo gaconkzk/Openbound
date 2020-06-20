@@ -14,28 +14,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
-using System;
+using Openbound_Network_Object_Library.Entity.Text;
 using System.Text;
 
 namespace OpenBound.GameComponents.Interface.Text
 {
-    public enum FontTextType
-    {
-        Arial12,
-
-        Consolas10,
-        Consolas10Bold,
-        Consolas11,
-        Consolas16,
-
-        FontAwesome10,
-    }
-
-    public enum Alignment
-    {
-        Center, Left, Right
-    }
-
     public class SpriteText
     {
         public SpriteFont SpriteFont { get; private set; }
@@ -137,7 +120,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
             foreach(char c in text)
             {
-                if (SpriteFont.Characters.Contains(c))
+                if (c == '\n' || SpriteFont.Characters.Contains(c))
                     sb.Append(c);
             }
 

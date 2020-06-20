@@ -28,6 +28,9 @@ using OpenBound.GameComponents.WeatherEffect;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Common;
+using System.Diagnostics;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -495,7 +498,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 //x ranging from 0.1f to 0.9f and
                 //y ranging from 0.4f to 0.9f, 1 - weatherMetadata.Position[1] is necessary because y axis is inverted
                 p1 = 0.1f + p1 * 0.9f;
-                p2 = (0.1f + p2 * 0.3f);
+                p2 = 0.9f /*1 - (NetworkObjectParameters.WeatherThorMinimumOffsetY + p2 * NetworkObjectParameters.WeatherThorMaximumOffsetY)*/;
                 Vector2 nPos = Topography.FromNormalizedPositionToRelativePosition(new float[] { p1, p2 });
                 WeatherHandler.Add(WeatherType.Thor, nPos);
                 Console.WriteLine(nPos);
@@ -505,16 +508,31 @@ namespace OpenBound.GameComponents.Level.Scene
             {
                 for (int i = 0; i < 100; i++)
                     //tsb.AppendText(sMobList[0].Owner, textBase += "0");
-                tsb.AsyncAppendPlayerText(sMobList[0].Owner, textBase += "0");
+                tsb.AsyncAppendText(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" });
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
                 string text = "";
                 for (int i = 0xF000; i < 0xFFFF; i++)
-                    text += (char)i + " " ;
+                    text += (char)i + " ";
 
-                tsb.AsyncAppendCustomMessage(text, Color.White.PackedValue, Color.Black.PackedValue, FontTextType.FontAwesome10);
+                var cm = new List<CustomMessage>(){
+                    new CustomMessage(){Text = "" + (char)0xf11b, TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.FontAwesome10 },
+                    new CustomMessage(){Text = "cha-la head chala", TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.Consolas10 },
+                };
+
+                NetworkObjectParameters.GameServerInformation = new GameServerInformation();
+                NetworkObjectParameters.GameServerInformation.ServerName = "ASDASd";
+
+                var x = Message.CreateWelcomeMessage(1);
+                var y = ObjectWrapper.ConvertObjectToByteArray(x, 4096);
+                var z = ObjectWrapper.ConvertByteArrayToObject<List<CustomMessage>>(y);
+
+                var y1 = ObjectWrapper.ConvertObjectToByteArray("" + (char)0xf11b, 4096);
+                var z1 = ObjectWrapper.ConvertByteArrayToObject<string>(y1);
+
+                tsb.AsyncAppendText(z);
 
                 Console.WriteLine(number);
             }
@@ -523,20 +541,20 @@ namespace OpenBound.GameComponents.Level.Scene
             {
             }
 
-            tsb.Update();
+            tsb.Update(gameTime);
         }
 
         string textBase = "abcdefgh";
         int number = 0;
 
-        TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300), 500, 0.5f, 0.8f, true);
+        TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300), 500, 0.5f, 0.8f, true, new Vector2(10, 10));
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
 
-            tsb.Draw(gameTime, spriteBatch);
+            tsb.Draw(spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);

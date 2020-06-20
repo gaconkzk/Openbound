@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Level.Scene;
+using Openbound_Network_Object_Library.Entity.Text;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Interface.Popup

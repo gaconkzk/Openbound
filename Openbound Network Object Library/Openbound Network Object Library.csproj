@@ -65,9 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Language.cs" />
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\ObjectWrapper.cs" />
     <Compile Include="Common\NetworkObjectParameters.cs" />
+    <Compile Include="Entity\Text\Message.cs" />
+    <Compile Include="Entity\Text\TextConfiguration.cs" />
     <Compile Include="FileOutput\ConfigFileManager.cs" />
     <Compile Include="Database\Context\OpenboundDatabaseContext.cs" />
     <Compile Include="Database\Controller\GuildController.cs" />

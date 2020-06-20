@@ -18,10 +18,11 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Interface.Popup;
+using System;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
-    public abstract class GameScene
+    public abstract class GameScene : IDisposable
     {
         public static Camera Camera;
         protected GraphicsDevice graphicsDevice;
@@ -87,5 +88,7 @@ namespace OpenBound.GameComponents.Level.Scene
         {
             spriteBatch.End();
         }
+
+        public virtual void Dispose() { }
     }
 }

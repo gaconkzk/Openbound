@@ -163,6 +163,25 @@ namespace Openbound_Game_Server
                 case NetworkObjectParameters.GameServerInGameRequestDeath:
                     GameClientProvider.GameServerInGameRequestDeath(request[1], playerSession);
                     return;
+
+                //Messaging / Room List Chat Requests
+                case NetworkObjectParameters.GameServerChatGameListEnter:
+                    answer = GameClientProvider.GameServerChatRoomListEnter(request[1], playerSession);
+                    break;
+                case NetworkObjectParameters.GameServerChatGameListLeave:
+                    GameClientProvider.GameServerChatRoomListLeave(playerSession);
+                    return;
+                case NetworkObjectParameters.GameServerChatGameListSendPlayerMessage:
+                    GameClientProvider.GameServerChatRoomSendMessage(request[1], playerSession);
+                    return;
+                //Messaging / Game Room Chat Requests
+                case NetworkObjectParameters.GameServerChatGameRoomEnter:
+                    break;
+                case NetworkObjectParameters.GameServerChatGameRoomLeave:
+                    break;
+                case NetworkObjectParameters.GameServerChatGameRoomSendMessage:
+                    break;
+
             }
 
             provider.Enqueue(service, answer);
@@ -190,6 +209,10 @@ namespace Openbound_Game_Server
                     Console.WriteLine($"- {playerSession.Player.Nickname} is now disconnected from the game server.");
                 }
             }
+
+            //Disconnects from any connected chat
+            if (playerSession.CurrentConnectedChat != 0)
+                GameClientProvider.GameServerChatRoomListLeave(playerSession);
 
             //Remove player from loading screen & start match (if necessary)
             if (playerSession.Player.PlayerNavigation == PlayerNavigation.InLoadingScreen)

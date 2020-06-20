@@ -75,7 +75,7 @@ namespace Openbound_Network_Object_Library.Entity
                 MobileType.Aduka,
                 new Dictionary<ShotType, AimPreset>()
                 {
-                    { ShotType.S1, new AimPreset(10,50, 10, 50) },
+                    { ShotType.S1, new AimPreset(10, 50, 10, 50) },
                     { ShotType.S2, new AimPreset(10, 50, 10, 50) },
                     { ShotType.SS, new AimPreset(10, 50, 10, 50) }
                 }

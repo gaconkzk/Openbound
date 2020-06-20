@@ -18,7 +18,7 @@ using OpenBound.GameComponents.Interface.Builder;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
-using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System;
 using System.Collections.Generic;
@@ -145,7 +145,7 @@ namespace OpenBound.GameComponents.Interface
             }
 
             biggestNickWidth = (int)playerScoreboardEntryList.Max((x) => x.NicknameSpriteText.MeasureSize.X);
-            rankingSpritePosition = new Vector2(playerScoreboardEntryList[0].TurnCounterSpriteFont.MeasureSize.X + xOffset, 0);
+            rankingSpritePosition = new Vector2((int)(playerScoreboardEntryList[0].TurnCounterSpriteFont.MeasureSize.X + xOffset), 0);
 
             Position = position;
         }
@@ -223,7 +223,7 @@ namespace OpenBound.GameComponents.Interface
             if (!playerScoreboardEntryList.Any()) return;
 
             //Sets the anchor of the UI element from Top-Left to Bottom-Left
-            Vector2 tmpPos = Position - new Vector2(0, yOffset * playerScoreboardEntryList.Count);
+            Vector2 tmpPos = new Vector2((int)Position.X, (int)(Position.Y - yOffset * playerScoreboardEntryList.Count));
             int biggestDelayWidth = (int)playerScoreboardEntryList.Max((x) => x.DelayCounterSpriteFont.MeasureCompleteSize.X);
             Vector2 delayCounterPosition = new Vector2(biggestNickWidth + biggestDelayWidth + xOffset, 0);
 
@@ -237,10 +237,10 @@ namespace OpenBound.GameComponents.Interface
 
                 tNSF.PositionOffset = tmpPos;
                 rS.PositionOffset = tmpPos + rankingSpritePosition;
-                nST.PositionOffset = new Vector2(rS.PositionOffset.X + rS.SourceRectangle.Width + xOffset, rS.PositionOffset.Y + 4);
+                nST.PositionOffset = new Vector2(rS.PositionOffset.X + rS.SourceRectangle.Width + xOffset, (int)(rS.PositionOffset.Y + 4));
                 dSF.PositionOffset = nST.PositionOffset + delayCounterPosition;
 
-                tmpPos += new Vector2(0, yOffset);
+                tmpPos += new Vector2(0, (int)yOffset);
             }
 
             playerBGBar.Scale = new Vector2(Math.Abs((OwningPlayerScoreboardEntry.TurnCounterSpriteFont.PositionOffset - OwningPlayerScoreboardEntry.DelayCounterSpriteFont.PositionOffset).X) + xOffset, 1);

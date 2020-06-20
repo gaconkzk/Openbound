@@ -10,10 +10,13 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Models;
 using Openbound_Network_Object_Library.TCP.ServiceProvider;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Openbound_Game_Server.Common
 {
@@ -35,10 +38,18 @@ namespace Openbound_Game_Server.Common
         public Hashtable PlayerHashtable { get; set; }
         public SortedList<int, RoomMetadata> RoomMetadataSortedList { get; set; }
 
+        /// <summary>
+        /// Stores all the chat channels of a game server. The Key is the channel id starting from 1 to <see cref="NetworkObjectParameters.GameServerMaximumChatChannelsNumber"/>.
+        /// The value is a HashSet of all connected players.
+        /// </summary>
+        public Dictionary<int, HashSet<Player>> ChatDictionary { get; set; }
+
         private GameServerObjects()
         {
             PlayerHashtable = new Hashtable();
             RoomMetadataSortedList = new SortedList<int, RoomMetadata>();
+            ChatDictionary = new Dictionary<int, HashSet<Player>>();
+            for(int i = 1; i <= NetworkObjectParameters.GameServerMaximumChatChannelsNumber; i++) ChatDictionary[i] = new HashSet<Player>();
         }
     }
 }

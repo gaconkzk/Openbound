@@ -357,8 +357,10 @@ namespace OpenBound.GameComponents.Interface
 
         private bool attachToCamera;
 
-        public Vector2 Position { get; set; }
-        public Vector2 PositionOffset { get; set; }
+        private Vector2 position;
+        public Vector2 Position { get => position; set => position = new Vector2(value.X, value.Y); }
+        private Vector2 positionOffset;
+        public Vector2 PositionOffset { get => positionOffset; set => positionOffset = new Vector2(value.X, value.Y); }
 
         public Vector2 SpriteSize => new Vector2(spriteList[0].SourceRectangle.Width, spriteList[0].SourceRectangle.Height);
         public Vector2 MeasureSize

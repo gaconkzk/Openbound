@@ -22,6 +22,6 @@ namespace Openbound_Game_Server.Server
         public RoomMetadata RoomMetadata;
         public MatchManager MatchManager;
         public ConcurrentQueue<byte[]> ProviderQueue;
-
+        public int CurrentConnectedChat;
     }
 }

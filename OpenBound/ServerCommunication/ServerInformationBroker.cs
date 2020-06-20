@@ -20,6 +20,7 @@ using Openbound_Network_Object_Library.TCP.ServiceProvider;
 using System;
 using System.Collections.Generic;
 using Openbound_Network_Object_Library.Models;
+using Openbound_Network_Object_Library.Entity.Text;
 
 namespace OpenBound.ServerCommunication
 {
@@ -171,6 +172,20 @@ namespace OpenBound.ServerCommunication
                 case NetworkObjectParameters.GameServerInGameRequestDisconnect:
                     answer = ObjectWrapper.DeserializeRequest<SyncMobile>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerInGameRequestDisconnect](answer);
+                    break;
+
+                //Chat
+                case NetworkObjectParameters.GameServerChatGameListEnter:
+                    answer = ObjectWrapper.DeserializeRequest<int>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListEnter](answer);
+                    break;
+                case NetworkObjectParameters.GameServerChatGameListSendPlayerMessage:
+                    answer = ObjectWrapper.DeserializeRequest<PlayerMessage>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListSendPlayerMessage](answer);
+                    break;
+                case NetworkObjectParameters.GameServerChatGameListSendSystemMessage:
+                    answer = ObjectWrapper.DeserializeRequest<List<CustomMessage>>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListSendSystemMessage](answer);
                     break;
             }
         }

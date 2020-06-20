@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
@@ -109,22 +110,22 @@ namespace OpenBound.GameComponents.Interface.Text
         }
         #endregion
 
-        public static List<CompositeSpriteText> CreateCustomMessage(string text, uint textColor, uint textBorderColor, FontTextType FontTextType, int maxWidth, float layerDepth)
+        public static List<CompositeSpriteText> CreateCustomMessage(CustomMessage customMessage, int maxWidth, float layerDepth)
         {
             List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
 
             int i = 0;
-            while(i < text.Length)
+            while(i < customMessage.Text.Length)
             {
                 List<SpriteText> line = new List<SpriteText>();
 
-                SpriteText st = new SpriteText(FontTextType, "", new Color(textColor), Alignment.Left, layerDepth, outlineColor: new Color(textBorderColor));
+                SpriteText st = new SpriteText(customMessage.FontTextType, "", new Color(customMessage.TextColor), Alignment.Left, layerDepth, outlineColor: new Color(customMessage.TextBorderColor));
 
                 line.Add(st);
 
-                for (; i < text.Length && st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + text[i])).X < maxWidth; i++)
+                for (; i < customMessage.Text.Length && st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + customMessage.Text[i])).X < maxWidth; i++)
                 {
-                    st.Text += text[i];
+                    st.Text += customMessage.Text[i];
                 }
 
                 if (st.Text.Length == 0) continue;
@@ -135,7 +136,30 @@ namespace OpenBound.GameComponents.Interface.Text
             return cstList;
         }
 
-        public static List<CompositeSpriteText> CreateChatMessage(Player player, string text, int maxWidth, float layerDepth)
+        /// <summary>
+        /// This method does not support automatic line breaks
+        /// </summary>
+        /// <param name="customMessageList"></param>
+        /// <param name="layerDepth"></param>
+        /// <returns></returns>
+        public static List<CompositeSpriteText> CreateCustomMessage(List<CustomMessage> customMessageList, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            List<SpriteText> line = new List<SpriteText>();
+            
+            foreach(CustomMessage cm in customMessageList)
+            {
+                cm.AppendTokenToText();
+                line.Add(new SpriteText(cm.FontTextType, cm.Text, new Color(cm.TextColor), Alignment.Left, layerDepth, outlineColor: new Color(cm.TextBorderColor)));
+            }
+
+            cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+
+            return cstList;
+        }
+
+        public static List<CompositeSpriteText> CreateChatMessage(PlayerMessage playerMessage, int maxWidth, float layerDepth)
         {
             List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
 
@@ -144,19 +168,19 @@ namespace OpenBound.GameComponents.Interface.Text
             //Load the first line with the player nickname
             List<SpriteText> line = new List<SpriteText>() {
                 new SpriteText(FontTextType.Consolas10, "[", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
-                new SpriteText(FontTextType.Consolas10, player.Nickname, Helper.TextToColor(player.Nickname), Alignment.Left, layerDepth, outlineColor: Color.Black),
+                new SpriteText(FontTextType.Consolas10, playerMessage.Player.Nickname, Helper.TextToColor(playerMessage.Player.Nickname), Alignment.Left, layerDepth, outlineColor: Color.Black),
                 new SpriteText(FontTextType.Consolas10, "]: ", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
             };
 
             SpriteText st = line.Last();
             int i = 0;
-            while (i < text.Length)
+            while (i < playerMessage.Text.Length)
             {
                 List<SpriteText> lineProjection = line.Except(new List<SpriteText>() { st }).ToList();
 
-                for (; i < text.Length && lineProjection.Sum((x) => x.MeasureSize.X) + st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + text[i])).X < maxWidth; i++)
+                for (; i < playerMessage.Text.Length && lineProjection.Sum((x) => x.MeasureSize.X) + st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + playerMessage.Text[i])).X < maxWidth; i++)
                 {
-                    st.Text += text[i];
+                    st.Text += playerMessage.Text[i];
                 }
 
                 cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));

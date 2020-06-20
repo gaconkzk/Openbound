@@ -36,6 +36,8 @@ namespace OpenBound.GameComponents.Pawn
         Vector2 cannonOffset;
 
         //Movement Animation
+        public Vector2 Position => position + positionMovement;
+
         Vector2 position, positionMovement;
         float movementElapsedTime;
 
@@ -182,7 +184,7 @@ namespace OpenBound.GameComponents.Pawn
                     projectile.Mobile,
                     this,
                     projectile.Position,
-                    -(float)Helper.AngleBetween(position + positionMovement, projectile.Position));
+                    -(float)Helper.AngleBetween(Position, projectile.Position));
 
                 tp.Update();
 
@@ -223,13 +225,13 @@ namespace OpenBound.GameComponents.Pawn
             Vector2 facingPosition = targetList.Count == 0 ? lastFocusedPosition : targetList[0].Position;
             flipbook.Rotation = (float)Helper.AngleBetween(facingPosition, flipbook.Position);
 
-            cannonPosition = position + positionMovement +
+            cannonPosition = Position +
                 Vector2.Transform(
                    cannonOffset,
                    Matrix.CreateRotationZ(
                        (float)Helper.AngleBetween(
                            facingPosition,
-                           position + positionMovement)));
+                           Position)));
 
             //Update texts
             levelSpriteFont.Position = flipbook.Position - tmpOscilatingPosition + new Vector2(70, 40);
