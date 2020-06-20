@@ -90,16 +90,16 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             roomFilter.PageNumber = 0;
 
             //Textbox
-            textBox = new TextBox(new Vector2(-380, 40), new Vector2(493, 141), 2000, 0,
+            textBox = new TextBox(new Vector2(-380, 40), new Vector2(493, 141), 100, 0,
                 hasScrollBar: true, scrollBackgroundAlpha: 0.6f,
                 hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(20, 0), maximumTextLength: 60,
                 onSendMessage: OnSendMessage);
 
             //Textual callbacks
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatGameListEnter, RequestChatConnectionAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatGameListLeave, OnReceivePlayerMessageAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatGameListSendPlayerMessage, OnReceivePlayerMessageAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatGameListSendSystemMessage, OnReceiveServerMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, OnReceivePlayerMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceivePlayerMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveServerMessageAsyncCallback);
 
             //Game Lists callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomListRequestList, RequestRoomListAsyncCallback);
@@ -111,7 +111,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             RequestRooms();
 
             //Connect to channel
-            ServerInformationHandler.SendChatConnectionRequest(0);
+            ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(0));
         }
 
         public override void OnSceneIsActive()
@@ -339,9 +339,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         #endregion
 
         #region Textbox
-        public void RequestChatConnectionAsyncCallback(object channelID)
+        public void RequestChatConnectionAsyncCallback(object response)
         {
-            int currentChannel = (int)channelID;
+            bool success = (bool)response;
             //Console.WriteLine("New channel: " + currentChannel);
         }
 
@@ -539,7 +539,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         public override void Dispose()
         {
             textBox.Dispose();
-            ServerInformationHandler.SendChatDisconnectionRequest();
         }
     }
 }

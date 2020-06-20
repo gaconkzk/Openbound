@@ -175,17 +175,17 @@ namespace OpenBound.ServerCommunication
                     break;
 
                 //Chat
-                case NetworkObjectParameters.GameServerChatGameListEnter:
-                    answer = ObjectWrapper.DeserializeRequest<int>(request[1]);
-                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListEnter](answer);
+                case NetworkObjectParameters.GameServerChatEnter:
+                    answer = ObjectWrapper.DeserializeRequest<bool>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatEnter](answer);
                     break;
-                case NetworkObjectParameters.GameServerChatGameListSendPlayerMessage:
+                case NetworkObjectParameters.GameServerChatSendPlayerMessage:
                     answer = ObjectWrapper.DeserializeRequest<PlayerMessage>(request[1]);
-                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListSendPlayerMessage](answer);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatSendPlayerMessage](answer);
                     break;
-                case NetworkObjectParameters.GameServerChatGameListSendSystemMessage:
+                case NetworkObjectParameters.GameServerChatSendSystemMessage:
                     answer = ObjectWrapper.DeserializeRequest<List<CustomMessage>>(request[1]);
-                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatGameListSendSystemMessage](answer);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatSendSystemMessage](answer);
                     break;
             }
         }

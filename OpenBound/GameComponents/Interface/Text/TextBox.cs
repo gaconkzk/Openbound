@@ -85,6 +85,7 @@ namespace OpenBound.GameComponents.Interface.Text
             //Create text producer thread
             textHandlerThread = new Thread(TextProcessingThread);
             textHandlerThread.Name = "TextHandlerThread";
+            textHandlerThread.IsBackground = true;
             textHandlerThread.Start();
             isThreadEnabled = true;
         }

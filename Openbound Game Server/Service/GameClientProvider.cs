@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
 using Openbound_Network_Object_Library.Entity.Text;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace Openbound_Game_Server.Service
 {
@@ -95,14 +96,17 @@ namespace Openbound_Game_Server.Service
                     room.RemovePlayer(playerSession.Player);
                     room.AddA(playerSession.Player);
 
-                    //Insert the room to the match metadata list;
-                    GameServerObjects.Instance.RoomMetadataSortedList.Add(room.ID, room);
+                    //Create room and chat
+                    GameServerObjects.Instance.CreateRoom(room);
                 }
 
                 playerSession.Player.PlayerNavigation = PlayerNavigation.InGameRoom;
                 playerSession.Player.PlayerRoomStatus = PlayerRoomStatus.Master;
                 playerSession.RoomMetadata = room;
                 playerSession.RoomMetadata.RoomOwner = playerSession.Player;
+
+                //Connect room owner to new chat
+                GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
 
                 Console.WriteLine($"- {room.RoomOwner.Nickname} created a room ({room.ID} - {room.Name})");
 
@@ -172,6 +176,9 @@ namespace Openbound_Game_Server.Service
 
                         playerSession.RoomMetadata = room;
 
+                        //Connect to room chat
+                        GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
+
                         //send an update for each member of the match with the current metadata
                         ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                     }
@@ -227,6 +234,9 @@ namespace Openbound_Game_Server.Service
                             newMaster.PlayerRoomStatus = PlayerRoomStatus.Master;
                             room.RoomOwner = newMaster;
                         }
+
+                        //Connect to room chat
+                        GameServerChatLeave(playerSession);
 
                         //send an update for each member of the match with the current metadata
                         ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
@@ -600,64 +610,93 @@ namespace Openbound_Game_Server.Service
         #endregion
 
         #region Messaging / Room List Chat Requests
-        public static int GameServerChatRoomListEnter(string param, PlayerSession playerSession)
+        public static bool GameServerChatEnterRequest(string param, PlayerSession playerSession)
         {
             try
             {
+                //Parse it back to string in order to remove string formatation
+                param = ObjectWrapper.DeserializeRequest<string>(param);
+                return GameServerChatEnter(param, playerSession);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Ex: When GameServerChatEnterRequest {ex.Message}");
+            }
+
+            return false;
+        }
+
+        public static bool GameServerChatEnter(string param, PlayerSession playerSession)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(param))
+                    return false;
+
                 //Parse the player selected channel to find out its index
-                int channelID = 0;
-                int.TryParse(param, out channelID);
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
 
-                lock (GameServerObjects.Instance.ChatDictionary)
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
                 {
-                    //find the first non-full channel IF the player hasn't selected a specific channel
-                    if (channelID == 0)
+                    //Is attempting to connect on any game list channel, give the player the first possible channel
+                    if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier && tuple.Item2 == 0)
                     {
-                        channelID = GameServerObjects.Instance.ChatDictionary.Keys.First((x) => GameServerObjects.Instance.ChatDictionary[x].Count < NetworkObjectParameters.GameServerMaximumChatChannelCapacity);
+                        //find the first non-full channel IF the player hasn't selected a specific channel
+                        tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
+                            .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
                     }
+
+                    //Is attempting to connect on a specific room/channel
+
+                    //Connects if there are free slots left on the channel.
+                    //If the user is attempting to connect on a Room it should always return true
+                    if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
+                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
                     else
-                    {
-                        //if the selected channel is already full, returns channel connection error
-                        return NetworkObjectParameters.ServerProcessingError;
-                    }
-
-                    //if player is connected to any channel, disconnect from the selected channel
-                    if (playerSession.CurrentConnectedChat != 0)
-                        GameServerObjects.Instance.ChatDictionary[playerSession.CurrentConnectedChat].Add(playerSession.Player);
-
-                    //Connect to new channel
-                    GameServerObjects.Instance.ChatDictionary[channelID].Add(playerSession.Player);
-
-                    //Sends welcome message to player
-                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatGameListSendSystemMessage, Message.CreateWelcomeMessage(channelID));
+                        //Error, the channel is full
+                        return false;
                 }
 
-                //Updates the current connected channel id
-                playerSession.CurrentConnectedChat = channelID;
+                //Leave any prior room
+                GameServerChatLeave(playerSession);
 
-                return channelID;
+                //Sends welcome message to player
+                if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
+                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateChannelWelcomeMessage(tuple.Item2));
+                else
+                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage(playerSession.RoomMetadata.Name));
+
+                //Updates the current connected channel id
+                playerSession.CurrentConnectedChat = tuple.Item1 + tuple.Item2.ToString();
+
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ex: When GameServerChatRoomListEnter {ex.Message}");
             }
 
-            return NetworkObjectParameters.ServerProcessingError;
+            return false;
         }
 
-        public static void GameServerChatRoomListLeave(PlayerSession playerSession)
+        public static void GameServerChatLeave(PlayerSession playerSession)
         {
             try
             {
+                if (!playerSession.IsChatConnected) return;
+
+                //Parse the current player channel
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
+
                 lock (GameServerObjects.Instance.ChatDictionary)
                 {
                     //if player is connected to any channel, disconnect from the selected channel
-                    if (playerSession.CurrentConnectedChat != 0)
-                        GameServerObjects.Instance.ChatDictionary[playerSession.CurrentConnectedChat].Remove(playerSession.Player);
+                    if (!string.IsNullOrEmpty(playerSession.CurrentConnectedChat))
+                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Remove(playerSession.Player);
                 }
 
                 //Updates the current connected channel id
-                playerSession.CurrentConnectedChat = 0;
+                playerSession.CurrentConnectedChat = "";
             }
             catch (Exception ex)
             {
@@ -669,13 +708,18 @@ namespace Openbound_Game_Server.Service
         {
             try
             {
+                if (!playerSession.IsChatConnected) return;
+
                 PlayerMessage pm = ObjectWrapper.DeserializeRequest<PlayerMessage>(param);
 
-                lock (GameServerObjects.Instance.ChatDictionary)
+                //Parse the player selected channel to find out its index
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
+
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
                 {
                     RestrictBroadcastToPlayer(
-                        NetworkObjectParameters.GameServerChatGameListSendPlayerMessage, pm,
-                        GameServerObjects.Instance.ChatDictionary[playerSession.CurrentConnectedChat]);
+                        NetworkObjectParameters.GameServerChatSendPlayerMessage, pm,
+                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2]);
                 }   
             }
             catch (Exception ex)

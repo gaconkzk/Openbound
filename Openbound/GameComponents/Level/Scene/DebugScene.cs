@@ -525,7 +525,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 NetworkObjectParameters.GameServerInformation = new GameServerInformation();
                 NetworkObjectParameters.GameServerInformation.ServerName = "ASDASd";
 
-                var x = Message.CreateWelcomeMessage(1);
+                var x = Message.CreateChannelWelcomeMessage(1);
                 var y = ObjectWrapper.ConvertObjectToByteArray(x, 4096);
                 var z = ObjectWrapper.ConvertByteArrayToObject<List<CustomMessage>>(y);
 

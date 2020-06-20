@@ -8,7 +8,10 @@ namespace Openbound_Network_Object_Library.Common
 {
     public class Language
     {
-        public const string CreateWelcomeMessage1 = "Welcome to OpenBound";
-        public const string CreateWelcomeMessage2 = " - Channel ";
+        public const string ChannelWelcomeMessage1 = " Welcome to OpenBound (";
+        public const string ChannelWelcomeMessage2 = ") - Channel ";
+
+        public const string RoomWelcomeMessage1 = " You have joined a room (";
+        public const string RoomWelcomeMessage2 = "). Be always polite with other players.";
     }
 }

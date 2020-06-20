@@ -163,7 +163,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
             GameMap map = GameInformation.Instance.RoomMetadata.Map.GameMap;
             GameMapType type = GameInformation.Instance.RoomMetadata.Map.GameMapType;
 
-            mapThumbnail = new Sprite($"Graphics/Maps/{map}/GameRoomThumb{type}", layerDepth: DepthParameter.Foreground);
+            mapThumbnail = new Sprite($"Graphics/Maps/{map}/GameRoomThumb{type}", layerDepth: DepthParameter.WeatherEffect);
             mapThumbnail.Position = basePosition - new Vector2(1, 78f);
 
             //Maps Weather

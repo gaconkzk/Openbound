@@ -70,18 +70,16 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerInGameRequestDisconnect     = 0x0033;
 
         //Messaging / Chat Requests
-        public const int GameServerChatGameListEnter             = 0x0037;
-        public const int GameServerChatGameListLeave             = 0x0038;
-        public const int GameServerChatGameListSendPlayerMessage = 0x0039;
-        public const int GameServerChatGameListSendSystemMessage = 0x003a;
-
-        public const int GameServerChatGameRoomEnter       = 0x003b;
-        public const int GameServerChatGameRoomLeave       = 0x003c;
-        public const int GameServerChatGameRoomSendMessage = 0x003d;
+        public const int GameServerChatEnter             = 0x0037;
+        public const int GameServerChatLeave             = 0x0038;
+        public const int GameServerChatSendPlayerMessage = 0x0039;
+        public const int GameServerChatSendSystemMessage = 0x003a;
 
         //Chat - Game Server
-        public const int GameServerMaximumChatChannelsNumber  = 10;
-        public const int GameServerMaximumChatChannelCapacity = 100;
+        public const int  GameServerChatChannelsMaximumNumber  = 10;
+        public const int  GameServerChatChannelMaximumCapacity = 100;
+        public const char GameServerChatGameListIdentifier     = 'G';
+        public const char GameServerChatGameRoomIdentifier     = 'R';
 
         //Server Information
         public static ServerInformation LoginServerInformation;

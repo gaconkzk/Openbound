@@ -86,21 +86,21 @@ namespace OpenBound.ServerCommunication.Service
         public static void SendGameListMessage(PlayerMessage message)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerChatGameListSendPlayerMessage,
+                NetworkObjectParameters.GameServerChatSendPlayerMessage,
                 message);
         }
 
-        public static void SendChatConnectionRequest(int channelID)
+        public static void SendChatConnectionRequest(string channelID)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerChatGameListEnter,
+                NetworkObjectParameters.GameServerChatEnter,
                 channelID);
         }
 
         public static void SendChatDisconnectionRequest()
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
-                NetworkObjectParameters.GameServerChatGameListLeave, null);
+                NetworkObjectParameters.GameServerChatLeave, null);
         }
         #endregion
 

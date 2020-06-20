@@ -165,22 +165,15 @@ namespace Openbound_Game_Server
                     return;
 
                 //Messaging / Room List Chat Requests
-                case NetworkObjectParameters.GameServerChatGameListEnter:
-                    answer = GameClientProvider.GameServerChatRoomListEnter(request[1], playerSession);
+                case NetworkObjectParameters.GameServerChatEnter:
+                    answer = GameClientProvider.GameServerChatEnterRequest(request[1], playerSession);
                     break;
-                case NetworkObjectParameters.GameServerChatGameListLeave:
-                    GameClientProvider.GameServerChatRoomListLeave(playerSession);
+                case NetworkObjectParameters.GameServerChatLeave:
+                    GameClientProvider.GameServerChatLeave(playerSession);
                     return;
-                case NetworkObjectParameters.GameServerChatGameListSendPlayerMessage:
+                case NetworkObjectParameters.GameServerChatSendPlayerMessage:
                     GameClientProvider.GameServerChatRoomSendMessage(request[1], playerSession);
                     return;
-                //Messaging / Game Room Chat Requests
-                case NetworkObjectParameters.GameServerChatGameRoomEnter:
-                    break;
-                case NetworkObjectParameters.GameServerChatGameRoomLeave:
-                    break;
-                case NetworkObjectParameters.GameServerChatGameRoomSendMessage:
-                    break;
 
             }
 
@@ -211,8 +204,7 @@ namespace Openbound_Game_Server
             }
 
             //Disconnects from any connected chat
-            if (playerSession.CurrentConnectedChat != 0)
-                GameClientProvider.GameServerChatRoomListLeave(playerSession);
+            GameClientProvider.GameServerChatLeave(playerSession);
 
             //Remove player from loading screen & start match (if necessary)
             if (playerSession.Player.PlayerNavigation == PlayerNavigation.InLoadingScreen)
