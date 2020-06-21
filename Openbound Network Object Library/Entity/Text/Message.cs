@@ -35,15 +35,15 @@ namespace Openbound_Network_Object_Library.Entity.Text
         public static string BuildGameServerChatGameList(int id) => NetworkObjectParameters.GameServerChatGameListIdentifier + id.ToString();
         public static string BuildGameServerChatGameRoom(int id) => NetworkObjectParameters.GameServerChatGameRoomIdentifier + id.ToString();
 
-        public static CustomMessage CreateFontAwesomeText(uint token) => new CustomMessage() { Token = token, TextColor = NetworkObjectParameters.ServerMessageColor, TextBorderColor = NetworkObjectParameters.ServerMessageBorderColor, FontTextType = FontTextType.FontAwesome10 };
-        public static CustomMessage CreateConsolasText(string text) => new CustomMessage() { Text = text, TextColor = NetworkObjectParameters.ServerMessageColor, TextBorderColor = NetworkObjectParameters.ServerMessageBorderColor, FontTextType = FontTextType.Consolas10 };
+        private static CustomMessage CreateFontAwesomeText(uint token) => new CustomMessage() { Token = token, TextColor = NetworkObjectParameters.ServerMessageColor, TextBorderColor = NetworkObjectParameters.ServerMessageBorderColor, FontTextType = FontTextType.FontAwesome10 };
+        private static CustomMessage CreateConsolasText(string text) => new CustomMessage() { Text = text, TextColor = NetworkObjectParameters.ServerMessageColor, TextBorderColor = NetworkObjectParameters.ServerMessageBorderColor, FontTextType = FontTextType.Consolas10 };
 
-        public static CustomMessage FAComputerToken = CreateFontAwesomeText(0xf108);
-        public static CustomMessage FAServerToken = CreateFontAwesomeText(0xf233);
-        public static CustomMessage FAGamepadToken = CreateFontAwesomeText(0xf11b);
+        private static CustomMessage FAComputerToken = CreateFontAwesomeText(0xf108);
+        private static CustomMessage FAServerToken = CreateFontAwesomeText(0xf233);
+        private static CustomMessage FAGamepadToken = CreateFontAwesomeText(0xf11b);
 
         #region Channel Welcome Message
-        public static List<CustomMessage> ChannelWelcomeMessage =
+        private static List<CustomMessage> ChannelWelcomeMessage =
             new List<CustomMessage>() {
                 FAComputerToken,
                 CreateConsolasText(Language.ChannelWelcomeMessage1),
@@ -58,20 +58,27 @@ namespace Openbound_Network_Object_Library.Entity.Text
         #endregion
 
         #region Rooom Welcome Message
-        public static List<CustomMessage> RoomWelcomeMessage =
+        private static List<CustomMessage> RoomWelcomeMessage1 =
             new List<CustomMessage>() {
                 FAComputerToken,
                 CreateConsolasText(Language.RoomWelcomeMessage1),
                 FAGamepadToken,
-                //Room name goes here,
-                CreateConsolasText(Language.RoomWelcomeMessage2),
+                CreateConsolasText(")."),
             };
 
-        public static List<CustomMessage> CreateRoomWelcomeMessage(string roomName)
+        private static List<CustomMessage> RoomWelcomeMessage2 =
+            new List<CustomMessage>() { FAComputerToken, CreateConsolasText(Language.RoomWelcomeMessage2) };
+
+        public static List<CustomMessage> CreateRoomWelcomeMessage1(string roomName)
         {
-            List<CustomMessage> mList = new List<CustomMessage>(RoomWelcomeMessage);
-            mList.Insert(3, CreateConsolasText(roomName));
-            return mList;
+            List<CustomMessage> cmL = new List<CustomMessage>(RoomWelcomeMessage1);
+            cmL.Insert(3, CreateConsolasText(roomName));
+            return cmL;
+        }
+
+        public static List<CustomMessage> CreateRoomWelcomeMessage2()
+        {
+            return RoomWelcomeMessage2;
         }
         #endregion
     }

@@ -105,9 +105,6 @@ namespace Openbound_Game_Server.Service
                 playerSession.RoomMetadata = room;
                 playerSession.RoomMetadata.RoomOwner = playerSession.Player;
 
-                //Connect room owner to new chat
-                GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
-
                 Console.WriteLine($"- {room.RoomOwner.Nickname} created a room ({room.ID} - {room.Name})");
 
                 return room;
@@ -662,9 +659,14 @@ namespace Openbound_Game_Server.Service
 
                 //Sends welcome message to player
                 if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
+                {
                     playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateChannelWelcomeMessage(tuple.Item2));
+                }
                 else
-                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage(playerSession.RoomMetadata.Name));
+                {
+                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage1(playerSession.RoomMetadata.Name));
+                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage2());
+                }
 
                 //Updates the current connected channel id
                 playerSession.CurrentConnectedChat = tuple.Item1 + tuple.Item2.ToString();

@@ -115,12 +115,14 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             playerButtonList.UpdatePlayerButtonList();
 
-
             //Popup menus
             popupSelectMobile = new PopupSelectMobile(SelectMobileAction, CloseSelectMobileAction);
             PopupHandler.Add(popupSelectMobile);
 
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
+
+            //Connect to channel
+            ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameRoom(GameInformation.Instance.RoomMetadata.ID));
         }
 
         public override void OnSceneIsActive()

@@ -95,7 +95,7 @@ namespace OpenBound.GameComponents.Interface.Text
             TextField t = (TextField)textField;
 
             Player p = GameInformation.Instance.PlayerInformation;
-            OnSendMessage(new PlayerMessage() { Player = new Player() { ID = p.ID, Nickname = p.Nickname }, Text = t.Text.Text });
+            OnSendMessage?.Invoke(new PlayerMessage() { Player = new Player() { ID = p.ID, Nickname = p.Nickname }, Text = t.Text.Text });
             
             t.ClearText();
         }
@@ -193,7 +193,7 @@ namespace OpenBound.GameComponents.Interface.Text
             {
                 //Adds the text into the list and delete all non visible texts
                 this.compositeSpriteTextList.AddRange(compositeSpriteTextList);
-                this.compositeSpriteTextList.RemoveRange(0, Math.Max(this.compositeSpriteTextList.Count - maximumRenderableLines - 1, 0));
+                this.compositeSpriteTextList.RemoveRange(0, Math.Max(this.compositeSpriteTextList.Count - maximumRenderableLines, 0));
             }
         }
 

@@ -47,6 +47,7 @@ namespace OpenBound.GameComponents.Level.Scene
             GameInformation.Instance.PlayerInformation = new Player()
             {
                 ID = 0,
+                Nickname = "Jebomancer",
             };
 
             #region Sync Mobile List
@@ -304,6 +305,11 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public DebugScene()
         {
+            tsb = new TextBox(-Parameter.ScreenResolution / 2 + new Vector2(2, 5) + new Vector2(110, 0), new Vector2(370, 400), 100, 0f,
+                hasScrollBar: false, scrollBackgroundAlpha: 0f,
+                hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(20, 0), maximumTextLength: 60,
+                onSendMessage: act);
+
             sceneTimespan = 1f;
             hasRequestedNextScene = false;
 
@@ -547,7 +553,12 @@ namespace OpenBound.GameComponents.Level.Scene
         string textBase = "abcdefgh";
         int number = 0;
 
-        TextBox tsb = new TextBox(new Vector2(-500, -200), new Vector2(1000, 300), 500, 0.5f, 0.8f, true, new Vector2(10, 10));
+        TextBox tsb;
+
+        public void act(PlayerMessage o)
+        {
+            tsb.AsyncAppendText(o);
+        }
 
         public override void Draw(GameTime gameTime)
         {
