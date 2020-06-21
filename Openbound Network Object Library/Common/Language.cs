@@ -12,6 +12,6 @@ namespace Openbound_Network_Object_Library.Common
         public const string ChannelWelcomeMessage2 = ") - Channel ";
 
         public const string RoomWelcomeMessage1 = " You have joined a room (";
-        public const string RoomWelcomeMessage2 = " Kindness promotes a large and healthy community!";
+        public const string RoomWelcomeMessage2 = " Kindness creates a large and healthy community!";
     }
 }

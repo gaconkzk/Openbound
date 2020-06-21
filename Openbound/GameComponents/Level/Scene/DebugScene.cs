@@ -305,11 +305,6 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public DebugScene()
         {
-            tsb = new TextBox(-Parameter.ScreenResolution / 2 + new Vector2(2, 5) + new Vector2(110, 0), new Vector2(370, 400), 100, 0f,
-                hasScrollBar: false, scrollBackgroundAlpha: 0f,
-                hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(20, 0), maximumTextLength: 60,
-                onSendMessage: act);
-
             sceneTimespan = 1f;
             hasRequestedNextScene = false;
 
@@ -514,7 +509,7 @@ namespace OpenBound.GameComponents.Level.Scene
             {
                 for (int i = 0; i < 100; i++)
                     //tsb.AppendText(sMobList[0].Owner, textBase += "0");
-                tsb.AsyncAppendText(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" });
+                    HUD.TextBox.AsyncAppendText(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" });
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
@@ -538,7 +533,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 var y1 = ObjectWrapper.ConvertObjectToByteArray("" + (char)0xf11b, 4096);
                 var z1 = ObjectWrapper.ConvertByteArrayToObject<string>(y1);
 
-                tsb.AsyncAppendText(z);
+                HUD.TextBox.AsyncAppendText(z);
 
                 Console.WriteLine(number);
             }
@@ -547,25 +542,20 @@ namespace OpenBound.GameComponents.Level.Scene
             {
             }
 
-            tsb.Update(gameTime);
         }
 
         string textBase = "abcdefgh";
         int number = 0;
 
-        TextBox tsb;
-
         public void act(PlayerMessage o)
         {
-            tsb.AsyncAppendText(o);
+            HUD.TextBox.AsyncAppendText(o);
         }
 
         public override void Draw(GameTime gameTime)
         {
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
-
-            tsb.Draw(spriteBatch);
 
             //optionsMenu.Draw(GameTime, spriteBatch);
             //delayboard.Draw(GameTime, SpriteBatch);

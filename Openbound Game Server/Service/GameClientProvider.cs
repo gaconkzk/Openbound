@@ -633,7 +633,7 @@ namespace Openbound_Game_Server.Service
                 //Parse the player selected channel to find out its index
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
 
-                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
                 {
                     //Is attempting to connect on any game list channel, give the player the first possible channel
                     if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier && tuple.Item2 == 0)
@@ -690,7 +690,7 @@ namespace Openbound_Game_Server.Service
                 //Parse the current player channel
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
 
-                lock (GameServerObjects.Instance.ChatDictionary)
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
                 {
                     //if player is connected to any channel, disconnect from the selected channel
                     if (!string.IsNullOrEmpty(playerSession.CurrentConnectedChat))
@@ -717,11 +717,18 @@ namespace Openbound_Game_Server.Service
                 //Parse the player selected channel to find out its index
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
 
-                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
+                IEnumerable<Player> pList;
+
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
                 {
-                    RestrictBroadcastToPlayer(
-                        NetworkObjectParameters.GameServerChatSendPlayerMessage, pm,
-                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2]);
+                    if (pm.PlayerTeam == null)
+                        pList = GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2];
+                    else if (pm.PlayerTeam == PlayerTeam.Blue)
+                        pList = playerSession.RoomMetadata.TeamA;
+                    else
+                        pList = playerSession.RoomMetadata.TeamB;
+
+                    RestrictBroadcastToPlayer(NetworkObjectParameters.GameServerChatSendPlayerMessage, pm, pList);
                 }   
             }
             catch (Exception ex)
@@ -756,7 +763,7 @@ namespace Openbound_Game_Server.Service
             }
         }
 
-        private static void RestrictBroadcastToPlayer(int service, object message, HashSet<Player> players)
+        private static void RestrictBroadcastToPlayer(int service, object message, IEnumerable<Player> players)
         {
             foreach (Player p in players)
             {

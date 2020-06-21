@@ -6916,6 +6916,18 @@
 /processorParam:TextureFormat=Color
 /build:Interface/StaticButtons/GameRoom/RightMap.png
 
+#begin Interface/StaticButtons/HUD/Blue/MessageFilter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/StaticButtons/HUD/Blue/MessageFilter.png
+
 #begin Interface/StaticButtons/HUD/Blue/Options.png
 /importer:TextureImporter
 /processor:TextureProcessor

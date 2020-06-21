@@ -38,6 +38,8 @@ namespace OpenBound.GameComponents.Interface.Interactive
         BlueOptions,
         BlueSkipTurn,
 
+        MessageFilter,
+
         //Server List
         ServerListButton,
 
@@ -185,6 +187,20 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Hoover,    new Rectangle(60,   0, 60, 23) },
                             { ButtonAnimationState.Clicked,   new Rectangle(60*2, 0, 60, 23) },
                             { ButtonAnimationState.Disabled,  new Rectangle(60*3, 0, 60, 23) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.MessageFilter,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/HUD/Blue/MessageFilter",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(26 * 0, 0, 26, 16) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(26 * 1, 0, 26, 16) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(26 * 2, 0, 26, 16) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(26 * 0, 0, 26, 16) },
                         }
                     }
                 },

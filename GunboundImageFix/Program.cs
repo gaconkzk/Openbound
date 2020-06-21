@@ -25,7 +25,6 @@ namespace GunboundImageFix
     {
         public static void Main(string[] args)
         {
-            A();
             do
             {
                 Console.WriteLine("Gunbound Raw Image Fix Tools");

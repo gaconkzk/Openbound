@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Input;
 using Openbound_Network_Object_Library.Entity.Text;
@@ -78,7 +79,7 @@ namespace OpenBound.GameComponents.Interface.Text
             //Text
             Text = new SpriteText(fontTextType, "", color, Alignment.Left, layerDepth, default, outlineColor);
             textPointer = new SpriteText(fontTextType, "|", Parameter.NameplateGuildColor, Alignment.Left, layerDepth + 0.01f, default, Parameter.NameplateGuildOutlineColor);
-            alignmentOffset = Text.MeasureSubstring(" ");
+            alignmentOffset = Text.MeasureSubstring(" ").ToIntegerDomain();
 
             DeactivateElement();
 
@@ -94,10 +95,17 @@ namespace OpenBound.GameComponents.Interface.Text
 
         private void UpdatePostion(Vector2 positionOffset)
         {
-            position = new Vector2((int)positionOffset.X, (int)positionOffset.Y);
+            position = positionOffset.ToIntegerDomain();
 
             collisionRectangle = new Rectangle((int)position.X, (int)position.Y, boxWidth, boxHeight);
             Text.Position = position + new Vector2(0, (int)(-alignmentOffset.Y / 2 + boxHeight / 2));
+
+            Vector2 blinkingMeasured = textPointer.SpriteFont.MeasureString(textPointer.Text).ToIntegerDomain();
+            Vector2 textPointerMeasured = Text.SpriteFont.MeasureString(Text.Text.Substring(0, textPointerLocation)).ToIntegerDomain();
+
+            textPointer.Position = position
+                + new Vector2(textPointerMeasured.X - blinkingMeasured.X / 2, 0).ToIntegerDomain()
+                + new Vector2(0, -alignmentOffset.Y / 2 + boxHeight / 2).ToIntegerDomain();
 
 #if DEBUG
             debugRectangle.Update(
@@ -143,14 +151,14 @@ namespace OpenBound.GameComponents.Interface.Text
             DeactivateElement();
         }
 
-        private void DeactivateElement()
+        public void DeactivateElement()
         {
             Text.Color = Parameter.TextColorTextBoxSelectedMessage;
             IsActive = false;
             Uninstall();
         }
 
-        private void ActivateElement()
+        public void ActivateElement()
         {
             if (IsActive) return;
 
@@ -233,11 +241,6 @@ namespace OpenBound.GameComponents.Interface.Text
 
         private void UpdateBlinkingBar(GameTime gameTime)
         {
-            Vector2 blinkingMeasured = textPointer.SpriteFont.MeasureString(textPointer.Text);
-            Vector2 textPointerMeasured = Text.SpriteFont.MeasureString(Text.Text.Substring(0, textPointerLocation));
-
-            textPointer.Position = Position + new Vector2(textPointerMeasured.X - blinkingMeasured.X / 2, 0) + new Vector2(0, -alignmentOffset.Y / 2 + boxHeight / 2);
-
             textPointerBlinkingTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             textPointerBlinkingTime = textPointerBlinkingTime % 1;
         }

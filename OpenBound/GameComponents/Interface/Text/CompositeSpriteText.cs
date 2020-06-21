@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using Openbound_Network_Object_Library.Entity.Text;
@@ -53,7 +54,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => elementOffset;
             set
             {
-                elementOffset = value;
+                elementOffset = value.ToIntegerDomain();
                 RecalculatePosition();
             }
         }
@@ -63,7 +64,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => position;
             set
             {
-                position = value;
+                position = value.ToIntegerDomain();
                 RecalculatePosition();
             }
         }
@@ -73,7 +74,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => positionOffset;
             set
             {
-                positionOffset = value;
+                positionOffset = value.ToIntegerDomain();
                 UpdateAttatchedPosition();
                 RecalculatePosition();
             }

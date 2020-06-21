@@ -22,6 +22,9 @@ using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using Openbound_Network_Object_Library.Models;
+using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
+using Microsoft.Xna.Framework.Input;
 
 namespace OpenBound.GameComponents.Interface
 {
@@ -34,7 +37,7 @@ namespace OpenBound.GameComponents.Interface
         private Sprite strenghtBarPreviousShotMarker, shotStrenghtSelector;
 
         private ShotButton shot1Button;
-        private List<Button> menuButtons;
+        private List<Button> menuButtonList;
 
         private List<SpriteNumericField> spriteNumericFieldList;
 
@@ -58,6 +61,11 @@ namespace OpenBound.GameComponents.Interface
         private Button gameOptionsButton;
         private PopupGameOptions popupGameOptions;
 
+        //Texts
+        public TextBox TextBox;
+        private Button textFilterButton;
+        private SpriteText allTextFilterSpriteFont, teamTextFilterSpriteFont;
+
         //Pass Turn button
         private Button passTurnButton;
 
@@ -74,7 +82,7 @@ namespace OpenBound.GameComponents.Interface
             RoomMetadata room = GameInformation.Instance.RoomMetadata;
 
             spriteList = new List<Sprite>();
-            menuButtons = new List<Button>();
+            menuButtonList = new List<Button>();
             FloatingTextHandler = new FloatingTextHandler();
             spriteNumericFieldList = new List<SpriteNumericField>();
 
@@ -114,7 +122,7 @@ namespace OpenBound.GameComponents.Interface
                 { PositionOffset = new Vector2(326, 1) + origin };
                 spriteList.Add(rightMenuTag);
 
-                menuButtons.Add(new Button(ButtonType.BlueTag, DepthParameter.HUDL1, default, new Vector2(288, 9) + origin));
+                menuButtonList.Add(new Button(ButtonType.BlueTag, DepthParameter.HUDL1, default, new Vector2(288, 9) + origin));
             }
 
             //Shot Strenght Metter
@@ -167,14 +175,14 @@ namespace OpenBound.GameComponents.Interface
             shot1Button.OtherButtons = shot2Button.OtherButtons = shotSSButton.OtherButtons = new List<ShotButton>() { shot1Button, shot2Button, shotSSButton };
             shot1Button.ChangeButtonState(ButtonAnimationState.Activated);
 
-            menuButtons.Add(shot2Button);
-            menuButtons.Add(shotSSButton);
+            menuButtonList.Add(shot2Button);
+            menuButtonList.Add(shotSSButton);
 
             gameOptionsButton = new Button(ButtonType.BlueOptions, DepthParameter.HUDForeground, GameOptionsOnClickAction, new Vector2(-359, 26) + origin);
-            menuButtons.Add(gameOptionsButton);
+            menuButtonList.Add(gameOptionsButton);
 
             passTurnButton = new Button(ButtonType.BlueSkipTurn, DepthParameter.HUDForeground, PassTurnButtonAction, new Vector2(-296, 26) + origin);
-            menuButtons.Add(passTurnButton);
+            menuButtonList.Add(passTurnButton);
 
             //Shot Strenght Selector (Button)
             TransparentButton shotStrenghtSelectorButton = new TransparentButton(
@@ -188,7 +196,7 @@ namespace OpenBound.GameComponents.Interface
                         -160 + origin.X + StrenghtBar.BarSprite.SpriteWidth),
                     shotStrenghtSelector.PositionOffset.Y);
             };
-            menuButtons.Add(shotStrenghtSelectorButton);
+            menuButtonList.Add(shotStrenghtSelectorButton);
 
             //Health Bars
             healthBarList = new List<HealthBar>();
@@ -199,6 +207,23 @@ namespace OpenBound.GameComponents.Interface
                 healthBarList.Add(new HealthBar(x));
                 nameplateList.Add(new Nameplate(x));
             });
+
+            //Text
+            TextBox = new TextBox(-Parameter.ScreenResolution / 2 + new Vector2(5, 5), new Vector2(370, 400), 100, 0f,
+                hasScrollBar: false, scrollBackgroundAlpha: 0f,
+                hasTextField: true, textFieldBackground: 0.5f, textFieldOffset: new Vector2(20, 0), textFieldFixedPosition: new Vector2(-40, -68) + origin, maximumTextLength: 50,
+                onSendMessage: (pm) => { ChangeMessageRecipents(pm, textFilterButton.IsActivated); });
+
+            TextBox.OnKeyPress[Keys.Enter] += ToggleTextBoxEnable;
+
+            textFilterButton = new Button(ButtonType.MessageFilter, DepthParameter.HUDForeground, (o) => { ChangeTextFilter(); }, new Vector2(-40, -60) + origin);
+            allTextFilterSpriteFont  = new SpriteText(FontTextType.Consolas10, Language.HUDTextAllText,  Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
+            teamTextFilterSpriteFont = new SpriteText(FontTextType.Consolas10, Language.HUDTextTeamText, Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
+            
+            allTextFilterSpriteFont.PositionOffset = teamTextFilterSpriteFont.PositionOffset = new Vector2(-40, -55) + origin;
+            teamTextFilterSpriteFont.SetTransparency(0);
+
+            menuButtonList.Add(textFilterButton);
 
             //Wind Compass
             windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
@@ -213,6 +238,36 @@ namespace OpenBound.GameComponents.Interface
             popupGameOptions = new PopupGameOptions(default);
             popupGameOptions.OnClose += PopupGameOptionsOnCloseAction;
             PopupHandler.Add(popupGameOptions);
+        }
+
+        public void ToggleTextBoxEnable(object textBox)
+        {
+            TextField tf = (TextField)textBox;
+
+            if (!tf.IsActive)
+                tf.ActivateElement();
+            else
+                tf.DeactivateElement();
+        }
+
+        public void ChangeTextFilter()
+        {
+            if (textFilterButton.IsActivated)
+            {
+                allTextFilterSpriteFont.SetTransparency(0);
+                teamTextFilterSpriteFont.SetTransparency(1);
+            }
+            else
+            {
+                allTextFilterSpriteFont.SetTransparency(1);
+                teamTextFilterSpriteFont.SetTransparency(0);
+            }
+        }
+
+        public void ChangeMessageRecipents(PlayerMessage playerMessage, bool alliesOnly)
+        {
+            if (alliesOnly) playerMessage.PlayerTeam = GameInformation.Instance.PlayerInformation.PlayerTeam;
+
         }
 
         public void MobileDeath(Mobile mobile)
@@ -263,7 +318,7 @@ namespace OpenBound.GameComponents.Interface
             FloatingTextHandler.Update(gameTime);
 
             //Menu buttons
-            menuButtons.ForEach((x) => x.Update());
+            menuButtonList.ForEach((x) => x.Update());
             shot1Button.Update();
 
             //Angle
@@ -275,6 +330,12 @@ namespace OpenBound.GameComponents.Interface
             //Health bars
             healthBarList.ForEach((x) => x.Update());
             nameplateList.ForEach((x) => x.Update());
+
+            //Text
+            TextBox.Update(gameTime);
+            //TextBox.UpdateTextFieldPosition(textFilterButton.ButtonSprite.Position - new Vector2(100, 0));
+            allTextFilterSpriteFont.UpdateAttatchedPosition();
+            teamTextFilterSpriteFont.UpdateAttatchedPosition();
 
             //Delayboard
             Delayboard.Update();
@@ -309,7 +370,12 @@ namespace OpenBound.GameComponents.Interface
 
             //Static Buttons
             shot1Button.Draw(gameTime, spriteBatch);
-            menuButtons.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            menuButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+
+            //Text List
+            TextBox.Draw(spriteBatch);
+            allTextFilterSpriteFont.Draw(spriteBatch);
+            teamTextFilterSpriteFont.Draw(spriteBatch);
 
             //Health bars
             healthBarList.ForEach((x) => x.Draw(gameTime, spriteBatch));

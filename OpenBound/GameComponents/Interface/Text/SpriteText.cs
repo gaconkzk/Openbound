@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
 using Openbound_Network_Object_Library.Entity.Text;
@@ -30,10 +31,14 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             get => position;
             //Prevent font of blurrying when it is in the middle of a coordinate
-            set => position = new Vector2((int)value.X, (int)value.Y);
+            set => position = value.ToIntegerDomain();
         }
 
-        public Vector2 PositionOffset;
+        private Vector2 positionOffset;
+        public Vector2 PositionOffset {
+            get => positionOffset;
+            set => positionOffset = value.ToIntegerDomain();
+        }
 
         private Vector2 origin;
         public Vector2 Origin

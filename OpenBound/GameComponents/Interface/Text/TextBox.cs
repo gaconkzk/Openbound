@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.General;
 using Openbound_Network_Object_Library.Entity.Text;
@@ -40,6 +41,7 @@ namespace OpenBound.GameComponents.Interface.Text
         TextField textField;
         Sprite textfieldBackground;
         Vector2 textFieldOffset;
+        Vector2? textFieldFixedPosition;
 
         //Action Handlers
         public Action<PlayerMessage> OnSendMessage;
@@ -49,13 +51,19 @@ namespace OpenBound.GameComponents.Interface.Text
         Queue<object> playerMessageQueue;
         bool isThreadEnabled;
 
-        public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha, float scrollBackgroundAlpha = 0.3f, bool hasScrollBar = true, Vector2 textFieldOffset = default, float textFieldBackground = 0.3f, bool hasTextField = true, Action<PlayerMessage> onSendMessage = default, int maximumTextLength = 50)
+        public Dictionary<Keys, Action<object>> OnKeyPress => textField.OnPressKey;
+
+        public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha,
+            bool hasScrollBar = true, float scrollBackgroundAlpha = 0.3f,
+            bool hasTextField = true, Vector2 textFieldOffset = default, Vector2? textFieldFixedPosition = null, float textFieldBackground = 0.3f, int maximumTextLength = 50,
+            Action<PlayerMessage> onSendMessage = default)
         {
             boxTextArea = boxSize;
             OnSendMessage = onSendMessage;
             this.maximumNumberOfLines = maximumNumberOfLines;
             this.textFieldOffset = textFieldOffset;
-            
+            this.textFieldFixedPosition = textFieldFixedPosition;
+
             if (hasScrollBar)
             {
                 //Instance, disable, add a action handler to scroll bar and reduce the text area proportional to textbar size.
@@ -69,9 +77,21 @@ namespace OpenBound.GameComponents.Interface.Text
             {
                 textField = new TextField(default, (int)(boxSize.X - textFieldOffset.X * 2), 30, maximumTextLength, FontTextType.Consolas10, Color.White, layerDepth: DepthParameter.InterfaceButtonText, outlineColor: Color.Black);
                 textField.OnPressKey[Keys.Enter] = SendMessage;
-                textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", position + new Vector2(0, boxSize.Y) + new Vector2(0, textFieldOffset.Y), layerDepth: DepthParameter.InterfaceButton);
-                textfieldBackground.SetTransparency(backgroundAlpha);
+
+                Vector2 tfBGPosition;
+
+                if (textFieldFixedPosition == default)
+                    tfBGPosition = position + new Vector2(0, boxSize.Y) + new Vector2(0, textFieldOffset.Y);
+                else
+                    tfBGPosition = (Vector2)textFieldFixedPosition;
+                
+                textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", tfBGPosition, layerDepth: DepthParameter.InterfaceButton);
+                textfieldBackground.SetTransparency(textFieldBackground);
                 textfieldBackground.Scale *= new Vector2(boxSize.X, 30);
+
+                /* textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", position + new Vector2(0, boxSize.Y) + new Vector2(0, textFieldOffset.Y), layerDepth: DepthParameter.InterfaceButton);
+                textfieldBackground.SetTransparency(backgroundAlpha);
+                textfieldBackground.Scale *= new Vector2(boxSize.X, 30);*/
             }
 
             background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: DepthParameter.InterfaceButton);
@@ -94,8 +114,7 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             TextField t = (TextField)textField;
 
-            Player p = GameInformation.Instance.PlayerInformation;
-            OnSendMessage?.Invoke(new PlayerMessage() { Player = new Player() { ID = p.ID, Nickname = p.Nickname }, Text = t.Text.Text });
+            OnSendMessage?.Invoke(new PlayerMessage() { Player = new Player() { Nickname = GameInformation.Instance.PlayerInformation.Nickname }, Text = t.Text.Text });
             
             t.ClearText();
         }
@@ -212,8 +231,25 @@ namespace OpenBound.GameComponents.Interface.Text
             background.UpdateAttatchmentPosition();
             UpdateReceivedTexts();
             UpdateTextPosition();
+            UpdateTextField(gameTime);
+        }
+
+        public void UpdateTextField(GameTime gameTime)
+        {
             textField?.Update(gameTime);
-            textfieldBackground?.UpdateAttatchmentPosition();
+
+            //Textfield
+            if (textFieldFixedPosition == null)
+            {
+                textfieldBackground?.UpdateAttatchmentPosition();
+                textField.Position = (background.Position + boxTextArea * Vector2.UnitY + textFieldOffset).ToIntegerDomain();
+            }
+            else
+            {
+                textfieldBackground?.UpdateAttatchmentPosition();
+                textField.Position = textfieldBackground.Position.ToIntegerDomain()
+                    + textFieldOffset.ToIntegerDomain();
+            }
         }
 
         /// <summary>
@@ -235,9 +271,6 @@ namespace OpenBound.GameComponents.Interface.Text
         /// </summary>
         private void UpdateTextPosition()
         {
-            //Textfield
-            textField.Position = background.Position + boxTextArea * Vector2.UnitY + textFieldOffset;
-
             if (compositeSpriteTextList.Count == 0) return;
 
             //Updating selected index

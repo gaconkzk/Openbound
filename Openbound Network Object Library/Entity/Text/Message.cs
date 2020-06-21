@@ -12,15 +12,16 @@ using System.Threading.Tasks;
 namespace Openbound_Network_Object_Library.Entity.Text
 {
     /// <summary>
-    /// Player message struct. So far, it is only being used in here. Eventually ill drop it on NetworkObjectLibrary
+    /// Player message class. So far, it is only being used in here. Eventually ill drop it on NetworkObjectLibrary
     /// </summary>
-    public struct PlayerMessage
+    public class PlayerMessage
     {
         public Player Player;
         public string Text;
+        public PlayerTeam? PlayerTeam;
     }
 
-    public struct CustomMessage
+    public class CustomMessage
     {
         public string Text;
         public uint Token;
