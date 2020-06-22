@@ -71,6 +71,7 @@
     <Compile Include="Common\NetworkObjectParameters.cs" />
     <Compile Include="Entity\Text\Message.cs" />
     <Compile Include="Entity\Text\TextConfiguration.cs" />
+    <Compile Include="Extension\EBitwiseOperators.cs" />
     <Compile Include="FileOutput\ConfigFileManager.cs" />
     <Compile Include="Database\Context\OpenboundDatabaseContext.cs" />
     <Compile Include="Database\Controller\GuildController.cs" />

@@ -177,7 +177,7 @@ namespace Openbound_Game_Server.Service
                         GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
 
                         //send an update for each member of the match with the current metadata
-                        ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
+                        BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                     }
 
                     Console.WriteLine($" - {playerSession.Player.Nickname} joined the room ({room.ID} - {room.Name})");
@@ -236,7 +236,7 @@ namespace Openbound_Game_Server.Service
                         GameServerChatLeave(playerSession);
 
                         //send an update for each member of the match with the current metadata
-                        ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
+                        BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                     }
 
                     return true;
@@ -261,7 +261,7 @@ namespace Openbound_Game_Server.Service
                 lock (room)
                 {
                     playerSession.Player.PrimaryMobile = mobileType;
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
                 }
             }
             catch (Exception ex)
@@ -304,8 +304,8 @@ namespace Openbound_Game_Server.Service
                             //Prepare match
                             room.StartMatch();
 
-                            ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
-                            ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomReadyRoom, null, roomUnion);
+                            BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
+                            BroadcastToPlayer(NetworkObjectParameters.GameServerRoomReadyRoom, null, roomUnion);
                         }
                     }
                     else
@@ -317,7 +317,7 @@ namespace Openbound_Game_Server.Service
                     Console.WriteLine($" - {player.Nickname} on ({room.ID} - {room.Name}) is {player.PlayerRoomStatus}");
 
                     //send an update for each member of the match with the current metadata
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                 }
             }
             catch (Exception ex)
@@ -347,7 +347,7 @@ namespace Openbound_Game_Server.Service
                     }
 
                     //send an update for each member of the match with the current metadata
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
                 }
             }
             catch (Exception ex)
@@ -374,7 +374,7 @@ namespace Openbound_Game_Server.Service
                     else room.Map = Map.GetMap(mapIndex);
 
                     //send an update for each member of the match with the current metadata
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, room.PlayerList);
                 }
             }
             catch (Exception ex)
@@ -392,7 +392,7 @@ namespace Openbound_Game_Server.Service
 
                 Console.WriteLine($"{playerSession.Player.ID} - {playerSession.Player.Nickname} is {loadingPercentage}%");
 
-                ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshLoadingPercentage, new KeyValuePair<int, int>(playerSession.Player.ID, loadingPercentage), playerSession.RoomMetadata.PlayerList);
+                BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshLoadingPercentage, new KeyValuePair<int, int>(playerSession.Player.ID, loadingPercentage), playerSession.RoomMetadata.PlayerList);
             }
             catch (Exception ex)
             {
@@ -434,7 +434,7 @@ namespace Openbound_Game_Server.Service
 
                 if (roomUnion.Any((x) => x.PlayerLoadingStatus != PlayerRoomStatus.Ready)) return;
 
-                ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerRoomStartInGameScene, null, roomUnion);
+                BroadcastToPlayer(NetworkObjectParameters.GameServerRoomStartInGameScene, null, roomUnion);
             }
         }
         #endregion
@@ -458,7 +458,7 @@ namespace Openbound_Game_Server.Service
 
                     RegisterIntoPlayerSession(roomUnion, (playerE) => { playerE.MatchManager = mm; });
 
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameStartMatch, mm.SyncMobileList, roomUnion);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerInGameStartMatch, mm.SyncMobileList, roomUnion);
                 }
             }
             catch (Exception ex)
@@ -480,7 +480,7 @@ namespace Openbound_Game_Server.Service
                 {
                     SyncMobile sm = mm.SyncMobileList.ToList().Find((x) => x.Owner.ID == player.ID);
                     sm.Update(filter);
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameRefreshSyncMobile, mm.SyncMobileList, mm.MatchUnion);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRefreshSyncMobile, mm.SyncMobileList, mm.MatchUnion);
                 }
             }
             catch (Exception ex)
@@ -520,7 +520,7 @@ namespace Openbound_Game_Server.Service
                     mm.ComputePlayerAction(filter);
                 }
 
-                ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestShot, filter, mm.MatchUnion);
+                BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestShot, filter, mm.MatchUnion);
             }
             catch (Exception ex)
             {
@@ -537,14 +537,18 @@ namespace Openbound_Game_Server.Service
 
                 lock (mm)
                 {
-                    SyncMobile sm = mm.SyncMobileList.Find((x) => x.Owner.ID == filter.Owner.ID);
+                    filter = mm.SyncMobileList.Find((x) => x.Owner.ID == filter.Owner.ID);
 
-                    if (sm == null) return;
+                    if (filter == null) return;
 
                     filter.IsAlive = false;
-                    sm.Update(filter);
+                    filter.Update(filter);
 
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDeath, filter, mm.MatchUnion);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDeath, filter, mm.MatchUnion);
+
+                    //Sends death message
+                    BroadcastMessage(Message.BuildDeathMessage(filter.Owner), mm.MatchUnion);
+
                     CheckWinConditions(mm, playerSession);
                 }
 
@@ -570,7 +574,7 @@ namespace Openbound_Game_Server.Service
 
                     sm.IsAlive = false;
 
-                    ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDisconnect, sm, mm.MatchUnion);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDisconnect, sm, mm.MatchUnion);
                     CheckWinConditions(mm, playerSession);
                 }
             }
@@ -602,7 +606,7 @@ namespace Openbound_Game_Server.Service
                 /*save data on database*/
             }
 
-            ServerwideBroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestGameEnd, victoriousTeam, matchManager.MatchUnion);
+            BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestGameEnd, victoriousTeam, matchManager.MatchUnion);
         }
         #endregion
 
@@ -627,31 +631,41 @@ namespace Openbound_Game_Server.Service
         {
             try
             {
-                if (string.IsNullOrEmpty(param))
+                if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat)
                     return false;
 
                 //Parse the player selected channel to find out its index
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
 
-                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
-                {
-                    //Is attempting to connect on any game list channel, give the player the first possible channel
-                    if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier && tuple.Item2 == 0)
+                //If is a random connection, find which is the best suitable channel
+                if (tuple.Item2 == 0) {
+                    lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
                     {
-                        //find the first non-full channel IF the player hasn't selected a specific channel
-                        tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
-                            .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
+                        //Is attempting to connect on any game list channel, give the player the first possible channel
+                        if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
+                        {
+                            //find the first non-full channel IF the player hasn't selected a specific channel
+                            tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
+                                .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
+
+                            //Connect to room
+                            GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
+                        }
                     }
-
+                }
+                else
+                {
                     //Is attempting to connect on a specific room/channel
-
-                    //Connects if there are free slots left on the channel.
-                    //If the user is attempting to connect on a Room it should always return true
-                    if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
-                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
-                    else
-                        //Error, the channel is full
-                        return false;
+                    lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                    {
+                        //Connects if there are free slots left on the channel.
+                        //If the user is attempting to connect on a Room it should always return true
+                        if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
+                            GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
+                        else
+                            //Error, the channel is full
+                            return false;
+                    }
                 }
 
                 //Leave any prior room
@@ -660,12 +674,11 @@ namespace Openbound_Game_Server.Service
                 //Sends welcome message to player
                 if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
                 {
-                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateChannelWelcomeMessage(tuple.Item2));
+                    BroadcastMessage(Message.CreateChannelWelcomeMessage(tuple.Item2), playerSession);
                 }
                 else
                 {
-                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage1(playerSession.RoomMetadata.Name));
-                    playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, Message.CreateRoomWelcomeMessage2());
+                    BroadcastMessage(Message.CreateRoomWelcomeMessage(playerSession.RoomMetadata.Name), playerSession);
                 }
 
                 //Updates the current connected channel id
@@ -690,7 +703,7 @@ namespace Openbound_Game_Server.Service
                 //Parse the current player channel
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
 
-                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
                 {
                     //if player is connected to any channel, disconnect from the selected channel
                     if (!string.IsNullOrEmpty(playerSession.CurrentConnectedChat))
@@ -724,11 +737,11 @@ namespace Openbound_Game_Server.Service
                     if (pm.PlayerTeam == null)
                         pList = GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2];
                     else if (pm.PlayerTeam == PlayerTeam.Blue)
-                        pList = playerSession.RoomMetadata.TeamA;
-                    else
                         pList = playerSession.RoomMetadata.TeamB;
+                    else
+                        pList = playerSession.RoomMetadata.TeamA;
 
-                    RestrictBroadcastToPlayer(NetworkObjectParameters.GameServerChatSendPlayerMessage, pm, pList);
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerChatSendPlayerMessage, pm, pList);
                 }   
             }
             catch (Exception ex)
@@ -751,7 +764,7 @@ namespace Openbound_Game_Server.Service
             }
         }
 
-        private static void ServerwideBroadcastToPlayer(int service, object message, List<Player> players)
+        private static void BroadcastToPlayer(int service, object message, IEnumerable<Player> players)
         {
             lock (GameServerObjects.Instance.PlayerHashtable)
             {
@@ -763,13 +776,27 @@ namespace Openbound_Game_Server.Service
             }
         }
 
-        private static void RestrictBroadcastToPlayer(int service, object message, IEnumerable<Player> players)
+        private static void BroadcastMessage(object message, IEnumerable<Player> players)
         {
-            foreach (Player p in players)
+            lock (GameServerObjects.Instance.PlayerHashtable)
             {
-                if (!GameServerObjects.Instance.PlayerHashtable.ContainsKey(p.ID)) continue;
-                ((PlayerSession)GameServerObjects.Instance.PlayerHashtable[p.ID]).ProviderQueue.Enqueue(service, message);
+                foreach (Player p in players)
+                {
+                    if (!GameServerObjects.Instance.PlayerHashtable.ContainsKey(p.ID)) continue;
+                    ((PlayerSession)GameServerObjects.Instance.PlayerHashtable[p.ID]).ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+                }
             }
+        }
+
+        private static void BroadcastMessage<T>(List<T> message, PlayerSession playerSession)
+        {
+            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+        }
+
+        private static void BroadcastMessage<T>(List<List<T>> messageList, PlayerSession playerSession)
+        {
+            foreach(List<T> message in messageList)
+                playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
         }
         #endregion
 

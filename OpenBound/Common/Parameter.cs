@@ -58,10 +58,13 @@ namespace OpenBound.Common
         public static readonly Color NameplateGuildColor = new Color(242, 198, 75);
         public static readonly Color NameplateGuildOutlineColor = new Color(95, 81, 16);
 
-        public static readonly float InterfaceNumericTextFieldUpdateRate = 0.05f;
-        public static readonly float InterfaceNumericTextFieldFactorNumber = 8f;
+        public const float InterfaceNumericTextFieldUpdateRate = 0.05f;
+        public const float InterfaceNumericTextFieldFactorNumber = 8f;
 
-        public static readonly float InterfaceMinimapScrollSpeed = 10f;
+        public const float InterfaceMinimapScrollSpeed = 10f;
+
+        public const float InterfaceInGameTextBoxTimeToStartFading = 10;
+        public const float InterfaceInGameTextBoxTimeFadeTime = 5;
         #endregion
 
         #region Misc

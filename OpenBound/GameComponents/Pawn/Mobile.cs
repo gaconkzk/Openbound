@@ -72,6 +72,9 @@ namespace OpenBound.GameComponents.Pawn
         public bool IsAbleToShoot;
         public bool IsAlive;
 
+        //IsActionsLocked
+        public bool IsActionsLocked;
+
         //Object References
         public Player Owner;
 
@@ -113,6 +116,7 @@ namespace OpenBound.GameComponents.Pawn
             SyncPosition = Position;
 
             IsAlive = true;
+            IsActionsLocked = false;
 
 #if DEBUG
             DebugHandler.Instance.Add(debugCrosshair);
@@ -368,7 +372,7 @@ namespace OpenBound.GameComponents.Pawn
                 LevelScene.HUD.StrenghtBar.Reset();
             }
             else if (InputHandler.IsBeingHeldDown(Keys.Space)
-                && !LevelScene.HUD.StrenghtBar.IsFull)
+                && !LevelScene.HUD.StrenghtBar.IsFull && !IsActionsLocked)
             {
                 LevelScene.HUD.StrenghtBar.PerformStep(GameTime);
 

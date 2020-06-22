@@ -25,6 +25,9 @@ using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Entity.Text;
 using Microsoft.Xna.Framework.Input;
+using OpenBound.GameComponents.Input;
+using System.Linq;
+using OpenBound.ServerCommunication.Service;
 
 namespace OpenBound.GameComponents.Interface
 {
@@ -62,7 +65,6 @@ namespace OpenBound.GameComponents.Interface
         private PopupGameOptions popupGameOptions;
 
         //Texts
-        public TextBox TextBox;
         private Button textFilterButton;
         private SpriteText allTextFilterSpriteFont, teamTextFilterSpriteFont;
 
@@ -70,6 +72,12 @@ namespace OpenBound.GameComponents.Interface
         private Button passTurnButton;
 
         public Delayboard Delayboard;
+
+        //Textboxes
+        public TextBox[] TextBoxes;
+        float[] textBoxesTransparencyElapsedTime;
+        float[] textBoxesTransparencyFadeTime;
+
 
         private Vector2 origin;
 
@@ -208,15 +216,7 @@ namespace OpenBound.GameComponents.Interface
                 nameplateList.Add(new Nameplate(x));
             });
 
-            //Text
-            TextBox = new TextBox(-Parameter.ScreenResolution / 2 + new Vector2(5, 5), new Vector2(370, 400), 100, 0f,
-                hasScrollBar: false, scrollBackgroundAlpha: 0f,
-                hasTextField: true, textFieldBackground: 0.5f, textFieldOffset: new Vector2(20, 0), textFieldFixedPosition: new Vector2(-40, -68) + origin, maximumTextLength: 50,
-                onSendMessage: (pm) => { ChangeMessageRecipents(pm, textFilterButton.IsActivated); });
-
-            TextBox.OnKeyPress[Keys.Enter] += ToggleTextBoxEnable;
-
-            textFilterButton = new Button(ButtonType.MessageFilter, DepthParameter.HUDForeground, (o) => { ChangeTextFilter(); }, new Vector2(-40, -60) + origin);
+            textFilterButton = new Button(ButtonType.MessageFilter, DepthParameter.HUDForeground, OnTeamMessageFilterIsClicked, new Vector2(-40, -60) + origin);
             allTextFilterSpriteFont  = new SpriteText(FontTextType.Consolas10, Language.HUDTextAllText,  Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
             teamTextFilterSpriteFont = new SpriteText(FontTextType.Consolas10, Language.HUDTextTeamText, Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
             
@@ -238,36 +238,105 @@ namespace OpenBound.GameComponents.Interface
             popupGameOptions = new PopupGameOptions(default);
             popupGameOptions.OnClose += PopupGameOptionsOnCloseAction;
             PopupHandler.Add(popupGameOptions);
+
+            //Text
+            TextBoxes = new TextBox[] {
+                //Player Messages & Textbox
+                new TextBox(-Parameter.ScreenResolution / 2 + new Vector2(5, 5), new Vector2(370, 400), 100, 0f,
+                    hasScrollBar: false, scrollBackgroundAlpha: 0,
+                    hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(185, 0), textFieldFixedPosition: new Vector2(-205, -70) + origin, maximumTextLength: 50,
+                    onSendMessage: OnSendMessage),
+
+                //Server Messages
+                new TextBox( Parameter.ScreenResolution / 2 * new Vector2(1, -1) - new Vector2(370, 0) + new Vector2(-5, 5), new Vector2(370, 400), 100, 0f,
+                    hasTextField: false,
+                    hasScrollBar: false, scrollBackgroundAlpha: 0, alignment: Alignment.Right)
+            };
+
+            textBoxesTransparencyElapsedTime = new float[2];
+            textBoxesTransparencyFadeTime = new float[2];
         }
 
-        public void ToggleTextBoxEnable(object textBox)
+        #region Textbox
+        public void UpdateTextboxTransparencies(GameTime gameTime)
         {
-            TextField tf = (TextField)textBox;
+            for (int i = 0; i < TextBoxes.Length; i++)
+            {
+                if (TextBoxes[i].IsTextFieldActive) continue;
 
-            if (!tf.IsActive)
-                tf.ActivateElement();
-            else
-                tf.DeactivateElement();
+                if (textBoxesTransparencyElapsedTime[i] < Parameter.InterfaceInGameTextBoxTimeToStartFading)
+                {
+                    textBoxesTransparencyElapsedTime[i] += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else if (textBoxesTransparencyFadeTime[i] < Parameter.InterfaceInGameTextBoxTimeFadeTime)
+                {
+                    textBoxesTransparencyFadeTime[i] += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    TextBoxes[i].Transparency = 1 - textBoxesTransparencyFadeTime[i] / Parameter.InterfaceInGameTextBoxTimeFadeTime;
+                }
+            }
         }
 
-        public void ChangeTextFilter()
+        public void OnTeamMessageFilterIsClicked(object b)
         {
             if (textFilterButton.IsActivated)
             {
                 allTextFilterSpriteFont.SetTransparency(0);
                 teamTextFilterSpriteFont.SetTransparency(1);
+
+                if (GameInformation.Instance.PlayerInformation.PlayerTeam == PlayerTeam.Red)
+                    TextBoxes[0].SetTextFieldColor(Parameter.TextColorTeamRed, Color.Black);
+                else
+                    TextBoxes[0].SetTextFieldColor(Parameter.TextColorTeamBlue, Color.Black);
             }
             else
             {
                 allTextFilterSpriteFont.SetTransparency(1);
                 teamTextFilterSpriteFont.SetTransparency(0);
+
+                TextBoxes[0].SetTextFieldColor(Color.White, Color.Black);
             }
         }
 
-        public void ChangeMessageRecipents(PlayerMessage playerMessage, bool alliesOnly)
+        public void OnSendMessage(PlayerMessage message)
         {
-            if (alliesOnly) playerMessage.PlayerTeam = GameInformation.Instance.PlayerInformation.PlayerTeam;
+            if (textFilterButton.IsActivated) message.PlayerTeam = GameInformation.Instance.PlayerInformation.PlayerTeam;
 
+            TextBoxes[0].DeactivateTextField();
+
+            ServerInformationHandler.SendGameListMessage(message);
+        }
+
+        public void UpdateTextBoxes(GameTime gameTime)
+        {
+            if (InputHandler.IsBeingPressed(Keys.Enter))
+            {
+                if (TextBoxes[0].IsTextFieldActive)
+                {
+                    TextBoxes[0].DeactivateTextField();
+                    mobile.IsActionsLocked = false;
+                }
+                else
+                {
+                    TextBoxes[0].ActivateTextField();
+                    textBoxesTransparencyElapsedTime[0] = 0;
+                    textBoxesTransparencyFadeTime[0] = 0;
+                    TextBoxes[0].Transparency = 1;
+                    mobile.IsActionsLocked = true;
+                }
+            }
+
+            TextBoxes[0].Update(gameTime);
+            TextBoxes[1].Update(gameTime);
+        }
+        #endregion
+
+        public void OnReceiveMessageAsyncCallback(object message, int textBoxIndex)
+        {
+            TextBoxes[textBoxIndex].AsyncAppendText(message);
+
+            textBoxesTransparencyElapsedTime[textBoxIndex] = 0;
+            textBoxesTransparencyFadeTime[textBoxIndex] = 0;
+            TextBoxes[textBoxIndex].Transparency = 1;
         }
 
         public void MobileDeath(Mobile mobile)
@@ -331,9 +400,7 @@ namespace OpenBound.GameComponents.Interface
             healthBarList.ForEach((x) => x.Update());
             nameplateList.ForEach((x) => x.Update());
 
-            //Text
-            TextBox.Update(gameTime);
-            //TextBox.UpdateTextFieldPosition(textFilterButton.ButtonSprite.Position - new Vector2(100, 0));
+            //TextButtons
             allTextFilterSpriteFont.UpdateAttatchedPosition();
             teamTextFilterSpriteFont.UpdateAttatchedPosition();
 
@@ -345,6 +412,10 @@ namespace OpenBound.GameComponents.Interface
 
             //Incoming Weather
             WeatherDisplay.Update(gameTime);
+
+            //Text
+            UpdateTextboxTransparencies(gameTime);
+            UpdateTextBoxes(gameTime);
         }
 
         public void UpdatePreviousShotMarker()
@@ -373,7 +444,6 @@ namespace OpenBound.GameComponents.Interface
             menuButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             //Text List
-            TextBox.Draw(spriteBatch);
             allTextFilterSpriteFont.Draw(spriteBatch);
             teamTextFilterSpriteFont.Draw(spriteBatch);
 
@@ -389,6 +459,17 @@ namespace OpenBound.GameComponents.Interface
 
             //IncomingWeather
             WeatherDisplay.Draw(gameTime, spriteBatch);
+
+            //Text
+            TextBoxes[0].Draw(spriteBatch);
+            TextBoxes[1].Draw(spriteBatch);
+        }
+
+        public void Dispose()
+        {
+            TextBoxes[0].Dispose();
+            TextBoxes[1].Dispose();
         }
     }
+
 }

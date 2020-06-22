@@ -507,9 +507,10 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
-                for (int i = 0; i < 100; i++)
-                    //tsb.AppendText(sMobList[0].Owner, textBase += "0");
-                    HUD.TextBox.AsyncAppendText(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" });
+                for (int i = 0; i < 10; i++)
+                {
+                    HUD.OnReceiveMessageAsyncCallback(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" }, 0);
+                }
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
@@ -533,7 +534,9 @@ namespace OpenBound.GameComponents.Level.Scene
                 var y1 = ObjectWrapper.ConvertObjectToByteArray("" + (char)0xf11b, 4096);
                 var z1 = ObjectWrapper.ConvertByteArrayToObject<string>(y1);
 
-                HUD.TextBox.AsyncAppendText(z);
+                //TextBoxes[1].AsyncAppendText(cm);
+
+                HUD.OnReceiveMessageAsyncCallback(cm, 1);
 
                 Console.WriteLine(number);
             }
@@ -542,6 +545,9 @@ namespace OpenBound.GameComponents.Level.Scene
             {
             }
 
+            HUD.TextBoxes[0].Update(gameTime);
+
+            //UpdateTextBoxes(gameTime);
         }
 
         string textBase = "abcdefgh";
@@ -549,7 +555,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public void act(PlayerMessage o)
         {
-            HUD.TextBox.AsyncAppendText(o);
+            HUD.TextBoxes[0].AsyncAppendText(o);
         }
 
         public override void Draw(GameTime gameTime)

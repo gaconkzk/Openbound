@@ -69,13 +69,15 @@ namespace OpenBound.GameComponents.Interface
 
         public void Update(GameTime gameTime)
         {
-            fadeAnimation = Math.Min(fadeAnimation + (float)gameTime.ElapsedGameTime.TotalSeconds / 2, 1);
-
             flipbook.Position = new Vector2(position.X, -(GameScene.Camera.CameraOffset + Parameter.ScreenResolution / 2).Y);
             spriteText.Position = flipbook.Position + new Vector2(0, 0);
 
-            flipbook.SetTransparency(fadeAnimation);
-            spriteText.SetTransparency(fadeAnimation);
+            if (fadeAnimation != 1)
+            {
+                fadeAnimation = Math.Min(fadeAnimation + (float)gameTime.ElapsedGameTime.TotalSeconds / 2, 1);
+                flipbook.SetTransparency(fadeAnimation);
+                spriteText.SetTransparency(fadeAnimation);
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

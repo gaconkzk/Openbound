@@ -97,9 +97,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             //Textual callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, OnReceivePlayerMessageAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceivePlayerMessageAsyncCallback);
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveServerMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
 
             //Game Lists callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomListRequestList, RequestRoomListAsyncCallback);
@@ -350,12 +349,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             ServerInformationHandler.SendGameListMessage(message);
         }
 
-        public void OnReceivePlayerMessageAsyncCallback(object message)
-        {
-            textBox.AsyncAppendText(message);
-        }
-
-        public void OnReceiveServerMessageAsyncCallback(object message)
+        public void OnReceiveMessageAsyncCallback(object message)
         {
             textBox.AsyncAppendText(message);
         }

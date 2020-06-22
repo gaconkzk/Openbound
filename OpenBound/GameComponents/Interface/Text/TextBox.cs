@@ -43,6 +43,12 @@ namespace OpenBound.GameComponents.Interface.Text
         Vector2 textFieldOffset;
         Vector2? textFieldFixedPosition;
 
+        //Transparency
+        public float Transparency { get; set; }
+
+        //Alignment
+        public Alignment alignment;
+
         //Action Handlers
         public Action<PlayerMessage> OnSendMessage;
 
@@ -51,18 +57,22 @@ namespace OpenBound.GameComponents.Interface.Text
         Queue<object> playerMessageQueue;
         bool isThreadEnabled;
 
+        public string Text => textField.Text.Text;
+        public bool IsTextFieldActive => textField == null ? false : textField.IsActive;
         public Dictionary<Keys, Action<object>> OnKeyPress => textField.OnPressKey;
 
         public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha,
             bool hasScrollBar = true, float scrollBackgroundAlpha = 0.3f,
             bool hasTextField = true, Vector2 textFieldOffset = default, Vector2? textFieldFixedPosition = null, float textFieldBackground = 0.3f, int maximumTextLength = 50,
-            Action<PlayerMessage> onSendMessage = default)
+            Action<PlayerMessage> onSendMessage = default, Alignment alignment = Alignment.Left)
         {
+            Transparency = 1;
             boxTextArea = boxSize;
             OnSendMessage = onSendMessage;
             this.maximumNumberOfLines = maximumNumberOfLines;
             this.textFieldOffset = textFieldOffset;
             this.textFieldFixedPosition = textFieldFixedPosition;
+            this.alignment = alignment;
 
             if (hasScrollBar)
             {
@@ -110,8 +120,16 @@ namespace OpenBound.GameComponents.Interface.Text
             isThreadEnabled = true;
         }
 
+        public void SetTextFieldColor(Color color, Color outlineColor)
+        {
+            textField.Text.Color = textField.Text.BaseColor = color;
+            textField.Text.OutlineColor = textField.Text.OutlineBaseColor = outlineColor;
+        }
+
         private void SendMessage(object textField)
         {
+            if (Text.Length == 0) return;
+
             TextField t = (TextField)textField;
 
             OnSendMessage?.Invoke(new PlayerMessage() { Player = new Player() { Nickname = GameInformation.Instance.PlayerInformation.Nickname }, Text = t.Text.Text });
@@ -176,6 +194,16 @@ namespace OpenBound.GameComponents.Interface.Text
             textField.Disable();
         }
 
+        public void ActivateTextField()
+        {
+            textField.ActivateElement();
+        }
+
+        public void DeactivateTextField()
+        {
+            textField.DeactivateElement();
+        }
+
         /// <summary>
         /// Appends a TextList into the texts being rendered.
         /// </summary>
@@ -236,17 +264,19 @@ namespace OpenBound.GameComponents.Interface.Text
 
         public void UpdateTextField(GameTime gameTime)
         {
-            textField?.Update(gameTime);
+            if (textField == null) return;
+
+            textField.Update(gameTime);
 
             //Textfield
             if (textFieldFixedPosition == null)
             {
-                textfieldBackground?.UpdateAttatchmentPosition();
+                textfieldBackground.UpdateAttatchmentPosition();
                 textField.Position = (background.Position + boxTextArea * Vector2.UnitY + textFieldOffset).ToIntegerDomain();
             }
             else
             {
-                textfieldBackground?.UpdateAttatchmentPosition();
+                textfieldBackground.UpdateAttatchmentPosition();
                 textField.Position = textfieldBackground.Position.ToIntegerDomain()
                     + textFieldOffset.ToIntegerDomain();
             }
@@ -277,11 +307,21 @@ namespace OpenBound.GameComponents.Interface.Text
             startingRenderingIndex = Math.Max(selectedIndex - maximumRenderableLines + 1, 0);
             finalRenderingIndex = Math.Min(startingRenderingIndex + maximumRenderableLines, compositeSpriteTextList.Count);
 
+            Vector2 startingPosition = background.Position;
+
+            if (alignment == Alignment.Right)
+                startingPosition = background.Position + boxTextArea * Vector2.UnitX;
+
             for (int i = startingRenderingIndex; i < finalRenderingIndex; i++)
             {
                 CompositeSpriteText cst = compositeSpriteTextList[i];
-                cst.PositionOffset = background.Position + (i - startingRenderingIndex) * elementYOffset;
+                cst.PositionOffset = startingPosition + (i - startingRenderingIndex) * elementYOffset;
+
+                if (alignment == Alignment.Right)
+                    cst.PositionOffset -= cst.ElementDimensions * Vector2.UnitX;
+
                 cst.ResetTextColor();
+                cst.Transparency = Transparency;
             }
 
             //Tint selected line
@@ -308,7 +348,7 @@ namespace OpenBound.GameComponents.Interface.Text
         public void Dispose()
         {
             isThreadEnabled = false;
-            textField.Dispose();
+            textField?.Dispose();
         }
     }
 }

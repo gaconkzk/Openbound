@@ -170,7 +170,8 @@ namespace OpenBound.GameComponents.Interface.Text
                 }
             }
 
-            Text.Color = Color.White;
+            Text.Color = Text.BaseColor;
+            Text.OutlineColor = Text.OutlineBaseColor;
             OnActive?.Invoke(this);
             IsActive = true;
             Install();

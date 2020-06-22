@@ -210,16 +210,6 @@ namespace OpenBound.Extension
                 action(t);
         }
 
-        public static uint RotateLeft(this uint value, int count)
-        {
-            return (value << count) | (value >> (32 - count));
-        }
-
-        public static uint RotateRight(this uint value, int count)
-        {
-            return (value >> count) | (value << (32 - count));
-        }
-
         public static Vector2 ToIntegerDomain(this Vector2 source)
         {
             return new Vector2((int)source.X, (int)source.Y);

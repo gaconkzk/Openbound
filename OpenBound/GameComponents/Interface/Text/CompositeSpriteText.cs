@@ -109,6 +109,8 @@ namespace OpenBound.GameComponents.Interface.Text
                 return new Vector2(sumX, sumY);
             }
         }
+
+        public float Transparency { set => SpriteTextMatrix.ForEach((x) => x.ForEach((y) => y.SetTransparency(value))); }
         #endregion
 
         public static List<CompositeSpriteText> CreateCustomMessage(CustomMessage customMessage, int maxWidth, float layerDepth)
@@ -164,13 +166,20 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
 
-            //Add player nickname painted with a random color
+            Color color, outlineColor = Color.Black;
+
+            if (playerMessage.PlayerTeam == null)
+                color = Color.White;
+            else if (playerMessage.PlayerTeam == PlayerTeam.Red)
+                color = Parameter.TextColorTeamRed;
+            else
+                color = Parameter.TextColorTeamBlue;
 
             //Load the first line with the player nickname
             List<SpriteText> line = new List<SpriteText>() {
-                new SpriteText(FontTextType.Consolas10, "[", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
-                new SpriteText(FontTextType.Consolas10, playerMessage.Player.Nickname, Helper.TextToColor(playerMessage.Player.Nickname), Alignment.Left, layerDepth, outlineColor: Color.Black),
-                new SpriteText(FontTextType.Consolas10, "]: ", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black),
+                new SpriteText(FontTextType.Consolas10, "[", color, Alignment.Left, layerDepth, outlineColor: outlineColor),
+                new SpriteText(FontTextType.Consolas10, playerMessage.Player.Nickname, Message.TextToColor(playerMessage.Player.Nickname), Alignment.Left, layerDepth, outlineColor: outlineColor),
+                new SpriteText(FontTextType.Consolas10, "]: ", color, Alignment.Left, layerDepth, outlineColor: outlineColor),
             };
 
             SpriteText st = line.Last();
@@ -187,7 +196,7 @@ namespace OpenBound.GameComponents.Interface.Text
                 cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
 
                 line = new List<SpriteText>();
-                st = new SpriteText(FontTextType.Consolas10, "", Color.White, Alignment.Left, layerDepth, outlineColor: Color.Black);
+                st = new SpriteText(FontTextType.Consolas10, "", color, Alignment.Left, layerDepth, outlineColor: outlineColor);
                 line.Add(st);
             }
 
