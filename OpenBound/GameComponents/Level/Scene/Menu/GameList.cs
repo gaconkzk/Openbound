@@ -89,11 +89,13 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             roomFilter.IsPlaying = false;
             roomFilter.PageNumber = 0;
 
-            //Textbox
+            //Textbox 
             textBox = new TextBox(new Vector2(-380, 40), new Vector2(493, 141), 100, 0,
                 hasScrollBar: true, scrollBackgroundAlpha: 0.6f,
                 hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(20, 0), maximumTextLength: 60,
                 onSendMessage: OnSendMessage);
+
+            textBox.EnableTextField();
 
             //Textual callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);

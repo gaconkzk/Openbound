@@ -115,6 +115,7 @@ namespace OpenBound.GameComponents.Level.Scene
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestGameEnd, RequestGameEndAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestDisconnect, RequestDisconnectAsyncCallback);
 
+            //Textbox handlers
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, (o) => HUD.OnReceiveMessageAsyncCallback(o, 0));
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, (o) => HUD.OnReceiveMessageAsyncCallback(o, 1));
         }

@@ -53,18 +53,35 @@ namespace OpenBound.GameComponents.Interface.Text
         public Action<PlayerMessage> OnSendMessage;
 
         //Asynchronous text handling thread objects
+        bool isThreadEnabled;
         Thread textHandlerThread;
         Queue<object> playerMessageQueue;
-        bool isThreadEnabled;
 
         public string Text => textField.Text.Text;
         public bool IsTextFieldActive => textField == null ? false : textField.IsActive;
         public Dictionary<Keys, Action<object>> OnKeyPress => textField.OnPressKey;
 
+        /// <summary>
+        /// All textboxes used in this game uses this implementation with different parameters.
+        /// </summary>
+        /// <param name="position">Defines the position of the textbox. The box is 'pivoted' at (0,0).</param>
+        /// <param name="boxSize">Defines the size of the box. The number of lines depends on Y component. The scroller also decreases the textarea.</param>
+        /// <param name="maximumNumberOfLines">Maximum number of previous messages stored in the textbox.</param>
+        /// <param name="backgroundAlpha"></param>
+        /// <param name="hasScrollBar"></param>
+        /// <param name="scrollBackgroundAlpha"></param>
+        /// <param name="hasTextField"></param>
+        /// <param name="textFieldOffset">The X component adds a offset to the begining of the textbox, the Y dictates the Y distance between the box and the field.</param>
+        /// <param name="textFieldFixedPosition">If not null, the textfield is attatched on a fixed position on the screen.</param>
+        /// <param name="textFieldBackground"></param>
+        /// <param name="maximumTextLength"></param>
+        /// <param name="onSendMessage">Action handler called whenever you type ENTER.</param>
+        /// <param name="alignment"> Text alignment. It only supports Left & Right</param>
         public TextBox(Vector2 position, Vector2 boxSize, int maximumNumberOfLines, float backgroundAlpha,
             bool hasScrollBar = true, float scrollBackgroundAlpha = 0.3f,
             bool hasTextField = true, Vector2 textFieldOffset = default, Vector2? textFieldFixedPosition = null, float textFieldBackground = 0.3f, int maximumTextLength = 50,
-            Action<PlayerMessage> onSendMessage = default, Alignment alignment = Alignment.Left)
+            Action<PlayerMessage> onSendMessage = default,
+            Alignment alignment = Alignment.Left)
         {
             Transparency = 1;
             boxTextArea = boxSize;
@@ -98,10 +115,6 @@ namespace OpenBound.GameComponents.Interface.Text
                 textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", tfBGPosition, layerDepth: DepthParameter.InterfaceButton);
                 textfieldBackground.SetTransparency(textFieldBackground);
                 textfieldBackground.Scale *= new Vector2(boxSize.X, 30);
-
-                /* textfieldBackground = new Sprite("Interface/TextBox/TextBoxBackground", position + new Vector2(0, boxSize.Y) + new Vector2(0, textFieldOffset.Y), layerDepth: DepthParameter.InterfaceButton);
-                textfieldBackground.SetTransparency(backgroundAlpha);
-                textfieldBackground.Scale *= new Vector2(boxSize.X, 30);*/
             }
 
             background = new Sprite("Interface/TextBox/TextBoxBackground", position, layerDepth: DepthParameter.InterfaceButton);
@@ -345,6 +358,9 @@ namespace OpenBound.GameComponents.Interface.Text
             textfieldBackground?.Draw(null, spriteBatch);
         }
 
+        /// <summary>
+        /// Must be called in order to kill the background consumer thread and release the elements from memory.
+        /// </summary>
         public void Dispose()
         {
             isThreadEnabled = false;

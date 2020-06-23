@@ -547,7 +547,7 @@ namespace Openbound_Game_Server.Service
                     BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDeath, filter, mm.MatchUnion);
 
                     //Sends death message
-                    BroadcastMessage(Message.BuildDeathMessage(filter.Owner), mm.MatchUnion);
+                    BroadcastMessage(Message.CreateDeathMessage(filter.Owner), mm.MatchUnion);
 
                     CheckWinConditions(mm, playerSession);
                 }

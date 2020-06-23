@@ -85,9 +85,11 @@ namespace OpenBound.ServerCommunication.Service
 
         public static void SendGameListMessage(PlayerMessage message)
         {
+#if !DEBUGSCENE
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
                 NetworkObjectParameters.GameServerChatSendPlayerMessage,
                 message);
+#endif
         }
 
         public static void SendChatConnectionRequest(string channelID)

@@ -49,14 +49,8 @@ namespace OpenBound.GameComponents.Interface.Text
         }
         public Vector2 Scale { get; set; }
 
-        public Color BaseColor {
-            get;
-            set;
-        }
-        public Color Color {
-            get;
-            set;
-        }
+        public Color BaseColor { get; set; }
+        public Color Color { get; set; }
 
         public Color OutlineBaseColor { get; set; }
         public Color OutlineColor { get; set; }

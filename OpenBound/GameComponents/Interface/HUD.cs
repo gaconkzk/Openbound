@@ -78,7 +78,6 @@ namespace OpenBound.GameComponents.Interface
         float[] textBoxesTransparencyElapsedTime;
         float[] textBoxesTransparencyFadeTime;
 
-
         private Vector2 origin;
 
         public HUD(Mobile mobile, List<Mobile> mobileList)
@@ -258,6 +257,7 @@ namespace OpenBound.GameComponents.Interface
         }
 
         #region Textbox
+        //Creates two distinct transparency animations for each textbox
         public void UpdateTextboxTransparencies(GameTime gameTime)
         {
             for (int i = 0; i < TextBoxes.Length; i++)
@@ -276,6 +276,7 @@ namespace OpenBound.GameComponents.Interface
             }
         }
 
+        //Changes the color of the text depending on which team you are
         public void OnTeamMessageFilterIsClicked(object b)
         {
             if (textFilterButton.IsActivated)
@@ -300,12 +301,11 @@ namespace OpenBound.GameComponents.Interface
         public void OnSendMessage(PlayerMessage message)
         {
             if (textFilterButton.IsActivated) message.PlayerTeam = GameInformation.Instance.PlayerInformation.PlayerTeam;
-
             TextBoxes[0].DeactivateTextField();
-
             ServerInformationHandler.SendGameListMessage(message);
         }
 
+        //Updates both textboxes, but the 2nd textbox has no textfield.
         public void UpdateTextBoxes(GameTime gameTime)
         {
             if (InputHandler.IsBeingPressed(Keys.Enter))
@@ -328,7 +328,6 @@ namespace OpenBound.GameComponents.Interface
             TextBoxes[0].Update(gameTime);
             TextBoxes[1].Update(gameTime);
         }
-        #endregion
 
         public void OnReceiveMessageAsyncCallback(object message, int textBoxIndex)
         {
@@ -338,6 +337,7 @@ namespace OpenBound.GameComponents.Interface
             textBoxesTransparencyFadeTime[textBoxIndex] = 0;
             TextBoxes[textBoxIndex].Transparency = 1;
         }
+        #endregion
 
         public void MobileDeath(Mobile mobile)
         {
