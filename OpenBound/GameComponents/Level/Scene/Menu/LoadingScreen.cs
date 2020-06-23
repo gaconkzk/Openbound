@@ -106,7 +106,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             lock (playerButtonList) playerButtonList.Update();
 
-            accumulator += (float)gameTime.ElapsedGameTime.TotalSeconds * factor * 10;
+            //accumulator += (float)gameTime.ElapsedGameTime.TotalSeconds * factor * 10;
 
             if (!hasStarted)
                 UpdateLoadingPercentage(Math.Min((int)accumulator, 100));

@@ -41,7 +41,10 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
         Vector2 fgOffset;
         List<Vector2> spawnPointsOffset;
         float totalButtonPushTime;
-        
+
+        Vector2 tacticalMapDimensions;
+        Vector2 miVect;
+
         public Minimap(RoomMetadata roomMetadata, Vector2 position)
         {
             spawnPointList = new List<Sprite>();
@@ -135,20 +138,22 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
 
             UpdateElementPositions(Vector2.Zero);
             totalButtonPushTime = 0;
+
+            //TacticalMap
+            tacticalMapDimensions = new Vector2(750, 159) / 2f;
+            miVect = mapFG.Pivot * mapFG.Scale;
+
+            Vector2 playerPosition = roomMetadata.SpawnPositions[GameInformation.Instance.PlayerInformation.ID].ToVector2() * mapFG.Scale;
+
+            UpdateElementPositions((miVect - playerPosition) * Vector2.UnitY);
         }
 
         public void UpdateElementPositions(Vector2 offset)
         {
-            //Limit offset
-            Vector2 miVect = mapFG.Pivot * mapFG.Scale;
-
             fgOffset += offset;
 
-            Vector2 tacticalMapDimensions = new Vector2(744, 155) / 2f;
-
-            fgOffset = new Vector2(
-                MathHelper.Clamp(fgOffset.X, -miVect.X, miVect.X),
-                MathHelper.Clamp(fgOffset.Y, -miVect.Y + tacticalMapDimensions.Y, miVect.Y - tacticalMapDimensions.Y));
+            fgOffset = new Vector2(fgOffset.X,
+                MathHelper.Clamp(fgOffset.Y, -miVect.Y + tacticalMapDimensions.Y + 10, miVect.Y - tacticalMapDimensions.Y - 10));
 
             //Repositioning Elements
             mapFG.Position = basePosition + fgOffset;
