@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using Microsoft.Xna.Framework;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -29,44 +30,56 @@ namespace Openbound_Network_Object_Library.Common
         //public static readonly int 
 
         //Login Server
-        public const int LoginServerLoginAttemptRequest = 0x0008;
+        public const int LoginServerLoginAttemptRequest    = 0x0008;
         public const int LoginServerAccountCreationRequest = 0x0009;
-
-        //Lobby Server
-        public const int LobbyServerPlayerUIDRequest = 0x0001;
-        public const int LobbyLoginRequest = 0x0005;
-        public const int LobbyServerServerListRequest = 0x0007;
-
-        //Game Server
-        public const int GameServerRegisterRequest = 0x0020;
-        public const int GameServerMetadataRequest = 0x0021;
-        public const int GameServerPlayerAccessRequest = 0x0022;
-        public const int GameServerSearchPlayer = 0x0023;
-
-        //Game Server - Room
-        public const int GameServerRoomListCreateRoom = 0x0024;
-        public const int GameServerRoomListRequestList = 0x0025;
-        public const int GameServerRoomListRoomEnter = 0x0026;
-        public const int GameServerRoomRefreshMetadata = 0x0027;
-        public const int GameServerRoomLeaveRoom = 0x0028;
-        public const int GameServerRoomReadyRoom = 0x0029;
-        public const int GameServerRoomRefreshLoadingPercentage = 0x002a;
-        public const int GameServerRoomStartInGameScene = 0x002b;
-        public const int GameServerRoomChangePrimaryMobile = 0x0034;
-        public const int GameServerRoomChangeTeam = 0x0035;
-        public const int GameServerRoomChangeMap = 0x0036;
-
-        //Game Server - InGame
-        public const int GameServerInGameStartMatch = 0x002c;
-        public const int GameServerInGameRefreshSyncMobile = 0x002d;
-        public const int GameServerInGameRequestNextPlayerTurn = 0x002e;
-        public const int GameServerInGameRequestShot = 0x0030;
-        public const int GameServerInGameRequestDeath = 0x0031;
-        public const int GameServerInGameRequestGameEnd = 0x0032;
-        public const int GameServerInGameRequestDisconnect = 0x0033;
 
         //Error
         public const int ServerProcessingError = 0x0000;
+
+        //Lobby Server
+        public const int LobbyServerPlayerUIDRequest  = 0x0001;
+        public const int LobbyLoginRequest            = 0x0005;
+        public const int LobbyServerServerListRequest = 0x0007;
+
+        //Game Server
+        public const int GameServerRegisterRequest     = 0x0020;
+        public const int GameServerMetadataRequest     = 0x0021;
+        public const int GameServerPlayerAccessRequest = 0x0022;
+        public const int GameServerSearchPlayer        = 0x0023;
+
+        //Game Server - Room
+        public const int GameServerRoomListCreateRoom           = 0x0024;
+        public const int GameServerRoomListRequestList          = 0x0025;
+        public const int GameServerRoomListRoomEnter            = 0x0026;
+        public const int GameServerRoomRefreshMetadata          = 0x0027;
+        public const int GameServerRoomLeaveRoom                = 0x0028;
+        public const int GameServerRoomReadyRoom                = 0x0029;
+        public const int GameServerRoomRefreshLoadingPercentage = 0x002a;
+        public const int GameServerRoomStartInGameScene         = 0x002b;
+        public const int GameServerRoomChangePrimaryMobile      = 0x0034;
+        public const int GameServerRoomChangeTeam               = 0x0035;
+        public const int GameServerRoomChangeMap                = 0x0036;
+
+        //Game Server - InGame
+        public const int GameServerInGameStartMatch            = 0x002c;
+        public const int GameServerInGameRefreshSyncMobile     = 0x002d;
+        public const int GameServerInGameRequestNextPlayerTurn = 0x002e;
+        public const int GameServerInGameRequestShot           = 0x0030;
+        public const int GameServerInGameRequestDeath          = 0x0031;
+        public const int GameServerInGameRequestGameEnd        = 0x0032;
+        public const int GameServerInGameRequestDisconnect     = 0x0033;
+
+        //Messaging / Chat Requests
+        public const int GameServerChatEnter             = 0x0037;
+        public const int GameServerChatLeave             = 0x0038;
+        public const int GameServerChatSendPlayerMessage = 0x0039;
+        public const int GameServerChatSendSystemMessage = 0x003a;
+
+        //Chat - Game Server
+        public const int  GameServerChatChannelsMaximumNumber  = 10;
+        public const int  GameServerChatChannelMaximumCapacity = 100;
+        public const char GameServerChatGameListIdentifier     = 'G';
+        public const char GameServerChatGameRoomIdentifier     = 'R';
 
         //Server Information
         public static ServerInformation LoginServerInformation;
@@ -119,5 +132,9 @@ namespace Openbound_Network_Object_Library.Common
         //Map Address
         public const int ChangeMapLeft = -2;
         public const int ChangeMapRight = -1;
+
+        //Game Messages
+        public static uint ServerMessageColor       = Color.DarkOrange.PackedValue;
+        public static uint ServerMessageBorderColor = Color.Black.PackedValue;
     }
 }

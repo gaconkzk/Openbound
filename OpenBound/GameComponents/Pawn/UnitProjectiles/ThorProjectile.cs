@@ -10,7 +10,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         ThorSatellite thor;
 
         public ThorProjectile(Mobile mobile, ThorSatellite thor, Vector2 position, float beamAngle)
-            : base(mobile, position, beamAngle, Parameter.ProjectileThorExplosionRadius, 0, Parameter.ProjectileThorBaseDamage + thor.Level * Parameter.ProjectileThorBaseDamagePerLevel, 0, false)
+            : base(mobile, position, beamAngle, Parameter.ProjectileThorExplosionRadius, 0, Parameter.ProjectileThorBaseDamage + thor.Level * Parameter.ProjectileThorBaseDamagePerLevel, 0, BeamEmitterType.Thor, thor.Position)
         {
             this.thor = thor;
         }

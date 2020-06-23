@@ -21,6 +21,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
+using Openbound_Network_Object_Library.Entity.Text;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace Openbound_Game_Server.Service
 {
@@ -94,8 +96,8 @@ namespace Openbound_Game_Server.Service
                     room.RemovePlayer(playerSession.Player);
                     room.AddA(playerSession.Player);
 
-                    //Insert the room to the match metadata list;
-                    GameServerObjects.Instance.RoomMetadataSortedList.Add(room.ID, room);
+                    //Create room and chat
+                    GameServerObjects.Instance.CreateRoom(room);
                 }
 
                 playerSession.Player.PlayerNavigation = PlayerNavigation.InGameRoom;
@@ -171,6 +173,9 @@ namespace Openbound_Game_Server.Service
 
                         playerSession.RoomMetadata = room;
 
+                        //Connect to room chat
+                        GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
+
                         //send an update for each member of the match with the current metadata
                         BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                     }
@@ -226,6 +231,9 @@ namespace Openbound_Game_Server.Service
                             newMaster.PlayerRoomStatus = PlayerRoomStatus.Master;
                             room.RoomOwner = newMaster;
                         }
+
+                        //Connect to room chat
+                        GameServerChatLeave(playerSession);
 
                         //send an update for each member of the match with the current metadata
                         BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
@@ -529,14 +537,18 @@ namespace Openbound_Game_Server.Service
 
                 lock (mm)
                 {
-                    SyncMobile sm = mm.SyncMobileList.Find((x) => x.Owner.ID == filter.Owner.ID);
+                    filter = mm.SyncMobileList.Find((x) => x.Owner.ID == filter.Owner.ID);
 
-                    if (sm == null) return;
+                    if (filter == null) return;
 
                     filter.IsAlive = false;
-                    sm.Update(filter);
+                    filter.Update(filter);
 
                     BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestDeath, filter, mm.MatchUnion);
+
+                    //Sends death message
+                    BroadcastMessage(Message.CreateDeathMessage(filter.Owner), mm.MatchUnion);
+
                     CheckWinConditions(mm, playerSession);
                 }
 
@@ -598,8 +610,148 @@ namespace Openbound_Game_Server.Service
         }
         #endregion
 
-        #region Helping Functions
+        #region Messaging / Room List Chat Requests
+        public static bool GameServerChatEnterRequest(string param, PlayerSession playerSession)
+        {
+            try
+            {
+                //Parse it back to string in order to remove string formatation
+                param = ObjectWrapper.DeserializeRequest<string>(param);
+                return GameServerChatEnter(param, playerSession);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Ex: When GameServerChatEnterRequest {ex.Message}");
+            }
 
+            return false;
+        }
+
+        public static bool GameServerChatEnter(string param, PlayerSession playerSession)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat)
+                    return false;
+
+                //Parse the player selected channel to find out its index
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
+
+                //If is a random connection, find which is the best suitable channel
+                if (tuple.Item2 == 0) {
+                    lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1])
+                    {
+                        //Is attempting to connect on any game list channel, give the player the first possible channel
+                        if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
+                        {
+                            //find the first non-full channel IF the player hasn't selected a specific channel
+                            tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
+                                .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
+
+                            //Connect to room
+                            GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
+                        }
+                    }
+                }
+                else
+                {
+                    //Is attempting to connect on a specific room/channel
+                    lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                    {
+                        //Connects if there are free slots left on the channel.
+                        //If the user is attempting to connect on a Room it should always return true
+                        if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
+                            GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
+                        else
+                            //Error, the channel is full
+                            return false;
+                    }
+                }
+
+                //Leave any prior room
+                GameServerChatLeave(playerSession);
+
+                //Sends welcome message to player
+                if (tuple.Item1 == NetworkObjectParameters.GameServerChatGameListIdentifier)
+                {
+                    BroadcastMessage(Message.CreateChannelWelcomeMessage(tuple.Item2), playerSession);
+                }
+                else
+                {
+                    BroadcastMessage(Message.CreateRoomWelcomeMessage(playerSession.RoomMetadata.Name), playerSession);
+                }
+
+                //Updates the current connected channel id
+                playerSession.CurrentConnectedChat = tuple.Item1 + tuple.Item2.ToString();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ex: When GameServerChatRoomListEnter {ex.Message}");
+            }
+
+            return false;
+        }
+
+        public static void GameServerChatLeave(PlayerSession playerSession)
+        {
+            try
+            {
+                if (!playerSession.IsChatConnected) return;
+
+                //Parse the current player channel
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
+
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                {
+                    //if player is connected to any channel, disconnect from the selected channel
+                    if (!string.IsNullOrEmpty(playerSession.CurrentConnectedChat))
+                        GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Remove(playerSession.Player);
+                }
+
+                //Updates the current connected channel id
+                playerSession.CurrentConnectedChat = "";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ex: When GameServerChatRoomListLeave {ex.Message}");
+            }
+        }
+
+        public static void GameServerChatRoomSendMessage(string param, PlayerSession playerSession)
+        {
+            try
+            {
+                if (!playerSession.IsChatConnected) return;
+
+                PlayerMessage pm = ObjectWrapper.DeserializeRequest<PlayerMessage>(param);
+
+                //Parse the player selected channel to find out its index
+                (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple();
+
+                IEnumerable<Player> pList;
+
+                lock (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                {
+                    if (pm.PlayerTeam == null)
+                        pList = GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2];
+                    else if (pm.PlayerTeam == PlayerTeam.Blue)
+                        pList = playerSession.RoomMetadata.TeamB;
+                    else
+                        pList = playerSession.RoomMetadata.TeamA;
+
+                    BroadcastToPlayer(NetworkObjectParameters.GameServerChatSendPlayerMessage, pm, pList);
+                }   
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ex: When GameServerChatRoomSendMessage {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region Helping Functions
         private static void RegisterIntoPlayerSession(List<Player> playerList, Action<PlayerSession> action)
         {
             lock (GameServerObjects.Instance.PlayerHashtable)
@@ -612,7 +764,7 @@ namespace Openbound_Game_Server.Service
             }
         }
 
-        private static void BroadcastToPlayer(int service, object message, List<Player> players)
+        private static void BroadcastToPlayer(int service, object message, IEnumerable<Player> players)
         {
             lock (GameServerObjects.Instance.PlayerHashtable)
             {
@@ -623,8 +775,32 @@ namespace Openbound_Game_Server.Service
                 }
             }
         }
+
+        private static void BroadcastMessage(object message, IEnumerable<Player> players)
+        {
+            lock (GameServerObjects.Instance.PlayerHashtable)
+            {
+                foreach (Player p in players)
+                {
+                    if (!GameServerObjects.Instance.PlayerHashtable.ContainsKey(p.ID)) continue;
+                    ((PlayerSession)GameServerObjects.Instance.PlayerHashtable[p.ID]).ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+                }
+            }
+        }
+
+        private static void BroadcastMessage<T>(List<T> message, PlayerSession playerSession)
+        {
+            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+        }
+
+        private static void BroadcastMessage<T>(List<List<T>> messageList, PlayerSession playerSession)
+        {
+            foreach(List<T> message in messageList)
+                playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+        }
         #endregion
 
+        #region DEBUG
         private static void DebugMethod(PlayerSession playerSession)
         {
             if (!playerSession.RoomMetadata.PlayerList.Contains(playerSession.RoomMetadata.RoomOwner))
@@ -633,6 +809,7 @@ namespace Openbound_Game_Server.Service
             if (!playerSession.RoomMetadata.PlayerList.Contains(playerSession.Player))
                 Console.WriteLine("\n\n NOT FOUND HIM! PLAYER \n\n");
         }
+        #endregion
 
     }
 }

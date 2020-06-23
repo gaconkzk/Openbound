@@ -104,6 +104,7 @@ namespace OpenBound.GameComponents.Level.Scene
             {
                 if (NextScene.Count > 0 && !sceneTransitionThread.IsAlive)
                 {
+                    CurrentScene.Dispose();
                     CurrentScene = NextScene.Dequeue();
                     CurrentScene.OnSceneIsActive();
                     IsChangingScene = false;

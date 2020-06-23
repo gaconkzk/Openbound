@@ -171,18 +171,6 @@ namespace OpenBound.GameComponents.Interface
                     }
                 },
                 #endregion
-                #region Raon
-                {
-                    MobileType.Raon,
-                    new Dictionary<ShotType, CrosshairPreset>()
-                    {
-                        {
-                            ShotType.S1,
-                            new CrosshairPreset() { CannonOffsetDistance = -29, CannonOffsetRotation = MathHelper.ToRadians(35), CrosshairPointerOffset = 29f }
-                        },
-                    }
-                },
-                #endregion
             };
 
         public Vector2 CannonPosition { get; private set; }

@@ -11,6 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
+using OpenBound.Extension;
 using System;
 
 namespace OpenBound.Common

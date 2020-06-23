@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level.Scene;
@@ -357,8 +358,10 @@ namespace OpenBound.GameComponents.Interface
 
         private bool attachToCamera;
 
-        public Vector2 Position { get; set; }
-        public Vector2 PositionOffset { get; set; }
+        private Vector2 position;
+        public Vector2 Position { get => position; set => position = value.ToIntegerDomain(); }
+        private Vector2 positionOffset;
+        public Vector2 PositionOffset { get => positionOffset; set => positionOffset = value.ToIntegerDomain(); }
 
         public Vector2 SpriteSize => new Vector2(spriteList[0].SourceRectangle.Width, spriteList[0].SourceRectangle.Height);
         public Vector2 MeasureSize
@@ -501,10 +504,10 @@ namespace OpenBound.GameComponents.Interface
             }
             else if (textAnchor == TextAnchor.Right)
             {
-                Vector2 tmpStartingPosition = new Vector2((int)(Position.X - MeasureSize.X), (int)Position.Y);
+                Vector2 tmpStartingPosition = new Vector2((int)(Position.X - MeasureSize.X), (int)Position.Y).ToIntegerDomain();
                 spriteList.ForEach((x) =>
                 {
-                    x.Position = tmpStartingPosition + new Vector2((int)(x.SourceRectangle.Width * i - (2 * i)), 0);
+                    x.Position = tmpStartingPosition + new Vector2((x.SourceRectangle.Width * i - (2 * i)), 0);
                     i++;
                 });
             }
@@ -513,7 +516,7 @@ namespace OpenBound.GameComponents.Interface
                 Vector2 tmpStartingPosition = new Vector2((int)(Position.X - MeasureSize.X / 2), (int)Position.Y);
                 spriteList.ForEach((x) =>
                 {
-                    x.Position = tmpStartingPosition + new Vector2((int)(x.SourceRectangle.Width * i - (2 * i)), 0);
+                    x.Position = tmpStartingPosition + new Vector2((x.SourceRectangle.Width * i - (2 * i)), 0);
                     i++;
                 });
             }

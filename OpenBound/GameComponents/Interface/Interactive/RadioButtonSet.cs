@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.Interactive.Misc;
 using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;

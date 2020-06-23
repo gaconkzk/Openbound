@@ -27,6 +27,10 @@ using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.WeatherEffect;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Pawn;
+using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Common;
+using System.Diagnostics;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -43,6 +47,7 @@ namespace OpenBound.GameComponents.Level.Scene
             GameInformation.Instance.PlayerInformation = new Player()
             {
                 ID = 0,
+                Nickname = "Jebomancer",
             };
 
             #region Sync Mobile List
@@ -53,7 +58,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 CrosshairAngle = 10,
                 Delay = 500,
                 //Facing = Facing.Left,
-                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Raon),
+                MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Lightning),
                 Owner = new Player()
                 {
                     CharacterGender = Gender.Feminine,
@@ -63,7 +68,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Raon,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -339,7 +344,7 @@ namespace OpenBound.GameComponents.Level.Scene
             mFlipbook = new List<MobileFlipbook>();
 
             for (int k = 0; k < 21; k++)
-                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Raon, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
+                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Lightning, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
 
             int i = 0;
 
@@ -494,7 +499,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 //x ranging from 0.1f to 0.9f and
                 //y ranging from 0.4f to 0.9f, 1 - weatherMetadata.Position[1] is necessary because y axis is inverted
                 p1 = 0.1f + p1 * 0.9f;
-                p2 = (0.1f + p2 * 0.3f);
+                p2 = 0.9f /*1 - (NetworkObjectParameters.WeatherThorMinimumOffsetY + p2 * NetworkObjectParameters.WeatherThorMaximumOffsetY)*/;
                 Vector2 nPos = Topography.FromNormalizedPositionToRelativePosition(new float[] { p1, p2 });
                 WeatherHandler.Add(WeatherType.Thor, nPos);
                 Console.WriteLine(nPos);
@@ -502,12 +507,55 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
+                for (int i = 0; i < 10; i++)
+                {
+                    HUD.OnReceiveMessageAsyncCallback(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" }, 0);
+                }
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
+                string text = "";
+                for (int i = 0xF000; i < 0xFFFF; i++)
+                    text += (char)i + " ";
 
+                var cm = new List<CustomMessage>(){
+                    new CustomMessage(){Text = "" + (char)0xf11b, TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.FontAwesome10 },
+                    new CustomMessage(){Text = "cha-la head chala", TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.Consolas10 },
+                };
+
+                NetworkObjectParameters.GameServerInformation = new GameServerInformation();
+                NetworkObjectParameters.GameServerInformation.ServerName = "ASDASd";
+
+                var x = Message.CreateChannelWelcomeMessage(1);
+                var y = ObjectWrapper.ConvertObjectToByteArray(x, 4096);
+                var z = ObjectWrapper.ConvertByteArrayToObject<List<CustomMessage>>(y);
+
+                var y1 = ObjectWrapper.ConvertObjectToByteArray("" + (char)0xf11b, 4096);
+                var z1 = ObjectWrapper.ConvertByteArrayToObject<string>(y1);
+
+                //TextBoxes[1].AsyncAppendText(cm);
+
+                HUD.OnReceiveMessageAsyncCallback(cm, 1);
+
+                Console.WriteLine(number);
             }
+
+            if (InputHandler.IsBeingPressed(Keys.D4))
+            {
+            }
+
+            HUD.TextBoxes[0].Update(gameTime);
+
+            //UpdateTextBoxes(gameTime);
+        }
+
+        string textBase = "abcdefgh";
+        int number = 0;
+
+        public void act(PlayerMessage o)
+        {
+            HUD.TextBoxes[0].AsyncAppendText(o);
         }
 
         public override void Draw(GameTime gameTime)

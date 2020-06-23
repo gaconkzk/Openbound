@@ -12,7 +12,12 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Common;
+using OpenBound.Extension;
+using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
+using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +54,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => elementOffset;
             set
             {
-                elementOffset = value;
+                elementOffset = value.ToIntegerDomain();
                 RecalculatePosition();
             }
         }
@@ -59,7 +64,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => position;
             set
             {
-                position = value;
+                position = value.ToIntegerDomain();
                 RecalculatePosition();
             }
         }
@@ -69,7 +74,7 @@ namespace OpenBound.GameComponents.Interface.Text
             get => positionOffset;
             set
             {
-                positionOffset = value;
+                positionOffset = value.ToIntegerDomain();
                 UpdateAttatchedPosition();
                 RecalculatePosition();
             }
@@ -104,7 +109,99 @@ namespace OpenBound.GameComponents.Interface.Text
                 return new Vector2(sumX, sumY);
             }
         }
+
+        public float Transparency { set => SpriteTextMatrix.ForEach((x) => x.ForEach((y) => y.SetTransparency(value))); }
         #endregion
+
+        public static List<CompositeSpriteText> CreateCustomMessage(CustomMessage customMessage, int maxWidth, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            int i = 0;
+            while(i < customMessage.Text.Length)
+            {
+                List<SpriteText> line = new List<SpriteText>();
+
+                SpriteText st = new SpriteText(customMessage.FontTextType, "", new Color(customMessage.TextColor), Alignment.Left, layerDepth, outlineColor: new Color(customMessage.TextBorderColor));
+
+                line.Add(st);
+
+                for (; i < customMessage.Text.Length && st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + customMessage.Text[i])).X < maxWidth; i++)
+                {
+                    st.Text += customMessage.Text[i];
+                }
+
+                if (st.Text.Length == 0) continue;
+
+                cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+            }
+
+            return cstList;
+        }
+
+        /// <summary>
+        /// This method does not support automatic line breaks
+        /// </summary>
+        /// <param name="customMessageList"></param>
+        /// <param name="layerDepth"></param>
+        /// <returns></returns>
+        public static List<CompositeSpriteText> CreateCustomMessage(List<CustomMessage> customMessageList, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            List<SpriteText> line = new List<SpriteText>();
+            
+            foreach(CustomMessage cm in customMessageList)
+            {
+                cm.AppendTokenToText();
+                line.Add(new SpriteText(cm.FontTextType, cm.Text, new Color(cm.TextColor), Alignment.Left, layerDepth, outlineColor: new Color(cm.TextBorderColor)));
+            }
+
+            cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+
+            return cstList;
+        }
+
+        public static List<CompositeSpriteText> CreateChatMessage(PlayerMessage playerMessage, int maxWidth, float layerDepth)
+        {
+            List<CompositeSpriteText> cstList = new List<CompositeSpriteText>();
+
+            Color color, outlineColor = Color.Black;
+
+            if (playerMessage.PlayerTeam == null)
+                color = Color.White;
+            else if (playerMessage.PlayerTeam == PlayerTeam.Red)
+                color = Parameter.TextColorTeamRed;
+            else
+                color = Parameter.TextColorTeamBlue;
+
+            //Load the first line with the player nickname
+            List<SpriteText> line = new List<SpriteText>() {
+                new SpriteText(FontTextType.Consolas10, "[", color, Alignment.Left, layerDepth, outlineColor: outlineColor),
+                new SpriteText(FontTextType.Consolas10, playerMessage.Player.Nickname, Message.TextToColor(playerMessage.Player.Nickname), Alignment.Left, layerDepth, outlineColor: outlineColor),
+                new SpriteText(FontTextType.Consolas10, "]: ", color, Alignment.Left, layerDepth, outlineColor: outlineColor),
+            };
+
+            SpriteText st = line.Last();
+            int i = 0;
+            while (i < playerMessage.Text.Length)
+            {
+                List<SpriteText> lineProjection = line.Except(new List<SpriteText>() { st }).ToList();
+
+                for (; i < playerMessage.Text.Length && lineProjection.Sum((x) => x.MeasureSize.X) + st.MeasureSubstring(st.GenerateTextWithSupportedCharacters(st.Text + playerMessage.Text[i])).X < maxWidth; i++)
+                {
+                    st.Text += playerMessage.Text[i];
+                }
+
+                cstList.Add(CreateCompositeSpriteText(line, Orientation.Horizontal, Alignment.Left, default));
+
+                line = new List<SpriteText>();
+                st = new SpriteText(FontTextType.Consolas10, "", color, Alignment.Left, layerDepth, outlineColor: outlineColor);
+                line.Add(st);
+            }
+
+            return cstList;
+        }
 
         public static CompositeSpriteText CreateCompositeSpriteText(List<List<SpriteText>> spriteTextMatrix, Alignment alignment, Vector2 position, Vector2 elementOffset)
         {
@@ -147,6 +244,19 @@ namespace OpenBound.GameComponents.Interface.Text
         {
             position = positionOffset;
             spriteTextMatrix.ForEach((x) => x.ForEach((y) => y.UpdateAttatchedPosition()));
+        }
+
+        public void ReplaceTextColor(Color from, Color to)
+        {
+            spriteTextMatrix.ForEach((x) => x.ForEach((y) =>
+            {
+                if (from == y.Color) y.Color = to;
+            }));
+        }
+
+        public void ResetTextColor()
+        {
+            spriteTextMatrix.ForEach((x) => x.ForEach((y) => y.Color = y.BaseColor));
         }
 
         private void RecalculatePosition()

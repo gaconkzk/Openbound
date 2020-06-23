@@ -35,8 +35,8 @@ namespace OpenBound.GameComponents.Pawn.Local
 
         public void Move()
         {
-            //If is falling, dont move
-            if (IsFalling) return;
+            //If mobile is falling or its actions are locked, dont move
+            if (IsFalling || Mobile.IsActionsLocked) return;
 
             //if user pressed left...
             if (InputHandler.IsCKDown(Keys.Left))

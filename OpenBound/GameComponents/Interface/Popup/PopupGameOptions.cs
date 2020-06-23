@@ -17,6 +17,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Interface.Popup

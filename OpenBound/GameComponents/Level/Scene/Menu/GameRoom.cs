@@ -27,6 +27,7 @@ using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
+using Openbound_Network_Object_Library.Entity.Text;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -48,7 +49,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             { MobileType.Mage,         new Rectangle(111 * 11, 0, 111, 86) },
             { MobileType.Nak,          new Rectangle(111 * 12, 0, 111, 86) },
             { MobileType.Random,       new Rectangle(111 * 13, 0, 111, 86) },
-            { MobileType.Raon,         new Rectangle(111 * 14, 0, 111, 86) },
+            { MobileType.RaonLauncher, new Rectangle(111 * 14, 0, 111, 86) },
             { MobileType.Trico,        new Rectangle(111 * 15, 0, 111, 86) },
         };
 
@@ -68,6 +69,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         Sprite mobilePortrait;
         Sprite mobilePortraitAtkBar, mobilePortraitDefBar, mobilePortraitMobBar;
+
+        TextBox textBox;
 
         //MatchMetadata matchMetadata;
 
@@ -91,20 +94,35 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             CreateRoomName();
             CreateMobilePortrait();
 
+            //text box
+            textBox = new TextBox(new Vector2(-391, 139), new Vector2(410, 135), 100, 0,
+                hasScrollBar: true, scrollBackgroundAlpha: 0.6f,
+                hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(30, -1), maximumTextLength: 50,
+                onSendMessage: OnSendMessage);
+
+            textBox.EnableTextField();
+
             matchConfigurationGrid = new MatchConfigurationGrid(Parameter.ScreenCenter - new Vector2(-1, 115));
 
             ServerInformationBroker.Instance.ActionCallbackDictionary[NetworkObjectParameters.GameServerRoomRefreshMetadata] += UpdateRoomMetadataAsyncCallback;
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomLeaveRoom, LeaveRoomAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomReadyRoom, ReadyRoomAsyncCallback);
 
-            playerButtonList.UpdatePlayerButtonList();
+            //Textual callbacks
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, OnReceiveMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
 
+            playerButtonList.UpdatePlayerButtonList();
 
             //Popup menus
             popupSelectMobile = new PopupSelectMobile(SelectMobileAction, CloseSelectMobileAction);
             PopupHandler.Add(popupSelectMobile);
 
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
+
+            //Connect to channel
+            ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameRoom(GameInformation.Instance.RoomMetadata.ID));
         }
 
         public override void OnSceneIsActive()
@@ -166,6 +184,16 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             ServerInformationBroker.Instance.ActionCallbackDictionary[NetworkObjectParameters.GameServerRoomRefreshMetadata] -= UpdateRoomMetadataAsyncCallback;
             SceneHandler.Instance.RequestSceneChange(SceneType.LoadingScreen,
                 TransitionEffectType.None);
+        }
+
+        public void OnSendMessage(PlayerMessage message)
+        {
+            ServerInformationHandler.SendGameListMessage(message);
+        }
+
+        public void OnReceiveMessageAsyncCallback(object message)
+        {
+            textBox.AsyncAppendText(message);
         }
         #endregion
 
@@ -378,8 +406,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         {
             //Animated Buttons
             int buttonIndex = 0;
-            Vector2 shiftingFactor = new Vector2(80, 0);
-            Vector2 initialOffset = new Vector2(-330, 265);
+            Vector2 shiftingFactor = new Vector2(60, 0);
+            Vector2 initialOffset = new Vector2(50, 265);
 
             exitDoor = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++, ExitDoorAction);
             animatedButtonList.Add(exitDoor);
@@ -396,20 +424,17 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                     Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++,
                     (sender) => { }));
 
-            initialOffset = new Vector2(-initialOffset.X, initialOffset.Y);
-            buttonIndex = 0;
-
-            ready = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Ready, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex--, ReadyAction);
-            animatedButtonList.Add(ready);
+            options = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Options, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++, OptionsAction);
+            animatedButtonList.Add(options);
 
             animatedButtonList.Add(
                 AnimatedButtonBuilder.BuildButton(
                     AnimatedButtonType.MuteList,
-                    Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex--,
+                    Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++,
                     (sender) => { }));
 
-            options = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Options, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex--, OptionsAction);
-            animatedButtonList.Add(options);
+            ready = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Ready, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++, ReadyAction);
+            animatedButtonList.Add(ready);
         }
 
         public override void Update(GameTime gameTime)
@@ -421,6 +446,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             ///buttonList.ForEach((x) => x.Update(MouseState, previousMouseState));
 
             lock (playerButtonList) playerButtonList.Update();
+
+            textBox.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -436,6 +463,13 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             serverName.Draw(spriteBatch);
+
+            textBox.Draw(spriteBatch);
+        }
+
+        public override void Dispose()
+        {
+            textBox.Dispose();
         }
     }
 }

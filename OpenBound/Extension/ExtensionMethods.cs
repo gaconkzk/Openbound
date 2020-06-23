@@ -209,5 +209,10 @@ namespace OpenBound.Extension
             foreach (T t in source)
                 action(t);
         }
+
+        public static Vector2 ToIntegerDomain(this Vector2 source)
+        {
+            return new Vector2((int)source.X, (int)source.Y);
+        }
     }
 }

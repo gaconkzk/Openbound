@@ -7,6 +7,7 @@ using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,13 +69,15 @@ namespace OpenBound.GameComponents.Interface
 
         public void Update(GameTime gameTime)
         {
-            fadeAnimation = Math.Min(fadeAnimation + (float)gameTime.ElapsedGameTime.TotalSeconds / 2, 1);
-
             flipbook.Position = new Vector2(position.X, -(GameScene.Camera.CameraOffset + Parameter.ScreenResolution / 2).Y);
             spriteText.Position = flipbook.Position + new Vector2(0, 0);
 
-            flipbook.SetTransparency(fadeAnimation);
-            spriteText.SetTransparency(fadeAnimation);
+            if (fadeAnimation != 1)
+            {
+                fadeAnimation = Math.Min(fadeAnimation + (float)gameTime.ElapsedGameTime.TotalSeconds / 2, 1);
+                flipbook.SetTransparency(fadeAnimation);
+                spriteText.SetTransparency(fadeAnimation);
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

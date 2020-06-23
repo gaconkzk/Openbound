@@ -19,11 +19,15 @@ using OpenBound.GameComponents.Interface.Builder;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Interactive.GameList;
 using OpenBound.GameComponents.Interface.Popup;
+using OpenBound.GameComponents.Interface.Text;
 using OpenBound.ServerCommunication;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -41,6 +45,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private List<RoomMetadata> requestedRoomMetadataList;
         private RoomMetadata roomFilter;
+
+        //Textbox
+        private TextBox textBox;
 
         //Button positioning variables
         private readonly int widthFactor;
@@ -68,7 +75,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             createGamePopup = new PopupCreateGame(Vector2.Zero);
-            createGamePopup.OnClose = (sender) => { UnlockAllButtons(); };
+            createGamePopup.OnClose = (sender) => { UnlockAllInterfaceElements(); };
 
             PopupHandler.Add(createGamePopup);
 
@@ -82,6 +89,20 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             roomFilter.IsPlaying = false;
             roomFilter.PageNumber = 0;
 
+            //Textbox 
+            textBox = new TextBox(new Vector2(-380, 40), new Vector2(493, 141), 100, 0,
+                hasScrollBar: true, scrollBackgroundAlpha: 0.6f,
+                hasTextField: true, textFieldBackground: 0, textFieldOffset: new Vector2(20, 0), maximumTextLength: 60,
+                onSendMessage: OnSendMessage);
+
+            textBox.EnableTextField();
+
+            //Textual callbacks
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
+
+            //Game Lists callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomListRequestList, RequestRoomListAsyncCallback);
 
             viewWaitingFilter.Disable(true);
@@ -89,25 +110,28 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             rightArrow.Disable(true);
 
             RequestRooms();
+
+            //Connect to channel
+            ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(0));
         }
 
         public override void OnSceneIsActive()
         {
             base.OnSceneIsActive();
-
             AudioHandler.ChangeSong(SongParameter.ServerAndRoomSelection, ChangeEffect.Fade);
         }
 
         #region Button State Manipulation
-        private void LockAllButtons()
+        private void LockAllInterfaceElements()
         {
             buttonState = new List<bool>();
             animatedButtonList.ForEach((x) => buttonState.Add(x.IsDisabled));
             animatedButtonList.ForEach((x) => x.Disable(true));
             roomButtonList.ForEach((x) => x.ShouldUpdate = false);
+            textBox.DisableTextField();
         }
 
-        private void UnlockAllButtons()
+        private void UnlockAllInterfaceElements()
         {
             animatedButtonList.ForEach((x) => x.Enable());
             roomButtonList.ForEach((x) => x.ShouldUpdate = true);
@@ -123,6 +147,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                     animatedButtonList[i].Enable();
                 }
             }
+
+            textBox.EnableTextField();
         }
         #endregion
 
@@ -149,7 +175,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             if (room == null)
             {
-                UnlockAllButtons();
+                UnlockAllInterfaceElements();
                 return;
             }
 
@@ -163,14 +189,14 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         #region Room Manipulation
         private void CreateRoomAction(object sender)
         {
-            LockAllButtons();
+            LockAllInterfaceElements();
             ((AnimatedButton)sender).Disable();
             createGamePopup.ShouldRender = true;
         }
 
         private void ConnectToRoom(object sender, RoomMetadata roomMetadata)
         {
-            LockAllButtons();
+            LockAllInterfaceElements();
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomListRoomEnter, ConnectToRoomAsyncCallback);
             ServerInformationHandler.ConnectToRoom(roomMetadata);
         }
@@ -311,6 +337,24 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             options.Disable();
         }
 
+        #endregion
+
+        #region Textbox
+        public void RequestChatConnectionAsyncCallback(object response)
+        {
+            bool success = (bool)response;
+            //Console.WriteLine("New channel: " + currentChannel);
+        }
+
+        public void OnSendMessage(PlayerMessage message)
+        {
+            ServerInformationHandler.SendGameListMessage(message);
+        }
+
+        public void OnReceiveMessageAsyncCallback(object message)
+        {
+            textBox.AsyncAppendText(message);
+        }
         #endregion
 
         public void CreateListedRoomButtons()
@@ -475,6 +519,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             animatedButtonList.ForEach((x) => x.Update());
             roomButtonList.ForEach((x) => x.Update());
+
+            textBox.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -483,6 +529,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             animatedButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             roomButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            textBox.Draw(spriteBatch);
+        }
+
+        public override void Dispose()
+        {
+            textBox.Dispose();
         }
     }
 }

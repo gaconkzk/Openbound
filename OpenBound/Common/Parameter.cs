@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Common;
+using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.FileOutput;
 using System;
 
@@ -57,10 +58,13 @@ namespace OpenBound.Common
         public static readonly Color NameplateGuildColor = new Color(242, 198, 75);
         public static readonly Color NameplateGuildOutlineColor = new Color(95, 81, 16);
 
-        public static readonly float InterfaceNumericTextFieldUpdateRate = 0.05f;
-        public static readonly float InterfaceNumericTextFieldFactorNumber = 8f;
+        public const float InterfaceNumericTextFieldUpdateRate = 0.05f;
+        public const float InterfaceNumericTextFieldFactorNumber = 8f;
 
-        public static readonly float InterfaceMinimapScrollSpeed = 10f;
+        public const float InterfaceMinimapScrollSpeed = 10f;
+
+        public const float InterfaceInGameTextBoxTimeToStartFading = 10;
+        public const float InterfaceInGameTextBoxTimeFadeTime = 5;
         #endregion
 
         #region Misc
@@ -159,6 +163,9 @@ namespace OpenBound.Common
 
         //-- GameRoom - SelectMobile
         public static readonly Color TextColorPopupSelectMobilePortrait = new Color(0, 56, 107);
+
+        //-- Chat
+        public static readonly Color TextColorTextBoxSelectedMessage = Color.LightGray;
 
         //-- Loading Screen - Minimap
         public static readonly Color TextColorTeamRed = new Color(246, 161, 98);
@@ -476,6 +483,7 @@ namespace OpenBound.Common
         //Mirror
         public const float WeatherEffectMirrorDamageIncreaseFactor = 1.1f;
         public const float WeatherEffectMirrorDamageIncreaseValue = 5f;
+        public const float WeatherEffectMirrorDistanceFromTopReduction = 2/3f;
 
         //Electricity
         public const int WeatherEffectElectricityBaseDamage = 0;
@@ -494,6 +502,7 @@ namespace OpenBound.Common
         public const int ProjectileThorExplosionRadius = 25;
         public const int ProjectileThorBaseDamage = 40;
         public const int ProjectileThorBaseDamagePerLevel = 20;
+        public const int ProjectileThorBeamDistanceThreshold = 2000;
         public static int[] ThorExperienceTable = new int[] { 800, 1400, 2000, 2400, 3000 };
         #endregion
     }

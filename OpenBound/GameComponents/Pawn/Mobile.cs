@@ -72,6 +72,10 @@ namespace OpenBound.GameComponents.Pawn
         public bool IsAbleToShoot;
         public bool IsAlive;
 
+        //IsActionsLocked
+        public bool IsActionsLocked;
+        bool hasShotSequenceStarted;
+
         //Object References
         public Player Owner;
 
@@ -113,6 +117,8 @@ namespace OpenBound.GameComponents.Pawn
             SyncPosition = Position;
 
             IsAlive = true;
+            IsActionsLocked = false;
+            hasShotSequenceStarted = false;
 
 #if DEBUG
             DebugHandler.Instance.Add(debugCrosshair);
@@ -363,12 +369,13 @@ namespace OpenBound.GameComponents.Pawn
 
         public void Shoot(GameTime GameTime)
         {
-            if (InputHandler.IsBeingPressed(Keys.Space))
+            if (InputHandler.IsBeingPressed(Keys.Space) && !IsActionsLocked)
             {
                 LevelScene.HUD.StrenghtBar.Reset();
+                hasShotSequenceStarted = true;
             }
             else if (InputHandler.IsBeingHeldDown(Keys.Space)
-                && !LevelScene.HUD.StrenghtBar.IsFull)
+                && !LevelScene.HUD.StrenghtBar.IsFull && hasShotSequenceStarted && !IsActionsLocked)
             {
                 LevelScene.HUD.StrenghtBar.PerformStep(GameTime);
 
@@ -379,11 +386,12 @@ namespace OpenBound.GameComponents.Pawn
                 else if (SelectedShotType == ShotType.SS)
                     ChangeFlipbookState(ActorFlipbookState.ChargingSS, true);
             }
-            else if (InputHandler.IsBeingReleased(Keys.Space) || LevelScene.HUD.StrenghtBar.IsFull)
+            else if ((InputHandler.IsBeingReleased(Keys.Space) || LevelScene.HUD.StrenghtBar.IsFull) && hasShotSequenceStarted)
             {
                 LevelScene.HUD.UpdatePreviousShotMarker();
 
                 RequestShoot();
+                hasShotSequenceStarted = false;
             }
         }
 

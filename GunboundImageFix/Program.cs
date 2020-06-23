@@ -12,8 +12,12 @@
 
 using GunboundImageFix.Utils;
 using GunboundImageProcessing.ImageUtils;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 
 namespace GunboundImageFix
 {
@@ -49,6 +53,7 @@ namespace GunboundImageFix
                 Console.WriteLine("a - Crosshair Drawer");
                 Console.WriteLine("b - Mobile Buttons");
                 Console.WriteLine("c - Create Minimap Tumbnails");
+                Console.WriteLine("d - Spritefont Range Builder");
 
 
                 try
@@ -101,7 +106,9 @@ namespace GunboundImageFix
                         case 'c':
                             MinimapThumbGenerator.GenerateButtonThumbnails();
                             break;
-
+                        case 'd':
+                            SpritefontRangeBuilder.BuildSpritefontRange();
+                            break;
                         default:
                             throw new Exception();
                     }

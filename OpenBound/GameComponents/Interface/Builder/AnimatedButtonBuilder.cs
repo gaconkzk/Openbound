@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Text;
+using Openbound_Network_Object_Library.Entity.Text;
 using System;
 
 namespace OpenBound.GameComponents.Interface.Builder

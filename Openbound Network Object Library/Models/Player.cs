@@ -13,6 +13,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Security;
@@ -115,6 +116,11 @@ namespace Openbound_Network_Object_Library.Models
         public Player()
         {
             PlayerNavigation = PlayerNavigation.InGameMenus;
+        }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode();
         }
     }
 }

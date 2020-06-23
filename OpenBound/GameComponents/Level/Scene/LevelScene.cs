@@ -34,6 +34,11 @@ using System.Linq;
 using System.Threading;
 using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.WeatherEffect;
+using Openbound_Network_Object_Library.Entity.Text;
+using OpenBound.GameComponents.Input;
+using Microsoft.Xna.Framework.Input;
+using OpenBound.GameComponents.Interface.Text;
+using OpenBound.GameComponents.Interface.Interactive;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -62,8 +67,9 @@ namespace OpenBound.GameComponents.Level.Scene
         public static WeatherHandler WeatherHandler;
         public static ThorSatellite ThorSatellite;
 
-        //Visual interface
+        //Interface
         public static HUD HUD;
+
         private bool isLeaveGamePopupRendered;
 
         public LevelScene()
@@ -108,12 +114,15 @@ namespace OpenBound.GameComponents.Level.Scene
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestDeath, RequestDeathAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestGameEnd, RequestGameEndAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestDisconnect, RequestDisconnectAsyncCallback);
+
+            //Textbox handlers
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, (o) => HUD.OnReceiveMessageAsyncCallback(o, 0));
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, (o) => HUD.OnReceiveMessageAsyncCallback(o, 1));
         }
 
         public override void OnSceneIsActive()
         {
             base.OnSceneIsActive();
-
             AudioHandler.ChangeSong(SongParameter.LevelScene, ChangeEffect.Fade);
         }
 
@@ -432,7 +441,6 @@ namespace OpenBound.GameComponents.Level.Scene
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            UpdateBackgroundParallaxPosition();
 
             WeatherHandler.Update(gameTime);
 
@@ -441,6 +449,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileList.ForEach((m) => m.Update(gameTime));
                 HUD.Update(gameTime);
             }
+
+            UpdateBackgroundParallaxPosition();
 
             ThorSatellite.Update(gameTime);
 
@@ -466,6 +476,12 @@ namespace OpenBound.GameComponents.Level.Scene
 
             DeathAnimation.Draw(gameTime, spriteBatch);
             SpecialEffectHandler.Draw(gameTime, spriteBatch);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            HUD.Dispose();
         }
     }
 }

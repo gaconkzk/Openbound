@@ -10,10 +10,15 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Models;
 using Openbound_Network_Object_Library.TCP.ServiceProvider;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Openbound_Game_Server.Common
 {
@@ -35,10 +40,36 @@ namespace Openbound_Game_Server.Common
         public Hashtable PlayerHashtable { get; set; }
         public SortedList<int, RoomMetadata> RoomMetadataSortedList { get; set; }
 
+        /// <summary>
+        /// Stores all the chat channels of a game server. The Key is the channel id starting from 1 to <see cref="NetworkObjectParameters.GameServerChatChannelsMaximumNumber"/>.
+        /// The value is a HashSet of all connected players. The key is a string composed by a leading character indicating which kind of chat the user is connected to, and the integer id
+        /// which could be associated with the channel ID or the room ID.
+        /// For instance: Game List Channel 7 - "G7", Game Room ID 172 - "R172".
+        /// In order to access such HashSet, one must use: ChatDictionary['G'][7].
+        /// </summary>
+        public Dictionary<char, Dictionary<int, HashSet<Player>>> ChatDictionary { get; set; }
+
         private GameServerObjects()
         {
             PlayerHashtable = new Hashtable();
             RoomMetadataSortedList = new SortedList<int, RoomMetadata>();
+            ChatDictionary = new Dictionary<char, Dictionary<int, HashSet<Player>>>()
+            {
+                { NetworkObjectParameters.GameServerChatGameListIdentifier, new Dictionary<int, HashSet<Player>>() },
+                { NetworkObjectParameters.GameServerChatGameRoomIdentifier, new Dictionary<int, HashSet<Player>>() }
+            };
+
+            for(int i = 1; i <= NetworkObjectParameters.GameServerChatChannelsMaximumNumber; i++)
+                ChatDictionary[NetworkObjectParameters.GameServerChatGameListIdentifier][i] = new HashSet<Player>();
+        }
+
+        public void CreateRoom(RoomMetadata room)
+        {
+            //Insert the room to the match metadata list;
+            RoomMetadataSortedList.Add(room.ID, room);
+
+            //Create and connect on the chat for the room
+            ChatDictionary[NetworkObjectParameters.GameServerChatGameRoomIdentifier][room.ID] = new HashSet<Player>();
         }
     }
 }

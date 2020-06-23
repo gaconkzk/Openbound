@@ -13,6 +13,7 @@
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Concurrent;
 using Openbound_Network_Object_Library.Models;
+using Newtonsoft.Json;
 
 namespace Openbound_Game_Server.Server
 {
@@ -22,6 +23,21 @@ namespace Openbound_Game_Server.Server
         public RoomMetadata RoomMetadata;
         public MatchManager MatchManager;
         public ConcurrentQueue<byte[]> ProviderQueue;
+        public string CurrentConnectedChat
+        {
+            get;
+            set;
+        }
 
+        [JsonIgnore]
+        public bool IsChatConnected => !string.IsNullOrEmpty(CurrentConnectedChat);
+
+        public (char, int) GetCurrentConnectChatAsTuple(string param = null)
+        {
+            string text = (param == null) ? CurrentConnectedChat : param;
+            char identifier = text[0];
+            int channelID = int.Parse(text.Substring(1, text.Length - 1));
+            return (identifier, channelID);
+        }
     }
 }

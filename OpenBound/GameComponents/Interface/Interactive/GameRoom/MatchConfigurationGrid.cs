@@ -16,6 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 
@@ -162,7 +163,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
             GameMap map = GameInformation.Instance.RoomMetadata.Map.GameMap;
             GameMapType type = GameInformation.Instance.RoomMetadata.Map.GameMapType;
 
-            mapThumbnail = new Sprite($"Graphics/Maps/{map}/GameRoomThumb{type}", layerDepth: DepthParameter.Foreground);
+            mapThumbnail = new Sprite($"Graphics/Maps/{map}/GameRoomThumb{type}", layerDepth: DepthParameter.WeatherEffect);
             mapThumbnail.Position = basePosition - new Vector2(1, 78f);
 
             //Maps Weather

@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Audio;
+using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 
@@ -20,7 +21,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 {
     public class Mirror : Force
     {
-        public Mirror(Vector2 position, float scale = 1) : base(position + new Vector2(0, 1000), WeatherType.Mirror, scale)
+        public Mirror(Vector2 position, float scale = 1) : base(new Vector2(position.X, -(Topography.MapHeight / 2) * Parameter.WeatherEffectMirrorDistanceFromTopReduction), WeatherType.Mirror, scale)
         {
             Initialize("Graphics/Special Effects/Weather/Mirror", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
             SetTransparency(0);

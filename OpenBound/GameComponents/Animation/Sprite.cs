@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Renderer;
 
@@ -59,7 +60,7 @@ namespace OpenBound.GameComponents.Animation
 
         public void UpdateAttatchmentPosition()
         {
-            Position = PositionOffset - GameScene.Camera.CameraOffset;
+            Position = PositionOffset.ToIntegerDomain() - GameScene.Camera.CameraOffset;
         }
     }
 }

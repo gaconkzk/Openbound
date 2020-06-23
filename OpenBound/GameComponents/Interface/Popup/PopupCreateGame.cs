@@ -22,8 +22,11 @@ using OpenBound.ServerCommunication;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Text;
 using System.Collections.Generic;
 using System.Linq;
+
+using Language = OpenBound.Common.Language;
 
 namespace OpenBound.GameComponents.Interface.Popup
 {
@@ -50,9 +53,9 @@ namespace OpenBound.GameComponents.Interface.Popup
             buttonList.Add(new Button(ButtonType.CreateGame4v4, DepthParameter.InterfacePopupButtons, (sender) => { CreateGameRoomSizeButtonAction(sender, RoomSize.FourVsFour); }));
 
             buttonList.Add(new Button(ButtonType.CreateGameJewel, DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Jewel); }));
-            buttonList.Add(new Button(ButtonType.CreateGameTag, DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Tag); }));
+            buttonList.Add(new Button(ButtonType.CreateGameTag,   DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Tag); }));
             buttonList.Add(new Button(ButtonType.CreateGameScore, DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Score); }));
-            buttonList.Add(new Button(ButtonType.CreateGameSolo, DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Solo); }));
+            buttonList.Add(new Button(ButtonType.CreateGameSolo,  DepthParameter.InterfacePopupButtons, (sender) => { CreateGameGameModeButtonAction(sender, GameMode.Solo); }));
 
             buttonList.Add(new Button(ButtonType.Accept, DepthParameter.InterfacePopupButtons, CreateRoomAction));
             buttonList.Add(new Button(ButtonType.Cancel, DepthParameter.InterfacePopupButtons, CloseAction));

@@ -56,6 +56,8 @@ namespace OpenBound.GameComponents.Input
             Keys.Space,
             //Close Game
             Keys.LeftAlt, Keys.F4,
+            //Open/Send Message
+            Keys.Enter,
 
             //Debug functions
             Keys.F1, Keys.F2,  Keys.F3,  Keys.F4,
