@@ -28,7 +28,7 @@ namespace OpenBound.GameComponents.Interface
     public class Nameplate
     {
         Sprite rankIndicator;
-        CompositeSpriteText compositeSprite;
+        CompositeSpriteText compositeSpriteText;
 
         public Vector2 Position { get; private set; }
         public Vector2 PositionOffset;
@@ -39,6 +39,12 @@ namespace OpenBound.GameComponents.Interface
 
         private bool shouldRender;
 
+        public Color PlayerColor { get; private set; }
+        public Color GuildColor { get; private set; }
+
+        //Reference
+        public readonly Player Player;
+
         /// <summary>
         /// Must be used only on menu components, for in-game nameplate, you must specify the
         /// attatched mobile on the other constructor
@@ -48,6 +54,8 @@ namespace OpenBound.GameComponents.Interface
         /// <param name="position"></param>
         public Nameplate(Player player, Alignment alignment, Vector2 position, bool showGuild = true, float layerDepth = DepthParameter.Nameplate)
         {
+            Player = player;
+
             Alignment = alignment;
             Position = PositionOffset = position;
 
@@ -57,16 +65,24 @@ namespace OpenBound.GameComponents.Interface
 
             if (showGuild && player.Guild != null)
             {
-                spTL.Add(new SpriteText(FontTextType.Consolas10, $"[{player.Guild.Tag}] ",
+                spTL.Add(new SpriteText(FontTextType.Consolas10, "[",
+                    Color.White, alignment, layerDepth,
+                    outlineColor: Color.Black));
+                spTL.Add(new SpriteText(FontTextType.Consolas10, player.Guild.Tag,
                     Parameter.NameplateGuildColor, alignment, layerDepth,
                     outlineColor: Parameter.NameplateGuildOutlineColor));
+                spTL.Add(new SpriteText(FontTextType.Consolas10, "] ",
+                    Color.White, alignment, layerDepth,
+                    outlineColor: Color.Black));
             }
 
+            PlayerColor = Message.TextToColor(player.Nickname);
+
             spTL.Add(new SpriteText(FontTextType.Consolas10, player.Nickname,
-                Color.White, alignment, layerDepth,
+                PlayerColor, alignment, layerDepth,
                 outlineColor: Color.Black));
 
-            compositeSprite = CompositeSpriteText.CreateCompositeSpriteText(spTL, Orientation.Horizontal, Alignment.Left, position, 0);
+            compositeSpriteText = CompositeSpriteText.CreateCompositeSpriteText(spTL, Orientation.Horizontal, Alignment.Left, position, 0);
 
             shouldRender = true;
 
@@ -79,6 +95,8 @@ namespace OpenBound.GameComponents.Interface
         /// <param name="mobile"></param>
         public Nameplate(Mobile mobile)
         {
+            Player = mobile.Owner;
+
             Mobile = mobile;
             Alignment = Alignment.Center;
 
@@ -103,11 +121,27 @@ namespace OpenBound.GameComponents.Interface
                 textColor, Alignment, DepthParameter.Nameplate,
                 outlineColor: Color.Black));
 
-            compositeSprite = CompositeSpriteText.CreateCompositeSpriteText(spTL, Orientation.Horizontal, Alignment.Left, default, 0);
+            compositeSpriteText = CompositeSpriteText.CreateCompositeSpriteText(spTL, Orientation.Horizontal, Alignment.Left, default, 0);
 
             shouldRender = true;
 
             Update();
+        }
+
+        public void ResetTextColor()
+        {
+            compositeSpriteText.ResetTextColor();
+        }
+
+        public void ReplaceTextColor(Color from, Color to)
+        {
+            compositeSpriteText.ReplaceTextColor(from, to);
+        }
+
+        public Vector2 ElementDimensions()
+        {
+            Vector2 textSize = compositeSpriteText.ElementDimensions;
+            return new Vector2(rankIndicator.SourceRectangle.Width + textSize.X, MathHelper.Max(rankIndicator.SourceRectangle.Height, textSize.Y));
         }
 
         public void UpdateAttatchmentPosition()
@@ -126,13 +160,13 @@ namespace OpenBound.GameComponents.Interface
             {
                 //Rank Indicator (Image)
                 rankIndicator.Position = NewPosition + new Vector2(rankIndicator.Pivot.X, 0);
-                compositeSprite.Position = rankIndicator.Position + new Vector2(rankIndicator.Pivot.X + 2, -7);
+                compositeSpriteText.Position = rankIndicator.Position + new Vector2(rankIndicator.Pivot.X + 2, -7);
             }
             else if (Alignment == Alignment.Center)
             {
-                Vector2 completeSentence = (compositeSprite.ElementDimensions + rankIndicator.Pivot) / 2;
+                Vector2 completeSentence = (compositeSpriteText.ElementDimensions + rankIndicator.Pivot) / 2;
                 rankIndicator.Position = NewPosition - completeSentence;
-                compositeSprite.Position = rankIndicator.Position + new Vector2(rankIndicator.Pivot.X + 2, -7);
+                compositeSpriteText.Position = rankIndicator.Position + new Vector2(rankIndicator.Pivot.X + 2, -7);
             }
         }
 
@@ -141,7 +175,7 @@ namespace OpenBound.GameComponents.Interface
             if (!shouldRender) return;
 
             rankIndicator.Draw(null, spriteBatch);
-            compositeSprite.Draw(spriteBatch);
+            compositeSpriteText.Draw(spriteBatch);
         }
 
         public void HideElement()
@@ -152,6 +186,11 @@ namespace OpenBound.GameComponents.Interface
         public void ShowElement()
         {
             shouldRender = true;
+        }
+
+        public override int GetHashCode()
+        {
+            return Player.ID;
         }
     }
 }

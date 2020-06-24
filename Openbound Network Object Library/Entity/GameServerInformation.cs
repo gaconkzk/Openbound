@@ -29,6 +29,7 @@ namespace Openbound_Network_Object_Library.Entity
         public int ServerID { get; set; }
         public int ConnectedClients { get; set; }
         public int ConnectedClientCapacity { get; set; }
+        public int MaximumClientsPerChatChannel { get; set; }
         public bool IsAvatarOn { get; set; }
         public string[] ServerDescription { get; set; }
         public ServerLevelLimitation LowerLevel { get; set; }

@@ -109,6 +109,10 @@ namespace OpenBound.ServerCommunication
             int service = int.Parse(request[0]);
             object answer;
 
+#if DEBUG
+            Console.WriteLine(service + "|" + request[1]);
+#endif
+
             switch (service)
             {
                 case NetworkObjectParameters.GameServerPlayerAccessRequest:
@@ -175,9 +179,17 @@ namespace OpenBound.ServerCommunication
                     break;
 
                 //Chat
+                case NetworkObjectParameters.GameServerChatJoinChannel:
+                    answer = ObjectWrapper.DeserializeRequest<int>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatJoinChannel](answer);
+                    break;
                 case NetworkObjectParameters.GameServerChatEnter:
-                    answer = ObjectWrapper.DeserializeRequest<bool>(request[1]);
+                    answer = ObjectWrapper.DeserializeRequest<Player>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerChatEnter](answer);
+                    break;
+                case NetworkObjectParameters.GameServerChatLeave:
+                    answer = ObjectWrapper.DeserializeRequest<Player>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatLeave](answer);
                     break;
                 case NetworkObjectParameters.GameServerChatSendPlayerMessage:
                     answer = ObjectWrapper.DeserializeRequest<PlayerMessage>(request[1]);
@@ -187,6 +199,7 @@ namespace OpenBound.ServerCommunication
                     answer = ObjectWrapper.DeserializeRequest<List<CustomMessage>>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerChatSendSystemMessage](answer);
                     break;
+
             }
         }
     }

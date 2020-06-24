@@ -225,12 +225,12 @@ namespace OpenBound.GameComponents.Interface.General
 #endif
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            scrollButtonUp.Draw(gameTime, spriteBatch);
-            scrollButtonDown.Draw(gameTime, spriteBatch);
+            scrollButtonUp.Draw(null, spriteBatch);
+            scrollButtonDown.Draw(null, spriteBatch);
             scrollBackground.Draw(null, spriteBatch);
-            scrollBar.Draw(gameTime, spriteBatch);
+            scrollBar.Draw(null, spriteBatch);
         }
     }
 }

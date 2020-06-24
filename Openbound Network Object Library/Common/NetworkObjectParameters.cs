@@ -10,10 +10,10 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
-using Microsoft.Xna.Framework;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Openbound_Network_Object_Library.Common
 {
@@ -74,10 +74,10 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerChatLeave             = 0x0038;
         public const int GameServerChatSendPlayerMessage = 0x0039;
         public const int GameServerChatSendSystemMessage = 0x003a;
+        public const int GameServerChatJoinChannel       = 0x003b;
 
         //Chat - Game Server
-        public const int  GameServerChatChannelsMaximumNumber  = 10;
-        public const int  GameServerChatChannelMaximumCapacity = 100;
+        public const int  GameServerChatChannelsMaximumNumber  = 8;
         public const char GameServerChatGameListIdentifier     = 'G';
         public const char GameServerChatGameRoomIdentifier     = 'R';
 

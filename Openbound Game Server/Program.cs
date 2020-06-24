@@ -166,8 +166,8 @@ namespace Openbound_Game_Server
 
                 //Messaging / Room List Chat Requests
                 case NetworkObjectParameters.GameServerChatEnter:
-                    answer = GameClientProvider.GameServerChatEnterRequest(request[1], playerSession);
-                    break;
+                    GameClientProvider.GameServerChatEnterRequest(request[1], playerSession);
+                    return;
                 case NetworkObjectParameters.GameServerChatLeave:
                     GameClientProvider.GameServerChatLeave(playerSession);
                     return;

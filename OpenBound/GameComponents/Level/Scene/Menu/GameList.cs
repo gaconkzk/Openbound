@@ -28,6 +28,7 @@ using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Openbound_Network_Object_Library.Models;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -53,6 +54,10 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         private readonly int widthFactor;
         private readonly int buttonHeightPosition;
         private readonly int heightFactor;
+
+        //Online users
+        private OnlineUserList onlineUserList;
+        private List<Button> channelButtonList;
 
         //Button previous state saving
         private List<bool> buttonState;
@@ -97,8 +102,36 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             textBox.EnableTextField();
 
+            //Online users list
+            onlineUserList = new OnlineUserList(new Vector2(140, 40), new Vector2(250, 166));
+            channelButtonList = new List<Button>();
+
+            /*
+            buttonList.Add(new Button(ButtonType.ChannelListButton1, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(1)); }, new Vector2(-47, 28)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton2, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(2)); }, new Vector2(-26, 28)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton3, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(3)); }, new Vector2( -1, 29)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton4, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(4)); }, new Vector2( 23, 28)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton5, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(5)); }, new Vector2( 44, 29)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton6, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(6)); }, new Vector2( 68, 29)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton7, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(7)); }, new Vector2( 92, 29)));
+            buttonList.Add(new Button(ButtonType.ChannelListButton8, DepthParameter.InterfaceButton, (o) => { ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(8)); }, new Vector2(116, 30)));
+            */
+
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton1, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(1); }, new Vector2(-47, 28)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton2, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(2); }, new Vector2(-26 - 2, 28)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton3, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(3); }, new Vector2(-1 - 4, 29)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton4, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(4); }, new Vector2(23 - 6, 28)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton5, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(5); }, new Vector2(44 - 8, 29)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton6, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(6); }, new Vector2(68 - 10 + 1, 29)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton7, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(7); }, new Vector2(92 - 12, 29)));
+            channelButtonList.Add(new Button(ButtonType.ChannelListButton8, DepthParameter.InterfaceButton, (o) => { ChannelListButtonAction(8); }, new Vector2(116 - 14, 30)));
+
+            channelButtonList.ForEach((x) => x.Disable());
+
             //Textual callbacks
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatJoinChannel, RequestJoinChannelAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, RequestChatDisconnectionAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
 
@@ -315,6 +348,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         }
         #endregion
 
+        private void ChannelListButtonAction(int channelIndex)
+        {
+            channelButtonList.ForEach((x) => x.Disable());
+            ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameList(channelIndex));
+        }
+
         private void ExitDoorAction(object sender)
         {
             ServerInformationBroker.Instance.DisconnectFromGameServer();
@@ -340,10 +379,40 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         #endregion
 
         #region Textbox
+        //Textbox channels
+        public void RequestJoinChannelAsyncCallback(object response)
+        {
+            int r = (int)response;
+            if (r == 0)
+            {
+                //Error
+            }
+            else
+            {
+                for (int i = 0; i < channelButtonList.Count; i++)
+                    if (i + 1 != r)
+                        channelButtonList[i].Enable();
+            }
+        }
+
+        //Whenever a player tries to connect to a channel this method receives a stream of connected players
+        //Including your own credentials. If it returns null, the server could not 
         public void RequestChatConnectionAsyncCallback(object response)
         {
-            bool success = (bool)response;
-            //Console.WriteLine("New channel: " + currentChannel);
+            Player player = (Player)response;
+
+            //User has connected to a chat
+            if (player.ID == GameInformation.Instance.PlayerInformation.ID)
+                onlineUserList.Clear();
+
+            onlineUserList.AppendNameplate(player);
+        }
+
+        //Whenever a player leaves a channel this method receives this player.
+        public void RequestChatDisconnectionAsyncCallback(object response)
+        {
+            Player player = (Player)response;
+            onlineUserList.RemoveNameplate(player);
         }
 
         public void OnSendMessage(PlayerMessage message)
@@ -521,6 +590,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             roomButtonList.ForEach((x) => x.Update());
 
             textBox.Update(gameTime);
+            onlineUserList.Update();
+
+            channelButtonList.ForEach((x) => x.Update());
         }
 
         public override void Draw(GameTime gameTime)
@@ -530,6 +602,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             animatedButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             roomButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             textBox.Draw(spriteBatch);
+            onlineUserList.Draw(spriteBatch);
+            channelButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
         }
 
         public override void Dispose()

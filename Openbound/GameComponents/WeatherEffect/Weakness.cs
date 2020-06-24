@@ -26,7 +26,7 @@ namespace OpenBound.GameComponents.WeatherEffect
     /// </summary>
     public class Weakness : Weather
     { 
-        public Weakness(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Force, scale, 0)
+        public Weakness(Vector2 position, float scale = 1) : base(new Vector2(position.X, -Topography.MapHeight / 2), new Vector2(64, 32), 8, new Vector2(20, 0), new Vector2(10, 10), WeatherType.Weakness, scale, 0)
         {
             Initialize("Graphics/Special Effects/Weather/Weakness", StartingPosition, WeatherAnimationType.VariableAnimationFrame, 2);
 
