@@ -173,9 +173,6 @@ namespace Openbound_Game_Server.Service
 
                         playerSession.RoomMetadata = room;
 
-                        //Connect to room chat
-                        GameServerChatEnter(Message.BuildGameServerChatGameRoom(room.ID), playerSession);
-
                         //send an update for each member of the match with the current metadata
                         BroadcastToPlayer(NetworkObjectParameters.GameServerRoomRefreshMetadata, room, roomUnion);
                     }
@@ -617,7 +614,7 @@ namespace Openbound_Game_Server.Service
             {
                 //Parse it back to string in order to remove string formatation
                 param = ObjectWrapper.DeserializeRequest<string>(param);
-                return GameServerChatEnter(param, playerSession);
+                GameServerChatEnter(param, playerSession);
             }
             catch(Exception ex)
             {
@@ -627,12 +624,11 @@ namespace Openbound_Game_Server.Service
             return false;
         }
 
-        public static bool GameServerChatEnter(string param, PlayerSession playerSession)
+        public static void GameServerChatEnter(string param, PlayerSession playerSession)
         {
             try
             {
-                if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat)
-                    return false;
+                if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat) return;
 
                 //Parse the player selected channel to find out its index
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
@@ -648,6 +644,17 @@ namespace Openbound_Game_Server.Service
                             tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
                                 .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
 
+                            //Connecting player receives a connecting message
+                            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, playerSession.Player);
+
+                            //The user receives every connected player
+                            foreach(Player p in GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                                playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, p);
+
+                            //Everyone else receives this user metadata
+                            BroadcastToPlayer(NetworkObjectParameters.GameServerChatEnter, playerSession.Player,
+                                GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2]);
+
                             //Connect to room
                             GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
                         }
@@ -661,12 +668,31 @@ namespace Openbound_Game_Server.Service
                         //Connects if there are free slots left on the channel.
                         //If the user is attempting to connect on a Room it should always return true
                         if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
+                        {
+                            //Connecting player receives a connecting message
+                            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, playerSession.Player);
+
+                            //The user receives every connected player
+                            foreach (Player p in GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2])
+                                playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, p);
+
+                            //Everyone else receives this user metadata
+                            BroadcastToPlayer(NetworkObjectParameters.GameServerChatEnter, playerSession.Player,
+                                GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2]);
+
+                            //Connect to room
                             GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Add(playerSession.Player);
+                        }
                         else
+                        {
                             //Error, the channel is full
-                            return false;
+                            return;
+                        }
                     }
                 }
+
+                //Enqueue all connected players into the current player queue
+
 
                 //Leave any prior room
                 GameServerChatLeave(playerSession);
@@ -683,15 +709,11 @@ namespace Openbound_Game_Server.Service
 
                 //Updates the current connected channel id
                 playerSession.CurrentConnectedChat = tuple.Item1 + tuple.Item2.ToString();
-
-                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Ex: When GameServerChatRoomListEnter {ex.Message}");
             }
-
-            return false;
         }
 
         public static void GameServerChatLeave(PlayerSession playerSession)
@@ -707,7 +729,10 @@ namespace Openbound_Game_Server.Service
                 {
                     //if player is connected to any channel, disconnect from the selected channel
                     if (!string.IsNullOrEmpty(playerSession.CurrentConnectedChat))
+                    {
                         GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Remove(playerSession.Player);
+                        BroadcastToPlayer(NetworkObjectParameters.GameServerChatLeave, playerSession.Player, GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2]);
+                    }
                 }
 
                 //Updates the current connected channel id

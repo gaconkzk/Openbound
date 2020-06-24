@@ -309,7 +309,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public DebugScene()
         {
-            oul = new OnlineUserList(new Vector2(-100, -100), new Vector2(300, 300));
+            oul = new OnlineUserList(new Vector2(140, 40), new Vector2(250, 166), backgroundAlpha: 0.5f);
 
             sceneTimespan = 1f;
             hasRequestedNextScene = false;
@@ -560,6 +560,11 @@ namespace OpenBound.GameComponents.Level.Scene
                 Console.WriteLine(p.Nickname);
                 oul.RemoveNameplate(p);
                 plist.Remove(p);
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D6))
+            {
+                oul.Clear();
             }
 
             HUD.TextBoxes[0].Update(gameTime);

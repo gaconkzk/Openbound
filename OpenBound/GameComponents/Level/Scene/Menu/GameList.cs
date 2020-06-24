@@ -28,6 +28,7 @@ using Openbound_Network_Object_Library.Entity.Text;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Openbound_Network_Object_Library.Models;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -53,6 +54,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         private readonly int widthFactor;
         private readonly int buttonHeightPosition;
         private readonly int heightFactor;
+
+        //Online users
+        private OnlineUserList onlineUserList;
 
         //Button previous state saving
         private List<bool> buttonState;
@@ -97,8 +101,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             textBox.EnableTextField();
 
+            //Online users list
+            onlineUserList = new OnlineUserList(new Vector2(140, 40), new Vector2(250, 166));
+
             //Textual callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatEnter, RequestChatConnectionAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, RequestChatDisconnectionAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
 
@@ -340,10 +348,24 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         #endregion
 
         #region Textbox
+        //Whenever a player tries to connect to a channel this method receives a stream of connected players
+        //Including your own credentials. If it returns null, the server could not 
         public void RequestChatConnectionAsyncCallback(object response)
         {
-            bool success = (bool)response;
-            //Console.WriteLine("New channel: " + currentChannel);
+            Player player = (Player)response;
+
+            //User has connected to a chat
+            if (player.ID == GameInformation.Instance.PlayerInformation.ID)
+                onlineUserList.Clear();
+
+            onlineUserList.AppendNameplate(player);
+        }
+
+        //Whenever a player leaves a channel this method receives this player.
+        public void RequestChatDisconnectionAsyncCallback(object response)
+        {
+            Player player = (Player)response;
+            onlineUserList.RemoveNameplate(player);
         }
 
         public void OnSendMessage(PlayerMessage message)
@@ -521,6 +543,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             roomButtonList.ForEach((x) => x.Update());
 
             textBox.Update(gameTime);
+            onlineUserList.Update();
         }
 
         public override void Draw(GameTime gameTime)
@@ -530,6 +553,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             animatedButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             roomButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             textBox.Draw(spriteBatch);
+            onlineUserList.Draw(spriteBatch);
         }
 
         public override void Dispose()

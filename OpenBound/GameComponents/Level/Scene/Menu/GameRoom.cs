@@ -109,7 +109,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerRoomReadyRoom, ReadyRoomAsyncCallback);
 
             //Textual callbacks
-            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatLeave, OnReceiveMessageAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendPlayerMessage, OnReceiveMessageAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerChatSendSystemMessage, OnReceiveMessageAsyncCallback);
 

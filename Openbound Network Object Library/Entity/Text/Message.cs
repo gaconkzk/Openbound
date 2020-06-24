@@ -118,7 +118,7 @@ namespace Openbound_Network_Object_Library.Entity.Text
                 new List<CustomMessage>(RoomWelcomeMessage[1]),
             };
 
-            cmL[0].Insert(3, CreateConsolasText(roomName));
+            cmL[0].Insert(4, CreateConsolasText(roomName));
             return cmL;
         }
 
@@ -139,7 +139,7 @@ namespace Openbound_Network_Object_Library.Entity.Text
             for (int i = 0; i < text.Length - 1; i++)
             {
                 color += text[i];
-                color = color.RotateLeft(i * 2);
+                color = color.RotateLeft(4);
             }
 
             //Removing the first 8 bits (alpha)

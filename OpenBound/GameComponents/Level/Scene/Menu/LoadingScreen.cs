@@ -88,6 +88,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             if (accumulator > 100 || accumulator == lastSend) return;
 
             lock (playerButtonList) playerButtonList.UserLoadingButton.UpdatePercentage(accumulator);
+
             lastSend = accumulator;
 
             //if (accumulator % 5 != 0)
@@ -106,7 +107,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             lock (playerButtonList) playerButtonList.Update();
 
-            //accumulator += (float)gameTime.ElapsedGameTime.TotalSeconds * factor * 10;
+            accumulator += (float)gameTime.ElapsedGameTime.TotalSeconds * factor * 10;
 
             if (!hasStarted)
                 UpdateLoadingPercentage(Math.Min((int)accumulator, 100));

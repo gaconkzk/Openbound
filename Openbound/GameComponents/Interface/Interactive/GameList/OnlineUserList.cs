@@ -34,7 +34,12 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameList
         int maximumRenderableLines;
         Vector2 elementYOffset;
 
-        public OnlineUserList(Vector2 position, Vector2 boxSize, float backgroundAlpha = 0.3f)
+        /// <summary>
+        /// This implementation is very similar to <see cref="TextBox"/>. Except that lines aren't spritetexts but nameplates.
+        /// No extra threads are created on this method since its mostly static without need for aditional refreshs.
+        /// Another difference is the possibility to remove any field at any time due to its nature.
+        /// </summary>
+        public OnlineUserList(Vector2 position, Vector2 boxSize, float backgroundAlpha = 0f)
         {
             nameplateList = new List<Nameplate>();
 
@@ -50,59 +55,82 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameList
 
         public void OnBeingDragged(object button)
         {
-            selectedIndex = Math.Max((int)(scrollBar.NormalizedCurrentScrollPercentage * nameplateList.Count) - 1, 0);
+            lock (nameplateList)
+            {
+                selectedIndex = Math.Max((int)(scrollBar.NormalizedCurrentScrollPercentage * nameplateList.Count) - 1, 0);
+            }
         }
 
         public void AppendNameplate(Player player)
         {
-            nameplateList.Add(new Nameplate(player, Alignment.Left, default));
-
-            if (maximumRenderableLines == 0)
+            lock (nameplateList)
             {
-                elementYOffset = nameplateList.First().ElementDimensions() * Vector2.UnitY - new Vector2(0, 2);
-                maximumRenderableLines = (int)(boxTextArea.Y / elementYOffset.Y);
+                nameplateList.Add(new Nameplate(player, Alignment.Left, default));
+
+                if (maximumRenderableLines == 0)
+                {
+                    elementYOffset = nameplateList.First().ElementDimensions() * Vector2.UnitY - new Vector2(0, 2);
+                    maximumRenderableLines = (int)(boxTextArea.Y / elementYOffset.Y);
+                }
+
+                //If the number of text exceeds the maximum capacity, enables the scroll bar
+                if (nameplateList.Count >= maximumRenderableLines && !scrollBar.IsEnabled) scrollBar.Enable();
+
+                //If the selected index is the last
+                if (selectedIndex + 1 == nameplateList.Count - 1)
+                    //Selects the last element
+                    selectedIndex++;
+
+                if (scrollBar.IsEnabled)
+                    //Keeps the same selected element and just updates the scroll bar to its new position.
+                    scrollBar.SetScrollPercentagePosition((float)(selectedIndex + 1) / nameplateList.Count);
             }
-
-            //If the number of text exceeds the maximum capacity, enables the scroll bar
-            if (nameplateList.Count >= maximumRenderableLines && !scrollBar.IsEnabled) scrollBar.Enable();
-
-            //If the selected index is the last
-            if (selectedIndex + 1 == nameplateList.Count - 1)
-                //Selects the last element
-                selectedIndex++;
-                        
-            if (scrollBar.IsEnabled)
-                //Keeps the same selected element and just updates the scroll bar to its new position.
-                scrollBar.SetScrollPercentagePosition((float)(selectedIndex + 1) / nameplateList.Count);
         }
 
         public void RemoveNameplate(Player player)
         {
-            bool hasRemoved = false;
-
-            //Selects a index, removes the element
-            for (int i = 0, removingIndex = 0; i < nameplateList.Count; i++, removingIndex++)
+            lock (nameplateList)
             {
-                if (nameplateList[i].Player.ID == player.ID && removingIndex < selectedIndex)
+                bool hasRemoved = false;
+
+                //Selects a index, removes the element
+                for (int i = 0, removingIndex = 0; i < nameplateList.Count; i++, removingIndex++)
                 {
-                    selectedIndex--;
-                    nameplateList.RemoveAt(removingIndex);
-                    hasRemoved = true;
-                    break;
+                    if (nameplateList[i].Player.ID == player.ID)
+                    {
+                        if (removingIndex <= selectedIndex)
+                            selectedIndex = Math.Max(0, selectedIndex - 1);
+
+                        nameplateList.RemoveAt(removingIndex);
+                        hasRemoved = true;
+                        break;
+                    }
                 }
+
+                if (!hasRemoved) return;
+
+                //If the number of text exceeds the maximum capacity, enables the scroll bar
+                if (nameplateList.Count < maximumRenderableLines && scrollBar.IsEnabled) scrollBar.Disable();
+
+                //Keeps the same selected element and just updates the scroll bar to its new position.
+                if (scrollBar.IsEnabled) scrollBar.SetScrollPercentagePosition((selectedIndex + 1f) / nameplateList.Count);
+
+                //Updating selected index
+                startingRenderingIndex = Math.Max(selectedIndex - maximumRenderableLines + 1, 0);
+                finalRenderingIndex = Math.Min(startingRenderingIndex + maximumRenderableLines, nameplateList.Count);
             }
+        }
 
-            if (!hasRemoved) return;
+        public void Clear()
+        {
+            lock (nameplateList)
+            {
+                nameplateList.Clear();
+                selectedIndex = 0;
+                scrollBar.Disable();
 
-            //If the number of text exceeds the maximum capacity, enables the scroll bar
-            if (nameplateList.Count < maximumRenderableLines && scrollBar.IsEnabled) scrollBar.Disable();
-
-            //Keeps the same selected element and just updates the scroll bar to its new position.
-            if (scrollBar.IsEnabled) scrollBar.SetScrollPercentagePosition((selectedIndex + 1f) / nameplateList.Count);
-
-            //Updating selected index
-            startingRenderingIndex = Math.Max(selectedIndex - maximumRenderableLines + 1, 0);
-            finalRenderingIndex = Math.Min(startingRenderingIndex + maximumRenderableLines, nameplateList.Count);
+                startingRenderingIndex = finalRenderingIndex = 0;
+            }
         }
 
         public void Update()
@@ -141,7 +169,9 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameList
             scrollBar.Draw(spriteBatch);
 
             //Draw only the necessary elements. The indexes are beingcalculated on UpdateTextPosition method.
-            for (int i = startingRenderingIndex; i < finalRenderingIndex; i++) nameplateList[i].Draw(spriteBatch);
+            lock(nameplateList)
+                for(int i = startingRenderingIndex; i < finalRenderingIndex; i++)
+                    nameplateList[i].Draw(spriteBatch);
         }
     }
 }

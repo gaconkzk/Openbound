@@ -179,6 +179,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         case List<CustomMessage> cmL:
                             cstList = CompositeSpriteText.CreateCustomMessage(cmL, DepthParameter.InterfaceButtonText);
                             break;
+#if DEBUG
+                        default:
+                            Console.WriteLine("Error when trying to proccess something that isn't a message: " + text.ToString());
+                            return;
+#endif
                     }
 
                     lock (toBeAddedCompositeSpriteTextList)
@@ -342,8 +347,8 @@ namespace OpenBound.GameComponents.Interface.Interactive
             if (scrollBar != null)
             {
                 compositeSpriteTextList[selectedIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
-                //compositeSpriteTextList[startingRenderingIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
-                //compositeSpriteTextList[Math.Max(finalRenderingIndex - 1, 0)].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                compositeSpriteTextList[startingRenderingIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                compositeSpriteTextList[Math.Max(finalRenderingIndex - 1, 0)].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
             }
         }
 
