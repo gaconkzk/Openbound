@@ -17,7 +17,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Openbound_Network_Object_Library.FileOutput
 {
@@ -198,8 +197,13 @@ namespace Openbound_Network_Object_Library.FileOutput
                 ScrollSpeed = 50,
                 MouseSpeed = 50,
 
-                BGM = 70,
+#if DEBUG
+                BGM = 0,
+                SFX = 20,
+#else
+                BGM = 30,
                 SFX = 50,
+#endif
 
                 IsBackgroundOn = true,
                 InterfaceType = 3,
@@ -238,6 +242,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                     "Avatar On", "Free Zone", "First Opensource Server"
                 },
                 ConnectedClientCapacity = 1000,
+                MaximumClientsPerChatChannel = 1000 / NetworkObjectParameters.GameServerChatChannelsMaximumNumber
             };
 
         private static readonly string GameClientSettingsInformation =
@@ -271,9 +276,9 @@ namespace Openbound_Network_Object_Library.FileOutput
 
         private static readonly string LobbyServerWhitelistInformation =
             ObjectWrapper.Serialize(new ConfigLobbyServerWhitelist() { Whitelist = new List<string>() { "localhost", "127.0.0.1" } }, Formatting.Indented);
-        #endregion
+#endregion
 
-        #region Serverlist Placeholders
+#region Serverlist Placeholders
         private static readonly string[] LobbyServerlistPlaceholder =
             ObjectWrapper.Serialize(
                 new ConfigServerInformation()
@@ -389,7 +394,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                 Formatting.Indented
             ).Split('\r');
 
-        #endregion
+#endregion
 
         private static string ServerConfigPath(RequesterApplication serverType) => $@"{Directory.GetCurrentDirectory()}\Config\{serverType}ServerConfig.txt";
         private static string GameClientSettingsPath => $@"{Directory.GetCurrentDirectory()}\Config\GameClientSettings.txt";

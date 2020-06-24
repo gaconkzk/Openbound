@@ -642,7 +642,7 @@ namespace Openbound_Game_Server.Service
                         {
                             //find the first non-full channel IF the player hasn't selected a specific channel
                             tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
-                                .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
+                                .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerInformation.MaximumClientsPerChatChannel);
 
                             //Sends the player the newfound chat
                             playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatJoinChannel, tuple.Item2);
@@ -670,7 +670,7 @@ namespace Openbound_Game_Server.Service
                     {
                         //Connects if there are free slots left on the channel.
                         //If the user is attempting to connect on a Room it should always return true
-                        if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
+                        if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerInformation.MaximumClientsPerChatChannel)
                         {
                             //Sends the player the newfound chat
                             playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatJoinChannel, tuple.Item2);

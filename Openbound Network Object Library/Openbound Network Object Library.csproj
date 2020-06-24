@@ -87,7 +87,6 @@
     <Compile Include="Entity\MobileType.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Entity\RoomMetadata.cs" />
-    <Compile Include="FileOutput\MessageLogger.cs" />
     <Compile Include="Helper\FormValidationHelper.cs" />
     <Compile Include="Helper\NotOrCharacter.cs" />
     <Compile Include="Security\SecurityToken.cs" />

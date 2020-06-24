@@ -77,8 +77,7 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerChatJoinChannel       = 0x003b;
 
         //Chat - Game Server
-        public const int  GameServerChatChannelsMaximumNumber  = 10;
-        public const int  GameServerChatChannelMaximumCapacity = 100;
+        public const int  GameServerChatChannelsMaximumNumber  = 8;
         public const char GameServerChatGameListIdentifier     = 'G';
         public const char GameServerChatGameRoomIdentifier     = 'R';
 
