@@ -294,6 +294,13 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency);
+            };
+
             SpecialEffectHandler.Add(se);
         }
 
@@ -304,6 +311,13 @@ namespace OpenBound.GameComponents.Animation
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency);
+            };
+
             SpecialEffectHandler.Add(se);
         }
 
@@ -313,6 +327,14 @@ namespace OpenBound.GameComponents.Animation
                 new AnimationInstance { StartingFrame = 0, EndingFrame = 29, TimePerFrame = 1 / 20f }, false, DepthParameter.ProjectileSFX, rotation);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
+
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency);
+            };
 
             SpecialEffectHandler.Add(se);
         }

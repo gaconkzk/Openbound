@@ -13,11 +13,13 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
@@ -86,6 +88,21 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             SpecialEffectBuilder.JDProjectile2Explosion(FlipbookList[0].Position, 0);
             base.Explode();
+
+            foreach (Mobile m in LevelScene.MobileList)
+            {
+                double distance = m.CollisionBox.GetDistance(FlipbookList[0].Position, ExplosionRadius);
+
+                if (distance < Parameter.ProjectileMageSSEExplosionRadius)
+                {
+                  
+                    for (int i = 0; i < 50; i++)
+                    {
+                        m.Movement.Pull(m.Position, this.Position);
+                    }
+              
+                }
+            }
         }
 
         protected override void Destroy()

@@ -62,6 +62,139 @@ namespace OpenBound.GameComponents.Pawn
             IsMoving = false;
         }
 
+        public void Push(float force)
+        {
+            //Copy parameter tank speed
+            float TankSpeed = Parameter.TankMovementSpeed;
+
+            //Start calculating the next possible position
+            int[] relPos = Topography.GetRelativePosition(Mobile.Position);
+            int i = (int)Parameter.TankMovementMaxYStepping;
+
+            //Flag to determine if the movement is possible
+            bool isValid = false;
+
+            //Get the possible adjacent block coordinate and save it on newX & newY
+            for (; i > -Parameter.TankMovementMinYStepping; i--)
+            {
+                //If the collision flag of the adjacent block is 0
+
+                //Save as a possible adjacent solution
+
+                if (relPos[0] - TankSpeed < 0 || relPos[0] - TankSpeed >= Topography.MapHeight)
+                {
+                    //Keep the height
+                    i = 0;
+                    isValid = true;
+                    break;
+                }
+
+                isValid = isValid || !Topography.CollidableForegroundMatrix[relPos[1] - i][(int)(relPos[0] - TankSpeed)];
+
+                //if has already a valid movement and a wall is detected
+                if (isValid && Topography.CollidableForegroundMatrix[relPos[1] - i][(int)(relPos[0] - TankSpeed)])
+                    break;
+            }
+
+            if (isValid)
+            {
+                if (!IsMoving)
+                {
+                    IsMoving = true;
+                    sidewaysDelayTimer = 0;
+                }
+
+                sidewaysDelayTimer += Parameter.ProjectileMovementFixedElapedTime;
+
+                if (sidewaysDelayTimer > Parameter.TankMovementSidewaysDelay)
+                {
+                    // Add new movement based on tank speed
+                    RemainingStepsThisTurn--;
+                    Mobile.Position += new Vector2(-(int)TankSpeed, -i);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.Moving, true);
+                    if (Mobile.IsPlayable) LevelScene.HUD.MovementBar.PerformStep();
+                }
+            }
+            else
+            {
+                //Sync
+                if (Mobile.MobileFlipbook.State != ActorFlipbookState.UnableToMove)
+                    Mobile.ForceSynchronize = true;
+
+                Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
+                Mobile.PlayUnableToMoveSE();
+            }
+
+            IsAbleToMove = RemainingStepsThisTurn > 0;
+        }
+
+        public void Pull(Vector2 playerPos, Vector2 explosionPos)
+        {
+            //Copy parameter tank speed
+            float TankSpeed = 1f;
+
+            //Start calculating the next possible position
+            int[] relPos = Topography.GetRelativePosition(Mobile.Position);
+            int i = (int)Parameter.TankMovementMaxYStepping;
+
+            //Flag to determine if the movement is possible
+            bool isValid = false;
+
+            //Get the possible adjacent block coordinate and save it on newX & newY
+            for (; i > -Parameter.TankMovementMinYStepping; i--)
+            {
+                //If the collision flag of the adjacent block is 0
+
+                //Save as a possible adjacent solution
+
+                if (relPos[0] - TankSpeed < 0 || relPos[0] - TankSpeed >= Topography.MapHeight)
+                {
+                    //Keep the height
+                    i = 0;
+                    isValid = true;
+                    break;
+                }
+
+                isValid = isValid || !Topography.CollidableForegroundMatrix[relPos[1] - i][(int)(relPos[0] - TankSpeed)];
+
+                //if has already a valid movement and a wall is detected
+                if (isValid && Topography.CollidableForegroundMatrix[relPos[1] - i][(int)(relPos[0] - TankSpeed)])
+                    break;
+            }
+
+            if (isValid)
+            {
+                if (!IsMoving)
+                {
+                    IsMoving = true;
+                    sidewaysDelayTimer = 0;
+                }
+
+                sidewaysDelayTimer += 1;
+
+                if (sidewaysDelayTimer > Parameter.TankMovementSidewaysDelay)
+                {
+                    // Add new movement based on tank speed
+                    if(Mobile.Position.X > explosionPos.X)
+                    {
+                        Mobile.Position += new Vector2(-(int)TankSpeed, -i);
+ 
+                    }
+                    else
+                    {
+                        Mobile.Position += new Vector2((int)TankSpeed, -i);
+                    }
+                    
+                }
+            }
+            else
+            {
+                //Sync
+                if (Mobile.MobileFlipbook.State != ActorFlipbookState.UnableToMove)
+                    Mobile.ForceSynchronize = true;
+            }
+        }
+
         public void MoveSideways(Facing Facing)
         {
             //Sound Effect
