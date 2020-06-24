@@ -179,6 +179,10 @@ namespace OpenBound.ServerCommunication
                     break;
 
                 //Chat
+                case NetworkObjectParameters.GameServerChatJoinChannel:
+                    answer = ObjectWrapper.DeserializeRequest<int>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerChatJoinChannel](answer);
+                    break;
                 case NetworkObjectParameters.GameServerChatEnter:
                     answer = ObjectWrapper.DeserializeRequest<Player>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerChatEnter](answer);
@@ -195,6 +199,7 @@ namespace OpenBound.ServerCommunication
                     answer = ObjectWrapper.DeserializeRequest<List<CustomMessage>>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerChatSendSystemMessage](answer);
                     break;
+
             }
         }
     }

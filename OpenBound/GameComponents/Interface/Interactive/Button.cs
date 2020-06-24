@@ -42,6 +42,8 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
         //Server List
         ServerListButton,
+        ChannelListButton1, ChannelListButton2, ChannelListButton3, ChannelListButton4,
+        ChannelListButton5, ChannelListButton6, ChannelListButton7, ChannelListButton8,
 
         //GameList
         RoomButton,
@@ -217,6 +219,126 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Hoover,    new Rectangle(326,   0, 326, 81) },
                             { ButtonAnimationState.Clicked,   new Rectangle(326*2, 0, 326, 81) },
                             { ButtonAnimationState.Disabled,  new Rectangle(326*3, 0, 326, 81) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton1,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel1",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(11 * 0, 0, 11, 15) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(11 * 1, 0, 11, 15) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(11 * 2, 0, 11, 15) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(11 * 3, 0, 11, 15) },
+                            { ButtonAnimationState.Activated, new Rectangle(11 * 4, 0, 11, 15) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton2,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel2",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(17 * 0, 0, 17, 15) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(17 * 1, 0, 17, 15) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(17 * 2, 0, 17, 15) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(17 * 3, 0, 17, 15) },
+                            { ButtonAnimationState.Activated, new Rectangle(17 * 4, 0, 17, 15) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton3,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel3",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(13 * 0, 0, 13, 16) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(13 * 1, 0, 13, 16) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(13 * 2, 0, 13, 16) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(13 * 3, 0, 13, 16) },
+                            { ButtonAnimationState.Activated, new Rectangle(13 * 4, 0, 13, 16) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton4,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel4",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(14 * 0, 0, 14, 15) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(14 * 1, 0, 14, 15) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(14 * 2, 0, 14, 15) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(14 * 3, 0, 14, 15) },
+                            { ButtonAnimationState.Activated, new Rectangle(14 * 4, 0, 14, 15) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton5,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel5",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(18 * 0, 0, 18, 17) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(18 * 1, 0, 18, 17) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(18 * 2, 0, 18, 17) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(18 * 3, 0, 18, 17) },
+                            { ButtonAnimationState.Activated, new Rectangle(18 * 4, 0, 18, 17) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton6,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel6",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(16 * 0, 0, 16, 17) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(16 * 1, 0, 16, 17) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(16 * 2, 0, 16, 17) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(16 * 3, 0, 16, 17) },
+                            { ButtonAnimationState.Activated, new Rectangle(16 * 4, 0, 16, 17) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton7,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel7",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(15 * 0, 0, 15, 15) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(15 * 1, 0, 15, 15) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(15 * 2, 0, 15, 15) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(15 * 3, 0, 15, 15) },
+                            { ButtonAnimationState.Activated, new Rectangle(15 * 4, 0, 15, 15) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.ChannelListButton8,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/GameList/Channel8",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(15 * 0, 0, 15, 18) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(15 * 1, 0, 15, 18) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(15 * 2, 0, 15, 18) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(15 * 3, 0, 15, 18) },
+                            { ButtonAnimationState.Activated, new Rectangle(15 * 4, 0, 15, 18) },
                         }
                     }
                 },

@@ -74,6 +74,7 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerChatLeave             = 0x0038;
         public const int GameServerChatSendPlayerMessage = 0x0039;
         public const int GameServerChatSendSystemMessage = 0x003a;
+        public const int GameServerChatJoinChannel       = 0x003b;
 
         //Chat - Game Server
         public const int  GameServerChatChannelsMaximumNumber  = 10;

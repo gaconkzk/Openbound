@@ -644,6 +644,9 @@ namespace Openbound_Game_Server.Service
                             tuple.Item2 = GameServerObjects.Instance.ChatDictionary[tuple.Item1].Keys
                                 .First((x) => GameServerObjects.Instance.ChatDictionary[tuple.Item1][x].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity);
 
+                            //Sends the player the newfound chat
+                            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatJoinChannel, tuple.Item2);
+
                             //Connecting player receives a connecting message
                             playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, playerSession.Player);
 
@@ -669,6 +672,9 @@ namespace Openbound_Game_Server.Service
                         //If the user is attempting to connect on a Room it should always return true
                         if (GameServerObjects.Instance.ChatDictionary[tuple.Item1][tuple.Item2].Count < NetworkObjectParameters.GameServerChatChannelMaximumCapacity)
                         {
+                            //Sends the player the newfound chat
+                            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatJoinChannel, tuple.Item2);
+
                             //Connecting player receives a connecting message
                             playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatEnter, playerSession.Player);
 
@@ -686,13 +692,11 @@ namespace Openbound_Game_Server.Service
                         else
                         {
                             //Error, the channel is full
+                            playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatJoinChannel, 0);
                             return;
                         }
                     }
                 }
-
-                //Enqueue all connected players into the current player queue
-
 
                 //Leave any prior room
                 GameServerChatLeave(playerSession);
