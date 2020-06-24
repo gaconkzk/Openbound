@@ -1,52 +1,3 @@
-
-﻿<h2>Configuration & Setup</h2>
-
-This solution contains four applications that works together to make the game work.
-
-1. Login Server
-2. Lobby Server
-3. Game Server
-4. Game Application
-
-Remember to build'em all beforehand.
-
-In the current version is MANDATORY that all servers are opened in the same order as I have mentioned above.
-
-All the necessary configuration (IP tables, public/local IPs and database address) can be edited by changing the configuration files that each application creates when are opened.
-
-<h3>Configuring the Solution</h3>
-
-1. First of all, you have to generate the config files, for that, all you have to do is open the LoginServer, LobbyServer and GameServer executables at least once and edit the generated .txt files.
-
-The default paths for the configuration files are:
-
-- Login Server/Config
-- Lobby Server/Config
-- Game Server/Config
-
-Further instructions on how to proceed and a few specifics about configurations are written on the default configuration .txt files.
-In case you have made a mess on any file, delete it and let the application create new ones!
-
-Database connections are handled by Entity Framework. In case you prefer a free database, such as MySQL, all you have to do is download It's driver and change the contexts on
-Openbound Network Object/OpenboundDatabaseContext. But it would require a few programming understanding.
-
-2. Configure your database custom user to have admin privilleges. It is mandatory because of the EntityFramework's (flawed?) design.
-
-This application creates the database by itself as long as the entered configurations are correct. Here is a checklist of things that you must do to ensure the server will work:
-   - Check if the address is valid.
-   - Check if the database is connectable.
-   - Check if the database instance is running. 
-   - Check if the user is valid and has admin privilleges.
-
-The easiest way to check these things is to connect using VS's Server Explorer, SQL Server Management Studio or any other database interface and then perform some quick operations
-like creating and then dropping a table on master using your newly creted user.
-
-Currently compatible databases:
-
-- SQL Server LocalDB (Installed automatically with VS Community 2019 or superior).
-- SQL Server Express
-- SQL Server (Recommended)
-
 <h2>Different things from the original game:</h2>
 
 <h3>Assets</h3>
@@ -119,9 +70,11 @@ Legend:
    - Incoming weather system has also a improved animation.
    - The incoming weather pointer shown atop of the screen can predict all incoming weather shown on the IncomingWeather menu. They also have a fade-in animation.
    - Some weather effects (tornado/force/mirror...) have a "infinite-scrolling" animation to make it look more "animated".
+   - Each player has a UNIQUE (or maybe not) chat color depending on the given nickname.
+   - Server message icons are no longer images, but glyphs from FontAwesome.
 
 5. Technical Information
-   - The resolution can be chanced. However, big resolutions that surpass the stage's foreground/background sprite size can break the camera and the parallaxing. Keep in mind that there is no solution to that since it is limited by its sprites dimensions.
+   - The resolution can be chanced. However, resolutions that surpass the stage's foreground/background sprite size can break the camera and the parallaxing. Keep in mind that there is no solution to that since it is limited by its sprites dimensions.
    - FPS is locked at 60 while the original game had lock at 30. The animations aren't rich enough to sustain bigger refresh rates.
    - The original game only supported the 800x600 resolution, hence, all the menus sprites were created for this resolution. In order to adapt the menus for bigger resolutions, I've scaled up all interface dynamically.
    - The game can be opened at window mode.
@@ -146,34 +99,7 @@ Legend:
    - [Testing] A few mobile projectiles and mobile animations are unsynched.
    - Weather animations are not fps proof. A laggy player can have different wind settings.
    - Maximum resolution can not be greater than 1600 width OR 1600 height.
-   - Tactical map offset can be bigger than the actual map.
 
 2. Server
    - There is no verification check on teams equality when a game is being started (INTENDED).
    - All servers are not smart enough to "re-attatch" the connections. In order to make it work again close it and open again in the same order described in Configurations & Setup.
-
-<h2>Contributors</h2>
-
-<h3>Developers</h3>
-
- - [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
- - [Icy Willow](https://github.com/IcyWillow/) (Vinícius Pontes) - Since 05/21/2020
-
-<h2>Bug Reports/Testers</h2>
-
- - [sdyalor](https://github.com/sdyalor)
-
-<h2>Licence and copyright</h2>
-
-All repositories/programs that copies this repository must include the following line:
-- Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
-
-Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
-
-This file is part of OpenBound.
-
-OpenBound is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-OpenBound is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.

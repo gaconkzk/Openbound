@@ -46,6 +46,22 @@ Currently compatible databases:
 - SQL Server Express
 - SQL Server (Recommended)
 
+<h2>Project Information</h2>
+
+There is a README.md explaining details for each kind of project.
+
+This project is divided in other 7 sub-projects. Here is a VERY resumed list of each project's goal.
+
+For further information read the README.md inside each project directory.
+
+ - GunboundImageFix - A set of tools for converting from encrypted & proprietary formats to PNG spritesheets. And other misc helpers used througout the project development.
+ - GunboundImageProcessing - Image library for trivial image processing like resizing, pixel comparison, conversion between matrixes and bitmaps, grayscales, a few filters and so on. This is mostly used as a helper/testing functions for GunboundImageFix.
+ - OpenBound - The game client itself.
+ - Openbound Game Server
+ - Openbound Login Server
+ - Openbound Lobby Server
+ - Network Object Library - Object library used in one or more game-related sub-projects.
+
 <h2>Contributors</h2>
 
 <h3>Developers</h3>
