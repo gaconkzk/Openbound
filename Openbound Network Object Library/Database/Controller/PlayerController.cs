@@ -69,7 +69,8 @@ namespace Openbound_Network_Object_Library.Database.Controller
 
                     if (!Crypter.CheckPassword(filter.Password, tmpPlayer.Password)) return null;
 
-                    tmpPlayer.Password = "";
+                    tmpPlayer.Email = null;
+                    tmpPlayer.Password = null;
 
                     if (tmpPlayer.Guild != null)
                         tmpPlayer.Guild.GuildMembers = null;
