@@ -33,7 +33,7 @@ namespace Openbound_Network_Object_Library.Entity
         public int WindForce;
         public int WindAngleDegrees;
 
-        public float WindAngleRadians => MathHelper.ToRadians(WindAngleDegrees);
+        public float WindAngleRadians => 0.01745f * WindAngleDegrees;
 
         public List<WeatherMetadata> CurrentWeatherList;
         public List<WeatherMetadata> IncomingWeatherList;
@@ -59,10 +59,10 @@ namespace Openbound_Network_Object_Library.Entity
 
         }
 
-        public Vector2 WindForceComponents()
+        public float[] WindForceComponents()
         {
             float waR = WindAngleRadians;
-            return new Vector2((float)Math.Cos(waR), (float)Math.Sin(waR)) * WindForce;
+            return new float[] { (float)Math.Cos(waR) * WindForce, (float)Math.Sin(waR) * WindForce };
         }
 
         internal void PassTurn(int RoomSize)

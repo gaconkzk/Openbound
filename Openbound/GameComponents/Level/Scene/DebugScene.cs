@@ -31,6 +31,8 @@ using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Common;
 using System.Diagnostics;
+using OpenBound.GameComponents.Interface.Interactive.GameList;
+using System.Data.OleDb;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -41,6 +43,8 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public PopupGameOptions optionsMenu;
         public PopupSelectMobile popupSelectMobile;
+
+        OnlineUserList oul;
 
         internal static void InitializeObjects()
         {
@@ -305,6 +309,8 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public DebugScene()
         {
+            oul = new OnlineUserList(new Vector2(-100, -100), new Vector2(300, 300));
+
             sceneTimespan = 1f;
             hasRequestedNextScene = false;
 
@@ -543,13 +549,25 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D4))
             {
+                Player p = new Player() { ID = number++, Nickname = sMobList[0].Owner.Nickname + r.Next(0, 10000), Guild = new Guild() {  Name = "jeba" + r.Next(0,100), Tag = "JEB" + r.Next(0,100) } };
+                oul.AppendNameplate(p);
+                plist.Add(p);
+            }
+
+            if (InputHandler.IsBeingPressed(Keys.D5))
+            {
+                Player p = plist[plist.Count / 2];
+                Console.WriteLine(p.Nickname);
+                oul.RemoveNameplate(p);
+                plist.Remove(p);
             }
 
             HUD.TextBoxes[0].Update(gameTime);
 
-            //UpdateTextBoxes(gameTime);
+            oul.Update();
         }
 
+        List<Player> plist = new List<Player>();
         string textBase = "abcdefgh";
         int number = 0;
 
@@ -560,6 +578,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public override void Draw(GameTime gameTime)
         {
+            oul.Draw(spriteBatch);
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
 

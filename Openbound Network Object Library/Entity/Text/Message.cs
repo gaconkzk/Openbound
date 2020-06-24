@@ -138,15 +138,18 @@ namespace Openbound_Network_Object_Library.Entity.Text
 
             for (int i = 0; i < text.Length - 1; i++)
             {
-                color ^= text[i];
-                color = color.RotateLeft(8);
+                color += text[i];
+                color = color.RotateLeft(i * 2);
             }
 
-            Color c = new Color(color);
-            c.A = (byte)(20 + c.A * 1.2);
-            c.R = (byte)(20 + c.R * 1.2);
-            c.B = (byte)(20 + c.B * 1.2);
-            c.G = (byte)(20 + c.G * 1.2);
+            //Removing the first 8 bits (alpha)
+            color /= 256;
+
+            Color c = new Color();
+            c.A = 255;
+            c.R = (byte)(20 + (color >>  0 & 255) * 1.2);
+            c.B = (byte)(20 + (color >>  8 & 255) * 1.2);
+            c.G = (byte)(20 + (color >> 16 & 255) * 1.2);
 
             return c;
         }

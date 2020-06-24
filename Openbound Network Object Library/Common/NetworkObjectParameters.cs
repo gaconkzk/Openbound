@@ -10,10 +10,10 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
-using Microsoft.Xna.Framework;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Openbound_Network_Object_Library.Common
 {

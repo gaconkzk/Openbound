@@ -166,7 +166,7 @@ namespace OpenBound.GameComponents.Pawn
                     if (gravityDelayTimer > Parameter.TankMovementGravityDelay)
                     {
                         //Wind-changing accumulated offset
-                        Vector2 wForce = (LevelScene.MatchMetadata != null) ? LevelScene.MatchMetadata.WindForceComponents() : Vector2.Zero;
+                        Vector2 wForce = (LevelScene.MatchMetadata != null) ? LevelScene.MatchMetadata.WindForceComponents().ToVector2() : Vector2.Zero;
 
                         windForceAccumulator = MathHelper.Clamp(windForceAccumulator + wForce.X / 45, -1, 1);
 

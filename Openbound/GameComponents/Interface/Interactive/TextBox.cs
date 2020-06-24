@@ -5,13 +5,14 @@ using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.General;
+using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace OpenBound.GameComponents.Interface.Text
+namespace OpenBound.GameComponents.Interface.Interactive
 {
     public class TextBox : IDisposable
     {
@@ -341,14 +342,14 @@ namespace OpenBound.GameComponents.Interface.Text
             if (scrollBar != null)
             {
                 compositeSpriteTextList[selectedIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
-                compositeSpriteTextList[startingRenderingIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
-                compositeSpriteTextList[Math.Max(finalRenderingIndex - 1, 0)].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                //compositeSpriteTextList[startingRenderingIndex].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
+                //compositeSpriteTextList[Math.Max(finalRenderingIndex - 1, 0)].ReplaceTextColor(Color.White, Parameter.TextColorTextBoxSelectedMessage);
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            scrollBar?.Draw(null, spriteBatch);
+            scrollBar?.Draw(spriteBatch);
             background.Draw(null, spriteBatch);
 
             //Draw only the necessary elements. The indexes are beingcalculated on UpdateTextPosition method.

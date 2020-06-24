@@ -636,6 +636,7 @@
     <Compile Include="GameComponents\Interface\Builder\IconBuilder.cs" />
     <Compile Include="GameComponents\Interface\IncomingWeather.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\GameList\OnlineUserList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\PlayerButton.cs" />
@@ -660,7 +661,7 @@
     <Compile Include="GameComponents\Interface\Delayboard.cs" />
     <Compile Include="GameComponents\Interface\Interactive\SliderBar.cs" />
     <Compile Include="GameComponents\Interface\Text\CompositeSpriteText.cs" />
-    <Compile Include="GameComponents\Interface\Text\TextBox.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\TextBox.cs" />
     <Compile Include="GameComponents\Interface\Text\TextField.cs" />
     <Compile Include="GameComponents\Interface\Interactive\General\ScrollBar.cs" />
     <Compile Include="GameComponents\Interface\WeatherDisplay.cs" />
