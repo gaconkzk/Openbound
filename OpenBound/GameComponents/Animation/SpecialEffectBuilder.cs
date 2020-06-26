@@ -189,41 +189,32 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
 
-        #region Mage
-        public static SpecialEffect RaonProjectile1(Vector2 position, float rotation)
+        #region RaonLauncher
+        public static SpecialEffect RaonLauncherProjectile1(Vector2 position, float rotation, Color color)
         {
             Flipbook fb = Flipbook.CreateFlipbook(
                 position, new Vector2(19, 21),
                 38, 42, "Graphics/Tank/RaonLauncher/Bullet1",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 20f },
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 0f },
                 true, DepthParameter.Projectile, rotation);
 
             SpecialEffect se = new SpecialEffect(fb, 0);
 
-            float transparency = 1;
-
-            se.UpdateAction += (specialEffect, gameTime) =>
-            {
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * 2;
-                se.Flipbook.SetTransparency(transparency);
-            };
-
-            SpecialEffectHandler.Add(se);
-
             return se;
         }
 
-        /*
-        public static void MageProjectile2Explosion(Vector2 position, float rotation)
+        
+        public static void RaonLauncherProjectile1Explosion(Vector2 position)
         {
-            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(82, 82), 143, 142, "Graphics/Special Effects/Tank/Mage/Flame2",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 17, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(94, 92), 169, 164, "Graphics/Special Effects/Tank/RaonLauncher/Flame1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
 
             SpecialEffect se = new SpecialEffect(fb, 1);
 
             SpecialEffectHandler.Add(se);
         }
 
+        /*
         public static void MageProjectile3Explosion(Vector2 position, float rotation)
         {
             Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(192.5f, 192), 385, 384, "Graphics/Special Effects/Tank/Mage/Flame3",

@@ -30,27 +30,23 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public static void Shot1(RaonLauncher mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(10, 0), 1 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(10, 0), 2 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(10, 0), 3 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(10, 0), 4 * MathHelper.PiOver2));
-
-            mobile.LastCreatedProjectileList[1].FlipbookList[0].SetCurrentFrame(5);
-            mobile.LastCreatedProjectileList[2].FlipbookList[0].SetCurrentFrame(10);
-            mobile.LastCreatedProjectileList[3].FlipbookList[0].SetCurrentFrame(15);
+            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 1 * MathHelper.PiOver2));
+            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 2 * MathHelper.PiOver2));
+            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 3 * MathHelper.PiOver2));
+            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 4 * MathHelper.PiOver2));
         }
     }
 
     public class RaonProjectile1 : Projectile
     {
         public RaonProjectile1(RaonLauncher mobile)
-            : base(mobile, ShotType.S1, Parameter.ProjectileTricoS2ExplosionRadius, Parameter.ProjectileTricoS2BaseDamage)
+            : base(mobile, ShotType.S1, Parameter.ProjectileRaonLauncherS1ExplosionRadius, Parameter.ProjectileRaonLauncherS1BaseDamage)
         {
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(19, 21),
                 38, 42, "Graphics/Tank/RaonLauncher/Bullet1",
-                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile, angle));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 15f } }, true, DepthParameter.Projectile, angle));
 
             FlipbookList[0].SetTransparency(0);
         }
@@ -58,39 +54,40 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            SpecialEffectBuilder.TricoProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
+            SpecialEffectBuilder.RaonLauncherProjectile1Explosion(FlipbookList[0].Position);
         }
     }
 
     public class RaonBaseProjectile1 : DummyProjectile
     {
-        List<SpecialEffect> specialEffectList;
-        Vector2 lastSpawnPosition;
+        //Special Effects
+        List<SpecialEffect> specialEffectList, toBeRemovedSpecialEffectList;
+        Vector2 lastSESpawnPosition;
 
         RaonProjectile1 projectile;
-
         float rotationAngle;
-
         Vector2 offset;
 
         public RaonBaseProjectile1(RaonLauncher mobile, Vector2 positionOffset, float rotationAngle)
             : base(mobile, ShotType.S1, 0, 0, canCollide: false)
         {
             projectile = new RaonProjectile1(mobile);
-            lastSpawnPosition = mobile.Crosshair.CannonPosition;
+
+            specialEffectList = new List<SpecialEffect>();
+            toBeRemovedSpecialEffectList = new List<SpecialEffect>();
+
+            lastSESpawnPosition = mobile.Crosshair.CannonPosition;
 
             this.rotationAngle = rotationAngle;
             offset = positionOffset;
-
-            specialEffectList = new List<SpecialEffect>();
 
             SpawnTime = 0.7f;
 
             projectile.OnFinalizeExecutionAction = OnFinalizeExecutionAction;
 
             //Physics/Trajectory setups
-            mass = Parameter.ProjectileTricoS2Mass;
-            windInfluence = Parameter.ProjectileTricoS2WindInfluence;
+            mass = Parameter.ProjectileRaonLauncherS1Mass;
+            windInfluence = Parameter.ProjectileRaonLauncherS1WindInfluence;
         }
 
         #region Weather
@@ -122,7 +119,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         //Electricity
         public override void OnBeginElectricityInteraction(Electricity electricity)
         {
-            //electricity.OnInteract(this);
             electricity.OnInteract(projectile);
             OnAfterUpdateAction = projectile.OnAfterUpdateAction;
         }
@@ -158,7 +154,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
 
-                rotationAngle += Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
+                rotationAngle -= 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
 
                 projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset * (float)Math.Sin(rotationAngle), Matrix.CreateRotationZ(FlipbookList[0].Rotation + MathHelper.PiOver2));
 
@@ -168,22 +164,33 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     break;
                 }
 
-                if (Helper.SquaredEuclideanDistance(lastSpawnPosition, projectile.Position) > 600)
+                if (Helper.SquaredEuclideanDistance(lastSESpawnPosition, projectile.Position) > 500)
                 {
-                    SpecialEffect se = SpecialEffectBuilder.RaonProjectile1(projectile.Position, projectile.CurrentFlipbookRotation);
-                    specialEffectList.Add(se);
-
-                    se.Flipbook.SetCurrentFrame(projectile.FlipbookList[0].GetCurrentFrame());
-
-                    lastSpawnPosition = projectile.Position;
+                    specialEffectList.Add(SpecialEffectBuilder.RaonLauncherProjectile1(projectile.Position, projectile.CurrentFlipbookRotation, projectile.FlipbookList[0].Color));
+                    lastSESpawnPosition = projectile.Position;
                 }
             }
+
+            //Animation
+            float transparency = 1;
+            for (int i = specialEffectList.Count - 1; i >= 0; i--)
+            {
+                specialEffectList[i].Flipbook.SetCurrentFrame(projectile.FlipbookList[0].GetCurrentFrame());
+                //I am using color mult because of weakness
+                specialEffectList[i].Flipbook.Color = projectile.FlipbookList[0].Color * (transparency -= 0.05f);
+
+                if (specialEffectList[i].Flipbook.Color == Color.Transparent)
+                    toBeRemovedSpecialEffectList.Add(specialEffectList[i]);
+            }
+
+            toBeRemovedSpecialEffectList.ForEach((x) => specialEffectList.Remove(x));
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
             projectile.Draw(gameTime, spriteBatch);
+            specialEffectList.ForEach((x) => x.Flipbook.Draw(gameTime, spriteBatch));
         }
     }
 

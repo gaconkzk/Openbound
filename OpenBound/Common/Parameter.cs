@@ -356,6 +356,23 @@ namespace OpenBound.Common
         public const float ProjectileKnightS2WindInfluence = 1.4f;
         public const float ProjectileKnightSSWindInfluence = 1.4f;
 
+        //Raon
+        public const int ProjectileRaonLauncherS1ExplosionRadius = 15;
+        public const int ProjectileRaonLauncherS2ExplosionRadius = 15;
+        public const int ProjectileRaonLauncherSSExplosionRadius = 15;
+
+        public const int ProjectileRaonLauncherS1BaseDamage = 100;
+        public const int ProjectileRaonLauncherS2BaseDamage = 200;
+        public const int ProjectileRaonLauncherSSBaseDamage = 300;
+
+        public const float ProjectileRaonLauncherS1Mass = 10f;
+        public const float ProjectileRaonLauncherS2Mass = 10f;
+        public const float ProjectileRaonLauncherSSMass = 10f;
+
+        public const float ProjectileRaonLauncherS1WindInfluence = 1.2f;
+        public const float ProjectileRaonLauncherS2WindInfluence = 1.2f;
+        public const float ProjectileRaonLauncherSSWindInfluence = 1.2f;
+
         //Trico
         public const int ProjectileTricoS1ExplosionRadius = 25;
         public const int ProjectileTricoS2ExplosionRadius = 25;
