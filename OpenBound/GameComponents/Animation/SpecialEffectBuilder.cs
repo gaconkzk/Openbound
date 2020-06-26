@@ -188,6 +188,62 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
         #endregion
+
+        #region Mage
+        public static SpecialEffect RaonProjectile1(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(
+                position, new Vector2(19, 21),
+                38, 42, "Graphics/Tank/RaonLauncher/Bullet1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 20f },
+                true, DepthParameter.Projectile, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 0);
+
+            float transparency = 1;
+
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds * 2;
+                se.Flipbook.SetTransparency(transparency);
+            };
+
+            SpecialEffectHandler.Add(se);
+
+            return se;
+        }
+
+        /*
+        public static void MageProjectile2Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(82, 82), 143, 142, "Graphics/Special Effects/Tank/Mage/Flame2",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 17, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void MageProjectile3Explosion(Vector2 position, float rotation)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(192.5f, 192), 385, 384, "Graphics/Special Effects/Tank/Mage/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 30, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency);
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+        */
+        #endregion
+
         #region Turtle
         public static void TurtleProjectile1Explosion(Vector2 position, float rotation)
         {

@@ -44,8 +44,6 @@ namespace OpenBound.GameComponents.Level.Scene
         public PopupGameOptions optionsMenu;
         public PopupSelectMobile popupSelectMobile;
 
-        OnlineUserList oul;
-
         internal static void InitializeObjects()
         {
             GameInformation.Instance.PlayerInformation = new Player()
@@ -72,7 +70,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Armor,
+                    PrimaryMobile = MobileType.RaonLauncher,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -309,8 +307,6 @@ namespace OpenBound.GameComponents.Level.Scene
 
         public DebugScene()
         {
-            oul = new OnlineUserList(new Vector2(140, 40), new Vector2(250, 166), backgroundAlpha: 0.5f);
-
             sceneTimespan = 1f;
             hasRequestedNextScene = false;
 
@@ -350,7 +346,7 @@ namespace OpenBound.GameComponents.Level.Scene
             mFlipbook = new List<MobileFlipbook>();
 
             for (int k = 0; k < 21; k++)
-                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.Lightning, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
+                mFlipbook.Add(MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncher, new Vector2(-500 + 100 * (k % 5), -500 + 100 * (k / 5))));
 
             int i = 0;
 
@@ -500,90 +496,22 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D1))
             {
-                float p1 = (float)Parameter.Random.NextDouble();
-                float p2 = (float)Parameter.Random.NextDouble();
-                //x ranging from 0.1f to 0.9f and
-                //y ranging from 0.4f to 0.9f, 1 - weatherMetadata.Position[1] is necessary because y axis is inverted
-                p1 = 0.1f + p1 * 0.9f;
-                p2 = 0.9f /*1 - (NetworkObjectParameters.WeatherThorMinimumOffsetY + p2 * NetworkObjectParameters.WeatherThorMaximumOffsetY)*/;
-                Vector2 nPos = Topography.FromNormalizedPositionToRelativePosition(new float[] { p1, p2 });
-                WeatherHandler.Add(WeatherType.Thor, nPos);
-                Console.WriteLine(nPos);
+
             }
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    HUD.OnReceiveMessageAsyncCallback(new PlayerMessage() { Player = sMobList[0].Owner, Text = textBase += "0" }, 0);
-                }
+
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
-                string text = "";
-                for (int i = 0xF000; i < 0xFFFF; i++)
-                    text += (char)i + " ";
 
-                var cm = new List<CustomMessage>(){
-                    new CustomMessage(){Text = "" + (char)0xf11b, TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.FontAwesome10 },
-                    new CustomMessage(){Text = "cha-la head chala", TextColor =  Color.White.PackedValue, TextBorderColor =  Color.Black.PackedValue, FontTextType = FontTextType.Consolas10 },
-                };
-
-                NetworkObjectParameters.GameServerInformation = new GameServerInformation();
-                NetworkObjectParameters.GameServerInformation.ServerName = "ASDASd";
-
-                var x = Message.CreateChannelWelcomeMessage(1);
-                var y = ObjectWrapper.ConvertObjectToByteArray(x, 4096);
-                var z = ObjectWrapper.ConvertByteArrayToObject<List<CustomMessage>>(y);
-
-                var y1 = ObjectWrapper.ConvertObjectToByteArray("" + (char)0xf11b, 4096);
-                var z1 = ObjectWrapper.ConvertByteArrayToObject<string>(y1);
-
-                //TextBoxes[1].AsyncAppendText(cm);
-
-                HUD.OnReceiveMessageAsyncCallback(cm, 1);
-
-                Console.WriteLine(number);
             }
-
-            if (InputHandler.IsBeingPressed(Keys.D4))
-            {
-                Player p = new Player() { ID = number++, Nickname = sMobList[0].Owner.Nickname + r.Next(0, 10000), Guild = new Guild() {  Name = "jeba" + r.Next(0,100), Tag = "JEB" + r.Next(0,100) } };
-                oul.AppendNameplate(p);
-                plist.Add(p);
-            }
-
-            if (InputHandler.IsBeingPressed(Keys.D5))
-            {
-                Player p = plist[plist.Count / 2];
-                Console.WriteLine(p.Nickname);
-                oul.RemoveNameplate(p);
-                plist.Remove(p);
-            }
-
-            if (InputHandler.IsBeingPressed(Keys.D6))
-            {
-                oul.Clear();
-            }
-
-            HUD.TextBoxes[0].Update(gameTime);
-
-            oul.Update();
-        }
-
-        List<Player> plist = new List<Player>();
-        string textBase = "abcdefgh";
-        int number = 0;
-
-        public void act(PlayerMessage o)
-        {
-            HUD.TextBoxes[0].AsyncAppendText(o);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            oul.Draw(spriteBatch);
             mFlipbook.ForEach((x) => x.Draw(gameTime, spriteBatch));
             base.Draw(gameTime);
 

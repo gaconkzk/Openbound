@@ -463,23 +463,23 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Blast/NakSS.mp3
 
-#begin Audio/SFX/Tank/Blast/RaonS1.mp3
+#begin Audio/SFX/Tank/Blast/RaonLauncherS1.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Blast/RaonS1.mp3
+/build:Audio/SFX/Tank/Blast/RaonLauncherS1.mp3
 
-#begin Audio/SFX/Tank/Blast/RaonS2.mp3
+#begin Audio/SFX/Tank/Blast/RaonLauncherS2.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Blast/RaonS2.mp3
+/build:Audio/SFX/Tank/Blast/RaonLauncherS2.mp3
 
-#begin Audio/SFX/Tank/Blast/RaonSS.mp3
+#begin Audio/SFX/Tank/Blast/RaonLauncherSS.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Blast/RaonSS.mp3
+/build:Audio/SFX/Tank/Blast/RaonLauncherSS.mp3
 
 #begin Audio/SFX/Tank/Blast/TricoS1.mp3
 /importer:Mp3Importer
@@ -697,17 +697,17 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Movement/NakUnable.mp3
 
-#begin Audio/SFX/Tank/Movement/Raon.mp3
+#begin Audio/SFX/Tank/Movement/RaonLauncher.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Movement/Raon.mp3
+/build:Audio/SFX/Tank/Movement/RaonLauncher.mp3
 
-#begin Audio/SFX/Tank/Movement/RaonUnable.mp3
+#begin Audio/SFX/Tank/Movement/RaonLauncherUnable.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Movement/RaonUnable.mp3
+/build:Audio/SFX/Tank/Movement/RaonLauncherUnable.mp3
 
 #begin Audio/SFX/Tank/Movement/Trico.mp3
 /importer:Mp3Importer
@@ -979,23 +979,23 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Shoot/NakSS.mp3
 
-#begin Audio/SFX/Tank/Shoot/RaonS1.mp3
+#begin Audio/SFX/Tank/Shoot/RaonLauncherS1.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Shoot/RaonS1.mp3
+/build:Audio/SFX/Tank/Shoot/RaonLauncherS1.mp3
 
-#begin Audio/SFX/Tank/Shoot/RaonS2.mp3
+#begin Audio/SFX/Tank/Shoot/RaonLauncherS2.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Shoot/RaonS2.mp3
+/build:Audio/SFX/Tank/Shoot/RaonLauncherS2.mp3
 
-#begin Audio/SFX/Tank/Shoot/RaonSS.mp3
+#begin Audio/SFX/Tank/Shoot/RaonLauncherSS.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Shoot/RaonSS.mp3
+/build:Audio/SFX/Tank/Shoot/RaonLauncherSS.mp3
 
 #begin Audio/SFX/Tank/Shoot/TricoS1.mp3
 /importer:Mp3Importer
@@ -4071,6 +4071,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/Random/CharacterSpritesheet.png
+
+#begin Graphics/Tank/RaonLauncher/Bullet1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/Bullet1.png
+
+#begin Graphics/Tank/RaonLauncher/Bullet2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/Bullet2.png
+
+#begin Graphics/Tank/RaonLauncher/Bullet3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/Bullet3.png
+
+#begin Graphics/Tank/RaonLauncher/CharacterSpritesheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/CharacterSpritesheet.png
 
 #begin Graphics/Tank/Trico/Bullet1.png
 /importer:TextureImporter

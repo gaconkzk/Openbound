@@ -694,6 +694,7 @@
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
+    <Compile Include="GameComponents\Pawn\UnitProjectiles\RaonLauncherProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ThorProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\TricoProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ArmorProjectile.cs" />
@@ -711,6 +712,7 @@
     <Compile Include="GameComponents\Pawn\Unit\Ice.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Lightning.cs" />
     <Compile Include="GameComponents\Pawn\ThorSatellite.cs" />
+    <Compile Include="GameComponents\Pawn\Unit\RaonLauncher.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Trico.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Turtle.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Mage.cs" />

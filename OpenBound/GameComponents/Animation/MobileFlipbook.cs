@@ -309,6 +309,46 @@ namespace OpenBound.GameComponents.Animation
                 }
             },
             #endregion
+            #region Raon Launcher
+            {
+                MobileType.RaonLauncher,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/17f } },
+
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 075, EndingFrame = 094, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 290, EndingFrame = 319, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 290, EndingFrame = 319, TimePerFrame = 1/29f } },
+
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 225, EndingFrame = 249, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 145, EndingFrame = 169, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 120, EndingFrame = 144, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 129, EndingFrame = 129, TimePerFrame = 1f } },
+
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 200, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 119, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 200, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 119, TimePerFrame = 1/26f } },
+
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 320, EndingFrame = 329, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 330, EndingFrame = 354, TimePerFrame = 1/20f } },
+
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 201, EndingFrame = 224, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 186, EndingFrame = 190, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 170, EndingFrame = 185, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 355, TimePerFrame = 1/18f } },
+                }
+            },
+            #endregion
             #region Trico
             {
                 MobileType.Trico,
@@ -505,6 +545,11 @@ namespace OpenBound.GameComponents.Animation
                 case MobileType.Knight:
                     mb.Flipbook = Flipbook.CreateFlipbook(
                         Position, new Vector2(59, 88), 2160 / 20, 2413 / 19, spritePath,
+                        new AnimationInstance(), true, DepthParameter.Mobile);
+                    break;
+                case MobileType.RaonLauncher:
+                    mb.Flipbook = Flipbook.CreateFlipbook(
+                        Position, new Vector2(64, 95), 2200 / 20, 2340 / 18, spritePath,
                         new AnimationInstance(), true, DepthParameter.Mobile);
                     break;
                 case MobileType.Trico:

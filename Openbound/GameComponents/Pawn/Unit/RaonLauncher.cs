@@ -22,13 +22,13 @@ using Openbound_Network_Object_Library.Models;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
-    public class Raon : Mobile
+    public class RaonLauncher : Mobile
     {
-        public Raon(Player player, Vector2 position) : base(player, MobileType.Raon)
+        public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher)
         {
             Position = position;
 
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Raon, position);
+            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncher, position);
 
             Movement.CollisionOffset = 22;
             Movement.MaximumStepsPerTurn = 90;
@@ -46,7 +46,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new RaonProjectile1(this));
+                RaonLauncherProjectileEmitter.Shot1(this);
             else if (SelectedShotType == ShotType.S2)
                 LastCreatedProjectileList.Add(new RaonProjectile2(this));
             else if (SelectedShotType == ShotType.SS)
