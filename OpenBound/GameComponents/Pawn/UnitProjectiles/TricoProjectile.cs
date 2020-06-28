@@ -188,11 +188,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 if (IsExternallyRefreshingPosition)
                 {
-                    offsetFactor = MathHelper.Max(offsetFactor - Parameter.ProjectileMovementTimeElapsedPerInteraction, 0);
+                    offsetFactor = MathHelper.Max(offsetFactor - 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction, 0);
                 }
                 else
                 {
-                    offsetFactor = MathHelper.Min(offsetFactor + Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
+                    offsetFactor = MathHelper.Min(offsetFactor + 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
                 }
 
                 base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);

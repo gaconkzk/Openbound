@@ -320,7 +320,7 @@ namespace OpenBound.GameComponents.PawnAction
             return false;
         }
 
-        public bool UpdateCollider(Vector2 position)
+        public virtual bool UpdateCollider(Vector2 position)
         {
             bool hasExploded = false;
 

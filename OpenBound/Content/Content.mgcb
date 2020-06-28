@@ -4156,6 +4156,30 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/RaonLauncher/CharacterSpritesheet.png
 
+#begin Graphics/Tank/RaonLauncher/MineS2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/MineS2.png
+
+#begin Graphics/Tank/RaonLauncher/MineSS.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Tank/RaonLauncher/MineSS.png
+
 #begin Graphics/Tank/Trico/Bullet1.png
 /importer:TextureImporter
 /processor:TextureProcessor

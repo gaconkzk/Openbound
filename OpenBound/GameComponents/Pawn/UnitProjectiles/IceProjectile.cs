@@ -63,8 +63,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public IceProjectile2(Ice mobile) : base(mobile, ShotType.S2, Parameter.ProjectileIceS2ExplosionRadius, Parameter.ProjectileIceS2BaseDamage)
         {
-            this.Mobile = mobile;
-
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16.5f, 17f),
@@ -102,8 +100,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public IceProjectile3(Ice mobile) : base(mobile, ShotType.SS, Parameter.ProjectileIceSSExplosionRadius, Parameter.ProjectileIceSSBaseDamage)
         {
-            this.Mobile = mobile;
-
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(38.5f, 35f),

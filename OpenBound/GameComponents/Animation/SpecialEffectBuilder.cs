@@ -214,6 +214,16 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
 
+        public static void RaonLauncherProjectile2Explosion(Vector2 position)
+        {
+            Flipbook fb = Flipbook.CreateFlipbook(position, new Vector2(96, 96), 157, 167, "Graphics/Special Effects/Tank/RaonLauncher/Flame2",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
+
         /*
         public static void MageProjectile3Explosion(Vector2 position, float rotation)
         {

@@ -35,6 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
+using OpenBound.GameComponents.Collision;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -50,6 +51,9 @@ namespace OpenBound.GameComponents.Pawn
 
         //Mobile Information
         public MobileMetadata MobileMetadata;
+
+        //Collision
+        public CollisionBox CollisionBox;
 
         //Projectiles
         public List<Projectile> ProjectileList;
@@ -75,9 +79,6 @@ namespace OpenBound.GameComponents.Pawn
         //IsActionsLocked
         public bool IsActionsLocked;
         bool hasShotSequenceStarted;
-
-        //Object References
-        public Player Owner;
 
         //Sound Effect
         public SoundEffect movingSE, unableToMoveSE;
@@ -126,7 +127,7 @@ namespace OpenBound.GameComponents.Pawn
 #endif
         }
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             //Must be called before Movement.Update()
             UpdateFlipbookRotation();
@@ -166,13 +167,13 @@ namespace OpenBound.GameComponents.Pawn
 #endif
         }
 
-        public virtual void PlayMovementSE(float pitch = 0, float pan = 0)
+        public new virtual void PlayMovementSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
                 AudioHandler.PlayUniqueSoundEffect(movingSE, () => MobileFlipbook.State == ActorFlipbookState.Moving, pitch: pitch, pan: pan);
         }
 
-        public virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
+        public new virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
                 AudioHandler.PlayUniqueSoundEffect(unableToMoveSE, () => MobileFlipbook.State == ActorFlipbookState.UnableToMove, pitch: pitch, pan: pan);
@@ -355,7 +356,7 @@ namespace OpenBound.GameComponents.Pawn
         }
 
         /// <summary>
-        /// Updates the flipbook rotation towards the normal
+        /// Updates the flipbook position depending on its rotation towards the normal
         /// </summary>
         public void UpdateFlipbookRotation()
         {
@@ -493,7 +494,7 @@ namespace OpenBound.GameComponents.Pawn
             else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
         }
 
-        public void ReceiveShock(int damage)
+        public override void ReceiveShock(int damage)
         {
             ChangeFlipbookState(ActorFlipbookState.BeingShocked, true);
 
@@ -515,7 +516,7 @@ namespace OpenBound.GameComponents.Pawn
             LevelScene.HUD.FloatingTextHandler.AddDamage(this, -damage);
         }
 
-        public void ReceiveDamage(int damage)
+        public override void ReceiveDamage(int damage)
         {
             //Play the "BeingDamaged" animation, then enqueue the stand animation
             switch (Parameter.Random.Next(0, 2))

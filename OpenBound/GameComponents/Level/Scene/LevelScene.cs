@@ -39,6 +39,7 @@ using OpenBound.GameComponents.Input;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Interface.Interactive;
+using OpenBound.GameComponents.Pawn.Unit;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -61,7 +62,13 @@ namespace OpenBound.GameComponents.Level.Scene
 
         //Game Constants/Information
         public static MatchMetadata MatchMetadata;
+        
+        //Mobile list
         public static List<Mobile> MobileList;
+
+        //Summoned list
+        public static List<Actor> MineList;
+        public static List<Actor> ToBeRemovedMineList;
 
         //Weather
         public static WeatherHandler WeatherHandler;
@@ -79,6 +86,9 @@ namespace OpenBound.GameComponents.Level.Scene
             MobileList = new List<Mobile>();
             WeatherHandler = new WeatherHandler();
             ThorSatellite = new ThorSatellite();
+
+            MineList = new List<Actor>();
+            ToBeRemovedMineList = new List<Actor>();
 
             //Popup related
             isLeaveGamePopupRendered = false;
@@ -450,6 +460,10 @@ namespace OpenBound.GameComponents.Level.Scene
                 HUD.Update(gameTime);
             }
 
+            MineList.ForEach((x) => x.Update(gameTime));
+            ToBeRemovedMineList.ForEach((x) => MineList.Remove(x));
+            ToBeRemovedMineList.Clear();
+
             UpdateBackgroundParallaxPosition();
 
             ThorSatellite.Update(gameTime);
@@ -471,6 +485,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
                 HUD.Draw(gameTime, spriteBatch);
             }
+
+            MineList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             ThorSatellite.Draw(gameTime, spriteBatch);
 

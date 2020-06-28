@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Collision;
 using OpenBound.GameComponents.Interface;
@@ -19,6 +20,8 @@ using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.PawnAction;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
@@ -48,12 +51,11 @@ namespace OpenBound.GameComponents.Pawn.Unit
             if (SelectedShotType == ShotType.S1)
                 RaonLauncherProjectileEmitter.Shot1(this);
             else if (SelectedShotType == ShotType.S2)
-                LastCreatedProjectileList.Add(new RaonProjectile2(this));
+                RaonLauncherProjectileEmitter.Shot2(this);
             else if (SelectedShotType == ShotType.SS)
                 LastCreatedProjectileList.Add(new RaonProjectile3(this));
 
             base.Shoot();
         }
-
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.PawnAction;
@@ -34,6 +35,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 2 * MathHelper.PiOver2));
             mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 3 * MathHelper.PiOver2));
             mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 4 * MathHelper.PiOver2));
+        }
+
+        public static void Shot2(RaonLauncher mobile)
+        {
+            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile, 3));
+            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile, -3));
         }
     }
 
@@ -65,7 +72,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         Vector2 lastSESpawnPosition;
 
         RaonProjectile1 projectile;
-        float rotationAngle;
+        float rotationAngle, offsetFactor;
         Vector2 offset;
 
         public RaonBaseProjectile1(RaonLauncher mobile, Vector2 positionOffset, float rotationAngle)
@@ -152,11 +159,20 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
+                if (IsExternallyRefreshingPosition)
+                {
+                    offsetFactor = MathHelper.Max(offsetFactor - 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction, 0);
+                }
+                else
+                {
+                    offsetFactor = MathHelper.Min(offsetFactor + 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction, 1);
+                }
+
                 base.UpdateMovementIteraction(Parameter.ProjectileMovementTimeElapsedPerInteraction);
 
                 rotationAngle -= 2 * Parameter.ProjectileMovementTimeElapsedPerInteraction * MathHelper.Pi;
 
-                projectile.FlipbookList[0].Position = Position + Vector2.Transform(offset * (float)Math.Sin(rotationAngle), Matrix.CreateRotationZ(FlipbookList[0].Rotation + MathHelper.PiOver2));
+                projectile.FlipbookList[0].Position = Position + offsetFactor * Vector2.Transform(offset * (float)Math.Sin(rotationAngle), Matrix.CreateRotationZ(FlipbookList[0].Rotation + MathHelper.PiOver2));
 
                 if (projectile.CheckOutOfBounds(projectile.FlipbookList[0].Position) || projectile.UpdateCollider(projectile.FlipbookList[0].Position))
                 {
@@ -196,30 +212,29 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
     public class RaonProjectile2 : Projectile
     {
-        public RaonProjectile2(RaonLauncher mobile) : base(mobile, ShotType.S2, Parameter.ProjectileIceS2ExplosionRadius, Parameter.ProjectileIceS2BaseDamage)
+        public RaonProjectile2(RaonLauncher mobile, float forceModifier)
+            : base(mobile, ShotType.S2, 0, 0, forceModifier: forceModifier)
         {
-            this.Mobile = mobile;
-
             //Initializing Flipbook
             FlipbookList.Add(Flipbook.CreateFlipbook(
-                mobile.Crosshair.CannonPosition, new Vector2(16.5f, 17f),
-                37, 34, "Graphics/Tank/Ice/Bullet2",
+                mobile.Crosshair.CannonPosition, new Vector2(15f, 15f),
+                33, 31, "Graphics/Tank/RaonLauncher/Bullet2",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
-                    { StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1 / 20f }
+                    { StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
                 }, true, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
-            mass = Parameter.ProjectileIceS2Mass;
-            windInfluence = Parameter.ProjectileIceS2WindInfluence;
+            mass = Parameter.ProjectileRaonLauncherS2Mass;
+            windInfluence = Parameter.ProjectileRaonLauncherS2WindInfluence;
 
-            SpawnTime = 0.2;
+            SpawnTime = 0.7;
         }
 
         protected override void Explode()
         {
-            SpecialEffectBuilder.IceProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();
+            LevelScene.MineList.Add(new RaonLauncherMine(Mobile, Position));
         }
 
         protected override void Destroy()
@@ -231,7 +246,41 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
         }
+
+        public override bool UpdateCollider(Vector2 position)
+        {
+            bool hasExploded = false;
+
+            //Check collision with ground
+            if (CanCollide && Topography.CheckCollision(position))
+            {
+                hasExploded = true;
+                Explode();
+#if Debug
+                debugCrosshair.Update(FlipbookList[0].Position);
+#endif
+            }
+
+            return hasExploded;
+        }
     }
+
+    public class RaonProjectile2Explosion : DummyProjectile
+    {
+        public RaonProjectile2Explosion(RaonLauncher mobile)
+         : base(mobile, ShotType.S2, Parameter.ProjectileRaonLauncherS2ExplosionRadius, Parameter.ProjectileRaonLauncherS2BaseDamage)
+        {
+            //Physics/Trajectory setups
+            mass = 1; windInfluence = 1;
+        }
+
+        protected override void Explode()
+        {
+            base.Explode();
+            SpecialEffectBuilder.RaonLauncherProjectile2Explosion(Position);
+        }
+    }
+
 
     public class RaonProjectile3 : Projectile
     {
