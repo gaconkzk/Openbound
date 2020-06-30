@@ -171,20 +171,11 @@ namespace OpenBound.GameComponents.Collision
             return Helper.SquaredEuclideanDistance(rPos, closestPosition);// < Radius;
         }
 
-        public void Update()
-        {
-            UpdateCorners();
-
-#if DEBUG
-            UpdateDebugElements();
-#endif
-        }
-
         /// <summary>
         /// This method refreshes the currentRotatedCorner vectors based on
         /// the desired Offset and the owner rotation and position on the scene.
         /// </summary>
-        public void UpdateCorners()
+        public void Update()
         {
             float rotation = owner.MobileFlipbook.Rotation;
 
@@ -199,6 +190,10 @@ namespace OpenBound.GameComponents.Collision
 
             rotatedCornerOffset = owner.MobileFlipbook.Position - rotatedBoxCenter
                 + Vector2.Transform(collisionOffset, Matrix.CreateRotationZ(rotation));
+
+#if DEBUG
+            UpdateDebugElements();
+#endif
         }
 
 #if DEBUG

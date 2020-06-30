@@ -43,21 +43,20 @@ namespace OpenBound.GameComponents.MobileAction.Motion
 
             Vector2 movVector = Mobile.Position - TargetPosition;
 
+            bool canMove = IsAbleToMove;
+
             //and move to the left
             if (movVector.X > 0)
             {
-                if (Mobile.Facing != Facing.Left)
-                    Mobile.Flip();
-
                 MoveSideways(Mobile.Facing);
             }
             else if (movVector.X < 0)
             {
-                if (Mobile.Facing != Facing.Right)
-                    Mobile.Flip();
-
                 MoveSideways(Mobile.Facing);
             }
+
+            if (canMove && !IsAbleToMove)
+                Mobile.ChangeFlipbookState(ActorFlipbookState.Activated, true);
         }
 
         public override void InvalidateMovementAttempt()

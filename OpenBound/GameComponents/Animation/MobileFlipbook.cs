@@ -58,6 +58,10 @@ namespace OpenBound.GameComponents.Animation
         Falling, //Drop
 
         All, //SFX
+
+        //Raon's Mine
+        Dormant,
+        Activated,
     }
 
     public class MobileFlipbook : Flipbook
@@ -353,11 +357,11 @@ namespace OpenBound.GameComponents.Animation
                 new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
                     //Normal
-                    { ActorFlipbookState.Stand,      new AnimationInstance(){ StartingFrame = 00, EndingFrame = 19, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    { ActorFlipbookState.Dormant,   new AnimationInstance(){ StartingFrame = 00, EndingFrame = 19, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                     //Active
-                    { ActorFlipbookState.ChargingS1, new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    { ActorFlipbookState.Activated, new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                     //Moving
-                    { ActorFlipbookState.Moving,     new AnimationInstance(){ StartingFrame = 37, EndingFrame = 48, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    { ActorFlipbookState.Moving,    new AnimationInstance(){ StartingFrame = 37, EndingFrame = 48, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                 }
             },
             #endregion

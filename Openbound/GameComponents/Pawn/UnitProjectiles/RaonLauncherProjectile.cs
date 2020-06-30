@@ -234,7 +234,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override void Explode()
         {
             base.Explode();
-            LevelScene.MineList.Add(new RaonLauncherMine(Mobile, Position));
+            LevelScene.MineList.Add(new RaonLauncherMine(Mobile, previousPosition));
         }
 
         protected override void Destroy()

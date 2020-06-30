@@ -481,7 +481,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F12))
             {
-
+                MineList[0].GrantTurn();
             }
 
             if (InputHandler.IsBeingPressed(Keys.F2))

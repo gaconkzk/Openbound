@@ -40,7 +40,7 @@ namespace OpenBound.GameComponents.Pawn
 {
     public abstract class Mobile : Actor
     {
-        public MobileFlipbook MobileFlipbook { get; set; }
+        public MobileFlipbook MobileFlipbook;
 
         // Mobile Name
         public MobileType MobileType;
@@ -222,7 +222,7 @@ namespace OpenBound.GameComponents.Pawn
                 Crosshair.HideElement();
         }
 
-        public void GrantTurn()
+        public virtual void GrantTurn()
         {
             LevelScene.MatchMetadata.CurrentTurnOwner = SyncMobile;
 
@@ -407,18 +407,21 @@ namespace OpenBound.GameComponents.Pawn
             }
         }
 
-        private bool IsStateMoving(ActorFlipbookState state) => state == ActorFlipbookState.MovingLowHealth || state == ActorFlipbookState.Moving;
-        private bool IsStateStand(ActorFlipbookState state) => state == ActorFlipbookState.Stand || state == ActorFlipbookState.StandLowHealth;
-        private bool IsStateShooting(ActorFlipbookState state) => state == ActorFlipbookState.ShootingS1 || state == ActorFlipbookState.ShootingS2 || state == ActorFlipbookState.ShootingSS;
-        private bool IsStateCharging(ActorFlipbookState state) => state == ActorFlipbookState.ChargingS1 || state == ActorFlipbookState.ChargingS2 || state == ActorFlipbookState.ChargingSS;
-        private bool IsStateBeingDamaged(ActorFlipbookState state) => state == ActorFlipbookState.BeingDamaged1 || state == ActorFlipbookState.BeingDamaged2 || state == ActorFlipbookState.DepletingShield || state == ActorFlipbookState.BeingFrozen || state == ActorFlipbookState.BeingShocked;
-        private bool IsStateEmoting(ActorFlipbookState state) => state == ActorFlipbookState.Emotion1 || state == ActorFlipbookState.Emotion2;
-        private bool IsStateDead(ActorFlipbookState state) => state == ActorFlipbookState.Dead;
-        private bool IsStateFalling(ActorFlipbookState state) => state == ActorFlipbookState.Falling;
-        private bool IsStateUnableToMove(ActorFlipbookState state) => state == ActorFlipbookState.UnableToMove;
-        private bool IsStateUsingItem(ActorFlipbookState state) => state == ActorFlipbookState.UsingItem;
+        protected bool IsStateMoving(ActorFlipbookState state) => state == ActorFlipbookState.MovingLowHealth || state == ActorFlipbookState.Moving;
+        protected bool IsStateStand(ActorFlipbookState state) => state == ActorFlipbookState.Stand || state == ActorFlipbookState.StandLowHealth;
+        protected bool IsStateShooting(ActorFlipbookState state) => state == ActorFlipbookState.ShootingS1 || state == ActorFlipbookState.ShootingS2 || state == ActorFlipbookState.ShootingSS;
+        protected bool IsStateCharging(ActorFlipbookState state) => state == ActorFlipbookState.ChargingS1 || state == ActorFlipbookState.ChargingS2 || state == ActorFlipbookState.ChargingSS;
+        protected bool IsStateBeingDamaged(ActorFlipbookState state) => state == ActorFlipbookState.BeingDamaged1 || state == ActorFlipbookState.BeingDamaged2 || state == ActorFlipbookState.DepletingShield || state == ActorFlipbookState.BeingFrozen || state == ActorFlipbookState.BeingShocked;
+        protected bool IsStateEmoting(ActorFlipbookState state) => state == ActorFlipbookState.Emotion1 || state == ActorFlipbookState.Emotion2;
+        protected bool IsStateDead(ActorFlipbookState state) => state == ActorFlipbookState.Dead;
+        protected bool IsStateFalling(ActorFlipbookState state) => state == ActorFlipbookState.Falling;
+        protected bool IsStateUnableToMove(ActorFlipbookState state) => state == ActorFlipbookState.UnableToMove;
+        protected bool IsStateUsingItem(ActorFlipbookState state) => state == ActorFlipbookState.UsingItem;
 
-        public void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
+        /// <summary>
+        /// Mobile's flipbook change state machine
+        /// </summary>
+        public virtual void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
         {
             if (IsHealthCritical)
             {
