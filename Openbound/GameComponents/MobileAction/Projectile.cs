@@ -26,7 +26,7 @@ using System;
 using System.Collections.Generic;
 using Random = OpenBound.GameComponents.WeatherEffect.Random;
 
-namespace OpenBound.GameComponents.PawnAction
+namespace OpenBound.GameComponents.MobileAction
 {
     public enum ProjectileAnimationState
     {

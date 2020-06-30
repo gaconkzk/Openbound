@@ -16,7 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
@@ -42,13 +42,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S1, Parameter.ProjectileTricoS1ExplosionRadius, Parameter.ProjectileTricoS1BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16, 16),
                 32, 32, "Graphics/Tank/Trico/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileTricoS1Mass;
@@ -80,10 +80,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S2, Parameter.ProjectileTricoS2ExplosionRadius, Parameter.ProjectileTricoS2BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16, 16),
                 32, 32, "Graphics/Tank/Trico/Bullet2",
-                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, true, DepthParameter.Projectile, angle));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1 / 20f } }, 
+                DepthParameter.Projectile, angle));
 
             FlipbookList[0].SetTransparency(0);
         }
@@ -233,11 +234,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             rotationExplosionOffset = mobile.Facing == Facing.Left ? -1 : 1;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(40, 17),
                 66, 36, "Graphics/Tank/Trico/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 7, TimePerFrame = 1/19f },
-                true, DepthParameter.Projectile, angle));
+                DepthParameter.Projectile, angle));
 
             hasExploded = false;
             explosionTimer = 0;

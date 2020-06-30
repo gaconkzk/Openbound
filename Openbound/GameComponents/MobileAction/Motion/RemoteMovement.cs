@@ -13,10 +13,11 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
 
-namespace OpenBound.GameComponents.Pawn.Remote
+namespace OpenBound.GameComponents.MobileAction.Motion
 {
     public class RemoteMovement : Movement
     {
@@ -31,7 +32,7 @@ namespace OpenBound.GameComponents.Pawn.Remote
             DesiredPositionQueue = new Queue<Vector2>();
         }
 
-        public void Update()
+        public override void Update()
         {
             ApplyGravity();
 

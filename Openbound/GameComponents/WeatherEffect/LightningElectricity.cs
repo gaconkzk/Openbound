@@ -2,7 +2,7 @@
 using OpenBound.Common;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {

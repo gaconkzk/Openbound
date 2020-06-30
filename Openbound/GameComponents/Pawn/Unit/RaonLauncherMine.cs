@@ -4,60 +4,63 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
+using Openbound_Network_Object_Library.Models;
 using System;
+using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenBound.GameComponents.Collision;
+using OpenBound.GameComponents.Level;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
-    public enum MineState
+    public class RaonLauncherMine : Mobile
     {
-        Dormant,
-        Active,
-        Moving,
-    }
+        //Necessary overrides to reuse mines as a mobile
 
-    public class RaonLauncherMine : Actor
-    {
-        protected static Dictionary<MineState, AnimationInstance> mineAnimationPresets = new Dictionary<MineState, AnimationInstance>()
-        {
-            { MineState.Dormant, new AnimationInstance(){ StartingFrame = 00, EndingFrame = 19, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
-            { MineState.Active,  new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
-            { MineState.Moving,  new AnimationInstance(){ StartingFrame = 37, EndingFrame = 48, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
-        };
 
         readonly Mobile mobile;
-        readonly Flipbook flipbook;
 
         Mobile target;
 
-        MineState mineState;
-
-        public new virtual Vector2 Position => flipbook.Position;
-
-        public RaonLauncherMine(Mobile mobile, Vector2 position) : base()
+        public RaonLauncherMine(Mobile mobile, Vector2 position) : base(mobile.Owner, MobileType.RaonLauncherMine, true)
         {
-            Owner = mobile.Owner;
             this.mobile = mobile;
 
-            mineState = MineState.Dormant;
+            Position = position;
 
-            LayerDepth = DepthParameter.Mobile;
-            
-            flipbook = Flipbook.CreateFlipbook(position -  5 * Vector2.UnitY, new Vector2(16, 25), 31, 29,
-                "Graphics/Tank/RaonLauncher/MineS2", mineAnimationPresets[mineState],
-                false, DepthParameter.Mobile);
+            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncherMine, position);
+
+            Movement.CollisionOffset = 10;
+            Movement.MaximumStepsPerTurn = 90;
+
+            //Unstuck mine
+            //Movement.MoveSideways(Facing.Left);
+            //Movement.MoveSideways(Facing.Right);
+
+            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 12, 12), new Vector2(0, 0));
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             UpdateProximity();
+            UpdateOutOfBounds();
         }
 
-        //public void Update
+
+        //Necessary overrides to reuse mines as a mobile
+        public override void UpdateSyncMobileToServer() { return; }
+
+        public void UpdateOutOfBounds()
+        {
+            if (Topography.IsNotInsideMapBoundaries(Position))
+                LevelScene.ToBeRemovedMineList.Add(this);
+        }
 
         public void UpdateProximity()
         {
@@ -74,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 }
             }
 
-            if (target.CollisionBox.CheckCollision(Position))
+            if (target.CollisionBox.CheckCollision(CollisionBox.Center))
             {
                 RaonProjectile2Explosion p = new RaonProjectile2Explosion((RaonLauncher)mobile);
                 p.Position = Position;
@@ -82,19 +85,14 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 LevelScene.ToBeRemovedMineList.Add(this);
             }
 
-            if (minDist < 1000 && mineState == MineState.Dormant)
+            if (minDist < 1000 && MobileFlipbook.State == ActorFlipbookState.Stand)
             {
-                flipbook.AppendAnimationIntoCycle(mineAnimationPresets[MineState.Active], true);
+                MobileFlipbook.ChangeState(ActorFlipbookState.ChargingS1, true);
             }
-            else if (mineState == MineState.Active)
+            else if (MobileFlipbook.State == ActorFlipbookState.ChargingS1)
             {
-                flipbook.AppendAnimationIntoCycle(mineAnimationPresets[MineState.Dormant], true);
+                MobileFlipbook.ChangeState(ActorFlipbookState.Stand, true);
             }
-        }
-
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            flipbook.Draw(gameTime, spriteBatch);
         }
 
         public override void ReceiveDamage(int damage)

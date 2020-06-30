@@ -3,7 +3,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;

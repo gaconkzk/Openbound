@@ -15,7 +15,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System;
@@ -47,12 +47,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public DragonProjectile(Dragon mobile, int damage, int blastRadius, float forceModifier, float angleModifier = 0, float spawnTime = 0) : base(mobile, ShotType.S1, blastRadius, damage, angleModifier: angleModifier, forceModifier: forceModifier)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, Vector2.One / 2,
                 1, 1, "Misc/Dummy",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             SpawnTime = spawnTime;
             FlipbookList[0].HideElement();
@@ -125,13 +125,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(19.5f, 19.5f),
                 39, 39, "Graphics/Tank/Dragon/Bullet3",
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                },
-                true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileDragonSSMass;
@@ -183,14 +182,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             double angle = (float)Helper.AngleBetween(finalPosition, initialPosition);
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 initialPosition, new Vector2(49.5f, 40),
                 99, 80, "Graphics/Tank/Dragon/Shot3",
                 new List<AnimationInstance>() {
                     new AnimationInstance() { StartingFrame =  0, EndingFrame = 17, TimePerFrame = 1/20f },
                     new AnimationInstance() { StartingFrame = 18, EndingFrame = 40, TimePerFrame = 1/20f },
-                },
-                true, DepthParameter.Projectile, Rotation: (float)angle));
+                }, DepthParameter.Projectile, rotation: (float)angle));
 
             SpawnTime = spawnTime;
 

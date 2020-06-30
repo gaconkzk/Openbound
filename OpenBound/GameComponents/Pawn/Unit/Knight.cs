@@ -16,7 +16,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Collision;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
 

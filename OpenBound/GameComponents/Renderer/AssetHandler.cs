@@ -180,7 +180,7 @@ namespace OpenBound.GameComponents.Renderer
 #if DEBUG
                 Console.WriteLine($"Resource not found: {path}");
 #endif
-                throw new Exception();
+                //throw new Exception();
             }
 
             return rAsset;

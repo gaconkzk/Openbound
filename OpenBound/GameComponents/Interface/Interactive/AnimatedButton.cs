@@ -483,10 +483,10 @@ namespace OpenBound.GameComponents.Interface.Interactive
             state = ButtonAnimationState.Normal;
             ShouldUpdate = true;
 
-            Flipbook = Flipbook.CreateFlipbook(position,
+            Flipbook = new Flipbook(position,
                 selectedPreset.Pivot,
                 selectedPreset.SpriteWidth, selectedPreset.SpriteHeight, selectedPreset.SpritePath,
-                selectedPreset.StatePreset[ButtonAnimationState.Normal], true, DepthParameter.InterfaceButton);
+                selectedPreset.StatePreset[ButtonAnimationState.Normal], DepthParameter.InterfaceButton);
 
             OnClick = onClick;
 

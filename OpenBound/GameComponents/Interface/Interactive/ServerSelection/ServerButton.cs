@@ -95,9 +95,9 @@ namespace OpenBound.GameComponents.Interface.Interactive.ServerSelection
 
             //Server Load Icon
             ServerStatusFlipbookIcon serverLoad = GetCurrentServerLoadIcon(serverInformation);
-            Flipbook icon = Flipbook.CreateFlipbook(
+            Flipbook icon = new Flipbook(
                 buttonPosition + new Vector2(130, 12), new Vector2(31, 37), 62, 58,
-                "Interface/InGame/Scene/ServerList/ServerStatusAnimatedIcon", serverLoad.FlipbookInstance, true, DepthParameter.InterfaceButtonAnimatedIcon);
+                "Interface/InGame/Scene/ServerList/ServerStatusAnimatedIcon", serverLoad.FlipbookInstance, DepthParameter.InterfaceButtonAnimatedIcon);
 
             flipbookList.Add(icon);
 

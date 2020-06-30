@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,12 +17,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, Vector2.One / 2,
                 1, 1, "Misc/Dummy",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
         }
 
         protected override void Destroy()

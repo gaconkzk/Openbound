@@ -16,7 +16,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
 

@@ -17,7 +17,7 @@ using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -170,7 +170,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
                 startingFrame++;
 
-                Flipbook fb = Flipbook.CreateFlipbook(currentOffset, flipbookPivot, (int)flipbookPivot.X * 2, (int)flipbookPivot.Y * 2, texturePath, animation, true, DepthParameter.WeatherEffect, rotation);
+                Flipbook fb = new Flipbook(currentOffset, flipbookPivot, (int)flipbookPivot.X * 2, (int)flipbookPivot.Y * 2, texturePath, animation, DepthParameter.WeatherEffect, rotation);
                 fb.Scale *= Scale;
                 flipbookList.Add(fb);
 

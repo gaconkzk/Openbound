@@ -16,7 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System;
@@ -215,11 +215,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.SS, Parameter.ProjectileTurtleSSExplosionRadius, Parameter.ProjectileTurtleSSBaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(26, 22.5f),
                 52, 45, "Graphics/Tank/Turtle/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile, angle));
+                DepthParameter.Projectile, angle));
 
             bubbleAnimation = ProjectileAnimationState.Closed;
 
@@ -282,11 +282,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.SS, Parameter.ProjectileTurtleSSEExplosionRadius, Parameter.ProjectileTurtleSSEBaseDamage, positionModifier)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 positionModifier, new Vector2(15, 13.5f),
                 30, 27, "Graphics/Tank/Turtle/Shot3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile, angle));
+                DepthParameter.Projectile, angle));
 
             FlipbookList[0].JumpToRandomAnimationFrame();
 

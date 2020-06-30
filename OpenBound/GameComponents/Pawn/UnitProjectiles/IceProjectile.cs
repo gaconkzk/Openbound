@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +27,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public IceProjectile1(Ice mobile) : base(mobile, ShotType.S1, Parameter.ProjectileIceS1ExplosionRadius, Parameter.ProjectileIceS1BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(17.5f, 12),
                 35, 24, "Graphics/Tank/Ice/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceS1Mass;
@@ -64,13 +64,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public IceProjectile2(Ice mobile) : base(mobile, ShotType.S2, Parameter.ProjectileIceS2ExplosionRadius, Parameter.ProjectileIceS2BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(16.5f, 17f),
                 37, 34, "Graphics/Tank/Ice/Bullet2",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceS2Mass;
@@ -101,13 +101,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public IceProjectile3(Ice mobile) : base(mobile, ShotType.SS, Parameter.ProjectileIceSSExplosionRadius, Parameter.ProjectileIceSSBaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(38.5f, 35f),
                 77, 70, "Graphics/Tank/Ice/Bullet3",
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f }
-                },
-                true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceSSMass;

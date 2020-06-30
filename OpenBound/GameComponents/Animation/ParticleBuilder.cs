@@ -90,8 +90,8 @@ namespace OpenBound.GameComponents.Animation
                 AnimationInstance animationInstance = new AnimationInstance();
                 animationInstance.StartingFrame = animationInstance.EndingFrame = Parameter.Random.Next(0, numberOfFrames);
 
-                flipbookList.Add(Flipbook.CreateFlipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
-                    particlePath, animationInstance, false, DepthParameter.Projectile));
+                flipbookList.Add(new Flipbook(Vector2.Zero, pivot, (int)(pivot.X * 2), (int)(pivot.Y * 2),
+                    particlePath, animationInstance, DepthParameter.Projectile));
             }
 
             return flipbookList;

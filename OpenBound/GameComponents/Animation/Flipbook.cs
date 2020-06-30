@@ -31,51 +31,57 @@ namespace OpenBound.GameComponents.Animation
 
         public AnimationInstance CurrentAnimationInstance => FlipbookAnimationList[currentAnimatedInstanceIndex].AnimationInstance;
 
-        private Flipbook() : base() { }
-
-        public static Flipbook CreateFlipbook(Vector2 Position, Vector2 Pivot,
-            int SpriteWidth, int SpriteHeight, string Texture2DPath,
-            List<AnimationInstance> AnimationCycle, bool RepeatAnimationCycle,
-            float LayerDepth, float Rotation = 0)
+        public Flipbook(Vector2 position, Vector2 pivot,
+            int spriteWidth, int SpriteHeight, string texture2DPath,
+            List<AnimationInstance> animationCycle,
+            float layerDepth, float rotation = 0) : base()
         {
-            Flipbook f = new Flipbook();
-
-            f.SpriteWidth = SpriteWidth;
-            f.SpriteHeight = SpriteHeight;
-            f.Texture2DPath = Texture2DPath;
-            f.Rotation = Rotation;
-            f.AnimationCycle = AnimationCycle;
-
-            f.Position = Position;
-            f.Pivot = Pivot;
-
-            f.currentAnimatedInstanceIndex = 0;
-            f.repeatAnimationCycle = false;
-
-            f.LayerDepth = LayerDepth;
-            f.Effect = SpriteEffects.None;
-
-            f.Texture2D = AssetHandler.Instance.RequestTexture(Texture2DPath);
-
-            f.FlipbookAnimationList = new List<FlipbookAnimation>();
-
-            f.CreateFlipbookInstances();
-
-            f.framesPerLine = (int)(f.Texture2D.Width / SpriteWidth);
-
-            return f;
+            CreateFlipbook(this, position, pivot,
+            spriteWidth, SpriteHeight, texture2DPath,
+            animationCycle, layerDepth, rotation);
         }
 
-        public static Flipbook CreateFlipbook(Vector2 Position, Vector2 Pivot,
-            int SpriteWidth, int SpriteHeight, string Texture2DPath,
-            AnimationInstance Animation, bool RepeatAnimationCycle, float LayerDepth,
-            float Rotation = 0)
+        public Flipbook(Vector2 position, Vector2 pivot,
+            int spriteWidth, int spriteHeight, string texture2DPath,
+            AnimationInstance animationInstance,
+            float layerDepth, float rotation = 0) : base()
         {
-            List<AnimationInstance> lAnm = new List<AnimationInstance>();
-            if (Animation != null) lAnm.Add(Animation);
+            List<AnimationInstance> aiL = new List<AnimationInstance>();
+            aiL.Add(animationInstance);
 
-            return CreateFlipbook(Position, Pivot, SpriteWidth, SpriteHeight, Texture2DPath,
-                lAnm, RepeatAnimationCycle, LayerDepth, Rotation);
+            CreateFlipbook(this, position, pivot,
+            spriteWidth, spriteHeight, texture2DPath,
+            aiL, layerDepth, rotation);
+        }
+
+        private static void CreateFlipbook(Flipbook flipbook,
+            Vector2 Position, Vector2 Pivot,
+            int SpriteWidth, int SpriteHeight, string Texture2DPath,
+            List<AnimationInstance> AnimationCycle,
+            float LayerDepth, float Rotation = 0)
+        {
+            flipbook.SpriteWidth = SpriteWidth;
+            flipbook.SpriteHeight = SpriteHeight;
+            flipbook.Texture2DPath = Texture2DPath;
+            flipbook.Rotation = Rotation;
+            flipbook.AnimationCycle = AnimationCycle;
+
+            flipbook.Position = Position;
+            flipbook.Pivot = Pivot;
+
+            flipbook.currentAnimatedInstanceIndex = 0;
+            flipbook.repeatAnimationCycle = false;
+
+            flipbook.LayerDepth = LayerDepth;
+            flipbook.Effect = SpriteEffects.None;
+
+            flipbook.Texture2D = AssetHandler.Instance.RequestTexture(Texture2DPath);
+
+            flipbook.FlipbookAnimationList = new List<FlipbookAnimation>();
+
+            flipbook.CreateFlipbookInstances();
+
+            flipbook.framesPerLine = flipbook.Texture2D.Width / SpriteWidth;
         }
 
         public void JumpToRandomAnimationFrame()

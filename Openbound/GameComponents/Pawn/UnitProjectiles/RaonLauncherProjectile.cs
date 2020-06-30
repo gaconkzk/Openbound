@@ -17,7 +17,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
@@ -50,10 +50,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S1, Parameter.ProjectileRaonLauncherS1ExplosionRadius, Parameter.ProjectileRaonLauncherS1BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(19, 21),
                 38, 42, "Graphics/Tank/RaonLauncher/Bullet1",
-                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 15f } }, true, DepthParameter.Projectile, angle));
+                new List<AnimationInstance>() { new AnimationInstance() { StartingFrame = 0, EndingFrame = 39, TimePerFrame = 1 / 15f } }, DepthParameter.Projectile, angle));
 
             FlipbookList[0].SetTransparency(0);
         }
@@ -182,7 +182,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
                 if (Helper.SquaredEuclideanDistance(lastSESpawnPosition, projectile.Position) > 500)
                 {
-                    specialEffectList.Add(SpecialEffectBuilder.RaonLauncherProjectile1(projectile.Position, projectile.CurrentFlipbookRotation, projectile.FlipbookList[0].Color));
+                    specialEffectList.Add(SpecialEffectBuilder.RaonLauncherProjectile1(projectile.Position, projectile.CurrentFlipbookRotation));
                     lastSESpawnPosition = projectile.Position;
                 }
             }
@@ -216,13 +216,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S2, 0, 0, forceModifier: forceModifier)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(15f, 15f),
                 33, 31, "Graphics/Tank/RaonLauncher/Bullet2",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileRaonLauncherS2Mass;
@@ -289,13 +289,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(38.5f, 35f),
                 77, 70, "Graphics/Tank/Ice/Bullet3",
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f }
-                },
-                true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileIceSSMass;

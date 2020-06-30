@@ -16,7 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
@@ -197,11 +197,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S1, Parameter.ProjectileMageS2ExplosionRadius, Parameter.ProjectileMageS2BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(27, 27),
                 54, 54, "Graphics/Tank/Mage/Bullet3",
                 new AnimationInstance() { StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f },
-                true, DepthParameter.Projectile, angle));
+                DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileMageS2Mass;

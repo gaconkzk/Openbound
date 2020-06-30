@@ -13,6 +13,8 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.MobileAction;
+using OpenBound.GameComponents.MobileAction.Motion;
 using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Models;
 

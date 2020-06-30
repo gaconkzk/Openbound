@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Level.Scene;

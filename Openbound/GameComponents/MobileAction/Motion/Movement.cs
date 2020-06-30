@@ -16,11 +16,12 @@ using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System;
 using System.Linq;
 
-namespace OpenBound.GameComponents.Pawn
+namespace OpenBound.GameComponents.MobileAction.Motion
 {
     /// <summary>
     /// The method collisions are now calculated must be re-created to mimic.
@@ -123,15 +124,20 @@ namespace OpenBound.GameComponents.Pawn
             }
             else
             {
-                //Sync
-                if (Mobile.MobileFlipbook.State != ActorFlipbookState.UnableToMove)
-                    Mobile.ForceSynchronize = true;
-
-                Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
-                Mobile.PlayUnableToMoveSE();
+                InvalidateMovementAttempt();
             }
 
             IsAbleToMove = RemainingStepsThisTurn > 0;
+        }
+
+        public virtual void InvalidateMovementAttempt()
+        {
+            //Sync
+            if (Mobile.MobileFlipbook.State != ActorFlipbookState.UnableToMove)
+                Mobile.ForceSynchronize = true;
+
+            Mobile.ChangeFlipbookState(ActorFlipbookState.UnableToMove, true);
+            Mobile.PlayUnableToMoveSE();
         }
 
         public void ApplyGravity()
@@ -222,7 +228,6 @@ namespace OpenBound.GameComponents.Pawn
         /// <summary>
         ///Update mobile standing angle based on the projections defined by ParameterCalculationOffsetX/Y
         /// </summary>
-        /// <param name="CollidableForegroundMatrix"></param>
         public void UpdateAngle()
         {
             Vector2 leftNotCollidablePosition, rightNotCollidablePosition;
@@ -327,10 +332,13 @@ namespace OpenBound.GameComponents.Pawn
                 newRot = 0;
 
             //Crosshair Angle
-            Mobile.Crosshair.UpdateCrosshairPointerAngle(Mobile.MobileFlipbook.Rotation - newRot);
+            if (Mobile.Crosshair != null)
+                Mobile.Crosshair.UpdateCrosshairPointerAngle(Mobile.MobileFlipbook.Rotation - newRot);
 
             //Tank Rotation
             Mobile.MobileFlipbook.Rotation = newRot;
         }
+
+        public abstract void Update();
     }
 }

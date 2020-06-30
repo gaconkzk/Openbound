@@ -51,6 +51,7 @@ namespace Openbound_Network_Object_Library.Entity
         Phoenix,
 
         RaonLauncher, //10
+        RaonLauncherMine,
 
         ShadowWalker,
 

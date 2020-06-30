@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 
 namespace OpenBound.GameComponents.WeatherEffect

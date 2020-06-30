@@ -24,9 +24,7 @@ using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.Pawn.Local;
-using OpenBound.GameComponents.Pawn.Remote;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.Renderer;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Entity;
@@ -36,6 +34,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.Collision;
+using OpenBound.GameComponents.MobileAction.Motion;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -64,7 +63,7 @@ namespace OpenBound.GameComponents.Pawn
 
         public ShotType SelectedShotType;
 
-        public bool IsHealthCritical => MobileMetadata.CurrentHealth / MobileMetadata.BaseHealth < Parameter.HealthBarLowHealthThreshold;
+        public bool IsHealthCritical => MobileMetadata != null && (MobileMetadata.CurrentHealth / MobileMetadata.BaseHealth < Parameter.HealthBarLowHealthThreshold);
         public bool IsEnemy => Owner.PlayerTeam != GameInformation.Instance.PlayerInformation.PlayerTeam;
 
         public SyncMobile SyncMobile;
@@ -75,6 +74,7 @@ namespace OpenBound.GameComponents.Pawn
         public bool IsPlayable;
         public bool IsAbleToShoot;
         public bool IsAlive;
+        public bool IsSummon;
 
         //IsActionsLocked
         public bool IsActionsLocked;
@@ -89,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, MobileType mobileType) : base()
+        public Mobile(Player player, MobileType mobileType, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -101,10 +101,14 @@ namespace OpenBound.GameComponents.Pawn
             movingSE = AssetHandler.Instance.RequestSoundEffect(SoundEffectParameter.MobileMovement(mobileType));
             unableToMoveSE = AssetHandler.Instance.RequestSoundEffect(SoundEffectParameter.MobileUnableToMove(mobileType));
 
-            IsPlayable = GameInformation.Instance.IsOwnedByPlayer(this);
+            this.IsSummon = IsSummon;
+
+            IsPlayable = GameInformation.Instance.IsOwnedByPlayer(this) && !IsSummon;
 
             if (IsPlayable)
                 Movement = new LocalMovement(this);
+            else if (IsSummon)
+                Movement = new AutomatedMovement(this);
             else
                 Movement = new RemoteMovement(this);
 
@@ -134,10 +138,7 @@ namespace OpenBound.GameComponents.Pawn
 
             SyncPosition = Position;
 
-            if (IsPlayable)
-                ((LocalMovement)Movement).Update();
-            else
-                ((RemoteMovement)Movement).Update();
+            Movement.Update();
 
             if (IsPlayable && IsAbleToShoot)
             {
@@ -148,7 +149,7 @@ namespace OpenBound.GameComponents.Pawn
                 SyncShootHandler();
             }
 
-            if (IsAlive) Crosshair.Update(gameTime);
+            if (IsAlive && Crosshair != null) Crosshair.Update(gameTime);
 
             ProjectileList.ForEach((x) => x.Update());
             UnusedProjectile.ForEach((x) => ProjectileList.Remove(x));
@@ -246,7 +247,7 @@ namespace OpenBound.GameComponents.Pawn
         {
             base.Flip();
             MobileFlipbook.Flip();
-            Crosshair.Flip();
+            Crosshair?.Flip();
         }
 
         public void SendRequestToServer()
@@ -596,7 +597,7 @@ namespace OpenBound.GameComponents.Pawn
         public new virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
         {
             MobileFlipbook.Draw(GameTime, SpriteBatch);
-            if (IsAlive) Crosshair.Draw(null, SpriteBatch);
+            if (IsAlive) Crosshair?.Draw(null, SpriteBatch);
 
             ProjectileList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
         }
