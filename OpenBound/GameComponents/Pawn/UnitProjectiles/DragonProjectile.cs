@@ -79,7 +79,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.DragonProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
@@ -139,7 +139,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.3f;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -222,7 +222,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }                
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 

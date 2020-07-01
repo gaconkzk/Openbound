@@ -68,7 +68,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             trace.Update(FlipbookList[0].Position, Vector2.Zero, FlipbookList[0].Rotation, 0, 0);
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TurtleProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
@@ -162,7 +162,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
         #endregion
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TurtleProjectile2Explosion(trace.Position, FlipbookList[0].Rotation);
@@ -259,7 +259,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TurtleProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
@@ -316,7 +316,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                 GameScene.Camera.TrackObject(Mobile.ProjectileList.Union(Mobile.LastCreatedProjectileList).First());
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TurtleProjectile3EExplosion(FlipbookList[0].Position, FlipbookList[0].Rotation);

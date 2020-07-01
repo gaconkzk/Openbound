@@ -58,7 +58,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             FlipbookList[0].SetTransparency(0);
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.RaonLauncherProjectile1Explosion(FlipbookList[0].Position);
@@ -231,7 +231,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             LevelScene.MineList.Add(new RaonLauncherMine(Mobile, previousPosition));
@@ -274,7 +274,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             mass = 1; windInfluence = 1;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.RaonLauncherProjectile2Explosion(Position);
@@ -303,7 +303,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.IceProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

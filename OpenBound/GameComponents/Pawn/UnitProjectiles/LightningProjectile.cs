@@ -42,7 +42,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileLightningS1WindInfluence;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -95,7 +95,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.2;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -144,7 +144,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();

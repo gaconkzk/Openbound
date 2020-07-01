@@ -388,7 +388,7 @@ namespace OpenBound.GameComponents.MobileAction
         /// This method is called when the projectile collides with a collidable surface
         /// must be overwriten to perform extra actions.
         /// </summary>
-        protected virtual void Explode()
+        public virtual void Explode()
         {
             OnExplodeAction?.Invoke();
 

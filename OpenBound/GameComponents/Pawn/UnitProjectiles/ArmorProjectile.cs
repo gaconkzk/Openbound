@@ -40,7 +40,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             windInfluence = Parameter.ProjectileArmorS1WindInfluence;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
@@ -83,7 +83,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.6;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile2Explosion(FlipbookList[0].Position);
             base.Explode();
@@ -186,7 +186,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

@@ -56,7 +56,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             trace.Update(FlipbookList[0].Position, Vector2.Zero, FlipbookList[0].Rotation, 0, 0);
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.MageProjectile1Explosion(FlipbookList[0].Position, 0);
@@ -103,7 +103,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             traceOffset = new Vector2(0, 15);
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.MageProjectile2Explosion(trace.Position, 0);
@@ -220,7 +220,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             return 0;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 

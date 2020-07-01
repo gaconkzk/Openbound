@@ -77,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.BigfootProjectile1Explosion(FlipbookList[0].Position);
@@ -119,7 +119,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile2Explosion(FlipbookList[0].Position);
             base.Explode();
@@ -160,7 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.BigfootProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

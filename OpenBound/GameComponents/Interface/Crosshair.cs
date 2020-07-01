@@ -565,6 +565,8 @@ namespace OpenBound.GameComponents.Interface
 
             crosshairPreset.CannonOffsetRotation = -crosshairPreset.CannonOffsetRotation;
             crosshairPreset.CannonOffsetDistance = -crosshairPreset.CannonOffsetDistance;
+
+            crosshairDesiredRotation += MathHelper.Pi;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

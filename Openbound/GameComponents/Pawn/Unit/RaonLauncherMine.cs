@@ -21,12 +21,12 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class RaonLauncherMine : Mobile
     {
-        //Necessary overrides to reuse mines as a mobile
-
-
         readonly Mobile mobile;
 
         Mobile target;
+        float freezeTime;
+
+        private List<RaonLauncherMine> extraMineList;
 
         public RaonLauncherMine(Mobile mobile, Vector2 position) : base(mobile.Owner, MobileType.RaonLauncherMine, true)
         {
@@ -43,25 +43,57 @@ namespace OpenBound.GameComponents.Pawn.Unit
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 12, 12), new Vector2(0, 0));
         }
 
+        //Necessary overrides to reuse mines as a mobile
         public override void Update(GameTime gameTime)
         {
+            if (Movement.IsAbleToMove && freezeTime <= 0.5f)
+            {
+                freezeTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                return;
+            }
+
             base.Update(gameTime);
             UpdateProximity();
             UpdateOutOfBounds();
         }
 
-        //Necessary overrides to reuse mines as a mobile
+        public void GrantTurn(List<RaonLauncherMine> extraMineList)
+        {
+            this.extraMineList = extraMineList;
+            GrantTurn();
+        }
+
+        public override void GrantTurn()
+        {
+            freezeTime = 0;
+            Movement.RemainingStepsThisTurn = Movement.MaximumStepsPerTurn;
+            Movement.IsAbleToMove = true;
+            GameScene.Camera.TrackObject(this);
+        }
+
+        public override void LoseTurn()
+        {
+            //If it has died before its turn has reached
+            if (extraMineList == null) return;
+
+            extraMineList.Remove(this);
+
+            if (extraMineList.Count > 0)
+                extraMineList[0].GrantTurn(extraMineList);
+            else
+                mobile.GrantTurn();
+        }
+
         public override void PlayMovementSE(float pitch = 0, float pan = 0)
         {
-            AudioHandler.PlayUniqueSoundEffect(movingSE, () => Movement.IsAbleToMove, pitch: pitch, pan: pan);
+            AudioHandler.PlayUniqueSoundEffect(movingSE, () => Movement.IsAbleToMove && !Movement.IsFalling, pitch: pitch, pan: pan);
         }
 
         public override void UpdateSyncMobileToServer() { return; }
 
         public void UpdateOutOfBounds()
         {
-            if (Topography.IsNotInsideMapBoundaries(Position))
-                Die();
+            if (Topography.IsNotInsideMapBoundaries(Position)) Die();
         }
 
         private bool IsStateDormant(ActorFlipbookState state) => state == ActorFlipbookState.Dormant;
@@ -70,27 +102,11 @@ namespace OpenBound.GameComponents.Pawn.Unit
         public override void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
         {
             if (NewState == MobileFlipbook.State || NewState == ActorFlipbookState.Stand || NewState == ActorFlipbookState.Falling) return;
-            /*
-            if (
-                (IsStateDormant(MobileFlipbook.State) && IsStateActivated(NewState)) ||
-                (IsStateDormant(MobileFlipbook.State) && IsStateActivated(NewState)) ||
-                (IsStateActivated(MobileFlipbook.State) && IsStateActivated(NewState)) ||
-                Force
-                )
-            {*/
             MobileFlipbook.ChangeState(NewState, Force);
-            //}
-        }
-
-        public override void GrantTurn()
-        {
-            Movement.RemainingStepsThisTurn = Movement.MaximumStepsPerTurn;
-            Movement.IsAbleToMove = true;
         }
 
         public void UpdateProximity()
         {
-            Console.WriteLine(Position + " " + MobileFlipbook.Position);
             float minDist = float.MaxValue;
 
             foreach(Mobile m in LevelScene.MobileList)
@@ -107,12 +123,12 @@ namespace OpenBound.GameComponents.Pawn.Unit
             if (target.CollisionBox.CheckCollision(CollisionBox.Center))
             {
                 RaonProjectile2Explosion p = new RaonProjectile2Explosion((RaonLauncher)mobile);
-                p.Position = Position;
-                p.UpdateCollider(Position);
+                p.Position = CollisionBox.Center;
+                p.Explode();
                 Die();
             }
 
-            if (minDist < 8100)
+            if (minDist < 8100 * 8)
             {
                 if (Position.X - target.Position.X < 0 && Facing == Facing.Left)
                     Flip();
@@ -142,7 +158,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
             //Change the state to force the SE thread to stop
             Movement.IsAbleToMove = false;
 
+            //Grants turn to the next mine or mobile
             LevelScene.ToBeRemovedMineList.Add(this);
+
+            LoseTurn();
         }
     }
 }

@@ -42,7 +42,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7f;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.IceProjectile1Explosion(FlipbookList[0].Position, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
@@ -79,7 +79,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.2;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.IceProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();
@@ -115,7 +115,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.IceProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

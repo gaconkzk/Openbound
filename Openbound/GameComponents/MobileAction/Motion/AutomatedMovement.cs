@@ -56,12 +56,15 @@ namespace OpenBound.GameComponents.MobileAction.Motion
             }
 
             if (canMove && !IsAbleToMove)
+            {
                 Mobile.ChangeFlipbookState(ActorFlipbookState.Activated, true);
+                Mobile.LoseTurn();
+            }
         }
 
         public override void InvalidateMovementAttempt()
         {
-            IsAbleToMove = false;
+            RemainingStepsThisTurn = 0;
         }
     }
 }

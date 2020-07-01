@@ -57,7 +57,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.7;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TricoProjectile1Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
@@ -89,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             FlipbookList[0].SetTransparency(0);
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.TricoProjectile2Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);

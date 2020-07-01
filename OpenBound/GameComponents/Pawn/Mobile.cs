@@ -171,7 +171,7 @@ namespace OpenBound.GameComponents.Pawn
         public new virtual void PlayMovementSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
-                AudioHandler.PlayUniqueSoundEffect(movingSE, () => MobileFlipbook.State == ActorFlipbookState.Moving, pitch: pitch, pan: pan);
+                AudioHandler.PlayUniqueSoundEffect(movingSE, () => IsStateMoving(MobileFlipbook.State), pitch: pitch, pan: pan);
         }
 
         public new virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
@@ -208,7 +208,7 @@ namespace OpenBound.GameComponents.Pawn
             ///ServerInformationHandler.RequestNextPlayerTurn();
         }
 
-        public void LoseTurn()
+        public virtual void LoseTurn()
         {
             Movement.IsAbleToMove = false;
             LevelScene.HUD.LoseTurn();

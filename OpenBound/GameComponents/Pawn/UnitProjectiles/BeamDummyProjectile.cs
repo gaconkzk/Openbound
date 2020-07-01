@@ -185,7 +185,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -202,7 +202,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public LightningBaseProjectile(Mobile mobile, Vector2 parentPosition, float beamAngle, int explosionRadius, int extraExplosionRadius, int baseDamage, int extraDamage, bool isWeather = false)
             : base(mobile, parentPosition, beamAngle, explosionRadius, extraExplosionRadius, baseDamage, extraDamage, BeamEmitterType.Lightning) { }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 

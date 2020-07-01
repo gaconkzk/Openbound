@@ -43,7 +43,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             Mobile.Satellite.AttackingTarget = FlipbookList[0];
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -128,7 +128,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             Mobile.Satellite.AttackingTarget = FlipbookList[0];
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 

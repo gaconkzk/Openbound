@@ -15,7 +15,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.thor = thor;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 

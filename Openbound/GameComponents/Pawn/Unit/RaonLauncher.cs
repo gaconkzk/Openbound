@@ -22,11 +22,15 @@ using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
 using System.Collections;
 using System.Collections.Generic;
+using OpenBound.GameComponents.Level.Scene;
+using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class RaonLauncher : Mobile
     {
+        bool mineTurn;
+
         public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher)
         {
             Position = position;
@@ -39,6 +43,30 @@ namespace OpenBound.GameComponents.Pawn.Unit
             Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(2, 0));
+
+            mineTurn = true;
+        }
+
+        public override void GrantTurn()
+        {
+            if (mineTurn)
+            {
+                List<RaonLauncherMine> ownedMines = LevelScene
+                    .MineList.Except(LevelScene.ToBeRemovedMineList)
+                    .Where((x) => x.Owner.ID == Owner.ID)
+                    .ToList()
+                    .ConvertAll((x) => (RaonLauncherMine)x);
+
+                if (ownedMines.Count > 0)
+                {
+                    ownedMines[0].GrantTurn(ownedMines);
+                    mineTurn = false;
+                    return;
+                }
+            }
+
+            mineTurn = true;
+            base.GrantTurn();
         }
 
         public override void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
