@@ -265,6 +265,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         }
     }
 
+    //Projectile Spawned/Exploded when a mine touches a mobile
     public class RaonProjectile2Explosion : DummyProjectile
     {
         public RaonProjectile2Explosion(RaonLauncher mobile)

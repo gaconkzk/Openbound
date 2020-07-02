@@ -42,7 +42,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
             Crosshair = new Crosshair(this);
 
-            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(2, 0));
+            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(0, 0));
 
             mineTurn = true;
         }
@@ -59,8 +59,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
                 if (ownedMines.Count > 0)
                 {
-                    ownedMines[0].GrantTurn(ownedMines);
                     mineTurn = false;
+                    ownedMines[0].GrantTurn(ownedMines);
                     return;
                 }
             }

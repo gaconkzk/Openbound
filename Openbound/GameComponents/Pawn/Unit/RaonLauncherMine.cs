@@ -38,9 +38,9 @@ namespace OpenBound.GameComponents.Pawn.Unit
             MobileFlipbook.ChangeState(ActorFlipbookState.Dormant, true);
 
             Movement.CollisionOffset = 10;
-            Movement.MaximumStepsPerTurn = 90;
+            Movement.MaximumStepsPerTurn = Parameter.ProjectileRaonLauncherS2MineMaximumStepsPerTurn;
 
-            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 12, 12), new Vector2(0, 0));
+            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 8, 8), new Vector2(0, 5));
         }
 
         //Necessary overrides to reuse mines as a mobile
@@ -65,9 +65,18 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
         public override void GrantTurn()
         {
+            //Force targetting re-checking
+            UpdateProximity();
+
+            if (target == null) {
+                LoseTurn();
+                return;
+            }
+
             freezeTime = 0;
             Movement.RemainingStepsThisTurn = Movement.MaximumStepsPerTurn;
             Movement.IsAbleToMove = true;
+
             GameScene.Camera.TrackObject(this);
         }
 
@@ -82,6 +91,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 extraMineList[0].GrantTurn(extraMineList);
             else
                 mobile.GrantTurn();
+
+            extraMineList = null;
         }
 
         public override void PlayMovementSE(float pitch = 0, float pan = 0)
@@ -128,7 +139,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 Die();
             }
 
-            if (minDist < 8100 * 8)
+            if (minDist < Parameter.ProjectileRaonLauncherS2MineSquaredProximityRange)
             {
                 if (Position.X - target.Position.X < 0 && Facing == Facing.Left)
                     Flip();
@@ -142,6 +153,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
             }
             else if (IsStateActivated(ActorFlipbookState.Activated))
             {
+                target = null;
                 ChangeFlipbookState(ActorFlipbookState.Dormant, true);
             }
         }

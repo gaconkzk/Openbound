@@ -537,7 +537,7 @@ namespace OpenBound.GameComponents.Animation
                     break;
                 case MobileType.RaonLauncher:
                     mb = new MobileFlipbook(
-                        Position, new Vector2(64, 95), 2200 / 20, 2340 / 18, spritePath,
+                        Position, new Vector2(66, 95), 2200 / 20, 2340 / 18, spritePath,
                         new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.RaonLauncherMine:

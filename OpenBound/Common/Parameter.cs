@@ -373,6 +373,9 @@ namespace OpenBound.Common
         public const float ProjectileRaonLauncherS2WindInfluence = 1.2f;
         public const float ProjectileRaonLauncherSSWindInfluence = 1.2f;
 
+        public const int ProjectileRaonLauncherS2MineMaximumStepsPerTurn = 90;
+        public const int ProjectileRaonLauncherS2MineSquaredProximityRange = 90 * 90;
+
         //Trico
         public const int ProjectileTricoS1ExplosionRadius = 25;
         public const int ProjectileTricoS2ExplosionRadius = 25;
