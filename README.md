@@ -72,6 +72,7 @@ For further information read the README.md inside each project directory.
 <h2>Bug Reports/Testers</h2>
 
  - [sdyalor](https://github.com/sdyalor)
+ - ursoGb
 
 <h2>Licence and copyright</h2>
 

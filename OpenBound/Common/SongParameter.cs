@@ -19,13 +19,15 @@ namespace OpenBound.Common
         public static readonly List<string> GameRoom = new List<string>()
         {
             "Audio/Music/GameRoom/GameRoomS1",
-            "Audio/Music/GameRoom/GameRoomS2"
+            "Audio/Music/GameRoom/GameRoomS2-1",
+            "Audio/Music/GameRoom/GameRoomS2-2",
         };
 
         public static readonly List<string> GameSceneEvent = new List<string>()
         {
             "Audio/Music/LevelScene/Event/BirthdayS2",
             "Audio/Music/LevelScene/Event/ChristmasS1",
+            "Audio/Music/LevelScene/Event/ChristmasS2",
             "Audio/Music/LevelScene/Event/UnknownS1-1",
             "Audio/Music/LevelScene/Event/UnknownS1-2",
             "Audio/Music/LevelScene/Event/UnknownS1-3",
