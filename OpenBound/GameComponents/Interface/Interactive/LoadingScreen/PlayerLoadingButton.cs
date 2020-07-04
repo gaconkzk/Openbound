@@ -100,7 +100,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
 
             Nameplate = new Nameplate(Player, Alignment.Left, ButtonOffset - new Vector2(100, 47));
 
-            Mobile.MobileFlipbook.Flipbook.JumpToRandomAnimationFrame();
+            Mobile.MobileFlipbook.JumpToRandomAnimationFrame();
         }
 
         public void ChangePosition(Vector2 newPostion)

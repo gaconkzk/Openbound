@@ -17,7 +17,7 @@ using OpenBound.GameComponents.Debug;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 
-namespace OpenBound.GameComponents.PawnAction
+namespace OpenBound.GameComponents.MobileAction
 {
     public class Trace
     {
@@ -67,9 +67,9 @@ namespace OpenBound.GameComponents.PawnAction
             switch (mobileType)
             {
                 case MobileType.Mage:
-                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(8, 8), 16, 16, $"Graphics/Tank/Mage/{shotType}T", animationInstance, false, projectile.FlipbookList[0].LayerDepth);
+                    return new Flipbook(Vector2.Zero, new Vector2(8, 8), 16, 16, $"Graphics/Tank/Mage/{shotType}T", animationInstance, projectile.FlipbookList[0].LayerDepth);
                 case MobileType.Turtle:
-                    return Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(20, 8), 32, 16, $"Graphics/Tank/Turtle/S1T", animationInstance, false, projectile.FlipbookList[0].LayerDepth);
+                    return new Flipbook(Vector2.Zero, new Vector2(20, 8), 32, 16, $"Graphics/Tank/Turtle/S1T", animationInstance, projectile.FlipbookList[0].LayerDepth);
             }
 
             return null;

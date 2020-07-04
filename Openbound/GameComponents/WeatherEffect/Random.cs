@@ -15,7 +15,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;

@@ -16,7 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
@@ -29,20 +29,20 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public LightningProjectile1(Lightning mobile) : base(mobile, ShotType.S1, Parameter.ProjectileLightningS1ExplosionRadius, Parameter.ProjectileLightningS1BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(30f, 31),
                 53, 60, "Graphics/Tank/Lightning/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileLightningS1Mass;
             windInfluence = Parameter.ProjectileLightningS1WindInfluence;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -80,13 +80,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(30f, 31),
                 53, 60, "Graphics/Tank/Lightning/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile));
+                }, DepthParameter.Projectile));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileLightningS2Mass;
@@ -95,7 +95,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.2;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -130,13 +130,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(44f, 27f),
                 99, 50, "Graphics/Tank/Lightning/Bullet3",
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1 / 20f }
-                },
-                true, DepthParameter.Projectile));
+                }, DepthParameter.Projectile));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileLightningSSMass;
@@ -145,7 +144,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.LightningProjectile3Explosion(FlipbookList[0].Position, FlipbookList[0].Rotation);
             base.Explode();

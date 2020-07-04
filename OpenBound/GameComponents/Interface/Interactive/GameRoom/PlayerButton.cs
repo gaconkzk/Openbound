@@ -141,19 +141,19 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
 
             int sidePositionFactor = (Player.PlayerTeam == PlayerTeam.Red) ? 1 : -1;
 
-            PlayerStatus = Flipbook.CreateFlipbook(
+            PlayerStatus = new Flipbook(
                 ButtonOffset + new Vector2(82 * sidePositionFactor, 0),
                 new Vector2((296 / 4) / 2, 76 / 2),
                 74, 76, "Interface/StaticButtons/GameRoom/Player/StatusMarker",
-                PlayerStatusPreset[Player.PlayerTeam][Player.PlayerRoomStatus], false,
+                PlayerStatusPreset[Player.PlayerTeam][Player.PlayerRoomStatus],
                 DepthParameter.InterfaceButtonIcon);
             flipbookList.Add(PlayerStatus);
 
-            PlayerStatusText = Flipbook.CreateFlipbook(
+            PlayerStatusText = new Flipbook(
                 ButtonOffset + new Vector2(78 * sidePositionFactor, 28),
                 new Vector2((150 / 3) / 2, 16 / 2),
                 50, 16, "Interface/StaticButtons/GameRoom/Player/StatusText",
-                PlayerStatusTextPreset[Player.PlayerTeam][Player.PlayerRoomStatus], false,
+                PlayerStatusTextPreset[Player.PlayerTeam][Player.PlayerRoomStatus],
                 DepthParameter.InterfaceButtonText);
             flipbookList.Add(PlayerStatusText);
 
@@ -171,7 +171,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
 
             Nameplate = new Nameplate(Player, Alignment.Left, ButtonOffset - new Vector2(100, 47));
 
-            Mobile.MobileFlipbook.Flipbook.JumpToRandomAnimationFrame();
+            Mobile.MobileFlipbook.JumpToRandomAnimationFrame();
         }
 
         public void ChangePosition(Vector2 newPostion)

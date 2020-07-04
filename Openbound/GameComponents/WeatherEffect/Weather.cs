@@ -17,7 +17,8 @@ using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -170,7 +171,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
                 startingFrame++;
 
-                Flipbook fb = Flipbook.CreateFlipbook(currentOffset, flipbookPivot, (int)flipbookPivot.X * 2, (int)flipbookPivot.Y * 2, texturePath, animation, true, DepthParameter.WeatherEffect, rotation);
+                Flipbook fb = new Flipbook(currentOffset, flipbookPivot, (int)flipbookPivot.X * 2, (int)flipbookPivot.Y * 2, texturePath, animation, DepthParameter.WeatherEffect, rotation);
                 fb.Scale *= Scale;
                 flipbookList.Add(fb);
 
@@ -203,14 +204,19 @@ namespace OpenBound.GameComponents.WeatherEffect
         }
 
         /// <summary>
-        /// Check if this <see cref="outerCollisionRectangle"/> intersects with another weather's <see cref="outerCollisionRectangle"/>.
+        /// Checks if this <see cref="outerCollisionRectangle"/> intersects with another weather's <see cref="outerCollisionRectangle"/>.
         /// </summary>
         public virtual bool Intersects(Weather weather) => weather.outerCollisionRectangle.Intersects(outerCollisionRectangle);
 
         /// <summary>
-        /// Check if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
+        /// Checks if this <see cref="collisionRectangle"/> intersects with a <see cref="Projectile.Position"/>.
         /// </summary>
         public virtual bool Intersects(Projectile projectile) => collisionRectangle.Intersects(projectile.Position);
+
+        /// <summary>
+        /// Checks if this <see cref="collisionRectangle"/> intersects with a <see cref="Mobile.Position"/>.
+        /// </summary>
+        public virtual bool Intersects(Mobile mobile) => collisionRectangle.Intersects(mobile.Position);
 
         /// <summary>
         /// Check if this Weather is interacting with a Projectile.

@@ -14,15 +14,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Input;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity.Sync;
 
-namespace OpenBound.GameComponents.Pawn.Local
+namespace OpenBound.GameComponents.MobileAction.Motion
 {
     public class LocalMovement : Movement
     {
         public LocalMovement(Mobile mobile) : base(mobile) { }
 
-        public void Update()
+        public override void Update()
         {
             ApplyGravity();
 

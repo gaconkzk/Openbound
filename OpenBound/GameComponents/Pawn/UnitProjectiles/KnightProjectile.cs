@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -31,19 +31,19 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(Mobile, ShotType.S1, 0, 0)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 Mobile.Crosshair.CannonPosition, new Vector2(31, 32),
                 64, 66, "Graphics/Tank/Knight/Shot1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Knightsword Animation
             Mobile.Satellite.AttackingTarget = FlipbookList[0];
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -108,7 +108,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(Mobile, ShotType.SS, 0, 0)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 Mobile.Crosshair.CannonPosition,
                 new Vector2(25 / 2f, 24 / 2f),
                 25, 24,
@@ -118,9 +118,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     StartingFrame = 0,
                     EndingFrame = 19,
                     TimePerFrame = 1 / 20f,
-                },
-                true,
-                DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileKnightSSMass;
@@ -130,7 +128,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             Mobile.Satellite.AttackingTarget = FlipbookList[0];
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
 
@@ -175,7 +173,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             //Initializing Flipbook
             FlipbookList.Add(
-                Flipbook.CreateFlipbook(
+                new Flipbook(
                 InitialPosition,
                 new Vector2(81, 32),
                 162, 65,
@@ -186,9 +184,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
                     EndingFrame = 19,
                     TimePerFrame = 1 / 40f,
                 },
-                true,
                 DepthParameter.Projectile,
-                Rotation: (float)angle));
+                rotation: (float)angle));
 
             this.FreezeTime = FreezeTime;
             this.SpawnTime = SpawnTime;

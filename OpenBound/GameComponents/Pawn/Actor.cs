@@ -13,8 +13,10 @@
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Collision;
+using OpenBound.GameComponents.MobileAction;
+using OpenBound.GameComponents.MobileAction.Motion;
 using Openbound_Network_Object_Library.Entity.Sync;
+using Openbound_Network_Object_Library.Models;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -26,10 +28,8 @@ namespace OpenBound.GameComponents.Pawn
         public Movement Movement;
         public Vector2 FlipbookOffset;
 
-        //Collision
-        public CollisionBox CollisionBox;
-
-        //Object Reference
+        //Object References
+        public Player Owner;
 
         public Actor() : base()
         {
@@ -41,5 +41,11 @@ namespace OpenBound.GameComponents.Pawn
         {
             Facing = (Facing == Facing.Left) ? Facing.Right : Facing.Left;
         }
+
+        public abstract void Update(GameTime gameTime);
+        public abstract void ReceiveDamage(int damage);
+        public abstract void ReceiveShock(int damage);
+        public virtual void PlayMovementSE(float pitch, float pan) { }
+        public virtual void PlayUnableToMoveSE(float pitch, float pan) { }
     }
 }

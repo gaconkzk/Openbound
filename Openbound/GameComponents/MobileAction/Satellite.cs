@@ -21,7 +21,7 @@ using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 
-namespace OpenBound.GameComponents.PawnAction
+namespace OpenBound.GameComponents.MobileAction
 {
     public enum SatelliteSpecialAnimationState
     {
@@ -276,11 +276,11 @@ namespace OpenBound.GameComponents.PawnAction
     {
         public KnightSword(Mobile Owner) : base(Owner)
         {
-            Flipbook = Flipbook.CreateFlipbook(Vector2.Zero,
+            Flipbook = new Flipbook(Vector2.Zero,
                 new Vector2(34 / 2, 19 / 2),
                 34, 19,
                 "Graphics/Tank/Knight/Satellite",
-                StatePresets[SatelliteFlipbookState], true,
+                StatePresets[SatelliteFlipbookState],
                 DepthParameter.MobileSatellite);
 
             oscilationAmplitude = 3f;

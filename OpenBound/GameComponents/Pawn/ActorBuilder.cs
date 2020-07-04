@@ -23,17 +23,18 @@ namespace OpenBound.GameComponents.Pawn
         {
             switch (mobileType)
             {
-                case MobileType.Random:  return new Random(player, position);
+                case MobileType.Random:       return new Random(player, position);
 
-                case MobileType.Armor:   return new Armor(player, position);
-                case MobileType.Bigfoot: return new Bigfoot(player, position);
-                case MobileType.Dragon:  return new Dragon(player, position);
-                case MobileType.Mage:    return new Mage(player, position);
-                case MobileType.Ice:     return new Ice(player, position);
-                case MobileType.Knight:  return new Knight(player, position);
-                case MobileType.Trico:   return new Trico(player, position);
-                case MobileType.Turtle:  return new Turtle(player, position);
-                case MobileType.Lightning: return new Lightning(player, position);
+                case MobileType.Armor:        return new Armor(player, position);
+                case MobileType.Bigfoot:      return new Bigfoot(player, position);
+                case MobileType.Dragon:       return new Dragon(player, position);
+                case MobileType.Mage:         return new Mage(player, position);
+                case MobileType.Ice:          return new Ice(player, position);
+                case MobileType.Knight:       return new Knight(player, position);
+                case MobileType.RaonLauncher: return new RaonLauncher(player, position);
+                case MobileType.Trico:        return new Trico(player, position);
+                case MobileType.Turtle:       return new Turtle(player, position);
+                case MobileType.Lightning:    return new Lightning(player, position);
             }
 
             return null;

@@ -17,7 +17,7 @@ using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using System;
 using System.Collections.Generic;
 

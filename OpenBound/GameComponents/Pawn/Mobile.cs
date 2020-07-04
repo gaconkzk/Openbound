@@ -24,9 +24,7 @@ using OpenBound.GameComponents.Input;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.Pawn.Local;
-using OpenBound.GameComponents.Pawn.Remote;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using OpenBound.GameComponents.Renderer;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Entity;
@@ -35,12 +33,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
+using OpenBound.GameComponents.Collision;
+using OpenBound.GameComponents.MobileAction.Motion;
 
 namespace OpenBound.GameComponents.Pawn
 {
     public abstract class Mobile : Actor
     {
-        public MobileFlipbook MobileFlipbook { get; set; }
+        public MobileFlipbook MobileFlipbook;
 
         // Mobile Name
         public MobileType MobileType;
@@ -51,6 +51,9 @@ namespace OpenBound.GameComponents.Pawn
         //Mobile Information
         public MobileMetadata MobileMetadata;
 
+        //Collision
+        public CollisionBox CollisionBox;
+
         //Projectiles
         public List<Projectile> ProjectileList;
 
@@ -60,7 +63,7 @@ namespace OpenBound.GameComponents.Pawn
 
         public ShotType SelectedShotType;
 
-        public bool IsHealthCritical => MobileMetadata.CurrentHealth / MobileMetadata.BaseHealth < Parameter.HealthBarLowHealthThreshold;
+        public bool IsHealthCritical => MobileMetadata != null && (MobileMetadata.CurrentHealth / MobileMetadata.BaseHealth < Parameter.HealthBarLowHealthThreshold);
         public bool IsEnemy => Owner.PlayerTeam != GameInformation.Instance.PlayerInformation.PlayerTeam;
 
         public SyncMobile SyncMobile;
@@ -71,13 +74,11 @@ namespace OpenBound.GameComponents.Pawn
         public bool IsPlayable;
         public bool IsAbleToShoot;
         public bool IsAlive;
+        public bool IsSummon;
 
         //IsActionsLocked
         public bool IsActionsLocked;
         bool hasShotSequenceStarted;
-
-        //Object References
-        public Player Owner;
 
         //Sound Effect
         public SoundEffect movingSE, unableToMoveSE;
@@ -88,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, MobileType mobileType) : base()
+        public Mobile(Player player, MobileType mobileType, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -100,10 +101,14 @@ namespace OpenBound.GameComponents.Pawn
             movingSE = AssetHandler.Instance.RequestSoundEffect(SoundEffectParameter.MobileMovement(mobileType));
             unableToMoveSE = AssetHandler.Instance.RequestSoundEffect(SoundEffectParameter.MobileUnableToMove(mobileType));
 
-            IsPlayable = GameInformation.Instance.IsOwnedByPlayer(this);
+            this.IsSummon = IsSummon;
+
+            IsPlayable = GameInformation.Instance.IsOwnedByPlayer(this) && !IsSummon;
 
             if (IsPlayable)
                 Movement = new LocalMovement(this);
+            else if (IsSummon)
+                Movement = new AutomatedMovement(this);
             else
                 Movement = new RemoteMovement(this);
 
@@ -126,17 +131,14 @@ namespace OpenBound.GameComponents.Pawn
 #endif
         }
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             //Must be called before Movement.Update()
             UpdateFlipbookRotation();
 
             SyncPosition = Position;
 
-            if (IsPlayable)
-                ((LocalMovement)Movement).Update();
-            else
-                ((RemoteMovement)Movement).Update();
+            Movement.Update();
 
             if (IsPlayable && IsAbleToShoot)
             {
@@ -147,7 +149,7 @@ namespace OpenBound.GameComponents.Pawn
                 SyncShootHandler();
             }
 
-            if (IsAlive) Crosshair.Update(gameTime);
+            if (IsAlive && Crosshair != null) Crosshair.Update(gameTime);
 
             ProjectileList.ForEach((x) => x.Update());
             UnusedProjectile.ForEach((x) => ProjectileList.Remove(x));
@@ -166,13 +168,13 @@ namespace OpenBound.GameComponents.Pawn
 #endif
         }
 
-        public virtual void PlayMovementSE(float pitch = 0, float pan = 0)
+        public new virtual void PlayMovementSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
-                AudioHandler.PlayUniqueSoundEffect(movingSE, () => MobileFlipbook.State == ActorFlipbookState.Moving, pitch: pitch, pan: pan);
+                AudioHandler.PlayUniqueSoundEffect(movingSE, () => IsStateMoving(MobileFlipbook.State), pitch: pitch, pan: pan);
         }
 
-        public virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
+        public new virtual void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
         {
             if (IsAbleToShoot)
                 AudioHandler.PlayUniqueSoundEffect(unableToMoveSE, () => MobileFlipbook.State == ActorFlipbookState.UnableToMove, pitch: pitch, pan: pan);
@@ -206,7 +208,7 @@ namespace OpenBound.GameComponents.Pawn
             ///ServerInformationHandler.RequestNextPlayerTurn();
         }
 
-        public void LoseTurn()
+        public virtual void LoseTurn()
         {
             Movement.IsAbleToMove = false;
             LevelScene.HUD.LoseTurn();
@@ -220,7 +222,7 @@ namespace OpenBound.GameComponents.Pawn
                 Crosshair.HideElement();
         }
 
-        public void GrantTurn()
+        public virtual void GrantTurn()
         {
             LevelScene.MatchMetadata.CurrentTurnOwner = SyncMobile;
 
@@ -245,7 +247,7 @@ namespace OpenBound.GameComponents.Pawn
         {
             base.Flip();
             MobileFlipbook.Flip();
-            Crosshair.Flip();
+            Crosshair?.Flip();
         }
 
         public void SendRequestToServer()
@@ -355,7 +357,7 @@ namespace OpenBound.GameComponents.Pawn
         }
 
         /// <summary>
-        /// Updates the flipbook rotation towards the normal
+        /// Updates the flipbook position depending on its rotation towards the normal
         /// </summary>
         public void UpdateFlipbookRotation()
         {
@@ -405,18 +407,21 @@ namespace OpenBound.GameComponents.Pawn
             }
         }
 
-        private bool IsStateMoving(ActorFlipbookState state) => state == ActorFlipbookState.MovingLowHealth || state == ActorFlipbookState.Moving;
-        private bool IsStateStand(ActorFlipbookState state) => state == ActorFlipbookState.Stand || state == ActorFlipbookState.StandLowHealth;
-        private bool IsStateShooting(ActorFlipbookState state) => state == ActorFlipbookState.ShootingS1 || state == ActorFlipbookState.ShootingS2 || state == ActorFlipbookState.ShootingSS;
-        private bool IsStateCharging(ActorFlipbookState state) => state == ActorFlipbookState.ChargingS1 || state == ActorFlipbookState.ChargingS2 || state == ActorFlipbookState.ChargingSS;
-        private bool IsStateBeingDamaged(ActorFlipbookState state) => state == ActorFlipbookState.BeingDamaged1 || state == ActorFlipbookState.BeingDamaged2 || state == ActorFlipbookState.DepletingShield || state == ActorFlipbookState.BeingFrozen || state == ActorFlipbookState.BeingShocked;
-        private bool IsStateEmoting(ActorFlipbookState state) => state == ActorFlipbookState.Emotion1 || state == ActorFlipbookState.Emotion2;
-        private bool IsStateDead(ActorFlipbookState state) => state == ActorFlipbookState.Dead;
-        private bool IsStateFalling(ActorFlipbookState state) => state == ActorFlipbookState.Falling;
-        private bool IsStateUnableToMove(ActorFlipbookState state) => state == ActorFlipbookState.UnableToMove;
-        private bool IsStateUsingItem(ActorFlipbookState state) => state == ActorFlipbookState.UsingItem;
+        protected bool IsStateMoving(ActorFlipbookState state) => state == ActorFlipbookState.MovingLowHealth || state == ActorFlipbookState.Moving;
+        protected bool IsStateStand(ActorFlipbookState state) => state == ActorFlipbookState.Stand || state == ActorFlipbookState.StandLowHealth;
+        protected bool IsStateShooting(ActorFlipbookState state) => state == ActorFlipbookState.ShootingS1 || state == ActorFlipbookState.ShootingS2 || state == ActorFlipbookState.ShootingSS;
+        protected bool IsStateCharging(ActorFlipbookState state) => state == ActorFlipbookState.ChargingS1 || state == ActorFlipbookState.ChargingS2 || state == ActorFlipbookState.ChargingSS;
+        protected bool IsStateBeingDamaged(ActorFlipbookState state) => state == ActorFlipbookState.BeingDamaged1 || state == ActorFlipbookState.BeingDamaged2 || state == ActorFlipbookState.DepletingShield || state == ActorFlipbookState.BeingFrozen || state == ActorFlipbookState.BeingShocked;
+        protected bool IsStateEmoting(ActorFlipbookState state) => state == ActorFlipbookState.Emotion1 || state == ActorFlipbookState.Emotion2;
+        protected bool IsStateDead(ActorFlipbookState state) => state == ActorFlipbookState.Dead;
+        protected bool IsStateFalling(ActorFlipbookState state) => state == ActorFlipbookState.Falling;
+        protected bool IsStateUnableToMove(ActorFlipbookState state) => state == ActorFlipbookState.UnableToMove;
+        protected bool IsStateUsingItem(ActorFlipbookState state) => state == ActorFlipbookState.UsingItem;
 
-        public void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
+        /// <summary>
+        /// Mobile's flipbook change state machine
+        /// </summary>
+        public virtual void ChangeFlipbookState(ActorFlipbookState NewState, bool Force = false)
         {
             if (IsHealthCritical)
             {
@@ -493,7 +498,7 @@ namespace OpenBound.GameComponents.Pawn
             else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
         }
 
-        public void ReceiveShock(int damage)
+        public override void ReceiveShock(int damage)
         {
             ChangeFlipbookState(ActorFlipbookState.BeingShocked, true);
 
@@ -515,7 +520,7 @@ namespace OpenBound.GameComponents.Pawn
             LevelScene.HUD.FloatingTextHandler.AddDamage(this, -damage);
         }
 
-        public void ReceiveDamage(int damage)
+        public override void ReceiveDamage(int damage)
         {
             //Play the "BeingDamaged" animation, then enqueue the stand animation
             switch (Parameter.Random.Next(0, 2))
@@ -571,7 +576,10 @@ namespace OpenBound.GameComponents.Pawn
         {
             Shoot();
 
-            LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction = () => { ServerInformationHandler.RequestNextPlayerTurn(); });
+            LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction = () => 
+            {
+                ServerInformationHandler.RequestNextPlayerTurn(); 
+            });
             GameScene.Camera.TrackObject(LastCreatedProjectileList.First());
         }
 
@@ -595,7 +603,7 @@ namespace OpenBound.GameComponents.Pawn
         public new virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
         {
             MobileFlipbook.Draw(GameTime, SpriteBatch);
-            if (IsAlive) Crosshair.Draw(null, SpriteBatch);
+            if (IsAlive) Crosshair?.Draw(null, SpriteBatch);
 
             ProjectileList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
         }

@@ -356,6 +356,30 @@ namespace OpenBound.Common
         public const float ProjectileKnightS2WindInfluence = 1.4f;
         public const float ProjectileKnightSSWindInfluence = 1.4f;
 
+        //Raon
+        public const int ProjectileRaonLauncherS1ExplosionRadius = 15;
+        public const int ProjectileRaonLauncherS2ExplosionRadius = 15;
+        public const int ProjectileRaonLauncherSSExplosionRadius = 30;
+
+        public const int ProjectileRaonLauncherS1BaseDamage = 100;
+        public const int ProjectileRaonLauncherS2BaseDamage = 200;
+        public const int ProjectileRaonLauncherSSBaseDamage = 500;
+
+        public const float ProjectileRaonLauncherS1Mass = 10f;
+        public const float ProjectileRaonLauncherS2Mass = 10f;
+        public const float ProjectileRaonLauncherSSMass = 10f;
+
+        public const float ProjectileRaonLauncherS1WindInfluence = 1.2f;
+        public const float ProjectileRaonLauncherS2WindInfluence = 1.2f;
+        public const float ProjectileRaonLauncherSSWindInfluence = 1.2f;
+
+        public const float ProjectileRaonLauncherS2MineTurnFreezetime = 0.5f;
+
+        public const int ProjectileRaonLauncherS2MineMaximumStepsPerTurn = 90;
+        public const int ProjectileRaonLauncherS2MineSquaredProximityRange = 90 * 90;
+
+        public const int ProjectileRaonLauncherSSMineMaximumStepsPerTurn = ProjectileRaonLauncherS2MineMaximumStepsPerTurn * 4;
+
         //Trico
         public const int ProjectileTricoS1ExplosionRadius = 25;
         public const int ProjectileTricoS2ExplosionRadius = 25;
@@ -488,16 +512,16 @@ namespace OpenBound.Common
         //Electricity
         public const int WeatherEffectElectricityBaseDamage = 0;
         public const int WeatherEffectElectricityExplosionRadius = 10;
-        public const int WeatherEffectElectricityEExplosionRadius = 20;
+        public const int WeatherEffectElectricityEExplosionRadius = 30;
         public const int WeatherEffectElectricityEBaseDamage = 30;
 
         //Thor
-        public static Color NeonGreen       = new Color(057, 255, 020, 255 / 4);
-        public static Color NeonBlue        = new Color(027, 003, 163, 255 / 4);
-        public static Color NeonYellow      = new Color(204, 255, 000, 255 / 4);
-        public static Color NeonRed         = new Color(255, 007, 058, 255 / 4);
-        public static Color NeonWhiteWhite  = new Color(255, 255, 255, 255 / 4);
-        public static Color[] ColorGradient = new Color[] { NeonGreen, NeonBlue, NeonYellow, NeonRed, NeonWhiteWhite };
+        public static Color NeonGreen  = new Color(057, 255, 020, 255 / 4);
+        public static Color NeonBlue   = new Color(027, 003, 163, 255 / 4);
+        public static Color NeonYellow = new Color(204, 255, 000, 255 / 4);
+        public static Color NeonRed    = new Color(255, 007, 058, 255 / 4);
+        public static Color NeonWhite  = new Color(255, 255, 255, 255 / 4);
+        public static Color[] ColorGradient = new Color[] { NeonGreen, NeonBlue, NeonYellow, NeonRed, NeonWhite };
 
         public const int ProjectileThorExplosionRadius = 25;
         public const int ProjectileThorBaseDamage = 40;

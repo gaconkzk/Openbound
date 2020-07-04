@@ -19,6 +19,7 @@ using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn;
+using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.GameComponents.Physics;
 using OpenBound.GameComponents.WeatherEffect;
 using Openbound_Network_Object_Library.Entity;
@@ -26,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using Random = OpenBound.GameComponents.WeatherEffect.Random;
 
-namespace OpenBound.GameComponents.PawnAction
+namespace OpenBound.GameComponents.MobileAction
 {
     public enum ProjectileAnimationState
     {
@@ -320,7 +321,7 @@ namespace OpenBound.GameComponents.PawnAction
             return false;
         }
 
-        public bool UpdateCollider(Vector2 position)
+        public virtual bool UpdateCollider(Vector2 position)
         {
             bool hasExploded = false;
 
@@ -388,7 +389,7 @@ namespace OpenBound.GameComponents.PawnAction
         /// This method is called when the projectile collides with a collidable surface
         /// must be overwriten to perform extra actions.
         /// </summary>
-        protected virtual void Explode()
+        public virtual void Explode()
         {
             OnExplodeAction?.Invoke();
 
@@ -403,22 +404,29 @@ namespace OpenBound.GameComponents.PawnAction
 
             if (BaseDamage > 0)
             {
-                foreach(Mobile m in LevelScene.MobileList)
+                foreach (Mobile m in LevelScene.DamageableMobiles)
                 {
                     int damage = CalculateDamage(m);
 
                     if (damage > 0)
                     {
-                        //Play the receive damage animation if is alive
-                        float previousHealth = m.MobileMetadata.CurrentHealth;
+                        switch (m)
+                        {
+                            case RaonLauncherMine rlm:
+                                rlm.ReceiveDamage(0);
+                                break;
+                            default:
+                                //Play the receive damage animation if is alive
+                                float previousHealth = m.MobileMetadata.CurrentHealth;
 
-                        m.ReceiveDamage(damage);
+                                m.ReceiveDamage(damage);
 
-                        if (previousHealth > 0 && m.MobileMetadata.CurrentHealth <= 0)
-                            m.RequestDeath();
+                                if (previousHealth > 0 && m.MobileMetadata.CurrentHealth <= 0)
+                                    m.RequestDeath();
 
-                        OnDealDamageAction?.Invoke(damage);
-                        //MatchManager.Instance.NextPlayerTurn.HUD.FloatingTextHandler.AddDamage(x, -damage);
+                                OnDealDamageAction?.Invoke(damage);
+                                break;
+                        }
                     }
                 }
             }

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,20 +27,20 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S1, Parameter.ProjectileArmorS1ExplosionRadius, Parameter.ProjectileArmorS1BaseDamage)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(18, 14),
                 36, 28, "Graphics/Tank/Armor/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS1Mass;
             windInfluence = Parameter.ProjectileArmorS1WindInfluence;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.ArmorProjectile1Explosion(FlipbookList[0].Position);
@@ -68,13 +68,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(31, 14),
                 63, 28, "Graphics/Tank/Armor/Bullet2",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorS2Mass;
@@ -83,7 +83,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = 0.6;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile2Explosion(FlipbookList[0].Position);
             base.Explode();
@@ -142,11 +142,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             totalTravelledTime = 0;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(65, 54),
                 131, 109, "Graphics/Tank/Armor/Bullet3",
                 new List<AnimationInstance>() { rocketAnimationPresets[rocketAnimation] },
-                true, DepthParameter.Projectile, angle));
+                DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileArmorSSMass;
@@ -186,7 +186,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

@@ -33,7 +33,7 @@ namespace OpenBound.GameComponents.Interface
             fadeAnimation = 0;
 
             position = Topography.FromNormalizedPositionToRelativePosition(weatherMetadata.Position);
-            flipbook = Flipbook.CreateFlipbook(Vector2.Zero, new Vector2(9, -11), 19, 27, "Interface/InGame/HUD/Blue/IncomingWeather/Pointer", new AnimationInstance { EndingFrame = 6, TimePerFrame = 1/15f }, false, 0.95f, 0);
+            flipbook = new Flipbook(Vector2.Zero, new Vector2(9, -11), 19, 27, "Interface/InGame/HUD/Blue/IncomingWeather/Pointer", new AnimationInstance { EndingFrame = 6, TimePerFrame = 1/15f }, 0.95f, 0);
 
             string text;
 

@@ -17,8 +17,9 @@ namespace OpenBound.GameComponents.Animation
 {
     public abstract class Renderable
     {
+        public virtual Vector2 Position { get; set; }
+
         public float LayerDepth;
-        public Vector2 Position;
         public Vector2 PositionOffset;
         public Vector2 Pivot;
         public Texture2D Texture2D;

@@ -11,9 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
-using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,9 +58,13 @@ namespace OpenBound.GameComponents.Animation
         Falling, //Drop
 
         All, //SFX
+
+        //Raon's Mine
+        Dormant,
+        Activated,
     }
 
-    public class MobileFlipbook
+    public class MobileFlipbook : Flipbook
     {
         static readonly Dictionary<MobileType, Dictionary<ActorFlipbookState, AnimationInstance>> MobileStatePresets = new Dictionary<MobileType, Dictionary<ActorFlipbookState, AnimationInstance>>()
         {
@@ -309,6 +311,72 @@ namespace OpenBound.GameComponents.Animation
                 }
             },
             #endregion
+            #region Raon Launcher
+            {
+                MobileType.RaonLauncher,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    { ActorFlipbookState.Stand,           new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/20f } },
+                    { ActorFlipbookState.StandLowHealth,  new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.Moving,          new AnimationInstance() { StartingFrame = 020, EndingFrame = 034, TimePerFrame = 1/17f } },
+                    { ActorFlipbookState.MovingLowHealth, new AnimationInstance() { StartingFrame = 035, EndingFrame = 054, TimePerFrame = 1/17f } },
+
+                    { ActorFlipbookState.UnableToMove,    new AnimationInstance() { StartingFrame = 075, EndingFrame = 094, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Emotion1,        new AnimationInstance() { StartingFrame = 290, EndingFrame = 319, TimePerFrame = 1/29f } },
+                    { ActorFlipbookState.Emotion2,        new AnimationInstance() { StartingFrame = 290, EndingFrame = 319, TimePerFrame = 1/29f } },
+
+                    { ActorFlipbookState.BeingDamaged1,   new AnimationInstance() { StartingFrame = 225, EndingFrame = 249, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingDamaged2,   new AnimationInstance() { StartingFrame = 145, EndingFrame = 169, TimePerFrame = 1/24f } },
+                    { ActorFlipbookState.BeingShocked,    new AnimationInstance() { StartingFrame = 120, EndingFrame = 144, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.BeingFrozen,     new AnimationInstance() { StartingFrame = 129, EndingFrame = 129, TimePerFrame = 1f } },
+
+                    { ActorFlipbookState.ChargingS1,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 200, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS1,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 119, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.ChargingS2,      new AnimationInstance() { StartingFrame = 191, EndingFrame = 200, TimePerFrame = 1/19f } },
+                    { ActorFlipbookState.ShootingS2,      new AnimationInstance() { StartingFrame = 095, EndingFrame = 119, TimePerFrame = 1/26f } },
+
+                    { ActorFlipbookState.ChargingSS,      new AnimationInstance() { StartingFrame = 320, EndingFrame = 329, TimePerFrame = 1/14f } },
+                    { ActorFlipbookState.ShootingSS,      new AnimationInstance() { StartingFrame = 330, EndingFrame = 354, TimePerFrame = 1/20f } },
+
+                    { ActorFlipbookState.UsingItem,       new AnimationInstance() { StartingFrame = 201, EndingFrame = 224, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Dead,            new AnimationInstance() { StartingFrame = 186, EndingFrame = 190, TimePerFrame = 1/19f } },
+
+                    { ActorFlipbookState.Falling,         new AnimationInstance() { StartingFrame = 170, EndingFrame = 185, TimePerFrame = 1/18f } },
+
+                    { ActorFlipbookState.All,             new AnimationInstance() { StartingFrame = 000, EndingFrame = 355, TimePerFrame = 1/18f } },
+                }
+            },
+            #endregion
+            #region Raon Launcher Mine
+            {
+                MobileType.RaonLauncherMineS2,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    //Normal
+                    { ActorFlipbookState.Dormant,   new AnimationInstance(){ StartingFrame = 00, EndingFrame = 19, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    //Active
+                    { ActorFlipbookState.Activated, new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    //Falling
+                    { ActorFlipbookState.Falling,   new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    //Moving
+                    { ActorFlipbookState.Moving,    new AnimationInstance(){ StartingFrame = 37, EndingFrame = 48, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                }
+            },
+            #endregion
+            #region Raon Launcher Mine
+            {
+                MobileType.RaonLauncherMineSS,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    //Moving
+                    { ActorFlipbookState.Moving,    new AnimationInstance(){ StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                }
+            },
+            #endregion
             #region Trico
             {
                 MobileType.Trico,
@@ -434,93 +502,80 @@ namespace OpenBound.GameComponents.Animation
 
         public ActorFlipbookState State { get; private set; }
 
-        public Flipbook Flipbook;
-
         public Dictionary<ActorFlipbookState, AnimationInstance> StatePresets;
-
-        public Vector2 Position
-        {
-            get => Flipbook.Position;
-            set => Flipbook.Position = value;
-        }
-
-        public float Rotation
-        {
-            get => Flipbook.Rotation;
-            set => Flipbook.Rotation = value;
-        }
-
-        public SpriteEffects Effect
-        {
-            get => Flipbook.Effect;
-            set => Flipbook.Effect = value;
-        }
-
-        public float LayerDepth
-        {
-            get => Flipbook.LayerDepth;
-            set => Flipbook.LayerDepth = value;
-        }
-
-        public int SpriteHeight => Flipbook.SpriteHeight;
 
         public static MobileFlipbook CreateMobileFlipbook(MobileType MobileType, Vector2 Position)
         {
-            MobileFlipbook mb = new MobileFlipbook();
+            MobileFlipbook mb = null;
 
             string spritePath = $"Graphics/Tank/{MobileType}/CharacterSpritesheet";
 
             switch (MobileType)
             {
                 case MobileType.Random:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(14, 23.5f), 28, 47, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Armor:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(79, 88), 2900 / 20, 2990 / 23, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Bigfoot:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(75, 88), 2580 / 20, 2470 / 19, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Dragon:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(72.5f, 85f), 2500 / 20, 3240 / 27, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Mage:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(52f, 85f), 2180 / 20, 3150 / 21, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Ice:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(78f, 75f), 2960 / 20, 3150 / 21, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Knight:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(59, 88), 2160 / 20, 2413 / 19, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
+                    break;
+                case MobileType.RaonLauncher:
+                    mb = new MobileFlipbook(
+                        Position, new Vector2(66, 95), 2200 / 20, 2340 / 18, spritePath,
+                        new AnimationInstance(), DepthParameter.Mobile);
+                    break;
+                case MobileType.RaonLauncherMineS2:
+                    mb = new MobileFlipbook(
+                        Position, new Vector2(15.5f, 14.5f), 1519 / 49, 29, spritePath,
+                        new AnimationInstance(), DepthParameter.Mobile);
+                    break;
+                case MobileType.RaonLauncherMineSS:
+                    mb = new MobileFlipbook(
+                        Position, new Vector2(19f, 17f), 456 / 12, 33, spritePath,
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Trico:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(65, 80), 2360 / 20, 2730 / 21, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Turtle:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(59, 88), 2300 / 20, 3000 / 24, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Lightning:
-                    mb.Flipbook = Flipbook.CreateFlipbook(
+                    mb = new MobileFlipbook(
                         Position, new Vector2(56, 83), 2560 / 20, 3013 / 23, spritePath,
-                        new AnimationInstance(), true, DepthParameter.Mobile);
+                        new AnimationInstance(), DepthParameter.Mobile);
                     break;
             }
 
@@ -528,28 +583,19 @@ namespace OpenBound.GameComponents.Animation
             mb.State = ActorFlipbookState.Moving;
             mb.ChangeState(ActorFlipbookState.Stand);
 
-            //            if (mb.FlipbookSFX != null)
-            //              mb.FlipbookSFX.Color = Color.;
-
             return mb;
         }
 
-        private MobileFlipbook() { }
-
-        public void Flip()
-        {
-            Flipbook.Flip();
-        }
-
-        public void SetAnimationFrame(int param)
-        {
-            Flipbook.SetCurrentFrame(param);
-        }
+        private MobileFlipbook(Vector2 position, Vector2 pivot, int spriteWidth, int spriteHeight,
+            string texture2DPath, AnimationInstance animationInstance, float layerDepth,
+            float rotation = 0)
+            : base(position, pivot, spriteWidth, spriteHeight, texture2DPath, animationInstance, layerDepth, rotation)
+        { }
 
         public void EnqueueAnimation(ActorFlipbookState NewState)
         {
             if (State == ActorFlipbookState.Dead) return;
-            Flipbook.AppendAnimationIntoCycle(StatePresets[NewState]);
+                AppendAnimationIntoCycle(StatePresets[NewState]);
         }
 
         public void ChangeState(ActorFlipbookState NewState, bool Force = false)
@@ -564,12 +610,7 @@ namespace OpenBound.GameComponents.Animation
             State = NewState;
 
             if (!selectedPreset.Equals(default(AnimationInstance)))
-                Flipbook.AppendAnimationIntoCycle(selectedPreset, Force);
-        }
-
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            Flipbook.Draw(gameTime, spriteBatch);
+                AppendAnimationIntoCycle(selectedPreset, Force);
         }
     }
 }

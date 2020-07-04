@@ -15,7 +15,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.Pawn.Unit;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
 using System.Collections.Generic;
@@ -62,13 +62,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             : base(mobile, ShotType.S1, Parameter.ProjectileBigfootS1ExplosionRadius, Parameter.ProjectileBigfootS1BaseDamage, angleModifier: angleModifier)
         {
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(31.5f, 20),
                 63, 40, "Graphics/Tank/Bigfoot/Bullet1",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileBigfootS1Mass;
@@ -77,7 +77,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             base.Explode();
             SpecialEffectBuilder.BigfootProjectile1Explosion(FlipbookList[0].Position);
@@ -104,13 +104,13 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(9, 7.5f),
                 18, 15, "Graphics/Tank/Bigfoot/Bullet2",
                 new List<AnimationInstance>() {
                     new AnimationInstance()
                     { StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
-                }, true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileBigfootS2Mass;
@@ -119,7 +119,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.ArmorProjectile2Explosion(FlipbookList[0].Position);
             base.Explode();
@@ -146,13 +146,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             this.Mobile = mobile;
 
             //Initializing Flipbook
-            FlipbookList.Add(Flipbook.CreateFlipbook(
+            FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(34.5f, 17.5f),
                 69, 35, "Graphics/Tank/Bigfoot/Bullet3",
                 new List<AnimationInstance>() {
                     new AnimationInstance(){ StartingFrame = 0, EndingFrame = 4, TimePerFrame = 1 / 20f }
-                },
-                true, DepthParameter.Projectile, angle));
+                }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
             mass = Parameter.ProjectileBigfootSSMass;
@@ -161,7 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             SpawnTime = spawnTime;
         }
 
-        protected override void Explode()
+        public override void Explode()
         {
             SpecialEffectBuilder.BigfootProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();

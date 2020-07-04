@@ -16,7 +16,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +80,7 @@ namespace OpenBound.GameComponents.Pawn
 
             position = new Vector2(0, -500);
 
-            flipbook = Flipbook.CreateFlipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], false, DepthParameter.Mobile, MathHelper.PiOver2);
+            flipbook = new Flipbook(position, new Vector2(118, 111), 197, 190, "Graphics/Entity/Thor/Spritesheet", thorStatePresets[ActorFlipbookState.Stand], DepthParameter.Mobile, MathHelper.PiOver2);
 
             levelSpriteFont = new NumericSpriteFont(FontType.HUDBlueThorLevelIndicator, 1, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false, StartingValue: 1);
             experienceSpriteFont = new CurrencySpriteFont(FontType.HUDBlueThorExperienceIndicator, 5, DepthParameter.MobileSatellite, textAnchor: TextAnchor.Right, attachToCamera: false);

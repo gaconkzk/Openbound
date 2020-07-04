@@ -2,7 +2,7 @@
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenBound.GameComponents.PawnAction
+namespace OpenBound.GameComponents.MobileAction
 {
     public class HelicoidalTrace : Trace
     {

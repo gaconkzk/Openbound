@@ -22,7 +22,6 @@ using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Interface.Popup;
 using OpenBound.GameComponents.Pawn;
-using OpenBound.GameComponents.Pawn.Remote;
 using OpenBound.ServerCommunication;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Common;
@@ -39,6 +38,9 @@ using OpenBound.GameComponents.Input;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Interface.Interactive;
+using OpenBound.GameComponents.Pawn.Unit;
+using OpenBound.GameComponents.MobileAction;
+using OpenBound.GameComponents.MobileAction.Motion;
 
 namespace OpenBound.GameComponents.Level.Scene
 {
@@ -61,7 +63,13 @@ namespace OpenBound.GameComponents.Level.Scene
 
         //Game Constants/Information
         public static MatchMetadata MatchMetadata;
+        
+        //Mobile list
         public static List<Mobile> MobileList;
+
+        //Summoned list
+        public static List<Mobile> MineList;
+        public static List<Mobile> ToBeRemovedMineList;
 
         //Weather
         public static WeatherHandler WeatherHandler;
@@ -72,6 +80,8 @@ namespace OpenBound.GameComponents.Level.Scene
 
         private bool isLeaveGamePopupRendered;
 
+        public static IEnumerable<Mobile> DamageableMobiles => MobileList.Union(MineList).Except(ToBeRemovedMineList);
+
         public LevelScene()
         {
             GameInformation.Instance.GameState = GameState.InGame;
@@ -79,6 +89,9 @@ namespace OpenBound.GameComponents.Level.Scene
             MobileList = new List<Mobile>();
             WeatherHandler = new WeatherHandler();
             ThorSatellite = new ThorSatellite();
+
+            MineList = new List<Mobile>();
+            ToBeRemovedMineList = new List<Mobile>();
 
             //Popup related
             isLeaveGamePopupRendered = false;
@@ -183,10 +196,10 @@ namespace OpenBound.GameComponents.Level.Scene
                 case GameMap.Metamine:
                     BackgroundFlipbookList = new List<Renderable>
                     {
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero,  52, 111, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 14, TimePerFrame = 0.1f },                                      true, DepthParameter.BackgroundAnim),
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero, 116, 191, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  9, TimePerFrame = 0.1f, AnimationType = AnimationType.Cycle }, true, DepthParameter.BackgroundAnim),
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero,  64, 192, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  9, TimePerFrame = 0.1f },                                      true, DepthParameter.BackgroundAnim),
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero, 100, 186, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 11, TimePerFrame = 0.2f },                                      true, DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero,  52, 111, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 14, TimePerFrame = 0.1f },                                      DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero, 116, 191, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  9, TimePerFrame = 0.1f, AnimationType = AnimationType.Cycle }, DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero,  64, 192, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  9, TimePerFrame = 0.1f },                                      DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero, 100, 186, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 11, TimePerFrame = 0.2f },                                      DepthParameter.BackgroundAnim),
                     };
 
                     BackgroundFlipbookOffsetList = new List<Vector2>() { new Vector2(-38, -403), new Vector2(-192, -158), new Vector2(163, -270), new Vector2(124, -116) };
@@ -196,9 +209,9 @@ namespace OpenBound.GameComponents.Level.Scene
                 case GameMap.SeaOfHero:
                     BackgroundFlipbookList = new List<Renderable>
                     {
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero, 142, 161, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 19, TimePerFrame = 0.2f },                                      true, DepthParameter.BackgroundAnim),
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero,  74, 124, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 19, TimePerFrame = 0.5f, AnimationType = AnimationType.Cycle }, true, DepthParameter.BackgroundAnim),
-                        Flipbook.CreateFlipbook(Vector2.Zero, Vector2.Zero,  86,  76, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  1, TimePerFrame = 5f   },                                      true, DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero, 142, 161, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 19, TimePerFrame = 0.2f },                                      DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero,  74, 124, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame = 19, TimePerFrame = 0.5f, AnimationType = AnimationType.Cycle }, DepthParameter.BackgroundAnim),
+                        new Flipbook(Vector2.Zero, Vector2.Zero,  86,  76, $@"Graphics/Maps/{map}/BackgroundAnimation{i++}", new AnimationInstance() { EndingFrame =  1, TimePerFrame = 5f   },                                      DepthParameter.BackgroundAnim),
                     };
 
                     BackgroundFlipbookOffsetList = new List<Vector2>() { new Vector2(-415, -235), new Vector2(208, -34), new Vector2(110, 033) };
@@ -450,6 +463,10 @@ namespace OpenBound.GameComponents.Level.Scene
                 HUD.Update(gameTime);
             }
 
+            MineList.ForEach((x) => x.Update(gameTime));
+            ToBeRemovedMineList.ForEach((x) => MineList.Remove(x));
+            ToBeRemovedMineList.Clear();
+
             UpdateBackgroundParallaxPosition();
 
             ThorSatellite.Update(gameTime);
@@ -471,6 +488,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
                 HUD.Draw(gameTime, spriteBatch);
             }
+
+            MineList.ForEach((x) => x.Draw(gameTime, spriteBatch));
 
             ThorSatellite.Draw(gameTime, spriteBatch);
 

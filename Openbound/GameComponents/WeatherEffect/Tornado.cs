@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Level;
-using OpenBound.GameComponents.PawnAction;
+using OpenBound.GameComponents.MobileAction;
 using System;
 using System.Collections.Generic;
 using Openbound_Network_Object_Library.Entity;
