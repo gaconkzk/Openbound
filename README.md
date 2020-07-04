@@ -73,7 +73,7 @@ For further information read the README.md inside each project directory.
 
  - [sdyalor](https://github.com/sdyalor)
 
-<h2>Game client assets/Datamined values
+<h2>Game client assets/Datamined values</h2>
 
  - ursoGb
 
