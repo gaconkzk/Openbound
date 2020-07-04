@@ -306,11 +306,16 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Explode()
         {
+            //Wipe the "pass turn" action from the projectile and pass the responsability to the mine.
+            Action explodeAction = OnFinalizeExecutionAction;
+            OnFinalizeExecutionAction = default;
+
             base.Explode();
 
-            RaonLauncherMineSS rlmss = new RaonLauncherMineSS(Mobile, previousPosition, OnFinalizeExecutionAction);
+            // The mine must be added on the scene AFTER the explosion
+            // to preventing it from being exploded by the weather
+            RaonLauncherMineSS rlmss = new RaonLauncherMineSS(Mobile, previousPosition, explodeAction);
             LevelScene.MineList.Add(rlmss);
-            OnFinalizeExecutionAction = default;
         }
 
         protected override void Destroy()
