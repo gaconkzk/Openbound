@@ -576,7 +576,10 @@ namespace OpenBound.GameComponents.Pawn
         {
             Shoot();
 
-            LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction = () => { ServerInformationHandler.RequestNextPlayerTurn(); });
+            LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction = () => 
+            {
+                ServerInformationHandler.RequestNextPlayerTurn(); 
+            });
             GameScene.Camera.TrackObject(LastCreatedProjectileList.First());
         }
 

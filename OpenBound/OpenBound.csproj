@@ -715,6 +715,8 @@
     <Compile Include="GameComponents\Pawn\ThorSatellite.cs" />
     <Compile Include="GameComponents\Pawn\Unit\RaonLauncher.cs" />
     <Compile Include="GameComponents\Pawn\Unit\RaonLauncherMine.cs" />
+    <Compile Include="GameComponents\Pawn\Unit\RaonLauncherMineS2.cs" />
+    <Compile Include="GameComponents\Pawn\Unit\RaonLauncherMineSS.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Trico.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Turtle.cs" />
     <Compile Include="GameComponents\Pawn\Unit\Mage.cs" />

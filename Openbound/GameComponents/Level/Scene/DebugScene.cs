@@ -430,7 +430,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F8))
             {
-                WeatherHandler.Add(WeatherType.Tornado, new Vector2(-200, -Topography.MapHeight / 2));
+                WeatherHandler.Add(WeatherType.Tornado, new Vector2(400, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F9))
@@ -486,17 +486,17 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.F2))
             {
-
+                WeatherHandler.Add(WeatherType.Thor, WeatherType.Weakness, new Vector2(0, -Topography.MapHeight / 2));
             }
 
             if (InputHandler.IsBeingPressed(Keys.F3))
             {
-
+                SpecialEffectBuilder.RaonLauncherProjectile2ActiveTornado(MobileList[0].Position);
             }
 
             if (InputHandler.IsBeingPressed(Keys.D1))
             {
-
+                SpecialEffectBuilder.RaonLauncherProjectile2DormantTornado(MobileList[0].Position);
             }
 
             if (InputHandler.IsBeingPressed(Keys.D2))

@@ -37,7 +37,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
             MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncher, position);
 
-            Movement.CollisionOffset = 22;
+            Movement.CollisionOffset = 20;
             Movement.MaximumStepsPerTurn = 90;
 
             Crosshair = new Crosshair(this);
@@ -47,15 +47,23 @@ namespace OpenBound.GameComponents.Pawn.Unit
             mineTurn = true;
         }
 
+        /// <summary>
+        /// Checks and grants turns to all the mines in the scene
+        /// </summary>
         public override void GrantTurn()
         {
+            // In the begining of the turn mineTurn is true, all mines are called on a 'daisy chain'
+            // where each mine removes itself from the list and then pass the remaining elements to the next mines
+            // via GrantTurn(param). After the last mine finishes its turn, this method is called once
+            // again but mineTurn is now false
             if (mineTurn)
             {
-                List<RaonLauncherMine> ownedMines = LevelScene
+                //Filters all the mines on the scene owned by raon's player
+                List<RaonLauncherMineS2> ownedMines = LevelScene
                     .MineList.Except(LevelScene.ToBeRemovedMineList)
-                    .Where((x) => x.Owner.ID == Owner.ID)
+                    .Where((x) => x is RaonLauncherMineS2 && x.Owner.ID == Owner.ID)
                     .ToList()
-                    .ConvertAll((x) => (RaonLauncherMine)x);
+                    .ConvertAll((x) => (RaonLauncherMineS2)x);
 
                 if (ownedMines.Count > 0)
                 {
@@ -65,13 +73,9 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 }
             }
 
+            // After all mines have its turns, execute normal procedure
             mineTurn = true;
             base.GrantTurn();
-        }
-
-        public override void PlayUnableToMoveSE(float pitch = 0, float pan = 0)
-        {
-            base.PlayUnableToMoveSE(pitch: 0.75f);
         }
 
         protected override void Shoot()

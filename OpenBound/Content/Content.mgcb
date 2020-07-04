@@ -703,11 +703,17 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Movement/RaonLauncher.mp3
 
-#begin Audio/SFX/Tank/Movement/RaonLauncherMine.mp3
+#begin Audio/SFX/Tank/Movement/RaonLauncherMineS2.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Audio/SFX/Tank/Movement/RaonLauncherMine.mp3
+/build:Audio/SFX/Tank/Movement/RaonLauncherMineS2.mp3
+
+#begin Audio/SFX/Tank/Movement/RaonLauncherMineSS.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SFX/Tank/Movement/RaonLauncherMineSS.mp3
 
 #begin Audio/SFX/Tank/Movement/RaonLauncherUnable.mp3
 /importer:Mp3Importer
@@ -4162,7 +4168,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/RaonLauncher/CharacterSpritesheet.png
 
-#begin Graphics/Tank/RaonLauncher/MineSS.png
+#begin Graphics/Tank/RaonLauncherMineS2/CharacterSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -4172,9 +4178,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Tank/RaonLauncher/MineSS.png
+/build:Graphics/Tank/RaonLauncherMineS2/CharacterSpritesheet.png
 
-#begin Graphics/Tank/RaonLauncherMine/CharacterSpritesheet.png
+#begin Graphics/Tank/RaonLauncherMineSS/CharacterSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -4184,7 +4190,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Tank/RaonLauncherMine/CharacterSpritesheet.png
+/build:Graphics/Tank/RaonLauncherMineSS/CharacterSpritesheet.png
 
 #begin Graphics/Tank/Trico/Bullet1.png
 /importer:TextureImporter

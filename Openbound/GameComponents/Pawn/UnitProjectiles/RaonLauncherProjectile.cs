@@ -39,7 +39,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public static void Shot2(RaonLauncher mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile, 3));
+            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile,  3));
             mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile, -3));
         }
     }
@@ -234,7 +234,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void Explode()
         {
             base.Explode();
-            LevelScene.MineList.Add(new RaonLauncherMine(Mobile, previousPosition));
+            LevelScene.MineList.Add(new RaonLauncherMineS2(Mobile, previousPosition));
         }
 
         protected override void Destroy()
@@ -277,24 +277,24 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Explode()
         {
+            CheckCollisionWithWeather();
             base.Explode();
             SpecialEffectBuilder.RaonLauncherProjectile2Explosion(Position);
         }
     }
 
-
     public class RaonProjectile3 : Projectile
     {
-        public RaonProjectile3(RaonLauncher mobile) : base(mobile, ShotType.SS, Parameter.ProjectileIceSSExplosionRadius, Parameter.ProjectileIceSSBaseDamage)
+        public RaonProjectile3(RaonLauncher mobile) : base(mobile, ShotType.SS, 0, 0)
         {
-            this.Mobile = mobile;
+            Mobile = mobile;
 
             //Initializing Flipbook
             FlipbookList.Add(new Flipbook(
-                mobile.Crosshair.CannonPosition, new Vector2(38.5f, 35f),
-                77, 70, "Graphics/Tank/Ice/Bullet3",
+                mobile.Crosshair.CannonPosition, new Vector2(21f, 16f),
+                44, 34, "Graphics/Tank/RaonLauncher/Bullet3",
                 new List<AnimationInstance>() {
-                    new AnimationInstance(){ StartingFrame = 0, EndingFrame = 14, TimePerFrame = 1 / 20f }
+                    new AnimationInstance(){ StartingFrame = 0, EndingFrame = 9, TimePerFrame = 1 / 20f }
                 }, DepthParameter.Projectile, angle));
 
             //Physics/Trajectory setups
@@ -306,8 +306,11 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Explode()
         {
-            SpecialEffectBuilder.IceProjectile3Explosion(FlipbookList[0].Position);
             base.Explode();
+
+            RaonLauncherMineSS rlmss = new RaonLauncherMineSS(Mobile, previousPosition, OnFinalizeExecutionAction);
+            LevelScene.MineList.Add(rlmss);
+            OnFinalizeExecutionAction = default;
         }
 
         protected override void Destroy()
@@ -318,6 +321,40 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
             if (pjList.Count() == 0)
                 OnFinalizeExecutionAction?.Invoke();
+        }
+
+        public override bool UpdateCollider(Vector2 position)
+        {
+            bool hasExploded = false;
+
+            //Check collision with ground
+            if (CanCollide && Topography.CheckCollision(position))
+            {
+                hasExploded = true;
+                Explode();
+#if Debug
+                debugCrosshair.Update(FlipbookList[0].Position);
+#endif
+            }
+
+            return hasExploded;
+        }
+    }
+
+    public class RaonProjectile3Explosion : DummyProjectile
+    {
+        public RaonProjectile3Explosion(RaonLauncher mobile)
+         : base(mobile, ShotType.SS, Parameter.ProjectileRaonLauncherSSExplosionRadius, Parameter.ProjectileRaonLauncherSSBaseDamage)
+        {
+            //Physics/Trajectory setups
+            mass = 1; windInfluence = 1;
+        }
+
+        public override void Explode()
+        {
+            CheckCollisionWithWeather();
+            base.Explode();
+            SpecialEffectBuilder.RaonLauncherProjectile3Explosion(Position);
         }
     }
 }

@@ -80,6 +80,8 @@ namespace OpenBound.GameComponents.Level.Scene
 
         private bool isLeaveGamePopupRendered;
 
+        public static IEnumerable<Mobile> DamageableMobiles => MobileList.Union(MineList).Except(ToBeRemovedMineList);
+
         public LevelScene()
         {
             GameInformation.Instance.GameState = GameState.InGame;

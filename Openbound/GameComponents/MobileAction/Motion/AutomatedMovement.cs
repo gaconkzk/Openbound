@@ -15,12 +15,16 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity.Sync;
+using System;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.MobileAction.Motion
 {
     public class AutomatedMovement : Movement
     {
+        public Action OnInvalidMovemenAttempt;
+        public Action OnRemaningMovementEnds;
+
         public Vector2 TargetPosition;
 
         public AutomatedMovement(Mobile mobile) : base(mobile)
@@ -57,14 +61,13 @@ namespace OpenBound.GameComponents.MobileAction.Motion
 
             if (canMove && !IsAbleToMove)
             {
-                Mobile.ChangeFlipbookState(ActorFlipbookState.Activated, true);
-                Mobile.LoseTurn();
+                OnRemaningMovementEnds?.Invoke();
             }
         }
 
         public override void InvalidateMovementAttempt()
         {
-            RemainingStepsThisTurn = 0;
+            OnInvalidMovemenAttempt?.Invoke();
         }
     }
 }

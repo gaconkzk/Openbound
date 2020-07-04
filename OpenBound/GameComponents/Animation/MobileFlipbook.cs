@@ -353,15 +353,27 @@ namespace OpenBound.GameComponents.Animation
             #endregion
             #region Raon Launcher Mine
             {
-                MobileType.RaonLauncherMine,
+                MobileType.RaonLauncherMineS2,
                 new Dictionary<ActorFlipbookState, AnimationInstance>()
                 {
                     //Normal
                     { ActorFlipbookState.Dormant,   new AnimationInstance(){ StartingFrame = 00, EndingFrame = 19, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                     //Active
                     { ActorFlipbookState.Activated, new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                    //Falling
+                    { ActorFlipbookState.Falling,   new AnimationInstance(){ StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                     //Moving
                     { ActorFlipbookState.Moving,    new AnimationInstance(){ StartingFrame = 37, EndingFrame = 48, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
+                }
+            },
+            #endregion
+            #region Raon Launcher Mine
+            {
+                MobileType.RaonLauncherMineSS,
+                new Dictionary<ActorFlipbookState, AnimationInstance>()
+                {
+                    //Moving
+                    { ActorFlipbookState.Moving,    new AnimationInstance(){ StartingFrame = 0, EndingFrame = 11, TimePerFrame = 1/20f, AnimationType = AnimationType.Foward } },
                 }
             },
             #endregion
@@ -540,9 +552,14 @@ namespace OpenBound.GameComponents.Animation
                         Position, new Vector2(66, 95), 2200 / 20, 2340 / 18, spritePath,
                         new AnimationInstance(), DepthParameter.Mobile);
                     break;
-                case MobileType.RaonLauncherMine:
+                case MobileType.RaonLauncherMineS2:
                     mb = new MobileFlipbook(
                         Position, new Vector2(15.5f, 14.5f), 1519 / 49, 29, spritePath,
+                        new AnimationInstance(), DepthParameter.Mobile);
+                    break;
+                case MobileType.RaonLauncherMineSS:
+                    mb = new MobileFlipbook(
+                        Position, new Vector2(19f, 17f), 456 / 12, 33, spritePath,
                         new AnimationInstance(), DepthParameter.Mobile);
                     break;
                 case MobileType.Trico:

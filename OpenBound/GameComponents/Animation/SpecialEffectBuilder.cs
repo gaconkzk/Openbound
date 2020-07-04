@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.GameComponents.Level;
 using System;
 
 namespace OpenBound.GameComponents.Animation
@@ -224,25 +225,59 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
 
-        /*
-        public static void MageProjectile3Explosion(Vector2 position, float rotation)
+        public static void RaonLauncherProjectile2DormantTornado(Vector2 position)
         {
-            Flipbook fb = new Flipbook(position, new Vector2(192.5f, 192), 385, 384, "Graphics/Special Effects/Tank/Mage/Flame3",
-                new AnimationInstance() { StartingFrame = 0, EndingFrame = 30, TimePerFrame = 1 / 30f }, false, DepthParameter.ProjectileSFX, rotation);
+            Flipbook fb = new Flipbook(position, new Vector2(15.5f, 18.5f), 31, 29, "Graphics/Tank/RaonLauncherMineS2/CharacterSpritesheet",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 19, TimePerFrame = 1 / 10f }, DepthParameter.ProjectileSFX, 0);
 
-            SpecialEffect se = new SpecialEffect(fb, 1);
+            SpecialEffect se = new SpecialEffect(fb, 0);
 
-            float transparency = 1f;
+            float positionMultiplier = 0;
             se.UpdateAction += (specialEffect, gameTime) =>
             {
-                se.Flipbook.Rotation += MathHelper.Pi * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                se.Flipbook.SetTransparency(transparency);
+                if (Topography.IsNotInsideMapBoundaries(se.Flipbook.Position))
+                    SpecialEffectHandler.Remove(se);
+
+                se.Flipbook.Position -= new Vector2(0, positionMultiplier);
+                se.Flipbook.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * positionMultiplier * positionMultiplier * MathHelper.PiOver2;
+
+                positionMultiplier += (float)gameTime.ElapsedGameTime.TotalSeconds;
             };
 
             SpecialEffectHandler.Add(se);
         }
-        */
+
+        public static void RaonLauncherProjectile2ActiveTornado(Vector2 position)
+        {
+            Flipbook fb = new Flipbook(position, new Vector2(15.5f, 18.5f), 31, 29, "Graphics/Tank/RaonLauncherMineS2/CharacterSpritesheet",
+                new AnimationInstance() { StartingFrame = 20, EndingFrame = 36, TimePerFrame = 1 / 10f }, DepthParameter.ProjectileSFX, 0);
+
+            SpecialEffect se = new SpecialEffect(fb, 0);
+
+            float positionMultiplier = 0;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                if (Topography.IsNotInsideMapBoundaries(se.Flipbook.Position))
+                    SpecialEffectHandler.Remove(se);
+
+                se.Flipbook.Position -= new Vector2(0, positionMultiplier);
+                se.Flipbook.Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds * positionMultiplier * positionMultiplier * MathHelper.PiOver2;
+
+                positionMultiplier += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void RaonLauncherProjectile3Explosion(Vector2 position)
+        {
+            Flipbook fb = new Flipbook(position, new Vector2(94, 95), 172, 182, "Graphics/Special Effects/Tank/RaonLauncher/Flame3",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 29, TimePerFrame = 1 / 30f }, DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi);
+
+            SpecialEffect se = new SpecialEffect(fb, 1);
+
+            SpecialEffectHandler.Add(se);
+        }
         #endregion
 
         #region Turtle

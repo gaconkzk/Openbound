@@ -2,6 +2,7 @@
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
+using OpenBound.GameComponents.Pawn.Unit;
 
 namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
@@ -28,7 +29,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         protected override int CalculateDamage(Mobile mobile)
         {
             int exp = base.CalculateDamage(mobile);
-            thor.GainExperience(exp);
+
+            if (!(mobile is RaonLauncherMine))
+                thor.GainExperience(exp);
+
             return exp;
         }
     }
