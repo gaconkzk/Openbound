@@ -77,12 +77,12 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             
             //The weather needs to have a top-bottom collision checking approach. On the other hand,
             //the Lightning projectile collision starts at the project itself and then checks farther positions
-            //because of its rotating feature
+            //because of its rotating characteristic
             switch (beamEmitterType)
             {
-                case BeamEmitterType.Weather:
+                /*case BeamEmitterType.Weather:
                     WeatherUpdateBehavior(ref explosionPosition);
-                    break;
+                    break;*/
                 case BeamEmitterType.Lightning:
                     LightningUpdateBehavior(ref explosionPosition);
                     break;
@@ -98,7 +98,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         private void LightningUpdateBehavior(ref Vector2 explosionPosition)
         {
-            completeMobileList = LevelScene.MobileList;
+            completeMobileList = LevelScene.DamageableMobiles.ToList();
 
             //While it is still inside the map
             while (Topography.IsInsideMapBoundaries(Position) && Position.Y >= Topography.FirstCollidableBlockY)
@@ -119,7 +119,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         private void ThorUpdateBehavior(ref Vector2 explosionPosition)
         {
-            completeMobileList = LevelScene.MobileList;
+            completeMobileList = LevelScene.MobileList.ToList();
 
             //While it is still inside the map
             while (
@@ -141,9 +141,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             }
         }
 
-        private void WeatherUpdateBehavior(ref Vector2 explosionPosition)
+        /*private void WeatherUpdateBehavior(ref Vector2 explosionPosition)
         {
-            completeMobileList = LevelScene.MobileList.Where((x) => Math.Abs(x.Position.Y) - Math.Abs(Position.Y) <= extraExplosionRadius).ToList();
+            completeMobileList = LevelScene.DamageableMobiles.Where((x) => Math.Abs(x.Position.Y) - Math.Abs(Position.Y) <= extraExplosionRadius).ToList();
 
             //Start at the first (possible) collidable position
             Position = new Vector2(Position.X, Topography.FirstCollidableBlockY);
@@ -167,7 +167,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             {
                 explosionPosition = new Vector2(Position.X, Topography.MapHeight / 2);
             }
-        }
+        }*/
 
         /// <summary>
         /// Checks if every mobile can be affected by the extra discharge damage
