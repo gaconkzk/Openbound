@@ -501,7 +501,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D2))
             {
-
+                MobileList[3].Die();
             }
 
             if (InputHandler.IsBeingPressed(Keys.D3))

@@ -40,6 +40,8 @@ namespace OpenBound.GameComponents.Pawn
 {
     public abstract class Mobile : Actor
     {
+        public Rider Rider;
+
         public MobileFlipbook MobileFlipbook;
 
         // Mobile Name
@@ -89,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, MobileType mobileType, bool IsSummon = false) : base()
+        public Mobile(Player player, MobileType mobileType, Vector2 riderPositionOffset = default, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -113,6 +115,9 @@ namespace OpenBound.GameComponents.Pawn
                 Movement = new RemoteMovement(this);
 
             MobileMetadata = MobileMetadata.BuildMobileMetadata(mobileType);
+
+            if (!IsSummon)
+                Rider = new Rider(this, riderPositionOffset);
 
             //Sync
             SyncMobile = new SyncMobile();
@@ -160,6 +165,8 @@ namespace OpenBound.GameComponents.Pawn
             CollisionBox.Update();
 
             SendRequestToServer();
+
+            Rider?.Update();
 
 #if DEBUG
                 //Debug
@@ -248,6 +255,7 @@ namespace OpenBound.GameComponents.Pawn
             base.Flip();
             MobileFlipbook.Flip();
             Crosshair?.Flip();
+            Rider?.Flip();
         }
 
         public void SendRequestToServer()
@@ -600,12 +608,13 @@ namespace OpenBound.GameComponents.Pawn
             LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
         }
 
-        public new virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
+        public new virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            MobileFlipbook.Draw(GameTime, SpriteBatch);
-            if (IsAlive) Crosshair?.Draw(null, SpriteBatch);
+            MobileFlipbook.Draw(gameTime, spriteBatch);
+            if (IsAlive) Crosshair?.Draw(null, spriteBatch);
 
-            ProjectileList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
+            ProjectileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            Rider?.Draw(gameTime, spriteBatch);
         }
     }
 }

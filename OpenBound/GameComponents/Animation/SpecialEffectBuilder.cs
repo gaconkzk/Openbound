@@ -52,6 +52,49 @@ namespace OpenBound.GameComponents.Animation
             return se;
         }
         #endregion
+        #region Thor
+        private static void ThorShotColorBase(Vector2 position, Color baseColor, float scale, float rotation)
+        {
+            Flipbook fb = new Flipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), DepthParameter.ProjectileSFXBase, rotation);
+            fb.Scale = new Vector2(3, scale);
+
+            SpecialEffect se = new SpecialEffect(fb, 1f);
+
+            float elapsedTime = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                elapsedTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.Color = baseColor * elapsedTime;
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        private static void ThorShotBase(Vector2 position, float scale, float rotation)
+        {
+            Flipbook fb = new Flipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), DepthParameter.ProjectileSFX, rotation);
+            Vector2 originalScale = new Vector2(3, scale);
+            fb.Scale = originalScale;
+
+            SpecialEffect se = new SpecialEffect(fb, 1f);
+
+            float transparency = 1f;
+            se.UpdateAction += (specialEffect, gameTime) =>
+            {
+                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                se.Flipbook.SetTransparency(transparency * 2);
+                se.Flipbook.Scale = new Vector2(se.Flipbook.Scale.X * transparency, originalScale.Y - ((originalScale.Y * (1 - transparency)) / (originalScale.Y * 2)));
+            };
+
+            SpecialEffectHandler.Add(se);
+        }
+
+        public static void ThorShot(Vector2 position, Color baseColor, float scale, float rotation)
+        {
+            ThorShotColorBase(position, baseColor, scale, rotation);
+            ThorShotBase(position, scale, rotation);
+        }
+        #endregion
 
         #region Common
         public static void CommonFlameSS(Vector2 position, float rotation)
@@ -189,7 +232,6 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
         #endregion
-
         #region RaonLauncher
         public static SpecialEffect RaonLauncherProjectile1(Vector2 position, float rotation)
         {
@@ -279,7 +321,6 @@ namespace OpenBound.GameComponents.Animation
             SpecialEffectHandler.Add(se);
         }
         #endregion
-
         #region Turtle
         public static void TurtleProjectile1Explosion(Vector2 position, float rotation)
         {
@@ -379,48 +420,5 @@ namespace OpenBound.GameComponents.Animation
         }
         #endregion
 
-        #region Thor
-        private static void ThorShotColorBase(Vector2 position, Color baseColor, float scale, float rotation)
-        {
-            Flipbook fb = new Flipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), DepthParameter.ProjectileSFXBase, rotation);
-            fb.Scale = new Vector2(3, scale);
-
-            SpecialEffect se = new SpecialEffect(fb, 1f);
-
-            float elapsedTime = 1f;
-            se.UpdateAction += (specialEffect, gameTime) =>
-            {
-                elapsedTime -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                se.Flipbook.Color = baseColor * elapsedTime;
-            };
-
-            SpecialEffectHandler.Add(se);
-        }
-
-        private static void ThorShotBase(Vector2 position, float scale, float rotation)
-        {
-            Flipbook fb = new Flipbook(position, new Vector2(8, 128), 16, 256, "Graphics/Entity/Thor/ThorLaser", new AnimationInstance(), DepthParameter.ProjectileSFX, rotation);
-            Vector2 originalScale = new Vector2(3, scale);
-            fb.Scale = originalScale;
-
-            SpecialEffect se = new SpecialEffect(fb, 1f);
-
-            float transparency = 1f;
-            se.UpdateAction += (specialEffect, gameTime) =>
-            {
-                transparency -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                se.Flipbook.SetTransparency(transparency * 2);
-                se.Flipbook.Scale = new Vector2(se.Flipbook.Scale.X * transparency, originalScale.Y - ((originalScale.Y * (1 - transparency)) / (originalScale.Y * 2)));
-            };
-
-            SpecialEffectHandler.Add(se);
-        }
-
-        public static void ThorShot(Vector2 position, Color baseColor, float scale, float rotation)
-        {
-            ThorShotColorBase(position, baseColor, scale, rotation);
-            ThorShotBase(position, scale, rotation);
-        }
-        #endregion
     }
 }

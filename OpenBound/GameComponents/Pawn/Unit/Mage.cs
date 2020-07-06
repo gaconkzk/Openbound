@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Mage : Mobile
     {
-        public Mage(Player player, Vector2 position) : base(player, MobileType.Mage)
+        public Mage(Player player, Vector2 position) : base(player, MobileType.Mage, new Vector2(-20, 0))
         {
             Position = position;
 

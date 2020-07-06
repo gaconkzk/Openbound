@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Lightning : Mobile
     {
-        public Lightning(Player player, Vector2 position) : base(player, MobileType.Lightning)
+        public Lightning(Player player, Vector2 position) : base(player, MobileType.Lightning, new Vector2(-20, 0))
         {
             Position = position;
 

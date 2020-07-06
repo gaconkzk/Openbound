@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Ice : Mobile
     {
-        public Ice(Player player, Vector2 position) : base(player, MobileType.Ice)
+        public Ice(Player player, Vector2 position) : base(player, MobileType.Ice, new Vector2(-20, 0))
         {
             Position = position;
 

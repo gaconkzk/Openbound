@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Trico : Mobile
     {
-        public Trico(Player player, Vector2 position) : base(player, MobileType.Trico)
+        public Trico(Player player, Vector2 position) : base(player, MobileType.Trico, new Vector2(-20, 0))
         {
             Position = position;
 

@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Dragon : Mobile
     {
-        public Dragon(Player player, Vector2 position) : base(player, MobileType.Dragon)
+        public Dragon(Player player, Vector2 position) : base(player, MobileType.Dragon, new Vector2(-20, 0))
         {
             Position = position;
 

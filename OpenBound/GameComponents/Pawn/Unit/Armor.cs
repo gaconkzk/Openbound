@@ -22,7 +22,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Armor : Mobile
     {
-        public Armor(Player player, Vector2 position) : base(player, MobileType.Armor)
+        public Armor(Player player, Vector2 position) : base(player, MobileType.Armor, new Vector2(-20, 0))
         {
             Position = position;
 

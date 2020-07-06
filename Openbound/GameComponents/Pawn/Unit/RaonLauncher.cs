@@ -31,7 +31,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         bool mineTurn;
 
-        public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher)
+        public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher, new Vector2(-20, -2))
         {
             Position = position;
 

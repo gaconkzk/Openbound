@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         protected readonly Mobile mobile;
 
-        public RaonLauncherMine(Mobile mobile, Vector2 position, MobileType mobileType) : base(mobile.Owner, mobileType, true)
+        public RaonLauncherMine(Mobile mobile, Vector2 position, MobileType mobileType) : base(mobile.Owner, mobileType, IsSummon: true)
         {
             this.mobile = mobile;
             Position = position;

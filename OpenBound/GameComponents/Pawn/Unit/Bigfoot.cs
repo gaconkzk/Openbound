@@ -22,7 +22,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Bigfoot : Mobile
     {
-        public Bigfoot(Player player, Vector2 position) : base(player, MobileType.Bigfoot)
+        public Bigfoot(Player player, Vector2 position) : base(player, MobileType.Bigfoot, new Vector2(-20, 0))
         {
             Position = position;
 

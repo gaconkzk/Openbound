@@ -26,7 +26,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         public KnightSword Satellite;
 
-        public Knight(Player player, Vector2 position) : base(player, MobileType.Knight)
+        public Knight(Player player, Vector2 position) : base(player, MobileType.Knight, new Vector2(-20, 0))
         {
             Position = position;
 
