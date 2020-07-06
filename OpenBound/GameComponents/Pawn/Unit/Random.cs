@@ -21,18 +21,12 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Random : Mobile
     {
-        public Random(Player player, Vector2 position) : base(player, MobileType.Armor, new Vector2(-20, 0))
+        public Random(Player player, Vector2 position) : base(player, position, MobileType.Random, new Vector2(-20, 0))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Random, position);
-
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;
 
-            Crosshair = new Crosshair(this);
-
-            CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 40), new Vector2(0, 10));
+            //CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 40), new Vector2(0, 10));
         }
     }
 }

@@ -47,16 +47,20 @@ namespace GunboundImageFix.Utils
                         Frame[] frameArr = ImageDecoder.LoadFrames(aFile);
 
                         string pivotStrList = "";
+                        string coordStrList = "";
 
                         for (int i2 = 0; i2 < frameArr.Length; i2++)
                         {
                             pivotStrList += $"{string.Format("{0:000}", i2)},{frameArr[i2].m_CenterX},{frameArr[i2].m_CenterY}|";
+                            coordStrList += $"{string.Format("{0:000}", i2)},{frameArr[i2].pR1},{frameArr[i2].pR2}|";
+
 
                             string s = $@"{Parameters.RawOutputDirectory}\{fileName}-{string.Format("{0:000}", i2)}.png";
                             frameArr[i2].m_Image.Save(s);
                         }
 
                         File.WriteAllLines($@"{Parameters.RawOutputDirectory}\{fileName}.txt", pivotStrList.Split('|'));
+                        File.WriteAllLines($@"{Parameters.RawOutputDirectory}\{fileName} c.txt", coordStrList.Split('|'));
 
                         Console.WriteLine($"Imported: {fileName}");
                     }

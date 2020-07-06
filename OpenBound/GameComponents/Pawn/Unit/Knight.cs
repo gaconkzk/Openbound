@@ -26,16 +26,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         public KnightSword Satellite;
 
-        public Knight(Player player, Vector2 position) : base(player, MobileType.Knight, new Vector2(-20, 0))
+        public Knight(Player player, Vector2 position) : base(player, position, MobileType.Knight, new Vector2(0, -20))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Knight, position);
-
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 100;
-
-            Crosshair = new Crosshair(this);
 
             Satellite = new KnightSword(this);
 

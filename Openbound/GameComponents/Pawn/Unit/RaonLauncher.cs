@@ -24,27 +24,27 @@ using System.Collections;
 using System.Collections.Generic;
 using OpenBound.GameComponents.Level.Scene;
 using System.Linq;
+using System.IO;
+using System.Data.SqlTypes;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class RaonLauncher : Mobile
     {
+        public static List<Vector2> pivotOffset1 = new List<Vector2>();
+        public static List<Vector2> pivotOffset2 = new List<Vector2>();
         bool mineTurn;
 
-        public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher, new Vector2(-20, -2))
+        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher, new Vector2(09, 6))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncher, position);
-
             Movement.CollisionOffset = 20;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(0, 0));
 
             mineTurn = true;
+
+
         }
 
         /// <summary>

@@ -24,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Ice : Mobile
     {
-        public Ice(Player player, Vector2 position) : base(player, MobileType.Ice, new Vector2(-20, 0))
+        public Ice(Player player, Vector2 position) : base(player, position, MobileType.Ice, new Vector2(-20, 0))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Ice, position);
-
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 40, 33), new Vector2(0, 10));
         }

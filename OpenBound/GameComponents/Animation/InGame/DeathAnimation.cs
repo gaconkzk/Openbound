@@ -41,8 +41,9 @@ namespace OpenBound.GameComponents.Animation.InGame
 
         private void UpdateElement(GameTime gameTime)
         {
+            mobile.Rider.Update();
             mobile.MobileFlipbook.Position += Parameter.AnimationInGameDeathAnimationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (Topography.IsNotInsideMapBoundaries(mobile.Position - new Vector2(0, 300)) && Topography.IsNotInsideMapBoundaries(mobile.Position + new Vector2(0, 300)))
+            if (Topography.IsNotInsideMapBoundaries(mobile.MobileFlipbook.Position - new Vector2(0, 300)) && Topography.IsNotInsideMapBoundaries(mobile.MobileFlipbook.Position + new Vector2(0, 300)))
                 toBeDestroyedDeathAnimationList.Add(this);
         }
 

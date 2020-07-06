@@ -302,6 +302,12 @@
     <Content Include="Content\Audio\SFX\Tank\Shoot\TurtleSS.mp3" />
     <Content Include="Content\Debug\DebugCrosshair.png" />
     <Content Include="Content\Debug\DebugDot.png" />
+    <Content Include="Content\Graphics\Avatar\Female\Body\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Female\Head\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Male\Body\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Male\Head\Base.png" />
+    <Content Include="Content\Graphics\Entity\Thor\Spritesheet.png" />
+    <Content Include="Content\Graphics\Entity\Thor\ThorLaser.png" />
     <Content Include="Content\Graphics\Maps\Metamine\Background.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation1.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation2.png" />
@@ -351,7 +357,29 @@
     <Content Include="Content\Graphics\Tank\Knight\SatelliteSFX.png" />
     <Content Include="Content\Graphics\Tank\Knight\Shot1.png" />
     <Content Include="Content\Graphics\Tank\Knight\Shot3.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Mage\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Mage\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Mage\S1T.png" />
+    <Content Include="Content\Graphics\Tank\Mage\S2T.png" />
     <Content Include="Content\Graphics\Tank\Random\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncherMineS2\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncherMineSS\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet2.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\RaonLauncher.txt" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet2.png" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Trico\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\S1T.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\Shot3.png" />
     <Content Include="Content\Interface\AnimatedButtons\Buddy.png" />
     <Content Include="Content\Interface\AnimatedButtons\CashCharge.png" />
     <Content Include="Content\Interface\AnimatedButtons\Exit.png" />
@@ -774,6 +802,8 @@
     </Compile>
     <Compile Include="ServerCommunication\ServerInformationBroker.cs" />
     <Compile Include="ServerCommunication\Service\ServerInformationHandler.cs" />
+    <None Include="Tanks Test\babo2.img" />
+    <None Include="Tanks Test\tank7.img" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -836,6 +866,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Graphics\Tank\Mine\" />
     <Folder Include="Content\Interface\Alert\" />
     <Folder Include="Content\Interface\CreateRoom\" />
     <Folder Include="Content\Interface\FontNumber\" />

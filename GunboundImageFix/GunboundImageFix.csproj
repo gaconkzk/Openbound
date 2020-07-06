@@ -100,6 +100,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\ImgTools.dll</HintPath>
     </Reference>
+    <Reference Include="InsideGB, Version=1.0.1538.9770, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\InsideGB.exe</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="MonoGame.Framework.Net, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -116,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Entity\ColorBlending.cs" />
     <Compile Include="Entity\ImportedImage.cs" />
+    <Compile Include="Extension\EQueue.cs" />
     <Compile Include="Helper\ExplorerHelper.cs" />
     <Compile Include="Helper\PaintHelper.cs" />
     <Compile Include="Helper\RestartHelper.cs" />

@@ -82,7 +82,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 SelectedShotType = ShotType.SS,
                 SynchronizableActionList = new List<SynchronizableAction>() { SynchronizableAction.LeftMovement, SynchronizableAction.ChargingShot }
             });
-
+            /*
             sMobList.Add(new SyncMobile()
             {
                 CrosshairAngle = 10,
@@ -277,7 +277,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 Position = new int[] { 1, 0 },
                 SelectedShotType = ShotType.SS,
                 SynchronizableActionList = new List<SynchronizableAction>() { SynchronizableAction.LeftMovement, SynchronizableAction.ChargingShot }
-            });
+            });*/
             #endregion
 
             //delayboard = new Delayboard(mobList, new Vector2(0, 0) /* Parameter.ScreenCenter */);
@@ -292,8 +292,8 @@ namespace OpenBound.GameComponents.Level.Scene
                     { 5, new int[] { 500, 700 } }, { 6, new int[] { 900, 700 } },
                     { 7, new int[] { 600, 700 } }, { 8, new int[] { 1000, 700 } },
                 },
-                TeamA = new List<Player>() { sMobList[0].Owner, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner },
-                TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
+                TeamA = new List<Player>() { sMobList[0].Owner /*, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner */ },
+                TeamB = new List<Player>() { /*sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner*/ },
             };
             GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
         }
@@ -506,7 +506,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
-
+                MobileList[0].ChangeFlipbookState(ActorFlipbookState.BeingDamaged2, true);
             }
         }
 

@@ -10,14 +10,19 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Extension;
 using GunboundImageFix.Utils;
 using GunboundImageProcessing.ImageUtils;
+using InsideGB.Storage;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Xml.Serialization;
 
 namespace GunboundImageFix
 {
@@ -55,6 +60,7 @@ namespace GunboundImageFix
                 Console.WriteLine("c - Create Minimap Tumbnails");
                 Console.WriteLine("d - Spritefont Range Builder");
 
+                ExtractIMGData();
 
                 try
                 {
@@ -123,6 +129,97 @@ namespace GunboundImageFix
                     Console.Clear();
                 }
             } while (true);
+        }
+
+        public static void ExtractIMGData()
+        {
+            byte[] imgByteArray = File.ReadAllBytes(@"C:\Users\Carlos\source\repos\Openbound\OpenBound\Tanks Test\tank7.img");
+
+            //Parsing data stream into integer
+            Queue<byte> valueQueue = new Queue<byte>();
+
+            for (int i = 0; i < imgByteArray.Length; i++)
+                valueQueue.Enqueue(imgByteArray[i]);
+
+            //File data:
+            //
+            // bits  |   i      | value
+            //  2x16 |   0      | zero - ? 
+            //  2x16 |   1      | number of images
+            //  2x16 |   2  (0) | ? - v0
+            // ------+----------+ Loop starts here
+            //    32 |   3  (1) | width
+            //    32 |   4  (2) | height
+            //    32 |   5  (3) | coord X
+            //    32 |   6  (4) | coord Y
+            //   4x8 |   7  (5) | ? - v5
+            //   4x8 |   8  (6) | ? - v6
+            //    32 |   9  (7) | pilot pivot X
+            //    32 |  10  (8) | pilot pivot Y
+            //    32 |  11  (9) | Data stream length
+            // (9)x8 |  12 (10) | Image Begining...
+            // (9)x8 |  12+(09) | Image Ending
+            // ------+----------+ Loop ends here
+            //
+            // After iterating dataStreamLength times, it will start another header, begining from the loop indicator.
+            // until the eof is reached
+            //
+            // Each pixel of the image is built like this:
+            //
+            // byte1 = 0x 0011 0100; // (queue.Dequeue();)
+            // byte2 = 0x 0110 1100; // (queue.Dequeue();)
+            //
+            // Where:
+            //
+            // alpha = 0011 XXXX (1st 4 bits of byte1 + 4 don't care); 
+            // red   = 0100 XXXX (2nd 4 bits of byte1 + 4 don't care);
+            // green = 0110 XXXX (1st 4 bits of byte2 + 4 don't care);
+            // blue  = 1100 XXXX (2st 4 bits of byte2 + 4 don't care);
+            //
+            // I have decided to replace the 4 don't care for 1 if the current value of alpha, red, green or blue isn't 0
+            //
+            // Where v0 is the first information on the header, numberOfImages is v1, and v2 is the third
+            // Every v# variable from now on are unknown values.
+
+            int v0 = valueQueue.DequeueInt32();
+            int numberOfImages = valueQueue.DequeueInt32();
+
+            for (int i = 0; i < numberOfImages; i++)
+            {
+                int v2 = valueQueue.DequeueInt32();
+                int width = valueQueue.DequeueInt32();
+                int height = valueQueue.DequeueInt32();
+                int coordX = valueQueue.DequeueInt32();
+                int coordY = valueQueue.DequeueInt32();
+                int v5 = valueQueue.DequeueInt32();
+                int v6 = valueQueue.DequeueInt32();
+                int pilotPivotX = valueQueue.DequeueInt32();
+                int pilotPivotY = valueQueue.DequeueInt32();
+                int dataStreamLength = valueQueue.DequeueInt32();
+
+                Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
+
+                for (int h = 0; h < dataStreamLength; h+=2)
+                {
+                    byte b1 = valueQueue.Dequeue();
+                    byte b2 = valueQueue.Dequeue();
+
+                    int a = (b2 & 0xF0) << 0;
+                    int r = (b2 & 0x0F) << 4;
+                    int g = (b1 & 0xF0) << 0;
+                    int b = (b1 & 0x0F) << 4;
+
+
+                    if (b > 0) b |= 0xF;
+                    if (g > 0) g |= 0xF;
+                    if (r > 0) r |= 0xF;
+                    if (a > 0) a |= 0xF;
+
+                    bitmap.SetPixel((h / 2) % width, (h / 2) / width, Color.FromArgb(a, r, g, b));
+                }
+
+
+            }
         }
     }
 }

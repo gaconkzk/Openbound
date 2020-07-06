@@ -24,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Dragon : Mobile
     {
-        public Dragon(Player player, Vector2 position) : base(player, MobileType.Dragon, new Vector2(-20, 0))
+        public Dragon(Player player, Vector2 position) : base(player, position, MobileType.Dragon, new Vector2(-20, 0))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Dragon, position);
-
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 36, 38), new Vector2(0, -10));
         }

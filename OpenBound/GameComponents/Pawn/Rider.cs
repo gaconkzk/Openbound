@@ -14,8 +14,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Debug;
+using OpenBound.GameComponents.Pawn.Unit;
+using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -54,7 +59,7 @@ namespace OpenBound.GameComponents.Pawn
         public Rider(Mobile mobile, Vector2 positionOffset)
         {
             this.mobile = mobile;
-            head = new Flipbook(Vector2.Zero, new Vector2(27, 12), 38, 24, "Graphics/Avatar/Male/Head/Base", headAvatarState[AvatarState.Staring], 1, 0);
+            head = new Flipbook(Vector2.Zero, new Vector2(25, 12), 38, 24, "Graphics/Avatar/Male/Head/Base", headAvatarState[AvatarState.Staring], 1, 0);
             body = new Flipbook(Vector2.Zero, new Vector2(22, 12), 44, 28, "Graphics/Avatar/Male/Body/Base", bodyAvatarState[AvatarState.Normal], 1, 0);
             headBasePosition = positionOffset + new Vector2(-10, -17);
             bodyBasePosition = positionOffset;
@@ -63,6 +68,30 @@ namespace OpenBound.GameComponents.Pawn
             DebugHandler.Instance.Add(dc1);
             DebugHandler.Instance.Add(dc2);
 #endif
+
+            File.ReadAllLines(@"C:\Users\Carlos\source\repos\Openbound\OpenBound\Content\Graphics\Tank\RaonLauncher\RaonLauncher.txt").ToList()
+                .ForEach((x) => {
+                string[] s = x.Split(',');
+                    if (s.Count() <= 1) return;
+                RaonLauncher.pivotOffset1.Add(new Vector2(int.Parse(s[1]), int.Parse(s[2])));
+                });
+
+            File.ReadAllLines(@"C:\Users\Carlos\source\repos\Openbound\GunboundImageFix\Output\Raw\tank7 c.txt").ToList()
+                .ForEach((x) => {
+                    string[] s = x.Split(',');
+                    if (s.Count() <= 1) return;
+                    RaonLauncher.pivotOffset2.Add(new Vector2(int.Parse(s[1]), int.Parse(s[2])));
+                });
+
+            Update();
+
+
+        }
+
+        public void Hide()
+        {
+            head.Color = Color.Transparent;
+            body.Color = Color.Transparent;
         }
 
         public void Flip()
@@ -71,19 +100,26 @@ namespace OpenBound.GameComponents.Pawn
             body.Flip();
         }
 
+        static int value = 0;
+
         public void Update()
         {
             float baseAngle = mobile.MobileFlipbook.Rotation;
             Vector2 basePosition = Vector2.One;
 
-            if (mobile.Facing == Facing.Left)
+            /*if (mobile.Facing == Facing.Left)
             {
-                basePosition = new Vector2(1, -1);
+                basePosition = new Vector2(-1, 1);
                 baseAngle = baseAngle + MathHelper.Pi;
-            }
+            }*/
 
-            Vector2 headPos = Vector2.Transform(headBasePosition * basePosition, Matrix.CreateRotationZ(baseAngle));
-            Vector2 bodyPos = Vector2.Transform(bodyBasePosition * basePosition, Matrix.CreateRotationZ(baseAngle));
+            value = mobile.MobileFlipbook.GetCurrentFrame();
+
+            Vector2 pivotOffset = RaonLauncher.pivotOffset1[mobile.MobileFlipbook.GetCurrentFrame()];
+            pivotOffset += RaonLauncher.pivotOffset2[mobile.MobileFlipbook.GetCurrentFrame()];
+
+            Vector2 headPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
+            Vector2 bodyPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
 
 #if DEBUG
             dc1.Update(mobile.MobileFlipbook.Position + headPos);
@@ -98,8 +134,9 @@ namespace OpenBound.GameComponents.Pawn
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            head.Draw(gameTime, spriteBatch);
+            //head.Draw(gameTime, spriteBatch);
             body.Draw(gameTime, spriteBatch);
+            Console.WriteLine(value + " " + mobile.MobileFlipbook.GetCurrentFrame());
         }
     }
 }

@@ -24,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Turtle : Mobile
     {
-        public Turtle(Player player, Vector2 position) : base(player, MobileType.Turtle, new Vector2(-20, 0))
+        public Turtle(Player player, Vector2 position) : base(player, position, MobileType.Turtle, new Vector2(-20, 0))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Turtle, position);
-
             Movement.CollisionOffset = 23;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 38, 33), new Vector2(0, 10));
         }

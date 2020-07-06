@@ -91,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, MobileType mobileType, Vector2 riderPositionOffset = default, bool IsSummon = false) : base()
+        public Mobile(Player player, Vector2 position, MobileType mobileType, Vector2 riderPositionOffset = default, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -116,8 +116,14 @@ namespace OpenBound.GameComponents.Pawn
 
             MobileMetadata = MobileMetadata.BuildMobileMetadata(mobileType);
 
+            Position = position;
+            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType, position);
+
             if (!IsSummon)
+            {
                 Rider = new Rider(this, riderPositionOffset);
+                Crosshair = new Crosshair(this);
+            }
 
             //Sync
             SyncMobile = new SyncMobile();
@@ -190,6 +196,8 @@ namespace OpenBound.GameComponents.Pawn
         public virtual void Die()
         {
             if (!IsAlive) return;
+
+            if (Rider != null) Rider.Hide();
 
             DeathAnimation.Add(this);
             ChangeFlipbookState(ActorFlipbookState.Dead, true);

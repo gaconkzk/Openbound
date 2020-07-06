@@ -24,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Mage : Mobile
     {
-        public Mage(Player player, Vector2 position) : base(player, MobileType.Mage, new Vector2(-20, 0))
+        public Mage(Player player, Vector2 position) : base(player, position, MobileType.Mage, new Vector2(-20, 0))
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Mage, position);
-
             Movement.CollisionOffset = 30;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 38, 33), new Vector2(0, 10));
         }

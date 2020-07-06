@@ -52,8 +52,9 @@ namespace OpenBound.GameComponents.Debug
 
         public void Add(DebugElement de)
         {
+            /*
             lock (debugElementList)
-                toBeAddedElements.Add(de);
+                toBeAddedElements.Add(de);*/
         }
         public void AddRange(List<DebugElement> deList)
         {
