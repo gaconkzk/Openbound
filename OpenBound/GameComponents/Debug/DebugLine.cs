@@ -14,7 +14,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Asset;
 
 namespace OpenBound.GameComponents.Debug
 {
@@ -22,7 +23,7 @@ namespace OpenBound.GameComponents.Debug
     {
         public DebugLine(Color Color)
         {
-            Sprite = new Animation.Sprite("Debug/DebugDot",
+            Sprite = new Sprite("Debug/DebugDot",
                 layerDepth: 1f,
                 shouldCopyAsset: true);
 

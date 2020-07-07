@@ -17,7 +17,7 @@ namespace GunboundImageFix.Utils
         /// </summary>
         public static void FixBorder()
         {
-            Bitmap bmp = FileImportManager.ReadSingleImage().Image;
+            Bitmap bmp = FileImportManager.ReadSingleImage().BitmapImage;
 
             int[][][] imageChannels = ImageProcessing.SplitImageChannels(bmp);
 

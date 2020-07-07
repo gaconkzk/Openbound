@@ -13,7 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using System;
 using System.Collections.Generic;
 

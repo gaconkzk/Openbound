@@ -25,7 +25,7 @@ using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.MobileAction;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;

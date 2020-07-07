@@ -49,6 +49,36 @@ namespace GunboundImageFix.Common
         }
 
         /// <summary>
+        /// Returns the path of one .IMG file.
+        /// </summary>
+        /// <returns></returns>
+        public static string ReadSingleIMGFile()
+        {
+            string importedImage = null;
+
+            Thread t = new Thread(() =>
+            {
+                Console.WriteLine("Importing Images...");
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.InitialDirectory = Parameters.OutputDirectory;
+                dialog.Filter = "IMG Files (img)|*.img;";
+                dialog.ShowDialog();
+
+                importedImage = dialog.FileNames[0];
+            });
+
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
+            while (t.IsAlive)
+            {
+                Thread.Sleep(50);
+            }
+
+            return importedImage;
+        }
+
+        /// <summary>
         /// Returns the path of all selected .IMG files.
         /// </summary>
         /// <returns></returns>
@@ -201,13 +231,13 @@ namespace GunboundImageFix.Common
 
             List<int[]> fileContent = new List<int[]>();
 
-            File.ReadAllLines(fileName).ToList().ForEach((x) =>
+            foreach(string x in File.ReadAllLines(fileName))
             {
                 string[] line = x.Split(',');
 
-                if (line.Count() == 3)
+                if (line.Count() < 3)
                     fileContent.Add(new int[] { int.Parse(line[0]), int.Parse(line[1]), int.Parse(line[2]) });
-            });
+            }
 
             return fileContent;
         }
@@ -250,9 +280,8 @@ namespace GunboundImageFix.Common
                 {
                     string[] line = str.Split(',');
 
-                    if (line.Length < 3) continue;
-
-                    importedImageList[int.Parse(line[0])].Pivot = (int.Parse(line[1]), int.Parse(line[2]));
+                    if (line.Length < 3)
+                        importedImageList[int.Parse(line[0])].Pivot = (int.Parse(line[1]), int.Parse(line[2]));
                 }
 
                 Console.WriteLine("\nWiping unecessary assets...\n");
@@ -281,9 +310,9 @@ namespace GunboundImageFix.Common
 
             foreach (ImportedImage img in imgList)
             {
-                if (!ImageProcessing.IsEqual(dummy, img.Image)) continue;
+                if (!ImageProcessing.IsEqual(dummy, img.BitmapImage)) continue;
 
-                img.Image = ImageProcessing.CreateImage(ImageProcessing.CreateBlankColorMatrix(img.Image.Width, img.Image.Height));
+                img.BitmapImage = ImageProcessing.CreateImage(ImageProcessing.CreateBlankColorMatrix(img.BitmapImage.Width, img.BitmapImage.Height));
                 Console.WriteLine($"Wiped image: {img.FilePath}");
             }
         }

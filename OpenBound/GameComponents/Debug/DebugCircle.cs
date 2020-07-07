@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using System;
 
 namespace OpenBound.GameComponents.Debug

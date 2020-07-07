@@ -17,11 +17,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using OpenBound.Common;
 using OpenBound.Extension;
+using OpenBound.GameComponents.Pawn.Unit;
+using Openbound_Network_Object_Library.Common;
+using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
-namespace OpenBound.GameComponents.Renderer
+namespace OpenBound.GameComponents.Asset
 {
     public class AssetHandler
     {
@@ -40,41 +44,22 @@ namespace OpenBound.GameComponents.Renderer
         private ContentManager contentManager;
         private GraphicsDevice graphicsDevice;
 
-        private string contentAssetPath;
+        private string assetBasePath;
 
-        public void Initialize(ContentManager ContentManager, GraphicsDevice GraphicsDevice)
+        public void Initialize(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
-            contentManager = ContentManager;
-            graphicsDevice = GraphicsDevice;
-            manager = new AssetManager(ContentManager);
-            contentAssetPath = $@"{Directory.GetCurrentDirectory()}\{contentManager.RootDirectory}\";
+            this.contentManager = contentManager;
+            this.graphicsDevice = graphicsDevice;
+            manager = new AssetManager(contentManager);
+            assetBasePath = $@"{Directory.GetCurrentDirectory()}\{this.contentManager.RootDirectory}\";
         }
 
-        private void AppendAllSubdirectoriesIntoList(ref List<String> directoryList, string directoryRoot)
+        private void AppendFilePaths(ref List<string> filePathList, string currentDirectory)
         {
-            foreach (string subDirectory in Directory.GetDirectories(directoryRoot))
-            {
-                directoryList.Add(subDirectory);
-                AppendAllSubdirectoriesIntoList(ref directoryList, subDirectory);
-            }
-        }
-
-        private void AppendFilePaths(ref List<string> filePathList, string directoryRoot)
-        {
-            directoryRoot = directoryRoot.Replace("/", "\\");
             List<string> fileList = new List<string>();
-            List<string> directoryList = new List<string>();
 
-            string baseDirectory = $@"{contentAssetPath}\{directoryRoot}";
-
-            directoryList.Add(baseDirectory);
-
-            AppendAllSubdirectoriesIntoList(ref directoryList, baseDirectory);
-
-            foreach (string subDirectory in directoryList)
-            {
+            foreach (string subDirectory in IOManager.GetAllSubdirectories($@"{assetBasePath}{currentDirectory}"))
                 fileList.AddRange(Directory.GetFiles(subDirectory));
-            }
 
             foreach (string path in fileList)
             {
@@ -85,7 +70,7 @@ namespace OpenBound.GameComponents.Renderer
                 if (path.Contains(".xnb"))
                 {
                     filePathList.Add(
-                        path.Replace(@contentAssetPath + "\\", "")
+                        path.Replace(assetBasePath, "")
                             .Replace(".xnb", ""));
                 }
             }
@@ -186,25 +171,33 @@ namespace OpenBound.GameComponents.Renderer
             return rAsset;
         }
 
+        //Load functions
+        public void LoadSpriteFonts()
+        {
+            List<string> sList = new List<string>();
+            AppendFilePaths(ref sList, @"Fonts");
+            manager.LoadAsset<SpriteFont>(sList);
+        }
+
         public void LoadAllAssets()
         {
             LoadSpriteFonts();
 
             // 2D Textures
             List<string> sList = new List<string>();
-            AppendFilePaths(ref sList, @"Debug");
-            AppendFilePaths(ref sList, @"Graphics");
-            AppendFilePaths(ref sList, @"Interface");
-            AppendFilePaths(ref sList, @"Misc");
+            AppendFilePaths(ref sList, $@"Debug");
+            AppendFilePaths(ref sList, $@"Graphics");
+            AppendFilePaths(ref sList, $@"Interface");
+            AppendFilePaths(ref sList, $@"Misc");
             manager.LoadAsset<Texture2D>(sList);
 
             //Audio
             sList.Clear();
-            AppendFilePaths(ref sList, @"Audio/Music");
+            AppendFilePaths(ref sList, $@"Audio\Music");
             manager.LoadAsset<Song>(sList);
 
             sList.Clear();
-            AppendFilePaths(ref sList, @"Audio/SFX");
+            AppendFilePaths(ref sList, $@"Audio\SFX");
             manager.LoadAsset<SoundEffect>(sList);
 
             /*
@@ -216,13 +209,6 @@ namespace OpenBound.GameComponents.Renderer
             LoadDebugAssets();
             LoadHealthAsset();
             */
-        }
-
-        public void LoadSpriteFonts()
-        {
-            List<string> sList = new List<string>();
-            AppendFilePaths(ref sList, @"Fonts");
-            manager.LoadAsset<SpriteFont>(sList);
         }
     }
 }

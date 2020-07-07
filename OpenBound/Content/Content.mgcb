@@ -4228,9 +4228,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Tank/RaonLauncher/CharacterSpritesheet.png
 
-#begin Graphics/Tank/RaonLauncher/RaonLauncher.txt
-/copy:Graphics/Tank/RaonLauncher/RaonLauncher.txt
-
 #begin Graphics/Tank/RaonLauncherMineS2/CharacterSpritesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

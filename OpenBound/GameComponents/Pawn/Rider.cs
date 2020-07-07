@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Asset;
 using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Pawn.Unit;
 using Openbound_Network_Object_Library.Entity;
@@ -50,6 +51,7 @@ namespace OpenBound.GameComponents.Pawn
         public Flipbook body;
 
         readonly Mobile mobile;
+        readonly List<int[]> riderOffset;
 
 #if DEBUG
         DebugCrosshair dc1 = new DebugCrosshair(Color.Blue);
@@ -64,28 +66,14 @@ namespace OpenBound.GameComponents.Pawn
             headBasePosition = positionOffset + new Vector2(-10, -17);
             bodyBasePosition = positionOffset;
 
+            riderOffset = (List<int[]>)MetadataManager.ElementMetadata[$@"Mobile/{mobile.MobileType}/RiderPivot"];
+
 #if DEBUG
             DebugHandler.Instance.Add(dc1);
             DebugHandler.Instance.Add(dc2);
 #endif
 
-            File.ReadAllLines(@"C:\Users\Carlos\source\repos\Openbound\OpenBound\Content\Graphics\Tank\RaonLauncher\RaonLauncher.txt").ToList()
-                .ForEach((x) => {
-                string[] s = x.Split(',');
-                    if (s.Count() <= 1) return;
-                RaonLauncher.pivotOffset1.Add(new Vector2(int.Parse(s[1]), int.Parse(s[2])));
-                });
-
-            File.ReadAllLines(@"C:\Users\Carlos\source\repos\Openbound\GunboundImageFix\Output\Raw\tank7 c.txt").ToList()
-                .ForEach((x) => {
-                    string[] s = x.Split(',');
-                    if (s.Count() <= 1) return;
-                    RaonLauncher.pivotOffset2.Add(new Vector2(int.Parse(s[1]), int.Parse(s[2])));
-                });
-
             Update();
-
-
         }
 
         public void Hide()
@@ -115,19 +103,16 @@ namespace OpenBound.GameComponents.Pawn
 
             value = mobile.MobileFlipbook.GetCurrentFrame();
 
-            Vector2 pivotOffset = RaonLauncher.pivotOffset1[mobile.MobileFlipbook.GetCurrentFrame()];
-            pivotOffset += RaonLauncher.pivotOffset2[mobile.MobileFlipbook.GetCurrentFrame()];
-
-            Vector2 headPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
-            Vector2 bodyPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
+            //Vector2 headPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
+            Vector2 bodyPos = Vector2.Transform((new Vector2(riderOffset[value][0], riderOffset[value][1]) * new Vector2( 1,  1) + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
 
 #if DEBUG
-            dc1.Update(mobile.MobileFlipbook.Position + headPos);
+            //dc1.Update(mobile.MobileFlipbook.Position + headPos);
             dc2.Update(mobile.MobileFlipbook.Position + bodyPos);
 #endif
 
-            head.Position = mobile.MobileFlipbook.Position + headPos;
-            head.Rotation = mobile.MobileFlipbook.Rotation;
+            //head.Position = mobile.MobileFlipbook.Position + headPos;
+            //head.Rotation = mobile.MobileFlipbook.Rotation;
             body.Position = mobile.MobileFlipbook.Position + bodyPos;
             body.Rotation = mobile.MobileFlipbook.Rotation;
         }

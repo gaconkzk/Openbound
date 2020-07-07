@@ -18,7 +18,7 @@ using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using System;

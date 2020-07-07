@@ -52,18 +52,24 @@ namespace GunboundImageFix.Utils
                 }
 
                 int imageWidth = 256;
+
                 Bitmap image = new Bitmap(imageWidth, lineInt.Length / imageWidth);
                 
                 for (int width = 0; width < lineInt.Length; width++)
                 {
-                    int a = lineInt[width];
+                    int value = lineInt[width];
 
-                    int alpha = ((a >> 12) & 0xFF) << 4;
-                    int red = ((a >> 8) & 0xFF) << 4;
-                    int green = ((a >> 4) & 0xFF) << 4;
-                    int blue = ((a >> 0) & 0xFF) << 4;
+                    int a = ((value >> 12) & 0xFF) << 4;
+                    int r = ((value >> 08) & 0xFF) << 4;
+                    int g = ((value >> 04) & 0xFF) << 4;
+                    int b = ((value >> 00) & 0xFF) << 4;
 
-                    image.SetPixel(width % imageWidth, width / imageWidth, Color.FromArgb((byte)alpha, (byte)red, (byte)green, (byte)blue));
+                    a = (int)Math.Ceiling(a * 255f / 240f);
+                    r = (int)Math.Ceiling(r * 255f / 240f);
+                    g = (int)Math.Ceiling(g * 255f / 240f);
+                    b = (int)Math.Ceiling(b * 255f / 240f);
+
+                    image.SetPixel(width % imageWidth, width / imageWidth, Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b));
                 }
 
                 image.Save($@"{Parameters.TextureOutputDirectory}{file.Split('\\').Last().Split('.')[0]}.png");

@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using OpenBound.Common;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using System;
 using System.Linq;
 
@@ -89,6 +89,8 @@ namespace OpenBound
             // TODO: use this.Content to load your game content here
             AssetHandler.Instance.Initialize(Content, GraphicsDevice);
             AssetHandler.Instance.LoadAllAssets();
+            MetadataManager.Instance.Initialize();
+            MetadataManager.Instance.LoadAssetMetadata();
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace GunboundImageFix.Utils
 
             for (int i = 0; i < list1.Count; i++)
             {
-                ImageProcessing.CompareImages(list1[i].Image, list2[i].Image, Parameters.ComparisonOutputDirectory + $@"{i}.png");
+                ImageProcessing.CompareImages(list1[i].BitmapImage, list2[i].BitmapImage, Parameters.ComparisonOutputDirectory + $@"{i}.png");
             }
         }
     }

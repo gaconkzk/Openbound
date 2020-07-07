@@ -31,11 +31,9 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class RaonLauncher : Mobile
     {
-        public static List<Vector2> pivotOffset1 = new List<Vector2>();
-        public static List<Vector2> pivotOffset2 = new List<Vector2>();
         bool mineTurn;
 
-        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher, new Vector2(09, 6))
+        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher, new Vector2(10, 26))
         {
             Movement.CollisionOffset = 20;
             Movement.MaximumStepsPerTurn = 90;
@@ -43,8 +41,6 @@ namespace OpenBound.GameComponents.Pawn.Unit
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(0, 0));
 
             mineTurn = true;
-
-
         }
 
         /// <summary>

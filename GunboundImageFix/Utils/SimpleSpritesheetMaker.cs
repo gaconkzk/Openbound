@@ -39,8 +39,8 @@ namespace GunboundImageFix.Utils
         private void Start()
         {
 
-            int width = _imgList[0].Image.Width;
-            int height = _imgList[0].Image.Height;
+            int width = _imgList[0].BitmapImage.Width;
+            int height = _imgList[0].BitmapImage.Height;
 
             Console.WriteLine("--Sprites per Line: ");
 
@@ -53,7 +53,7 @@ namespace GunboundImageFix.Utils
             int index = 0;
             foreach (ImportedImage img in _imgList)
             {
-                ImageProcessing.AddImageIntoMatrix(newImageMatrix, img.Image, accX, accY);
+                ImageProcessing.AddImageIntoMatrix(newImageMatrix, img.BitmapImage, accX, accY);
 
                 accX += width + 2;
 

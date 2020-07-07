@@ -52,7 +52,7 @@ namespace GunboundImageFix.Utils
 
             imgList.AddRange(imgListSFX);
 
-            (int, int) maxImageSize = (imgList.Max((x) => x.Image.Width), imgList.Max((x) => x.Image.Height));
+            (int, int) maxImageSize = (imgList.Max((x) => x.BitmapImage.Width), imgList.Max((x) => x.BitmapImage.Height));
             (int, int) maxImagePivot = (imgList.Max((x) => x.Pivot.Item1), imgList.Max((x) => x.Pivot.Item2));
             (int, int) minImagePivot = (imgList.Min((x) => x.Pivot.Item1), imgList.Min((x) => x.Pivot.Item2));
 
@@ -90,17 +90,17 @@ namespace GunboundImageFix.Utils
 
                 if (!reaply)
                 {
-                    ImageProcessing.AddImageIntoMatrix(nCM1, img.Image, w, h);
-                    ImageProcessing.AddImageIntoMatrix(nCM2, img.Image, w, h);
+                    ImageProcessing.AddImageIntoMatrix(nCM1, img.BitmapImage, w, h);
+                    ImageProcessing.AddImageIntoMatrix(nCM2, img.BitmapImage, w, h);
                 }
                 else
                 {
-                    ImageProcessing.BlendImageIntoMatrix(nCM1, img.Image, w, h, (y, x) =>
+                    ImageProcessing.BlendImageIntoMatrix(nCM1, img.BitmapImage, w, h, (y, x) =>
                     {
                         return ColorBlending.MultiChannelAlphaBlending(x, y);
                     });
 
-                    ImageProcessing.BlendImageIntoMatrix(nCM2, img.Image, w, h, (x, y) =>
+                    ImageProcessing.BlendImageIntoMatrix(nCM2, img.BitmapImage, w, h, (x, y) =>
                     {
                         return ColorBlending.MultiChannelAlphaBlending(x, y);
                     });
