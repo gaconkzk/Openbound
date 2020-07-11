@@ -16,6 +16,7 @@ using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.FileOutput;
 using System;
+using System.Data;
 
 namespace OpenBound.Common
 {
@@ -65,6 +66,12 @@ namespace OpenBound.Common
 
         public const float InterfaceInGameTextBoxTimeToStartFading = 10;
         public const float InterfaceInGameTextBoxTimeFadeTime = 5;
+
+        public static readonly Color InterfaceAvatarShopButtonGoldColor = new Color(237, 232, 128);
+        public static readonly Color InterfaceAvatarShopButtonGoldOutlineColor = new Color(85, 88, 59);
+
+        public static readonly Color InterfaceAvatarShopButtonCashColor = new Color(137, 190, 234);
+        public static readonly Color InterfaceAvatarShopButtonCashOutlineColor = new Color(9, 55, 104);
         #endregion
 
         #region Misc
@@ -206,6 +213,22 @@ namespace OpenBound.Common
         public const string ButtonTextInRoomMatchSettings = "Settings";
         public const string ButtonTextInRoomChangeItem = "Item";
         public const string ButtonTextInRoomChangeTeam = "Team";
+
+        //-- Avatar Shop - Avatar
+        public const string ButtonTextAvatarShopTry = "Try";
+        public const string ButtonTextAvatarShopBuy = "Buy";
+        public const string ButtonTextAvatarShopGift = "Gift";
+
+        //-- Avatar Shop - Filter
+        public const string ButtonTextAvatarShopHat = "Hat";
+        public const string ButtonTextAvatarShopBody = "Body";
+        public const string ButtonTextAvatarShopGoggles = "Goggles";
+        public const string ButtonTextAvatarShopFlag = "Flag";
+        public const string ButtonTextAvatarShopExItem = "ExItem";
+        public const string ButtonTextAvatarShopPet = "Pet";
+        public const string ButtonTextAvatarShopNecklace = "Misc";
+        public const string ButtonTextAvatarShopRing = "Extra";
+
 
         public const string IconSubtitleOffline = "Offline";
         public const string IconSubtitleLowPopulation = "Low";

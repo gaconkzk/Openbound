@@ -233,9 +233,11 @@ namespace GunboundImageFix.Common
 
             foreach(string x in File.ReadAllLines(fileName))
             {
+                if (x.Count() == 0 || x[0] == '#') continue;
+
                 string[] line = x.Split(',');
 
-                if (line.Count() < 3)
+                if (line.Count() >= 3)
                     fileContent.Add(new int[] { int.Parse(line[0]), int.Parse(line[1]), int.Parse(line[2]) });
             }
 
@@ -278,9 +280,11 @@ namespace GunboundImageFix.Common
 
                 foreach (string str in pivotFileContent)
                 {
+                    if (str.Count() == 0 || str[0] == '#') continue;
+
                     string[] line = str.Split(',');
 
-                    if (line.Length < 3)
+                    if (line.Length >= 3)
                         importedImageList[int.Parse(line[0])].Pivot = (int.Parse(line[1]), int.Parse(line[2]));
                 }
 

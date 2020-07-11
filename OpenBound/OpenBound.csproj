@@ -670,6 +670,7 @@
     <Compile Include="GameComponents\Interface\Builder\IconBuilder.cs" />
     <Compile Include="GameComponents\Interface\IncomingWeather.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AvatarButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\OnlineUserList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />
@@ -700,6 +701,7 @@
     <Compile Include="GameComponents\Interface\Interactive\General\ScrollBar.cs" />
     <Compile Include="GameComponents\Interface\WeatherDisplay.cs" />
     <Compile Include="GameComponents\Interface\WindCompass.cs" />
+    <Compile Include="GameComponents\Level\Scene\Menu\AvatarShop.cs" />
     <Compile Include="GameComponents\Level\Scene\Menu\GameList.cs" />
     <Compile Include="GameComponents\Level\Scene\DebugScene.cs" />
     <Compile Include="GameComponents\Level\Scene\Menu\GameRoom.cs" />
@@ -726,6 +728,7 @@
     <Compile Include="GameComponents\Pawn\ActorBuilder.cs" />
     <Compile Include="GameComponents\MobileAction\Motion\LocalMovement.cs" />
     <Compile Include="GameComponents\MobileAction\Motion\RemoteMovement.cs" />
+    <Compile Include="GameComponents\Pawn\Avatar.cs" />
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />

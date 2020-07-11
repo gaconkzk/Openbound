@@ -76,6 +76,30 @@ namespace OpenBound.GameComponents.Interface.Builder
                 buttonText = Parameter.ButtonTextInRoomChangeItem;
             else if (type == AnimatedButtonType.ChangeTeam)
                 buttonText = Parameter.ButtonTextInRoomChangeTeam;
+            //Avatar Shop Buttons
+            else if (type == AnimatedButtonType.Try)
+                buttonText = Parameter.ButtonTextAvatarShopTry;
+            else if (type == AnimatedButtonType.Buy)
+                buttonText = Parameter.ButtonTextAvatarShopBuy;
+            else if (type == AnimatedButtonType.Gift)
+                buttonText = Parameter.ButtonTextAvatarShopGift;
+            //Avatar Shop Buttons - Filter
+            else if (type == AnimatedButtonType.Hat)
+                buttonText = Parameter.ButtonTextAvatarShopHat;
+            else if (type == AnimatedButtonType.Body)
+                buttonText = Parameter.ButtonTextAvatarShopBody;
+            else if (type == AnimatedButtonType.Goggles)
+                buttonText = Parameter.ButtonTextAvatarShopGoggles;
+            else if (type == AnimatedButtonType.Flag)
+                buttonText = Parameter.ButtonTextAvatarShopFlag;
+            else if (type == AnimatedButtonType.ExItem)
+                buttonText = Parameter.ButtonTextAvatarShopExItem;
+            else if (type == AnimatedButtonType.Pet)
+                buttonText = Parameter.ButtonTextAvatarShopPet;
+            else if (type == AnimatedButtonType.Necklace)
+                buttonText = Parameter.ButtonTextAvatarShopNecklace;
+            else if (type == AnimatedButtonType.Ring)
+                buttonText = Parameter.ButtonTextAvatarShopRing;
 
             return new AnimatedButton(type, position, onClick,
                 new SpriteText(Parameter.AnimatedButtonFont,

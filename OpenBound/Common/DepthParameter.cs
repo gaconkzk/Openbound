@@ -76,6 +76,7 @@ namespace OpenBound.Common
         public const float InterfacePopupBackground = 0.4f;
         public const float InterfacePopupForeground = InterfacePopupBackground + 0.01f;
         public const float InterfacePopupButtons    = InterfacePopupBackground + 0.02f;
+        public const float InterfacePopupButtonIcon = InterfacePopupBackground + 0.03f;
         public const float InterfacePopupText       = InterfacePopupBackground + 0.04f;
 
         //Game Interface - Popups - Message

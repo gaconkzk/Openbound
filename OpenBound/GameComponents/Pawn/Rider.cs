@@ -63,7 +63,7 @@ namespace OpenBound.GameComponents.Pawn
             this.mobile = mobile;
             head = new Flipbook(Vector2.Zero, new Vector2(25, 12), 38, 24, "Graphics/Avatar/Male/Head/Base", headAvatarState[AvatarState.Staring], 1, 0);
             body = new Flipbook(Vector2.Zero, new Vector2(22, 12), 44, 28, "Graphics/Avatar/Male/Body/Base", bodyAvatarState[AvatarState.Normal], 1, 0);
-            headBasePosition = positionOffset + new Vector2(-10, -17);
+            headBasePosition = positionOffset + new Vector2(10, -17);
             bodyBasePosition = positionOffset;
 
             riderOffset = (List<int[]>)MetadataManager.ElementMetadata[$@"Mobile/{mobile.MobileType}/RiderPivot"];
@@ -95,31 +95,29 @@ namespace OpenBound.GameComponents.Pawn
             float baseAngle = mobile.MobileFlipbook.Rotation;
             Vector2 basePosition = Vector2.One;
 
-            /*if (mobile.Facing == Facing.Left)
-            {
+            if (mobile.Facing == Facing.Right)
                 basePosition = new Vector2(-1, 1);
-                baseAngle = baseAngle + MathHelper.Pi;
-            }*/
 
             value = mobile.MobileFlipbook.GetCurrentFrame();
 
-            //Vector2 headPos = Vector2.Transform((pivotOffset * new Vector2( 1,  1) + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
-            Vector2 bodyPos = Vector2.Transform((new Vector2(riderOffset[value][0], riderOffset[value][1]) * new Vector2( 1,  1) + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
+            Vector2 basePos = new Vector2(riderOffset[value][0], riderOffset[value][1]);
+            Vector2 headPos = Vector2.Transform((basePos + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
+            Vector2 bodyPos = Vector2.Transform((basePos + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
 
 #if DEBUG
-            //dc1.Update(mobile.MobileFlipbook.Position + headPos);
+            dc1.Update(mobile.MobileFlipbook.Position + headPos);
             dc2.Update(mobile.MobileFlipbook.Position + bodyPos);
 #endif
 
-            //head.Position = mobile.MobileFlipbook.Position + headPos;
-            //head.Rotation = mobile.MobileFlipbook.Rotation;
+            head.Position = mobile.MobileFlipbook.Position + headPos;
+            head.Rotation = mobile.MobileFlipbook.Rotation;
             body.Position = mobile.MobileFlipbook.Position + bodyPos;
             body.Rotation = mobile.MobileFlipbook.Rotation;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //head.Draw(gameTime, spriteBatch);
+            head.Draw(gameTime, spriteBatch);
             body.Draw(gameTime, spriteBatch);
             Console.WriteLine(value + " " + mobile.MobileFlipbook.GetCurrentFrame());
         }

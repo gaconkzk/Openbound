@@ -47,6 +47,12 @@ namespace OpenBound.GameComponents.Interface.Interactive
         ChangeMobile,
         ChangeItem,
         ChangeTeam,
+
+        //AvatarShop/Avatar
+        Buy, Gift, Try,
+
+        //AvatarShop/Avatar Filtering
+        Hat, Body, Goggles, Flag, ExItem, Pet, Necklace, Ring,
     }
 
     public struct AnimatedButtonPreset
@@ -447,6 +453,183 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         { ButtonAnimationState.Hoover,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
                         { ButtonAnimationState.Clicked,  new AnimationInstance() { StartingFrame = 020, EndingFrame = 065, TimePerFrame = 1/30f } },
                         { ButtonAnimationState.Disabled, new AnimationInstance() { StartingFrame = 066, EndingFrame = 066, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            #endregion
+            #region AvatarShop/Avatar
+            {
+                AnimatedButtonType.Buy,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Buy",
+                    SpriteWidth = 512/8, SpriteHeight = 438/6,
+                    Pivot = new Vector2((512/8)/2, (438/6)/2), CollisionRectangleOffset = new Vector2(18, 21),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 023, TimePerFrame = 1/30f, AnimationType = AnimationType.Cycle } },
+                        { ButtonAnimationState.Clicked,  new AnimationInstance() { StartingFrame = 026, EndingFrame = 045, TimePerFrame = 1/30f, AnimationType = AnimationType.Cycle } },
+                        { ButtonAnimationState.Disabled, new AnimationInstance() { StartingFrame = 046, EndingFrame = 046, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Gift,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Gift",
+                    SpriteWidth = 768/12, SpriteHeight = 414/6,
+                    Pivot = new Vector2((414/6)/2, (414/6)/2 + 5), CollisionRectangleOffset = new Vector2(18, 21),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 014, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,  new AnimationInstance() { StartingFrame = 031, EndingFrame = 062, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled, new AnimationInstance() { StartingFrame = 071, EndingFrame = 071, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Try,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Try",
+                    SpriteWidth = 768/12, SpriteHeight = 432/6,
+                    Pivot = new Vector2((768/12)/2, (432/6)/2), CollisionRectangleOffset = new Vector2(18, 21),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,   new AnimationInstance() { StartingFrame = 013, EndingFrame = 013, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,   new AnimationInstance() { StartingFrame = 000, EndingFrame = 043, TimePerFrame = 1/30f, AnimationType = AnimationType.Cycle } },
+                        { ButtonAnimationState.Clicked,  new AnimationInstance() { StartingFrame = 045, EndingFrame = 070, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled, new AnimationInstance() { StartingFrame = 071, EndingFrame = 071, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            #endregion
+            #region AvatarShop/Avatar Filtering
+            {
+                AnimatedButtonType.Hat,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Hat",
+                    SpriteWidth = 245/5, SpriteHeight = 336/7,
+                    Pivot = new Vector2((245/5)/2 - 2, (336/7)/2 - 3), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 021, EndingFrame = 032, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 033, EndingFrame = 033, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 034, EndingFrame = 034, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Body,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Body",
+                    SpriteWidth = 539/11, SpriteHeight = 117/3,
+                    Pivot = new Vector2((539/11)/2 - 2, (117/3)/2 - 3), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 020, EndingFrame = 030, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 031, EndingFrame = 031, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 032, EndingFrame = 032, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Goggles,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Goggles",
+                    SpriteWidth = 931/19, SpriteHeight = 92/2,
+                    Pivot = new Vector2((931/19)/2, (92/2)/2 - 5), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 020, EndingFrame = 035, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 036, EndingFrame = 036, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 037, EndingFrame = 037, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Flag,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Flag",
+                    SpriteWidth = 672/12, SpriteHeight = 188/4,
+                    Pivot = new Vector2((672/12)/2, (188/4)/2), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 014, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 015, EndingFrame = 044, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 045, EndingFrame = 045, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 046, EndingFrame = 046, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.ExItem,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/ExItem",
+                    SpriteWidth = 540/10, SpriteHeight = 204/4,
+                    Pivot = new Vector2((540/10)/2 + 2, (204/4)/2 - 8), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 022, EndingFrame = 037, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 038, EndingFrame = 038, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 039, EndingFrame = 039, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Pet,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Pet",
+                    SpriteWidth = 795/15, SpriteHeight = 147/3,
+                    Pivot = new Vector2((795/15)/2 - 4, (147/3)/2 - 4), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 001, EndingFrame = 021, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 022, EndingFrame = 042, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 043, EndingFrame = 043, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 044, EndingFrame = 044, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Necklace,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Necklace",
+                    SpriteWidth = 450/9, SpriteHeight = 176/4,
+                    Pivot = new Vector2((450/9)/2 - 4, (176/4)/2 - 6), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 021, EndingFrame = 033, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 034, EndingFrame = 034, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 035, EndingFrame = 035, TimePerFrame = 0.1f  } },
+                    },
+                }
+            },
+            {
+                AnimatedButtonType.Ring,
+                new AnimatedButtonPreset() {
+                    SpritePath = "Interface/AnimatedButtons/AvatarShop/Ring",
+                    SpriteWidth = 660/15, SpriteHeight = 138/3,
+                    Pivot = new Vector2((660/15)/2 - 3, (138/3)/2 - 5), CollisionRectangleOffset = new Vector2(15, 15),
+                    StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
+                    {
+                        { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Hoover,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 019, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Clicked,   new AnimationInstance() { StartingFrame = 022, EndingFrame = 040, TimePerFrame = 1/30f } },
+                        { ButtonAnimationState.Disabled,  new AnimationInstance() { StartingFrame = 041, EndingFrame = 041, TimePerFrame = 0.1f  } },
+                        { ButtonAnimationState.Activated, new AnimationInstance() { StartingFrame = 042, EndingFrame = 042, TimePerFrame = 0.1f  } },
                     },
                 }
             },

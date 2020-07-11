@@ -13,11 +13,11 @@ namespace GunboundImageFix.Extension
         {
             int a = 0;
 
-            a = a | source.Dequeue() << 8 * 0;
-            a = a | source.Dequeue() << 8 * 1;
+            a = a | source.Dequeue() << (8 * 0);
+            a = a | source.Dequeue() << (8 * 1);
 
-            a = a | source.Dequeue() << 8 * 2;
-            a = a | source.Dequeue() << 8 * 3;
+            a = a | source.Dequeue() << (8 * 2);
+            a = a | source.Dequeue() << (8 * 3);
 
             return a;
         }
@@ -26,10 +26,10 @@ namespace GunboundImageFix.Extension
         {
             int a = 0;
 
-            a = a | source.Dequeue() << 8 * 0;
-            a = a | source.Dequeue() << 8 * 1;
+            a = a | source.Dequeue() << (8 * 0);
+            a = a | source.Dequeue() << (8 * 1);
 
-            return a;
+            return (short)a;
         }
     }
 }

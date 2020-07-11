@@ -30,7 +30,10 @@ namespace OpenBound.GameComponents.Interface.Text
         public Vector2 Position
         {
             get => position;
-            set { UpdatePostion(value); }
+            set {
+                position = value.ToIntegerDomain();
+                UpdatePostion();
+            }
         }
 
         public SpriteText Text { get; private set; }
@@ -91,12 +94,12 @@ namespace OpenBound.GameComponents.Interface.Text
             debugRectangle = new DebugRectangle(Color.CornflowerBlue);
             DebugHandler.Instance.Add(debugRectangle);
 #endif
+
+            Position = positionOffset;
         }
 
-        private void UpdatePostion(Vector2 positionOffset)
+        private void UpdatePostion()
         {
-            position = positionOffset.ToIntegerDomain();
-
             collisionRectangle = new Rectangle((int)position.X, (int)position.Y, boxWidth, boxHeight);
             Text.Position = position + new Vector2(0, (int)(-alignmentOffset.Y / 2 + boxHeight / 2));
 
@@ -126,6 +129,7 @@ namespace OpenBound.GameComponents.Interface.Text
             CheckMouseIntersection();
             UpdateBlinkingBar(gameTime);
             UpdateActivatedTextInputs(gameTime);
+            UpdatePostion();
         }
 
         private void CheckMouseIntersection()
@@ -249,7 +253,8 @@ namespace OpenBound.GameComponents.Interface.Text
         public void Draw(SpriteBatch spriteBatch)
         {
             Text.Draw(spriteBatch);
-            if (IsActive && textPointerBlinkingTime < 0.5) textPointer.Draw(spriteBatch);
+            if (IsActive && textPointerBlinkingTime < 0.5)
+                textPointer.Draw(spriteBatch);
         }
 
         public void ClearText()

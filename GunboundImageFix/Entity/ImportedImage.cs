@@ -14,8 +14,8 @@ namespace GunboundImageFix.Entity
         {
             BitmapImage = bitmapImage;
             Pivot = pivot;
-            RealRiderOffset = riderOffset;
-            RealRiderOffset = (Pivot.Item1 + RealRiderOffset.Item1, Pivot.Item2 + RealRiderOffset.Item2);
+            RiderOffset = riderOffset;
+            RealRiderOffset = (Pivot.Item1 + RiderOffset.Item1, Pivot.Item2 + RiderOffset.Item2);
         }
 
         public ImportedImage(string path)

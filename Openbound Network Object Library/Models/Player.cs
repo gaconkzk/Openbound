@@ -22,8 +22,8 @@ namespace Openbound_Network_Object_Library.Models
 {
     public enum Gender
     {
-        Masculine,
-        Feminine
+        Male,
+        Female
     }
 
     public enum PlayerRoomStatus

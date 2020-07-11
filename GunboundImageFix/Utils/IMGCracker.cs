@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace GunboundImageFix.Utils
         {
             List<string> paths = FileImportManager.ReadMultipleIMGFiles();
 
-            for(int i = 0; i < paths.Count; i++)
+            for (int i = 0; i < paths.Count; i++)
             {
                 List<ImportedImage> importedImageList = ExtractIMGData(paths[i]);
                 string filePath = paths[i];
@@ -30,11 +31,11 @@ namespace GunboundImageFix.Utils
                 string pivotList = "[\n";
                 string pivotFileStr = $"{Parameters.PivotFileHeader}\n";
                 Directory.CreateDirectory($@"{Parameters.RawOutputDirectory}\{fileName}");
-                for(int j = 0; j < importedImageList.Count; j++)
+                for (int j = 0; j < importedImageList.Count; j++)
                 {
                     ImportedImage ii = importedImageList[j];
-                    
-                    pivotFileStr += $"{j},{ii.Pivot.Item1},{ii.Pivot.Item2},{ii.RiderOffset.Item1},{ii.RealRiderOffset.Item2},{ii.RealRiderOffset.Item1},{ii.RealRiderOffset.Item2}\n";
+
+                    pivotFileStr += $"{j},{ii.Pivot.Item1},{ii.Pivot.Item2},{ii.RiderOffset.Item1},{ii.RiderOffset.Item2},{ii.RealRiderOffset.Item1},{ii.RealRiderOffset.Item2}\n";
                     pivotList += $"[ {ii.RealRiderOffset.Item1}, {ii.RealRiderOffset.Item2} ],\n";
                     ii.BitmapImage.Save($@"{Parameters.RawOutputDirectory}\{fileName}\{fileName}_{j}.png");
                 }
@@ -65,7 +66,7 @@ namespace GunboundImageFix.Utils
             // bits  |   i      | value
             //  2x16 |   0      | zero - ? 
             //  2x16 |   1      | number of images
-            //  2x16 |   2  (0) | ? - v0
+            //  2x16 |   2  (0) | color mode, 0 = no alpha (565 rgb), 1 = simple transparency, 2 = transparency (4444 rgba)
             // ------+----------+ Loop starts here
             //    32 |   3  (1) | width
             //    32 |   4  (2) | height
@@ -73,11 +74,15 @@ namespace GunboundImageFix.Utils
             //    32 |   6  (4) | pivot Y
             //   4x8 |   7  (5) | ? - v5
             //   4x8 |   8  (6) | ? - v6
-            //    32 |   9  (7) | pilot pivot X
-            //    32 |  10  (8) | pilot pivot Y
-            //    32 |  11  (9) | Data stream length
-            // (9)x8 |  12 (10) | Image Begining...
-            // (9)x8 |  12+(09) | Image Ending
+            //    16 |   9  (7) | ? - v7
+            //     8 |  10  (8) | ? - v8
+            //     8 |  11  (9) | pilot pivot X
+            //    16 |  12 (10) | ? - v9
+            //     8 |  13 (11) | ? - v10
+            //     8 |  14 (12) | pilot pivot Y
+            //    32 |  15 (13) | Data stream length
+            // (9)x8 |  16 (14) | Image Begining...
+            // (9)x8 |  17+(09) | Image Ending
             // ------+----------+ Loop ends here
             //
             // After iterating dataStreamLength times, it will start another header, begining from the loop indicator.
@@ -95,7 +100,7 @@ namespace GunboundImageFix.Utils
             // green = 0110 XXXX (1st 4 bits of byte2 + 4 don't care);
             // blue  = 1100 XXXX (2st 4 bits of byte2 + 4 don't care);
             //
-            // I have decided to replace the 4 don't care for proportional values scaled, where
+            // I have decided to replace the 4 don't care for proportional values, where
             // 240 (0xF0 - 0b1111000) is 255 (0xFF - 0b11111111). Using the following formula:
             //
             // trueColor = 255 * current / 240;
@@ -110,41 +115,97 @@ namespace GunboundImageFix.Utils
 
             for (int i = 0; i < numberOfImages; i++)
             {
-                int v2 = valueQueue.DequeueInt32();
+                byte[] colorMode = new byte[] { (byte)valueQueue.DequeueInt16(), (byte)valueQueue.DequeueInt16() };
                 int width = valueQueue.DequeueInt32();
                 int height = valueQueue.DequeueInt32();
                 int pivotX = valueQueue.DequeueInt32();
                 int pivotY = valueQueue.DequeueInt32();
-                int v5 = valueQueue.DequeueInt32();
-                int v6 = valueQueue.DequeueInt32();
-                int pilotPivotX = valueQueue.DequeueInt32();
-                int pilotPivotY = valueQueue.DequeueInt32();
+                int[] v5 = new int[] { valueQueue.DequeueInt16(), valueQueue.DequeueInt16() };
+                int[] v6 = new int[] { valueQueue.DequeueInt16(), valueQueue.DequeueInt16() };
+                int pilotPivotX = (sbyte)valueQueue.DequeueInt32();
+                int pilotPivotY = (sbyte)valueQueue.DequeueInt32();
                 int dataStreamLength = valueQueue.DequeueInt32();
 
                 Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
 
-                for (int h = 0; h < dataStreamLength; h += 2)
+                int nextRead = 0;
+                
+                /*
+                int[] read = new int[4];
+                if (nextRead == 0 && pixelCount / width != height)
                 {
-                    byte b1 = valueQueue.Dequeue();
-                    byte b2 = valueQueue.Dequeue();
+                    read = new int[] {
+                            valueQueue.DequeueInt16(), valueQueue.DequeueInt16(),
+                            valueQueue.DequeueInt16(), valueQueue.DequeueInt16(),
+                        };
 
-                    int a = (b2 & 0xF0) << 0;
-                    int r = (b2 & 0x0F) << 4;
-                    int g = (b1 & 0xF0) << 0;
-                    int b = (b1 & 0x0F) << 4;
+                    nextRead = read[0];
 
-                    a = (int)Math.Ceiling(255f / 240f * a);
-                    r = (int)Math.Ceiling(255f / 240f * r);
-                    g = (int)Math.Ceiling(255f / 240f * g);
-                    b = (int)Math.Ceiling(255f / 240f * b);
-
-                    bitmap.SetPixel((h / 2) % width, (h / 2) / width, Color.FromArgb(a, r, g, b));
+                    nextRead -= 4;
+                    bitCount += 8;
+                    pixelCount += read[2];
+                }*/
+            
+                for (int bitCount = 0, pixelCount = 0; bitCount < dataStreamLength; bitCount += 2, pixelCount++, nextRead--)
+                {
+                    bitmap.SetPixel(
+                        pixelCount % width,
+                        pixelCount / width,
+                        GetPixelColor(
+                            colorMode[0],
+                            (short)valueQueue.DequeueInt16()));
                 }
 
                 importedImage.Add(new ImportedImage(bitmap, (pivotX, pivotY), (pilotPivotX, pilotPivotY)));
             }
 
             return importedImage;
+        }
+
+        private static Color GetPixelColor(byte colorType, short encodedValue)
+        {
+            if (encodedValue > 1)
+            {
+                int kkk = 10;
+                kkk++;
+            }
+
+            int a = 0, r = 0, g = 0, b = 0;
+            switch (colorType)
+            {
+                case 0:
+                    //In case no transparency is being used, 5-6-5 rgb pixel format it is
+                    a = 255;
+                    r = (encodedValue & 0b1111_1000_0000_0000) >> 8;
+                    g = (encodedValue & 0b0000_0111_1110_0000) >> 3;
+                    b = (encodedValue & 0b0000_0000_0001_1111) << 3;
+                    break;
+
+                case 1:
+                    r = (encodedValue & 0b1111_1000_0000_0000) >> 8;
+                    g = (encodedValue & 0b0000_0111_1110_0000) >> 3;
+                    b = (encodedValue & 0b0000_0000_0001_1111) << 3;
+                    if (r == 0 && g == 0 && b == 0)
+                        a = 0;
+                    else
+                        a = 255;
+                    break;
+
+                case 2:
+                    //In case there is transparency, each color is made of 4 bits
+                    a = (encodedValue & 0xF000) >> 8;
+                    r = (encodedValue & 0x0F00) >> 4;
+                    g = (encodedValue & 0x00F0) >> 0;
+                    b = (encodedValue & 0x000F) << 4;
+
+                    a = (int)Math.Ceiling(255f / 240f * a);
+                    r = (int)Math.Ceiling(255f / 240f * r);
+                    g = (int)Math.Ceiling(255f / 240f * g);
+                    b = (int)Math.Ceiling(255f / 240f * b);
+                    break;
+            }
+
+            return Color.FromArgb(a, r, g, b);
         }
     }
 }
