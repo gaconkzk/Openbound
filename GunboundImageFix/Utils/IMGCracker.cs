@@ -128,32 +128,13 @@ namespace GunboundImageFix.Utils
 
                 Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppPArgb);
 
-                int nextRead = 0;
-                
-                /*
-                int[] read = new int[4];
-                if (nextRead == 0 && pixelCount / width != height)
-                {
-                    read = new int[] {
-                            valueQueue.DequeueInt16(), valueQueue.DequeueInt16(),
-                            valueQueue.DequeueInt16(), valueQueue.DequeueInt16(),
-                        };
-
-                    nextRead = read[0];
-
-                    nextRead -= 4;
-                    bitCount += 8;
-                    pixelCount += read[2];
-                }*/
-            
-                for (int bitCount = 0, pixelCount = 0; bitCount < dataStreamLength; bitCount += 2, pixelCount++, nextRead--)
+                for (int bitCount = 0, pixelCount = 0; bitCount < dataStreamLength; bitCount += 2, pixelCount++)
                 {
                     bitmap.SetPixel(
                         pixelCount % width,
                         pixelCount / width,
                         GetPixelColor(
-                            colorMode[0],
-                            (short)valueQueue.DequeueInt16()));
+                            colorMode[0], (short)valueQueue.DequeueInt16()));
                 }
 
                 importedImage.Add(new ImportedImage(bitmap, (pivotX, pivotY), (pilotPivotX, pilotPivotY)));

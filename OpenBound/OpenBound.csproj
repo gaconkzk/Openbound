@@ -130,9 +130,36 @@
     <Compile Include="GameComponents\Animation\ParticleBuilder.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffect.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffectHandler.cs" />
-    <Content Include="ContentMetadata\Mobile\RaonLauncher\RiderPivot.txt">
+    <None Include="ContentMetadata\Avatar\Male\Body\Metadata.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\ExItem\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Extra\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Flag\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Goggles\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Head\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Misc\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Avatar\Male\Pet\Metadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Random\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\RaonLauncher\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Audio\Music\GameRoom\GameRoomS1.mp3" />
     <Content Include="Content\Audio\Music\GameRoom\GameRoomS2.mp3" />
     <Content Include="Content\Audio\Music\LevelScene\Event\BirthdayS2.mp3" />
@@ -670,6 +697,7 @@
     <Compile Include="GameComponents\Interface\Builder\IconBuilder.cs" />
     <Compile Include="GameComponents\Interface\IncomingWeather.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AttributeMenu.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AvatarButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\OnlineUserList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />

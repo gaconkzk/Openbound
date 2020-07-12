@@ -1,0 +1,24 @@
+﻿[
+  {
+    "ID": 0,
+    "Name": "Base",
+    "Date": "2020-07-12",
+    "Category": 0,
+    "Gender": 0,
+    "GoldPrice": 0,
+    "CashPrice": 0,
+    "Pivot": [ 25, 12 ],
+    "FrameDimensions": [ 38, 24 ]
+  },
+  {
+    "ID": 1,
+    "Name": "Space Marine",
+    "Date": "2020-07-12",
+    "Category": 0,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 17, 14 ],
+    "FrameDimensions": [ 32, 28 ]
+  },
+]

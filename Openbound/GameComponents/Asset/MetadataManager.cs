@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Common;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,11 @@ namespace OpenBound.GameComponents.Asset
 
         public void LoadAssetMetadata()
         {
+            //Mobile metadata
             LoadMetadata<List<int[]>>("Mobile");
+
+            //Avatar metadata
+            LoadMetadata<List<AvatarMetadata>>("Avatar");
         }
 
         private void LoadMetadata<T>(string metadataPath)

@@ -1,0 +1,13 @@
+﻿[
+  {
+    "ID": 0,
+    "Name": "Base",
+    "Date": "2020-07-12",
+    "Category": 1,
+    "Gender": 0,
+    "GoldPrice": 0,
+    "CashPrice": 0,
+    "Pivot": [ 22, 12 ],
+    "FrameDimensions": [ 44, 28 ]
+  },
+]

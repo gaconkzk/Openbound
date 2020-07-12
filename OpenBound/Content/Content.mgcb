@@ -1168,7 +1168,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Male/Body/Base.png
 
-#begin Graphics/Avatar/Male/Goggles/RedParrot.png
+#begin Graphics/Avatar/Male/Goggles/Red Parrot.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1178,7 +1178,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Goggles/RedParrot.png
+/build:Graphics/Avatar/Male/Goggles/Red Parrot.png
 
 #begin Graphics/Avatar/Male/Head/Base.png
 /importer:TextureImporter
@@ -1192,7 +1192,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Male/Head/Base.png
 
-#begin Graphics/Avatar/Male/Head/SpaceMarine.png
+#begin Graphics/Avatar/Male/Head/Space Marine.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1202,9 +1202,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Head/SpaceMarine.png
+/build:Graphics/Avatar/Male/Head/Space Marine.png
 
-#begin Graphics/Avatar/Male/Portrait/Goggles/RedParrot.png
+#begin Graphics/Avatar/Male/Portrait/Goggles/Red Parrot.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1214,9 +1214,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Portrait/Goggles/RedParrot.png
+/build:Graphics/Avatar/Male/Portrait/Goggles/Red Parrot.png
 
-#begin Graphics/Avatar/Male/Portrait/Head/SpaceMarine.png
+#begin Graphics/Avatar/Male/Portrait/Head/Space Marine.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1226,7 +1226,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Portrait/Head/SpaceMarine.png
+/build:Graphics/Avatar/Male/Portrait/Head/Space Marine.png
 
 #begin Graphics/Entity/Thor/Spritesheet.png
 /importer:TextureImporter
@@ -6508,18 +6508,6 @@
 /processorParam:TextureFormat=Color
 /build:Interface/InGame/HUD/HealthBarFrame.png
 
-#begin Interface/InGame/Scene/AvatarShop/Attribute/Icons.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Interface/InGame/Scene/AvatarShop/Attribute/Icons.png
-
 #begin Interface/InGame/Scene/AvatarShop/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -7011,6 +6999,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Interface/Rank/Horizontal.png
+
+#begin Interface/Spritefont/AvatarShop/AvatarStatusCounter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Interface/Spritefont/AvatarShop/AvatarStatusCounter.png
 
 #begin Interface/Spritefont/GameList/PlayerCounter.png
 /importer:TextureImporter

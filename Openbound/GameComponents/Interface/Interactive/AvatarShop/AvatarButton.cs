@@ -15,7 +15,6 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
     public class AvatarButton : Button
     {
         AvatarCategory avatarCategory;
-        AvatarType avatarType;
 
         List<Sprite> spriteList;
         List<SpriteText> spriteTextList;
@@ -35,25 +34,32 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
         float newMarkerElapsedTime = 0;
 
-        public AvatarButton(Vector2 position, int goldPrice, int cashPrice, string name, AvatarCategory avatarCategory, AvatarType avatarType, Gender gender, Action<object> onClick)
+        public AvatarMetadata AvatarMetadata { get; private set; }
+
+        public AvatarButton(Vector2 position, AvatarMetadata avatarMetadata, Action<object> onClick)
             : base(ButtonType.AvatarButton, DepthParameter.InterfacePopupButtons, onClick, position)
         {
+            AvatarMetadata = avatarMetadata;
+
             spriteList = new List<Sprite>();
             spriteTextList = new List<SpriteText>();
 
-            thumb = new Sprite($"Graphics/Avatar/{gender}/Portrait/{avatarCategory}/{avatarType}",
-                position + new Vector2(1, 6.5f), DepthParameter.InterfacePopupButtonIcon);
+            thumb = new Sprite($"Graphics/Avatar/{avatarMetadata.Gender}/Portrait/{avatarCategory}/{avatarMetadata.Name}",
+                position + new Vector2(1, 6f), DepthParameter.InterfacePopupButtonIcon);
             Vector2 scaleFactor = new Vector2(87, 48) / new Vector2(thumb.SpriteWidth, thumb.SpriteHeight);
             float newScale = Math.Min(scaleFactor.X, scaleFactor.Y);
             thumb.Scale = new Vector2(newScale, newScale);
 
             spriteList.Add(thumb);
 
-            newMarker = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/NewItem",
-                position + new Vector2(40, -30), DepthParameter.InterfacePopupMessageBackground);
-            newMarker.Scale /= 2;
+            if (DateTime.Now.AddDays(Parameter.InterfaceAvatarShopAvatarButtonNewStampDay) > avatarMetadata.Date)
+            {
+                newMarker = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/NewItem",
+                    position + new Vector2(40, -30), DepthParameter.InterfacePopupMessageBackground);
+                newMarker.Scale /= 2;
 
-            spriteList.Add(newMarker);
+                spriteList.Add(newMarker);
+            }
 
             equippedIndicator = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/EquipedIndicator",
                 position + new Vector2(-47, 0), DepthParameter.InterfacePopupButtonIcon);
@@ -67,7 +73,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             spriteList.Add(ownedCheck);
 
             //Selecting button icon
-            int index = GetCorrespondingIconIndex(avatarCategory, gender);
+            int index = GetCorrespondingIconIndex(avatarCategory, avatarMetadata.Gender);
             typeIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/ButtonIcons",
                 position + new Vector2(-32, -12), DepthParameter.InterfacePopupText,
                 new Rectangle((index % 6) * 26, (index / 6) * 17, 26, 17));
@@ -76,6 +82,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             spriteList.Add(typeIcon);
 
             //Texts
+            string name = avatarMetadata.Name;
             if (name.Length > 13)
                 name = name.Substring(0, 12) + ".";
 
@@ -84,9 +91,9 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             spriteTextList.Add(itemNameSpriteText);
 
             int pricePos = 0;
-            if (goldPrice != 0)
+            if (avatarMetadata.GoldPrice != 0)
             {
-                goldSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", goldPrice), Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
+                goldSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.GoldPrice), Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
                 goldSpriteText.PositionOffset = position + new Vector2(30, 20 - 10 * pricePos);
                 goldIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/GoldIcon",
                     position + new Vector2(38, 26 - 10 * pricePos++), DepthParameter.InterfacePopupText, new Rectangle(0, 0, 26, 21));
@@ -97,9 +104,9 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
                 spriteList.Add(goldIcon);
             }
 
-            if (cashPrice != 0)
+            if (avatarMetadata.CashPrice != 0)
             {
-                cashSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", cashPrice), Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
+                cashSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.CashPrice), Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
                 cashSpriteText.PositionOffset = position + new Vector2(30, 20 - 10 * pricePos);
                 cashIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/CashIcon",
                     position + new Vector2(38, 26 - 10 * pricePos++), DepthParameter.InterfacePopupText, new Rectangle(0, 0, 26, 21));
@@ -121,7 +128,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             newMarkerElapsedTime += MathHelper.Pi / 2 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             newMarkerElapsedTime %= MathHelper.TwoPi;
 
-            newMarker.SetTransparency((float)Math.Sin(newMarkerElapsedTime));
+            newMarker?.SetTransparency((float)Math.Sin(newMarkerElapsedTime));
         }
 
         private static int GetCorrespondingIconIndex(AvatarCategory avatarCategory, Gender gender)
@@ -136,15 +143,11 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
                     return (gender == Gender.Male) ? 4 : 5;
                 case AvatarCategory.Flag:
                     return 6;
-                case AvatarCategory.Set:
-                    return (gender == Gender.Male) ? 27 : 28;
                 case AvatarCategory.ExItem:
                     return 29;
-                case AvatarCategory.Landscape:
-                    return 31;
-                case AvatarCategory.Ring:
+                case AvatarCategory.Extra:
                     return 32;
-                case AvatarCategory.Necklace:
+                case AvatarCategory.Misc:
                     return 33;
                 case AvatarCategory.Pet:
                     return 34;

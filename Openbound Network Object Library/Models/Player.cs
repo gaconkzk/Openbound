@@ -113,9 +113,44 @@ namespace Openbound_Network_Object_Library.Models
         [JsonIgnore, NotMapped]
         public PlayerNavigation PlayerNavigation;
 
+        //Avatar Region
+        public int[] Avatar { get; set; }
+        
+        [JsonIgnore, NotMapped] public int EquippedAvatarHead => Avatar[0];
+        [JsonIgnore, NotMapped] public int EquippedAvatarBody => Avatar[1];
+        [JsonIgnore, NotMapped] public int EquippedAvatarGoggles => Avatar[2];
+        [JsonIgnore, NotMapped] public int EquippedAvatarFlag => Avatar[3];
+        [JsonIgnore, NotMapped] public int EquippedAvatarExItem => Avatar[4];
+        [JsonIgnore, NotMapped] public int EquippedAvatarPet => Avatar[5];
+        [JsonIgnore, NotMapped] public int EquippedAvatarMisc => Avatar[6];
+        [JsonIgnore, NotMapped] public int EquippedAvatarExtra => Avatar[7];
+
+        [JsonIgnore] public List<int> AvatarHead;
+        [JsonIgnore] public List<int> AvatarBody;
+        [JsonIgnore] public List<int> AvatarGoggles;
+        [JsonIgnore] public List<int> AvatarFlag;
+        [JsonIgnore] public List<int> AvatarExItem;
+        [JsonIgnore] public List<int> AvatarPet;
+        [JsonIgnore] public List<int> AvatarMisc;
+        [JsonIgnore] public List<int> AvatarExtra;
+
+        //Status Region
+        public int[] Status { get; set; }
+
+        [JsonIgnore, NotMapped] public int Attack => Avatar[0];
+        [JsonIgnore, NotMapped] public int Health => Avatar[1];
+        [JsonIgnore, NotMapped] public int Defense => Avatar[2];
+        [JsonIgnore, NotMapped] public int Regeneration => Avatar[3];
+        [JsonIgnore, NotMapped] public int AttackDelay => Avatar[4];
+        [JsonIgnore, NotMapped] public int ItemDelay => Avatar[5];
+        [JsonIgnore, NotMapped] public int Dig => Avatar[6];
+        [JsonIgnore, NotMapped] public int Popularity => Avatar[7];
+
         public Player()
         {
             PlayerNavigation = PlayerNavigation.InGameMenus;
+            Avatar = new int[8];
+            Status = new int[8];
         }
 
         public override int GetHashCode()

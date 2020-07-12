@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
+using OpenBound.GameComponents.Asset;
 using OpenBound.GameComponents.Interface.Builder;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Interactive.AvatarShop;
@@ -10,7 +12,9 @@ using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Pawn.Unit;
 using Openbound_Network_Object_Library.Entity;
+using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Models;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
@@ -33,8 +37,25 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private Rider riderPreview;
 
+        private AttributeMenu attributeMenu;
+        public AvatarMetadata selectedAvatarMetadata;
+
+        private AnimatedButton tryButton;
+
         public AvatarShop()
         {
+            GameInformation.Instance.PlayerInformation = new Player()
+            {
+                ID = 1,
+                CharacterGender = Gender.Male,
+                Email = "c@c.c",
+                Guild = new Guild() { ID = 1, Name = "Zica", Tag = "Zik" },
+                LeavePercentage = 0,
+                Nickname = "Winged",
+                Password = "123",
+                PlayerRank = PlayerRank.GM,
+            };
+
             Background = new Sprite(@"Interface/InGame/Scene/AvatarShop/Background",
                 position: Parameter.ScreenCenter,
                 layerDepth: DepthParameter.Background,
@@ -63,20 +84,26 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Room Button
-            riderPreview = new Rider(new Random(GameInformation.Instance.PlayerInformation, default), default);
+            riderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -60));
 
             int[] offset = new int[] { 108, 86 };
             for (int i = 0; i < 25; i++)
             {
-                /*
-                var x = new AvatarButton(
-                    new Vector2(-95, -175) + new Vector2(offset[0] * (i / 5), offset[1] * (i % 5)), 1000 - 100 * (13 - i), 1000 - 100 * (12 - i), "Red Pirate Parrot",
-                        AvatarCategory.Goggles, AvatarType.RedParrot,
-                        Gender.Male, (a) => { });
+                List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{Gender.Male}/{AvatarCategory.Head}/Metadata"];
 
-                avatarButtonList.Add(x);*/
+                var x = new AvatarButton(
+                    new Vector2(-95, -175) + new Vector2(offset[0] * (i / 5), offset[1] * (i % 5)),
+                    headMetadata.Find((xx) => xx.ID == 1),
+                    AvatarButtonClick);
+
+                avatarButtonList.Add(x);
             }
-        }
+
+            attributeMenu = new AttributeMenu(new Vector2(-285, -235), GameInformation.Instance.PlayerInformation);
+
+            //Buttons standard preset
+            tryButton.Disable();
+    }
 
         #region Button Actions
         private void OptionsCloseAction(object sender)
@@ -99,6 +126,31 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             //ServerInformationBroker.Instance.DisconnectFromGameServer();
             SceneHandler.Instance.RequestSceneChange(SceneType.GameList, TransitionEffectType.RotatingRectangles);
             ((AnimatedButton)sender).Disable();
+        }
+
+        private void AvatarButtonClick(object sender)
+        {
+            AvatarButton avatarButton = ((AvatarButton)sender);
+            selectedAvatarMetadata = avatarButton.AvatarMetadata;
+            avatarButtonList.ForEach((x) => { x.Disable(); x.Enable(); });
+            tryButton.Enable();
+            avatarButton.ChangeButtonState(ButtonAnimationState.Activated, true);
+        }
+
+        private void TryButtonAction(object sender)
+        {
+            if (selectedAvatarMetadata != null)
+            {
+                Avatar avatar = riderPreview.head;
+
+                riderPreview.head = new Avatar(selectedAvatarMetadata);
+                riderPreview.head.Position = avatar.Position;
+
+                if (avatar.Flipbook.Effect != riderPreview.head.Flipbook.Effect)
+                    riderPreview.head.Flip();
+            }
+
+            tryButton.Disable();
         }
 
         private void ShopButtonAction(object sender)
@@ -200,7 +252,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             basePosition = Parameter.ScreenCenter - new Vector2(-370, -265) - 2 * offset;
             i = 0;
 
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Try,  basePosition + offset * i++, ExitDoorAction));
+            animatedButtonList.Add(tryButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Try,  basePosition + offset * i++, TryButtonAction));
             animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Buy,  basePosition + offset * i++, ExitDoorAction));
             animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Gift, basePosition + offset * i++, ExitDoorAction));
 
@@ -217,7 +269,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             avatarButtonList.ForEach((x) => x.Update(gameTime));
             searchTextField.Update(gameTime);
             buttonList.ForEach((x) => x.Update());
-            riderPreview.Update();
+            attributeMenu.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -230,6 +282,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchTextField.Draw(spriteBatch);
             buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             riderPreview.Draw(gameTime, spriteBatch);
+            attributeMenu.Draw(gameTime, spriteBatch);
         }
     }
 }

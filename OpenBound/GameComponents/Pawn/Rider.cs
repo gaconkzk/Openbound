@@ -18,6 +18,7 @@ using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Pawn.Unit;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
+using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,22 +34,11 @@ namespace OpenBound.GameComponents.Pawn
 
     public class Rider
     {
-        static Dictionary<AvatarState, AnimationInstance> headAvatarState = new Dictionary<AvatarState, AnimationInstance>()
-        {
-            { AvatarState.Normal,  new AnimationInstance(){ StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1/10f, AnimationType = AnimationType.Cycle } },
-            { AvatarState.Staring, new AnimationInstance(){ StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1/10f, AnimationType = AnimationType.Cycle } },
-        };
-
-        static Dictionary<AvatarState, AnimationInstance> bodyAvatarState = new Dictionary<AvatarState, AnimationInstance>()
-        {
-            { AvatarState.Normal,  new AnimationInstance(){ StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1/10f, AnimationType = AnimationType.Cycle } },
-        };
-
         public Vector2 Position;
         public Vector2 headBasePosition, bodyBasePosition;
 
-        public Flipbook head;
-        public Flipbook body;
+        public Avatar head;
+        public Avatar body;
 
         readonly Mobile mobile;
         readonly List<int[]> riderOffset;
@@ -58,11 +48,31 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair dc2 = new DebugCrosshair(Color.White);
 #endif
 
+        //Used on Avatar shop. No updates are supported for variables instanced with this constructor.
+        public Rider(Facing facing, Player player, Vector2 positionOffset)
+        {
+            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Head}/Metadata"];
+            List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Body}/Metadata"];
+
+            head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHead));
+            body = new Avatar(bodyMetadata.Find((x) => x.ID == player.EquippedAvatarBody));
+
+            head.Position = positionOffset + new Vector2(((facing == Facing.Right) ? -1 : 1) * 10, -17);
+            body.Position = positionOffset;
+
+            if (facing == Facing.Right) Flip();
+        }
+
         public Rider(Mobile mobile, Vector2 positionOffset)
         {
             this.mobile = mobile;
-            head = new Flipbook(Vector2.Zero, new Vector2(25, 12), 38, 24, "Graphics/Avatar/Male/Head/Base", headAvatarState[AvatarState.Staring], 1, 0);
-            body = new Flipbook(Vector2.Zero, new Vector2(22, 12), 44, 28, "Graphics/Avatar/Male/Body/Base", bodyAvatarState[AvatarState.Normal], 1, 0);
+
+            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Head}/Metadata"];
+            List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Body}/Metadata"];
+
+            head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHead));
+            body = new Avatar(bodyMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarBody));
+
             headBasePosition = positionOffset + new Vector2(10, -17);
             bodyBasePosition = positionOffset;
 
@@ -78,8 +88,8 @@ namespace OpenBound.GameComponents.Pawn
 
         public void Hide()
         {
-            head.Color = Color.Transparent;
-            body.Color = Color.Transparent;
+            head.Hide();
+            body.Hide();
         }
 
         public void Flip()
@@ -87,8 +97,6 @@ namespace OpenBound.GameComponents.Pawn
             head.Flip();
             body.Flip();
         }
-
-        static int value = 0;
 
         public void Update()
         {
@@ -98,8 +106,7 @@ namespace OpenBound.GameComponents.Pawn
             if (mobile.Facing == Facing.Right)
                 basePosition = new Vector2(-1, 1);
 
-            value = mobile.MobileFlipbook.GetCurrentFrame();
-
+            int value = mobile.MobileFlipbook.GetCurrentFrame();
             Vector2 basePos = new Vector2(riderOffset[value][0], riderOffset[value][1]);
             Vector2 headPos = Vector2.Transform((basePos + headBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
             Vector2 bodyPos = Vector2.Transform((basePos + bodyBasePosition) * basePosition, Matrix.CreateRotationZ(baseAngle));
@@ -119,7 +126,6 @@ namespace OpenBound.GameComponents.Pawn
         {
             head.Draw(gameTime, spriteBatch);
             body.Draw(gameTime, spriteBatch);
-            Console.WriteLine(value + " " + mobile.MobileFlipbook.GetCurrentFrame());
         }
     }
 }

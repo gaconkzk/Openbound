@@ -412,6 +412,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Normal,    new Rectangle(105 * 0, 0, 105, 83) },
                             { ButtonAnimationState.Hoover,    new Rectangle(105 * 1, 0, 105, 83) },
                             { ButtonAnimationState.Clicked,   new Rectangle(105 * 2, 0, 105, 83) },
+                            { ButtonAnimationState.Activated, new Rectangle(105 * 2, 0, 105, 83) },
                         }
                     }
                 },
@@ -1111,9 +1112,10 @@ namespace OpenBound.GameComponents.Interface.Interactive
         protected virtual Rectangle CalculateCollisionRectangle()
         {
             return new Rectangle(
-                (int)ButtonSprite.Position.X - (int)ButtonSprite.Pivot.X,
-                (int)ButtonSprite.Position.Y - (int)ButtonSprite.Pivot.Y,
-                ButtonSprite.SourceRectangle.Width, ButtonSprite.SourceRectangle.Height);
+                (int)ButtonSprite.Position.X - (int)(ButtonSprite.Pivot.X * ButtonSprite.Scale.X),
+                (int)ButtonSprite.Position.Y - (int)(ButtonSprite.Pivot.Y * ButtonSprite.Scale.Y),
+                (int)(ButtonSprite.SourceRectangle.Width  * ButtonSprite.Scale.X),
+                (int)(ButtonSprite.SourceRectangle.Height * ButtonSprite.Scale.Y));
         }
 
         public virtual void UpdateAttatchedPosition()

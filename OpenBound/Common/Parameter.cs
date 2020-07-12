@@ -72,6 +72,8 @@ namespace OpenBound.Common
 
         public static readonly Color InterfaceAvatarShopButtonCashColor = new Color(137, 190, 234);
         public static readonly Color InterfaceAvatarShopButtonCashOutlineColor = new Color(9, 55, 104);
+
+        public const int InterfaceAvatarShopAvatarButtonNewStampDay = 14; //Two weeks
         #endregion
 
         #region Misc
