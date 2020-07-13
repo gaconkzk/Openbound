@@ -75,19 +75,21 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             }
 
             //Gold/Cash
-            goldSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", int.MaxValue), Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfaceButton, basePosition, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
+            goldSpriteText = new SpriteText(FontTextType.Consolas10, "", Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfaceButton, basePosition, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
             goldSpriteText.Position = basePosition + new Vector2(582, 452);
             goldIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/GoldIcon",
                 basePosition + new Vector2(594, 458), DepthParameter.InterfaceButton, new Rectangle(0, 0, 26, 21));
             goldIcon.Pivot = new Vector2(13, 10.5f);
             goldIcon.Scale /= 2;
 
-            cashSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", int.MaxValue), Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, DepthParameter.InterfaceButton, basePosition, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
+            cashSpriteText = new SpriteText(FontTextType.Consolas10, "", Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, DepthParameter.InterfaceButton, basePosition, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
             cashSpriteText.Position = basePosition + new Vector2(582, 472);
             cashIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/CashIcon",
                 basePosition + new Vector2(594, 478), DepthParameter.InterfaceButton, new Rectangle(0, 0, 26, 21));
             cashIcon.Pivot = new Vector2(13, 10.5f);
             cashIcon.Scale /= 2;
+
+            RefreshCurrencyValues();
 
             //Remaining Points
             remainingPointsSpriteTextList =
@@ -113,6 +115,12 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
             buttonList.Add(accept);
             buttonList.Add(cancel);
+        }
+
+        public void RefreshCurrencyValues()
+        {
+            goldSpriteText.Text = string.Format("{0:N0}", GameInformation.Instance.PlayerInformation.Gold);
+            cashSpriteText.Text = string.Format("{0:N0}", GameInformation.Instance.PlayerInformation.Cash);
         }
 
         public void Update(GameTime gameTime)

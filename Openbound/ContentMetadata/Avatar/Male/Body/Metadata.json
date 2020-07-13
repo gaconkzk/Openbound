@@ -1,7 +1,7 @@
 ﻿[
   {
     "ID": 0,
-    "Name": "Base",
+    "Name": "Basic",
     "Date": "2020-07-12",
     "Category": 1,
     "Gender": 0,
@@ -9,5 +9,38 @@
     "CashPrice": 0,
     "Pivot": [ 22, 12 ],
     "FrameDimensions": [ 44, 28 ]
+  },
+  {
+    "ID": 1,
+    "Name": "Space Marine",
+    "Date": "2020-07-13",
+    "Category": 1,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 15, 15 ],
+    "FrameDimensions": [ 34, 34 ]
+  },
+  {
+    "ID": 2,
+    "Name": "Miner",
+    "Date": "2020-07-13",
+    "Category": 1,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 16, 15 ],
+    "FrameDimensions": [ 36, 34 ]
+  },
+  {
+    "ID": 3,
+    "Name": "Punk",
+    "Date": "2020-07-13",
+    "Category": 1,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 15, 15 ],
+    "FrameDimensions": [ 34, 34 ]
   },
 ]

@@ -13,6 +13,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Remoting.Messaging;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Openbound_Network_Object_Library.Entity;
@@ -113,6 +114,10 @@ namespace Openbound_Network_Object_Library.Models
         [JsonIgnore, NotMapped]
         public PlayerNavigation PlayerNavigation;
 
+        public int Gold { get; set; }
+
+        public int Cash { get; set; }
+
         //Avatar Region
         public int[] Avatar { get; set; }
         
@@ -125,14 +130,7 @@ namespace Openbound_Network_Object_Library.Models
         [JsonIgnore, NotMapped] public int EquippedAvatarMisc => Avatar[6];
         [JsonIgnore, NotMapped] public int EquippedAvatarExtra => Avatar[7];
 
-        [JsonIgnore] public List<int> AvatarHead;
-        [JsonIgnore] public List<int> AvatarBody;
-        [JsonIgnore] public List<int> AvatarGoggles;
-        [JsonIgnore] public List<int> AvatarFlag;
-        [JsonIgnore] public List<int> AvatarExItem;
-        [JsonIgnore] public List<int> AvatarPet;
-        [JsonIgnore] public List<int> AvatarMisc;
-        [JsonIgnore] public List<int> AvatarExtra;
+        [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
         //Status Region
         public int[] Status { get; set; }
@@ -151,11 +149,38 @@ namespace Openbound_Network_Object_Library.Models
             PlayerNavigation = PlayerNavigation.InGameMenus;
             Avatar = new int[8];
             Status = new int[8];
+
+            OwnedAvatar = new Dictionary<AvatarCategory, HashSet<int>>()
+            {
+                { AvatarCategory.Head,    new HashSet<int>(){ 0, } },
+                { AvatarCategory.Body,    new HashSet<int>(){ 0, } },
+                { AvatarCategory.Goggles, new HashSet<int>() },
+                { AvatarCategory.Flag,    new HashSet<int>() },
+                { AvatarCategory.ExItem,  new HashSet<int>() },
+                { AvatarCategory.Pet,     new HashSet<int>() },
+                { AvatarCategory.Misc,    new HashSet<int>() },
+                { AvatarCategory.Extra,   new HashSet<int>() },
+            };
         }
 
         public override int GetHashCode()
         {
             return ID.GetHashCode();
+        }
+
+        public int GetEquippedAvatar(AvatarCategory avatarCategory)
+        {
+            switch (avatarCategory)
+            {
+                case AvatarCategory.Head:    return EquippedAvatarHead;
+                case AvatarCategory.Body:    return EquippedAvatarBody;
+                case AvatarCategory.Goggles: return EquippedAvatarGoggles;
+                case AvatarCategory.Flag:    return EquippedAvatarFlag;
+                case AvatarCategory.ExItem:  return EquippedAvatarExItem;
+                case AvatarCategory.Pet:     return EquippedAvatarPet;
+                case AvatarCategory.Misc:    return EquippedAvatarMisc;
+                default:                     return EquippedAvatarExtra;
+            }
         }
     }
 }

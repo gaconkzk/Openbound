@@ -1115,6 +1115,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Consolas11.spritefont
 
+#begin Fonts/Consolas14.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Consolas14.spritefont
+
 #begin Fonts/Consolas16.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -1132,7 +1139,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/FontAwesome10.spritefont
 
-#begin Graphics/Avatar/Female/Body/Base.png
+#begin Graphics/Avatar/Female/Body/Basic.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1142,9 +1149,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Female/Body/Base.png
+/build:Graphics/Avatar/Female/Body/Basic.png
 
-#begin Graphics/Avatar/Female/Head/Base.png
+#begin Graphics/Avatar/Female/Head/Basic.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1154,9 +1161,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Female/Head/Base.png
+/build:Graphics/Avatar/Female/Head/Basic.png
 
-#begin Graphics/Avatar/Male/Body/Base.png
+#begin Graphics/Avatar/Male/Body/Basic.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1166,7 +1173,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Body/Base.png
+/build:Graphics/Avatar/Male/Body/Basic.png
+
+#begin Graphics/Avatar/Male/Body/Miner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Body/Miner.png
+
+#begin Graphics/Avatar/Male/Body/Punk.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Body/Punk.png
+
+#begin Graphics/Avatar/Male/Body/Space Marine.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Body/Space Marine.png
 
 #begin Graphics/Avatar/Male/Goggles/Red Parrot.png
 /importer:TextureImporter
@@ -1180,7 +1223,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Male/Goggles/Red Parrot.png
 
-#begin Graphics/Avatar/Male/Head/Base.png
+#begin Graphics/Avatar/Male/Head/Basic.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1190,7 +1233,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Avatar/Male/Head/Base.png
+/build:Graphics/Avatar/Male/Head/Basic.png
+
+#begin Graphics/Avatar/Male/Head/Miner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Head/Miner.png
+
+#begin Graphics/Avatar/Male/Head/Punk.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Head/Punk.png
 
 #begin Graphics/Avatar/Male/Head/Space Marine.png
 /importer:TextureImporter
@@ -1204,6 +1271,54 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Male/Head/Space Marine.png
 
+#begin Graphics/Avatar/Male/Portrait/Body/Basic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Body/Basic.png
+
+#begin Graphics/Avatar/Male/Portrait/Body/Miner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Body/Miner.png
+
+#begin Graphics/Avatar/Male/Portrait/Body/Punk.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Body/Punk.png
+
+#begin Graphics/Avatar/Male/Portrait/Body/Space Marine.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Body/Space Marine.png
+
 #begin Graphics/Avatar/Male/Portrait/Goggles/Red Parrot.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1215,6 +1330,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Male/Portrait/Goggles/Red Parrot.png
+
+#begin Graphics/Avatar/Male/Portrait/Head/Basic.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Head/Basic.png
+
+#begin Graphics/Avatar/Male/Portrait/Head/Miner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Head/Miner.png
+
+#begin Graphics/Avatar/Male/Portrait/Head/Punk.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Male/Portrait/Head/Punk.png
 
 #begin Graphics/Avatar/Male/Portrait/Head/Space Marine.png
 /importer:TextureImporter

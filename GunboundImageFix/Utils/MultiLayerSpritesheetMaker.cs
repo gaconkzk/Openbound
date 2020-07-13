@@ -72,6 +72,9 @@ namespace GunboundImageFix.Utils
             Console.WriteLine("Inicial X Shift factor:");
             int initialXFactor = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("Inicial Y Shift factor:");
+            int initialYFactor = int.Parse(Console.ReadLine());
+
             (int, int) newBigImageSize = ((newSize.Item1 - squishXFactor + initialXFactor) * imgPerLine, (newSize.Item2 - squishYFactor) * (int)Math.Ceiling((double)imagePerLayer[0] / imgPerLine));
 
             Color[][] nCM1 = ImageProcessing.CreateBlankColorMatrix(newBigImageSize.Item1, newBigImageSize.Item2);
@@ -85,8 +88,8 @@ namespace GunboundImageFix.Utils
 
             foreach (ImportedImage img in imgList)
             {
-                w = initialXFactor * (1 + (index % imgPerLine)) + (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
-                h = (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
+                w = initialXFactor + /* * (1 + (index % imgPerLine))*/ + (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
+                h = initialYFactor + (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
 
                 if (!reaply)
                 {

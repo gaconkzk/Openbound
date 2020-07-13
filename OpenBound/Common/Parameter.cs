@@ -231,6 +231,11 @@ namespace OpenBound.Common
         public const string ButtonTextAvatarShopNecklace = "Misc";
         public const string ButtonTextAvatarShopRing = "Extra";
 
+        //--Avatar Shop - Popup - Buy
+        public const string PopupTextConfirmPuchase = "Confirm puchase with";
+        public const string PopupTextBalance = "Balance";
+        public const string PopupTextCurrencyGold = "Gold";
+        public const string PopupTextCurrencyCash = "Cash";
 
         public const string IconSubtitleOffline = "Offline";
         public const string IconSubtitleLowPopulation = "Low";

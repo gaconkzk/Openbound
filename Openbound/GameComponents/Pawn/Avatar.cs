@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
+using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,6 @@ using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.Pawn
 {
-    public enum AvatarCategory
-    {
-        Head = 0,
-        Body = 1,
-        Goggles = 2,
-        Flag = 3,
-        ExItem = 4,
-        Pet = 5,
-        Misc = 6,
-        Extra = 7,
-    }
-
     public class AvatarMetadata
     {
         public int ID;

@@ -716,6 +716,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
             ChangeButtonState(ButtonAnimationState.Normal, true);
         }
 
+        /*public void AppendAnimationIntoCycle(ButtonAnimationState newState, bool force = false)
+        {
+            Flipbook.AppendAnimationIntoCycle(selectedPreset.StatePreset[newState], force);
+        }*/
+
         public void ChangeButtonState(ButtonAnimationState newState, bool force = false)
         {
             if (state == newState) return;
@@ -726,6 +731,19 @@ namespace OpenBound.GameComponents.Interface.Interactive
                     Flipbook.AppendAnimationIntoCycle(selectedPreset.StatePreset[state = newState]);
 
                 if (!selectedPreset.StatePreset.ContainsKey(newState)) return;
+
+                if (state == ButtonAnimationState.Clicked && Flipbook.FlipbookAnimationList.Exists((x) => x.AnimationInstance == selectedPreset.StatePreset[ButtonAnimationState.Normal]))
+                {
+                    if (Flipbook.FlipbookAnimationList.Count == 1)
+                        return;
+                    else
+                        state = ButtonAnimationState.Normal;
+                }
+
+                if (newState == ButtonAnimationState.Normal && Flipbook.FlipbookAnimationList.Exists((x) => x.AnimationInstance == selectedPreset.StatePreset[ButtonAnimationState.Normal]))
+                {
+                    return;
+                }
 
                 if (state == ButtonAnimationState.Hoover && newState == ButtonAnimationState.Normal)
                 {
@@ -740,8 +758,8 @@ namespace OpenBound.GameComponents.Interface.Interactive
                 if (newState == ButtonAnimationState.Clicked)
                 {
                     Flipbook.AppendAnimationIntoCycle(selectedPreset.StatePreset[ButtonAnimationState.Clicked], true);
-
-                    state = ButtonAnimationState.Activated;
+                    Flipbook.AppendAnimationIntoCycle(selectedPreset.StatePreset[ButtonAnimationState.Normal]);
+                    state = ButtonAnimationState.Clicked;
 
                     return;
                 }

@@ -714,6 +714,7 @@
     <Compile Include="GameComponents\Interface\Nameplate.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessage.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessageBuilder.cs" />
+    <Compile Include="GameComponents\Interface\Popup\PopupBuyAvatar.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupCreateGame.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupGameOptions.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupGameResults.cs" />

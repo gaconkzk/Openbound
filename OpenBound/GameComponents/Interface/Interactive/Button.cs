@@ -72,6 +72,9 @@ namespace OpenBound.GameComponents.Interface.Interactive
         SelectMobileNak, SelectMobilePhoenix, SelectMobileRandom, SelectMobileRaonLauncher,
         SelectMobileTiburon, SelectMobileTrico, SelectMobileTurtle, SelectMobileBlueWhale,
         SelectMobileWolf,
+
+        //Popup - Buy Avatar
+        AvatarBuyCash, AvatarBuyGold,
     }
 
     public enum ButtonAnimationState
@@ -1012,6 +1015,36 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Clicked,   new Rectangle(67 * 02, 62 * 6, 67, 62) },
                             { ButtonAnimationState.Disabled,  new Rectangle(67 * 03, 62 * 6, 67, 62) },
                             { ButtonAnimationState.Activated, new Rectangle(67 * 04, 62 * 6, 67, 62) },
+                        }
+                    }
+                },
+                #endregion
+                #region Popup - Buy Avatar
+                {
+                    ButtonType.AvatarBuyCash,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/Cash",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(32 * 0, 0, 32, 31) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(32 * 1, 0, 32, 31) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(32 * 2, 0, 32, 31) },
+                            { ButtonAnimationState.Disabled, new Rectangle(32 * 3, 0, 32, 31) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.AvatarBuyGold,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/Gold",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(32 * 0, 0, 32, 31) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(32 * 1, 0, 32, 31) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(32 * 2, 0, 32, 31) },
+                            { ButtonAnimationState.Disabled, new Rectangle(32 * 3, 0, 32, 31) },
                         }
                     }
                 },

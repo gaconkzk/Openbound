@@ -1,7 +1,7 @@
 ﻿[
   {
     "ID": 0,
-    "Name": "Base",
+    "Name": "Basic",
     "Date": "2020-07-12",
     "Category": 0,
     "Gender": 0,
@@ -18,7 +18,29 @@
     "Gender": 0,
     "GoldPrice": 100,
     "CashPrice": 100,
-    "Pivot": [ 17, 14 ],
+    "Pivot": [ 18, 14 ],
     "FrameDimensions": [ 32, 28 ]
   },
+  {
+    "ID": 2,
+    "Name": "Miner",
+    "Date": "2020-07-13",
+    "Category": 0,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 95, 52 ],
+    "FrameDimensions": [ 136, 78 ]
+  },
+  {
+    "ID": 3,
+    "Name": "Punk",
+    "Date": "2020-07-13",
+    "Category": 0,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "Pivot": [ 23, 22 ],
+    "FrameDimensions": [ 38, 39 ]
+  }
 ]

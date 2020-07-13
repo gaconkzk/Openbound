@@ -4,6 +4,7 @@ using OpenBound.Common;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Pawn;
+using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.Models;
 using System;
@@ -14,8 +15,6 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 {
     public class AvatarButton : Button
     {
-        AvatarCategory avatarCategory;
-
         List<Sprite> spriteList;
         List<SpriteText> spriteTextList;
 
@@ -36,46 +35,55 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
         public AvatarMetadata AvatarMetadata { get; private set; }
 
-        public AvatarButton(Vector2 position, AvatarMetadata avatarMetadata, Action<object> onClick)
-            : base(ButtonType.AvatarButton, DepthParameter.InterfacePopupButtons, onClick, position)
+        public AvatarButton(Vector2 position, AvatarMetadata avatarMetadata, Action<object> onClick, float layerDepth)
+            : base(ButtonType.AvatarButton, layerDepth, onClick, position)
         {
             AvatarMetadata = avatarMetadata;
 
             spriteList = new List<Sprite>();
             spriteTextList = new List<SpriteText>();
 
-            thumb = new Sprite($"Graphics/Avatar/{avatarMetadata.Gender}/Portrait/{avatarCategory}/{avatarMetadata.Name}",
-                position + new Vector2(1, 6f), DepthParameter.InterfacePopupButtonIcon);
+            thumb = new Sprite($"Graphics/Avatar/{avatarMetadata.Gender}/Portrait/{avatarMetadata.Category}/{avatarMetadata.Name}",
+                position + new Vector2(1, 6f), layerDepth + 0.001f);
             Vector2 scaleFactor = new Vector2(87, 48) / new Vector2(thumb.SpriteWidth, thumb.SpriteHeight);
             float newScale = Math.Min(scaleFactor.X, scaleFactor.Y);
             thumb.Scale = new Vector2(newScale, newScale);
 
             spriteList.Add(thumb);
 
+            //New Marker
             if (DateTime.Now.AddDays(Parameter.InterfaceAvatarShopAvatarButtonNewStampDay) > avatarMetadata.Date)
             {
                 newMarker = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/NewItem",
-                    position + new Vector2(40, -30), DepthParameter.InterfacePopupMessageBackground);
+                    position + new Vector2(40, -30), layerDepth + 0.003f);
                 newMarker.Scale /= 2;
 
                 spriteList.Add(newMarker);
             }
 
-            equippedIndicator = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/EquipedIndicator",
-                position + new Vector2(-47, 0), DepthParameter.InterfacePopupButtonIcon);
+            //Equipped Indicator
+            if (GameInformation.Instance.PlayerInformation.GetEquippedAvatar(avatarMetadata.Category) == avatarMetadata.ID)
+            {
+                equippedIndicator = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/EquipedIndicator",
+                    position + new Vector2(-47, 0), layerDepth + 0.002f);
 
-            spriteList.Add(equippedIndicator);
+                spriteList.Add(equippedIndicator);
+            }
 
-            ownedCheck = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/OwnedCheck",
-                position + new Vector2(38, -14), DepthParameter.InterfacePopupButtonIcon);
-            ownedCheck.Scale /= 2;
+            //Owned check
+            if (GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.Category].Contains(avatarMetadata.ID))
+            {
+                ownedCheck = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/OwnedCheck",
+                    position + new Vector2(38, -14), layerDepth + 0.002f);
+                ownedCheck.Scale /= 2;
 
-            spriteList.Add(ownedCheck);
+                spriteList.Add(ownedCheck);
+            }
 
             //Selecting button icon
-            int index = GetCorrespondingIconIndex(avatarCategory, avatarMetadata.Gender);
+            int index = GetCorrespondingIconIndex(avatarMetadata.Category, avatarMetadata.Gender);
             typeIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/ButtonIcons",
-                position + new Vector2(-32, -12), DepthParameter.InterfacePopupText,
+                position + new Vector2(-32, -12), layerDepth + 0.002f,
                 new Rectangle((index % 6) * 26, (index / 6) * 17, 26, 17));
             typeIcon.Pivot = new Vector2(13, 8.5f);
 
@@ -86,17 +94,17 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             if (name.Length > 13)
                 name = name.Substring(0, 12) + ".";
 
-            itemNameSpriteText = new SpriteText(FontTextType.Consolas10, name, Color.White, Alignment.Left, DepthParameter.InterfacePopupText, position, Color.Black);
+            itemNameSpriteText = new SpriteText(FontTextType.Consolas10, name, Color.White, Alignment.Left, layerDepth + 0.002f, position, Color.Black);
             itemNameSpriteText.PositionOffset = position + new Vector2(-44, -36);
             spriteTextList.Add(itemNameSpriteText);
 
             int pricePos = 0;
             if (avatarMetadata.GoldPrice != 0)
             {
-                goldSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.GoldPrice), Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
+                goldSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.GoldPrice), Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, layerDepth + 0.003f, position, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
                 goldSpriteText.PositionOffset = position + new Vector2(30, 20 - 10 * pricePos);
                 goldIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/GoldIcon",
-                    position + new Vector2(38, 26 - 10 * pricePos++), DepthParameter.InterfacePopupText, new Rectangle(0, 0, 26, 21));
+                    position + new Vector2(38, 26 - 10 * pricePos++), layerDepth + 0.002f, new Rectangle(0, 0, 26, 21));
                 goldIcon.Pivot = new Vector2(13, 10.5f);
                 goldIcon.Scale /= 2;
 
@@ -106,10 +114,10 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
             if (avatarMetadata.CashPrice != 0)
             {
-                cashSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.CashPrice), Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, DepthParameter.InterfacePopupText, position, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
+                cashSpriteText = new SpriteText(FontTextType.Consolas10, string.Format("{0:N0}", avatarMetadata.CashPrice), Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Right, layerDepth + 0.003f, position, Parameter.InterfaceAvatarShopButtonCashOutlineColor);
                 cashSpriteText.PositionOffset = position + new Vector2(30, 20 - 10 * pricePos);
                 cashIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/CashIcon",
-                    position + new Vector2(38, 26 - 10 * pricePos++), DepthParameter.InterfacePopupText, new Rectangle(0, 0, 26, 21));
+                    position + new Vector2(38, 26 - 10 * pricePos++), layerDepth + 0.002f, new Rectangle(0, 0, 26, 21));
                 cashIcon.Pivot = new Vector2(13, 10.5f);
                 cashIcon.Scale /= 2;
 

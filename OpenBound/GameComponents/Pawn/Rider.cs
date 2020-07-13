@@ -37,8 +37,8 @@ namespace OpenBound.GameComponents.Pawn
         public Vector2 Position;
         public Vector2 headBasePosition, bodyBasePosition;
 
-        public Avatar head;
-        public Avatar body;
+        public Avatar Head;
+        public Avatar Body;
 
         readonly Mobile mobile;
         readonly List<int[]> riderOffset;
@@ -54,11 +54,11 @@ namespace OpenBound.GameComponents.Pawn
             List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Head}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
-            head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHead));
-            body = new Avatar(bodyMetadata.Find((x) => x.ID == player.EquippedAvatarBody));
+            Head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHead));
+            Body = new Avatar(bodyMetadata.Find((x) => x.ID == player.EquippedAvatarBody));
 
-            head.Position = positionOffset + new Vector2(((facing == Facing.Right) ? -1 : 1) * 10, -17);
-            body.Position = positionOffset;
+            Head.Position = positionOffset + new Vector2(((facing == Facing.Right) ? -1 : 1) * 10, -17);
+            Body.Position = positionOffset;
 
             if (facing == Facing.Right) Flip();
         }
@@ -70,8 +70,8 @@ namespace OpenBound.GameComponents.Pawn
             List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Head}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
-            head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHead));
-            body = new Avatar(bodyMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarBody));
+            Head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHead));
+            Body = new Avatar(bodyMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarBody));
 
             headBasePosition = positionOffset + new Vector2(10, -17);
             bodyBasePosition = positionOffset;
@@ -88,14 +88,39 @@ namespace OpenBound.GameComponents.Pawn
 
         public void Hide()
         {
-            head.Hide();
-            body.Hide();
+            Head.Hide();
+            Body.Hide();
         }
 
         public void Flip()
         {
-            head.Flip();
-            body.Flip();
+            Head.Flip();
+            Body.Flip();
+        }
+
+        public void ReplaceAvatar(AvatarMetadata avatarMetadata)
+        {
+            Avatar avatar = new Avatar(avatarMetadata);
+            Avatar previousAvatar = null;
+
+            switch (avatarMetadata.Category)
+            {
+                case AvatarCategory.Head:
+                    previousAvatar = Head;
+                    Head = avatar;
+                    break;
+                case AvatarCategory.Body:
+                    previousAvatar = Body;
+                    Body = avatar;
+                    break;
+            }
+
+            avatar.Position = previousAvatar.Position;
+
+            if (avatar.Flipbook.Effect != previousAvatar.Flipbook.Effect)
+                avatar.Flip();
+
+            ResetCurrentAnimation();
         }
 
         public void Update()
@@ -116,16 +141,22 @@ namespace OpenBound.GameComponents.Pawn
             dc2.Update(mobile.MobileFlipbook.Position + bodyPos);
 #endif
 
-            head.Position = mobile.MobileFlipbook.Position + headPos;
-            head.Rotation = mobile.MobileFlipbook.Rotation;
-            body.Position = mobile.MobileFlipbook.Position + bodyPos;
-            body.Rotation = mobile.MobileFlipbook.Rotation;
+            Head.Position = mobile.MobileFlipbook.Position + headPos;
+            Head.Rotation = mobile.MobileFlipbook.Rotation;
+            Body.Position = mobile.MobileFlipbook.Position + bodyPos;
+            Body.Rotation = mobile.MobileFlipbook.Rotation;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            head.Draw(gameTime, spriteBatch);
-            body.Draw(gameTime, spriteBatch);
+            Head.Draw(gameTime, spriteBatch);
+            Body.Draw(gameTime, spriteBatch);
+        }
+
+        internal void ResetCurrentAnimation()
+        {
+            Head.Flipbook.ResetCurrentAnimation();
+            Body.Flipbook.ResetCurrentAnimation();
         }
     }
 }
