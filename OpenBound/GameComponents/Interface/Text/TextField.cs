@@ -37,6 +37,7 @@ namespace OpenBound.GameComponents.Interface.Text
         }
 
         public SpriteText Text { get; private set; }
+
         private SpriteText textPointer;
 
         //Control
@@ -62,7 +63,8 @@ namespace OpenBound.GameComponents.Interface.Text
         private Vector2 alignmentOffset;
 
         //Event
-        Action<object> OnActive { get; set; }
+        public Action<object> OnActive { get; set; }
+        public Action<string> OnTextChange { get; set; }
         public Dictionary<Keys, Action<object>> OnPressKey { get; set; }
 
 #if DEBUG
@@ -228,7 +230,7 @@ namespace OpenBound.GameComponents.Interface.Text
                     string before = Text.Text.Substring(0, textPointerLocation);
                     string after = Text.Text.Substring(textPointerLocation + 1, Text.Text.Length - textPointerLocation - 1);
 
-                    Text.Text = before + after;
+                    UpdateText(before + after);
                 }
                 else if (key == Keys.Home)
                 {
@@ -259,7 +261,7 @@ namespace OpenBound.GameComponents.Interface.Text
 
         public void ClearText()
         {
-            Text.Text = "";
+            UpdateText("");
             textPointerLocation = 0;
         }
 
@@ -278,7 +280,7 @@ namespace OpenBound.GameComponents.Interface.Text
                 string before = Text.Text.Substring(0, textPointerLocation - 1);
                 string after = Text.Text.Substring(textPointerLocation, Text.Text.Length - textPointerLocation);
 
-                Text.Text = before + after;
+                UpdateText(before + after);
                 textPointerLocation--;
             }
             else if (pressedKey.Key == Keys.Tab)
@@ -304,9 +306,15 @@ namespace OpenBound.GameComponents.Interface.Text
 
                 string before = Text.Text.Substring(0, textPointerLocation);
                 string after = Text.Text.Substring(textPointerLocation, Text.Text.Length - textPointerLocation);
-                Text.Text = before + pressedKey.Character + after;
+                UpdateText(before + pressedKey.Character + after);
                 textPointerLocation++;
             }
+        }
+
+        public void UpdateText(string newText)
+        {
+            Text.Text = newText;
+            OnTextChange?.Invoke(newText);
         }
 
         public void Dispose()

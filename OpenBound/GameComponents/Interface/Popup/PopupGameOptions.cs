@@ -13,11 +13,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Text;
 using Openbound_Network_Object_Library.Entity.Text;
+using System;
 using System.Collections.Generic;
 
 namespace OpenBound.GameComponents.Interface.Popup
@@ -165,6 +167,8 @@ namespace OpenBound.GameComponents.Interface.Popup
 
         public override void RealocateElements(Vector2 delta)
         {
+            delta = delta.ToIntegerDomain();
+
             base.RealocateElements(delta);
 
             sliderBarList.ForEach((x) => x.RealocateElements(delta));

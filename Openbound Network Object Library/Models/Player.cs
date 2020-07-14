@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -121,14 +122,14 @@ namespace Openbound_Network_Object_Library.Models
         //Avatar Region
         public int[] Avatar { get; set; }
         
-        [JsonIgnore, NotMapped] public int EquippedAvatarHead => Avatar[0];
-        [JsonIgnore, NotMapped] public int EquippedAvatarBody => Avatar[1];
-        [JsonIgnore, NotMapped] public int EquippedAvatarGoggles => Avatar[2];
-        [JsonIgnore, NotMapped] public int EquippedAvatarFlag => Avatar[3];
-        [JsonIgnore, NotMapped] public int EquippedAvatarExItem => Avatar[4];
-        [JsonIgnore, NotMapped] public int EquippedAvatarPet => Avatar[5];
-        [JsonIgnore, NotMapped] public int EquippedAvatarMisc => Avatar[6];
-        [JsonIgnore, NotMapped] public int EquippedAvatarExtra => Avatar[7];
+        [JsonIgnore, NotMapped] public int EquippedAvatarHead { get => Avatar[0]; set => Avatar[0] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarGoggles { get => Avatar[2]; set => Avatar[2] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarFlag { get => Avatar[3]; set => Avatar[3] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarExItem { get => Avatar[4]; set => Avatar[4] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarPet { get => Avatar[5]; set => Avatar[5] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarMisc { get => Avatar[6]; set => Avatar[6] = value; }
+        [JsonIgnore, NotMapped] public int EquippedAvatarExtra { get => Avatar[7]; set => Avatar[7] = value; }
 
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
@@ -180,6 +181,24 @@ namespace Openbound_Network_Object_Library.Models
                 case AvatarCategory.Pet:     return EquippedAvatarPet;
                 case AvatarCategory.Misc:    return EquippedAvatarMisc;
                 default:                     return EquippedAvatarExtra;
+            }
+        }
+
+        public void EquipAvatar(AvatarCategory avatarCategory, int avatarID)
+        {
+            if (!OwnedAvatar[avatarCategory].Contains(avatarID))
+                return;
+
+            switch (avatarCategory)
+            {
+                case AvatarCategory.Head:    EquippedAvatarHead    = avatarID; return;
+                case AvatarCategory.Body:    EquippedAvatarBody    = avatarID; return;
+                case AvatarCategory.Goggles: EquippedAvatarGoggles = avatarID; return;
+                case AvatarCategory.Flag:    EquippedAvatarFlag    = avatarID; return;
+                case AvatarCategory.ExItem:  EquippedAvatarExItem  = avatarID; return;
+                case AvatarCategory.Pet:     EquippedAvatarPet     = avatarID; return;
+                case AvatarCategory.Misc:    EquippedAvatarMisc    = avatarID; return;
+                default:                     EquippedAvatarExtra   = avatarID; return;
             }
         }
     }

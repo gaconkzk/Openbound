@@ -30,11 +30,13 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         public int LastPage;
         public bool IsRenderingInventory;
 
-        public AvatarSearchFilter() { }
+        public AvatarSearchFilter() { AvatarName = ""; }
     }
     public class AvatarShop : GameScene
     {
+        //Interface animated buttons
         private List<AnimatedButton> animatedButtonList;
+        private AnimatedButton cashChargeButton;
 
         private List<Sprite> spriteList;
         private Sprite foreground1, foreground2;
@@ -48,7 +50,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         private Button tabInventoryButton, tabShopButton;
         private SpriteText inventorySpriteText, shopSpriteText;
 
-        private Rider riderPreview;
+        private Rider shopRiderPreview, inventoryRiderPreview;
+        private SpriteText avatarPreviewSpriteText;
 
         private AttributeMenu attributeMenu;
         public AvatarMetadata selectedAvatarMetadata;
@@ -57,6 +60,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         // Filter buttons
         private List<AnimatedButton> filterButtonList;
+        private AnimatedButton filterHatButton, filterBodyButton, filterGogglesButton, filterFlagButton;
+        private AnimatedButton filterExItemButton, filterPetButton, filterMiscButton, filterExtraButton;
 
         // Footer buttons
         private AnimatedButton tryButton, buyButton, giftButton;
@@ -64,6 +69,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         // Filtering options
         private AvatarSearchFilter searchFilter;
         private AnimatedButton filterLeftButton, filterRightButton;
+
+        // Popups
+        private PopupBuyAvatar popupBuyAvatar;
 
         public AvatarShop()
         {
@@ -110,19 +118,21 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Room Button
-            riderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -60));
+            shopRiderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -40));
+            inventoryRiderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -40));
+            inventoryRiderPreview.Hide();
+
+            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop, Color.White,
+                Alignment.Left, DepthParameter.InterfaceButton,
+                Parameter.ScreenCenter - new Vector2(385, 110),
+                Color.Black);
 
             //AttributeButton
             attributeMenu = new AttributeMenu(new Vector2(-285, -235), GameInformation.Instance.PlayerInformation);
 
-            //Buttons standard preset
-            tryButton.Disable();
-            buyButton.Disable();
-            giftButton.Disable();
-
             //Since Hats is the first selected filter, start the window rendering all hats
             //Filtering
-            filterButtonList[0].Disable(); // 0 = head
+            filterHatButton.ChangeButtonState(ButtonAnimationState.Activated, true);
             searchFilter = new AvatarSearchFilter();
             searchFilter.AvatarCategory = AvatarCategory.Head;
 
@@ -143,7 +153,117 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteTextList.Add(filterDivider);
 
             UpdateFilter(AvatarCategory.Head, 0);
+
+            //Buttons standard preset
+            tryButton.Disable(true);
+            buyButton.Disable(true);
+            giftButton.Disable(true);
+            cashChargeButton.Disable(true);
         }
+
+        #region AddComponents Into Screen
+        public void AddTabControlToScene()
+        {
+            tabShopButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, ShopButtonAction, new Vector2(-110, -285));
+            tabInventoryButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, InventoryButtonAction, new Vector2(-030, -285));
+            tabShopButton.UpdateAttatchedPosition();
+            tabInventoryButton.UpdateAttatchedPosition();
+
+            tabShopButton.Disable();
+
+            buttonList.Add(tabShopButton);
+            buttonList.Add(tabInventoryButton);
+
+            shopSpriteText = new SpriteText(FontTextType.Consolas10, "Shop", Color.White, Alignment.Center, DepthParameter.InterfaceButtonText, tabShopButton.ButtonSprite.Position, Color.Black);
+            inventorySpriteText = new SpriteText(FontTextType.Consolas10, "Inventory", Color.LightGray, Alignment.Center, DepthParameter.InterfaceButtonText, tabInventoryButton.ButtonSprite.Position, Color.Black);
+            shopSpriteText.Position -= (shopSpriteText.MeasureSize * Vector2.UnitY) / 3;
+            inventorySpriteText.Position -= (inventorySpriteText.MeasureSize * Vector2.UnitY) / 3;
+            spriteTextList.Add(shopSpriteText);
+            spriteTextList.Add(inventorySpriteText);
+        }
+
+        public void AddSearchTextToScene()
+        {
+            SpriteText spriteText = new SpriteText(FontTextType.FontAwesome10, "" + (char)0xf002, Color.White, Alignment.Left, DepthParameter.InterfaceButtonText,
+                Parameter.ScreenCenter + new Vector2(242, -253), Color.Black);
+            spriteTextList.Add(spriteText);
+
+            searchTextField = new TextField(Parameter.ScreenCenter + new Vector2(260, -252), 120, 16, 16, FontTextType.Consolas10, Color.White, DepthParameter.InterfaceButtonText, Color.Black);
+            searchTextField.ActivateElement();
+            searchTextField.OnTextChange = OnFilterTextChange;
+        }
+
+        public void AddFilterAnimatedButtonsToScene()
+        {
+            Vector2 position = Parameter.ScreenCenter - new Vector2(130, 250);
+            Vector2 offset = new Vector2(45, 0);
+            int i = 0;
+            filterButtonList.Add(filterHatButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Hat,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Head); }));
+            filterButtonList.Add(filterBodyButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Body,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Body); }));
+            filterButtonList.Add(filterGogglesButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Goggles,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Goggles); }));
+            filterButtonList.Add(filterFlagButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Flag,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Flag); }));
+            filterButtonList.Add(filterExItemButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExItem,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.ExItem); }));
+            filterButtonList.Add(filterPetButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Pet,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Pet); }));
+            filterButtonList.Add(filterMiscButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Necklace,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Misc); }));
+            filterButtonList.Add(filterExtraButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Ring,
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Extra); }));
+        }
+
+        public void AddBottomAnimatedButtonsToScene()
+        {
+            //Left Side
+            int i = 0;
+
+            Vector2 basePosition = Parameter.ScreenCenter - new Vector2(360, -265);
+            Vector2 offset = new Vector2(72, 0);
+
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Buddy,    basePosition + offset * i++, ExitDoorAction));
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Options,  basePosition + offset * i++, OptionsAction));
+
+            /*
+            basePosition += new Vector2(0, -55);
+            i = 0;
+
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
+            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));*/
+
+            //Right Side - Left
+            basePosition = Parameter.ScreenCenter - new Vector2(129, -265);
+            animatedButtonList.Add(cashChargeButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.CashCharge, basePosition, ExitDoorAction));
+
+            //Right Side - Right
+            offset = new Vector2(62, 0);
+            basePosition = Parameter.ScreenCenter - new Vector2(-370, -265) - 2 * offset;
+            i = 0;
+
+            animatedButtonList.Add(tryButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Try, basePosition + offset * i++, TryButtonAction));
+            animatedButtonList.Add(buyButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Buy, basePosition + offset * i++, BuyButtonAction));
+            animatedButtonList.Add(giftButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Gift, basePosition + offset * i++, ExitDoorAction));
+
+            animatedButtonList.Add(filterLeftButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.LeftArrow,
+                Parameter.ScreenCenter - new Vector2(-141 + 40 + 30, -245), (o) => { UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage - 1); }));
+            animatedButtonList.Add(filterRightButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.RightArrow,
+                Parameter.ScreenCenter - new Vector2(-141 - 40, -245), (o) => { UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage + 1); }));
+        }
+        #endregion
+
+        #region Networking
+        public void OnAcquireAvatarAsyncCallback(object avatar)
+        {
+            AvatarMetadata avatarMetadata = ((AvatarMetadata)avatar);
+            GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.Category].Add(avatarMetadata.ID);
+            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
+        }
+        #endregion
 
         #region Button Actions
         private void OptionsCloseAction(object sender)
@@ -151,6 +271,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             //roomButtonList.ForEach((x) => x.ShouldUpdate = true);
             animatedButtonList.ForEach((x) => x.ShouldUpdate = true);
             ((Button)sender).Enable();
+
+            EnableInterfaceButtons();
         }
 
         private void OptionsAction(object sender)
@@ -158,47 +280,93 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             //roomButtonList.ForEach((x) => x.ShouldUpdate = false);
             animatedButtonList.ForEach((x) => x.ShouldUpdate = false);
             PopupHandler.PopupGameOptions.ShouldRender = true;
-            ((AnimatedButton)sender).Disable();
+            ((AnimatedButton)sender).Disable(true);
+
+            DisableInterfaceButtons();
         }
 
         private void ExitDoorAction(object sender)
         {
             //ServerInformationBroker.Instance.DisconnectFromGameServer();
             SceneHandler.Instance.RequestSceneChange(SceneType.GameList, TransitionEffectType.RotatingRectangles);
-            ((AnimatedButton)sender).Disable();
+            ((AnimatedButton)sender).Disable(true);
         }
 
-        private void AvatarButtonClick(object sender)
+        private void AvatarButtonAction(object sender)
         {
             AvatarButton avatarButton = ((AvatarButton)sender);
             selectedAvatarMetadata = avatarButton.AvatarMetadata;
+
+            // If it is a inventory button
+            if (searchFilter.IsRenderingInventory)
+            {
+                // Equip
+                GameInformation.Instance.PlayerInformation
+                    .EquipAvatar(selectedAvatarMetadata.Category, selectedAvatarMetadata.ID);
+
+                // Update Equipped
+                avatarButtonList.ForEach((x) => x.HideEquippedIndicator());
+                avatarButton.ShowEquippedIndicator();
+
+                inventoryRiderPreview.ReplaceAvatar(selectedAvatarMetadata);
+
+                tryButton.Disable(true);
+                buyButton.Disable(true);
+
+                return;
+            }
+
+            // If it isn't an inventory button
             avatarButtonList.ForEach((x) => { x.Disable(); x.Enable(); });
-
-            tryButton.Enable();
-            buyButton.Enable();
-            giftButton.Enable();
-
             avatarButton.ChangeButtonState(ButtonAnimationState.Activated, true);
+
+            if (shopRiderPreview.GetEquippedAvatarID(selectedAvatarMetadata.Category) != selectedAvatarMetadata.ID)
+                tryButton.Enable();
+            else
+                tryButton.Disable(true);
+
+            if (GameInformation.Instance.PlayerInformation.Gold >= selectedAvatarMetadata.GoldPrice ||
+                GameInformation.Instance.PlayerInformation.Cash >= selectedAvatarMetadata.CashPrice)
+            {
+                if (!GameInformation.Instance.PlayerInformation
+                    .OwnedAvatar[selectedAvatarMetadata.Category].Contains(selectedAvatarMetadata.ID))
+                    buyButton.Enable();
+                else
+                    buyButton.Disable(true);
+            }
         }
 
         private void TryButtonAction(object sender)
         {
             if (selectedAvatarMetadata != null)
             {
-                riderPreview.ReplaceAvatar(selectedAvatarMetadata);
+                shopRiderPreview.ReplaceAvatar(selectedAvatarMetadata);
+
+                foreach(AvatarButton button in avatarButtonList)
+                {
+                    button.HideEquippedIndicator();
+
+                    if (button.AvatarMetadata.ID == shopRiderPreview.GetEquippedAvatarID(button.AvatarMetadata.Category))
+                        button.ShowEquippedIndicator();
+                }
             }
 
-            tryButton.Disable();
+            tryButton.Disable(true);
         }
 
         private void BuyButtonAction(object sender)
         {
-            PopupBuyAvatar pba = new PopupBuyAvatar(selectedAvatarMetadata, (o) => {
-                buyButton.Enable();
-            }, default, default);
+            popupBuyAvatar = new PopupBuyAvatar(selectedAvatarMetadata,
+                OnClosePopupDialog,
+                OnBuyCash,
+                OnBuyGold);
 
-            PopupHandler.Add(pba);
-            buyButton.Disable();
+            PopupHandler.Add(popupBuyAvatar);
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
+
+            DisableInterfaceButtons();
         }
 
         private void ShopButtonAction(object sender)
@@ -210,6 +378,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             foreground1.SetTransparency(1);
             foreground2.SetTransparency(0);
+
+            shopRiderPreview.Show();
+            inventoryRiderPreview.Hide();
+
+            avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShop;
 
             searchFilter.IsRenderingInventory = false;
             UpdateFilter(searchFilter.AvatarCategory, 0);
@@ -225,8 +398,16 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             foreground1.SetTransparency(0);
             foreground2.SetTransparency(1);
 
+            shopRiderPreview.Hide();
+            inventoryRiderPreview.Show();
+
+            avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShopEquipped;
+
             searchFilter.IsRenderingInventory = true;
             UpdateFilter(searchFilter.AvatarCategory, 0);
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
         }
 
         public void FilterButtonAction(object sender, AvatarCategory category)
@@ -236,11 +417,111 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 if (x != sender) x.Enable();
             });
 
-            ((AnimatedButton)sender).Disable();
+            ((AnimatedButton)sender).ChangeButtonState(ButtonAnimationState.Activated);
 
             UpdateFilter(category, 0);
         }
+
+        public void OnClosePopupDialog(object sender)
+        {
+            EnableInterfaceButtons();
+
+            buyButton.Enable();
+            tryButton.Enable();
+
+        }
+
+        public void OnBuyCash(object sender)
+        {
+            //send request
+            GameInformation.Instance.PlayerInformation.Cash -= selectedAvatarMetadata.CashPrice;
+            OnAcquireAvatarAsyncCallback(selectedAvatarMetadata);
+            PopupHandler.Remove(popupBuyAvatar);
+
+            attributeMenu.RefreshCurrencyValues();
+
+            EnableInterfaceButtons();
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
+        }
+
+        public void OnBuyGold(object sender)
+        {
+            //send request
+            GameInformation.Instance.PlayerInformation.Gold -= selectedAvatarMetadata.GoldPrice;
+            OnAcquireAvatarAsyncCallback(selectedAvatarMetadata);
+            PopupHandler.Remove(popupBuyAvatar);
+
+            attributeMenu.RefreshCurrencyValues();
+
+            EnableInterfaceButtons();
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
+        }
         #endregion
+
+        #region Action handlers
+        public void OnFilterTextChange(string newText)
+        {
+            searchFilter.AvatarName = newText;
+            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
+        }
+        #endregion
+
+        private void DisableInterfaceButtons()
+        {
+            animatedButtonList.ForEach((x) => x.Disable(true));
+            filterButtonList.ForEach((x) => x.Disable(true));
+            avatarButtonList.ForEach((x) => x.ShouldUpdate = false);
+            tabInventoryButton.Disable();
+            tabShopButton.Disable();
+            searchTextField.Disable();
+            searchTextField.DeactivateElement();
+        }
+
+        private void EnableInterfaceButtons()
+        {
+            animatedButtonList.ForEach((x) => x.Enable());
+            filterButtonList.ForEach((x) => x.Enable());
+            avatarButtonList.ForEach((x) => x.ShouldUpdate = true);
+
+            if (searchFilter.IsRenderingInventory)
+                tabShopButton.Enable();
+            else
+                tabInventoryButton.Enable();
+
+            AnimatedButton button;
+
+            switch (searchFilter.AvatarCategory)
+            {
+                case AvatarCategory.Head: button = filterHatButton; break;
+                case AvatarCategory.Body: button = filterBodyButton; break;
+                case AvatarCategory.Goggles: button = filterGogglesButton; break;
+                case AvatarCategory.Flag: button = filterFlagButton; break;
+                case AvatarCategory.ExItem: button = filterExItemButton; break;
+                case AvatarCategory.Pet: button = filterPetButton; break;
+                case AvatarCategory.Misc: button = filterMiscButton; break;
+                default: button = filterExtraButton; break;
+            }
+
+            button.ChangeButtonState(ButtonAnimationState.Activated);
+
+            giftButton.Disable(true);
+            cashChargeButton.Disable(true);
+
+            //Update filter buttons
+            if (searchFilter.CurrentPage == 0) filterLeftButton.Disable(true);
+            else if (filterLeftButton.IsDisabled) filterLeftButton.Enable();
+
+            if (searchFilter.CurrentPage + 1 == searchFilter.LastPage) filterRightButton.Disable(true);
+            else if (filterRightButton.IsDisabled) filterRightButton.Enable();
+
+            //Search text field
+            searchTextField.Enable();
+            searchTextField.ActivateElement();
+        }
 
         public void UpdateFilter(AvatarCategory category, int currentPage)
         {
@@ -248,6 +529,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchFilter.CurrentPage = currentPage;
 
             IEnumerable<AvatarMetadata> metadataList = (IEnumerable<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{Gender.Male}/{searchFilter.AvatarCategory}/Metadata"];
+
+            //Text filter
+            metadataList = metadataList.Where((x) => x.Name.ToLower().Contains(searchFilter.AvatarName));
 
             if (searchFilter.IsRenderingInventory)
                 metadataList = metadataList.Where((x) => GameInformation.Instance.PlayerInformation.OwnedAvatar[category].Contains(x.ID));
@@ -262,10 +546,10 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             filterLastPage.Text = searchFilter.LastPage.ToString();
 
             //Update filter buttons
-            if (currentPage == 0) filterLeftButton.Disable();
+            if (currentPage == 0) filterLeftButton.Disable(true);
             else if (filterLeftButton.IsDisabled) filterLeftButton.Enable();
 
-            if (currentPage + 1 == searchFilter.LastPage) filterRightButton.Disable();
+            if (currentPage + 1 == searchFilter.LastPage) filterRightButton.Disable(true);
             else if (filterRightButton.IsDisabled) filterRightButton.Enable();
         }
 
@@ -278,98 +562,25 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             for (int i = 0; i < 25 && i < metadataList.Count(); i++)
             {
-                avatarButtonList.Add(new AvatarButton(
+                AvatarButton button = new AvatarButton(
                     new Vector2(-95, -175) + new Vector2(offsetX * (i % 5), offsetY * (i / 5)),
-                    metadataList[i],
-                    AvatarButtonClick,
-                    DepthParameter.InterfaceButton));
+                    metadataList[i], AvatarButtonAction, DepthParameter.InterfaceButton);
+
+                button.HideEquippedIndicator();
+
+                if (searchFilter.IsRenderingInventory)
+                {
+                    if (inventoryRiderPreview.GetEquippedAvatarID(metadataList[i].Category) == metadataList[i].ID)
+                        button.ShowEquippedIndicator();
+                }
+                else
+                {
+                    if (shopRiderPreview.GetEquippedAvatarID(metadataList[i].Category) == metadataList[i].ID)
+                        button.ShowEquippedIndicator();
+                }
+
+                avatarButtonList.Add(button);
             }
-        }
-
-        public void AddTabControlToScene()
-        {
-            tabShopButton      = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, ShopButtonAction,      new Vector2(-110, -285));
-            tabInventoryButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, InventoryButtonAction, new Vector2(-030, -285));
-            tabShopButton.UpdateAttatchedPosition();
-            tabInventoryButton.UpdateAttatchedPosition();
-
-            tabShopButton.Disable();
-
-            buttonList.Add(tabShopButton);
-            buttonList.Add(tabInventoryButton);
-
-            shopSpriteText      = new SpriteText(FontTextType.Consolas10, "Shop",      Color.White,     Alignment.Center, DepthParameter.InterfaceButtonText, tabShopButton.ButtonSprite.Position,      Color.Black);
-            inventorySpriteText = new SpriteText(FontTextType.Consolas10, "Inventory", Color.LightGray, Alignment.Center, DepthParameter.InterfaceButtonText, tabInventoryButton.ButtonSprite.Position, Color.Black);
-            shopSpriteText.Position -= (shopSpriteText.MeasureSize * Vector2.UnitY) / 3;
-            inventorySpriteText.Position -= (inventorySpriteText.MeasureSize * Vector2.UnitY) / 3;
-            spriteTextList.Add(shopSpriteText);
-            spriteTextList.Add(inventorySpriteText);
-        }
-
-        public void AddSearchTextToScene()
-        {
-            SpriteText spriteText = new SpriteText(FontTextType.FontAwesome10, "" + (char)0xf002 + "12312313123123", Color.White, Alignment.Left, DepthParameter.InterfaceButtonText,
-                Parameter.ScreenCenter + new Vector2(242, -253), Color.Black);
-            spriteTextList.Add(spriteText);
-
-            searchTextField = new TextField(Parameter.ScreenCenter + new Vector2(260, -252), 120, 16, 16, FontTextType.Consolas10, Color.White, DepthParameter.InterfaceButtonText, Color.Black);
-            searchTextField.ActivateElement();
-        }
-
-        public void AddFilterAnimatedButtonsToScene()
-        {
-            Vector2 position = Parameter.ScreenCenter - new Vector2(130, 250);
-            Vector2 offset = new Vector2(45, 0);
-            int i = 0;
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Hat,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Head); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Body,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Body); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Goggles,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Goggles); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Flag,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Flag); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExItem,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.ExItem); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Pet,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Pet); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Necklace,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Misc); }));
-            filterButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Ring,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Extra); }));
-        }
-
-        public void AddBottomAnimatedButtonsToScene()
-        {
-            int i = 0;
-
-            Vector2 basePosition = Parameter.ScreenCenter - new Vector2(370, -265);
-            Vector2 offset = new Vector2(54, 0);
-            
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor,   basePosition + offset * i++, ExitDoorAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Buddy,      basePosition + offset * i++, ExitDoorAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Options,    basePosition + offset * i++, OptionsAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.CashCharge, basePosition + offset * i++, ExitDoorAction));
-
-            basePosition += new Vector2(0, -55);
-            i = 0;
-
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
-            animatedButtonList.Add(AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ExitDoor, basePosition + offset * i++, ExitDoorAction));
-
-            basePosition = Parameter.ScreenCenter - new Vector2(-370, -265) - 2 * offset;
-            i = 0;
-
-            animatedButtonList.Add(tryButton  = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Try,  basePosition + offset * i++, TryButtonAction));
-            animatedButtonList.Add(buyButton  = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Buy,  basePosition + offset * i++, BuyButtonAction));
-            animatedButtonList.Add(giftButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Gift, basePosition + offset * i++, ExitDoorAction));
-
-            animatedButtonList.Add(filterLeftButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.LeftArrow,
-                Parameter.ScreenCenter - new Vector2(-141 + 40 + 30, -245), (o) => { UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage - 1); }));
-            animatedButtonList.Add(filterRightButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.RightArrow,
-                Parameter.ScreenCenter - new Vector2(-141 - 40, -245), (o) => { UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage + 1); }));
         }
 
         public override void Update(GameTime gameTime)
@@ -393,7 +604,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteTextList.ForEach((x) => x.Draw(spriteBatch));
             searchTextField.Draw(spriteBatch);
             buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            riderPreview.Draw(gameTime, spriteBatch);
+            shopRiderPreview.Draw(gameTime, spriteBatch);
+            inventoryRiderPreview.Draw(gameTime, spriteBatch);
+            avatarPreviewSpriteText.Draw(spriteBatch);
             attributeMenu.Draw(gameTime, spriteBatch);
         }
     }

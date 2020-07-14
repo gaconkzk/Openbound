@@ -87,7 +87,14 @@ namespace OpenBound.GameComponents.Interface.Popup
                         PositionOffset = new Vector2(-startingX, 62)
                     });
 
-                buttonList.Add(new Button(ButtonType.AvatarBuyGold, DepthParameter.InterfacePopupButtons, onBuyCash, new Vector2(-startingX, 92)));
+                Button goldButton = new Button(ButtonType.AvatarBuyGold,
+                    DepthParameter.InterfacePopupButtons,
+                    onBuyGold, new Vector2(-startingX, 92));
+
+                buttonList.Add(goldButton);
+
+                if (GameInformation.Instance.PlayerInformation.Gold - avatarMetadata.GoldPrice < 0)
+                    goldButton.Disable();
             }
 
             if (avatarMetadata.CashPrice > 0)
@@ -102,7 +109,7 @@ namespace OpenBound.GameComponents.Interface.Popup
                         PositionOffset = new Vector2(startingX, -05)
                     });
 
-                //Gold
+                //Cash Value
                 spriteTextList.Add(
                     new SpriteText(FontTextType.Consolas10,
                     string.Format("{0:N0}", GameInformation.Instance.PlayerInformation.Cash),
@@ -122,17 +129,24 @@ namespace OpenBound.GameComponents.Interface.Popup
                         PositionOffset = new Vector2(startingX, 45)
                     });
 
-                //Gold 2
+                //Cash Value 2
                 spriteTextList.Add(
                     new SpriteText(FontTextType.Consolas10,
-                    string.Format("{0:N0}", GameInformation.Instance.PlayerInformation.Cash - avatarMetadata.GoldPrice),
+                    string.Format("{0:N0}", GameInformation.Instance.PlayerInformation.Cash - avatarMetadata.CashPrice),
                     Parameter.InterfaceAvatarShopButtonCashColor, Alignment.Center, DepthParameter.InterfacePopupText,
                     default, outlineColor: Parameter.InterfaceAvatarShopButtonCashOutlineColor)
                     {
                         PositionOffset = new Vector2(startingX, 62)
                     });
 
-                buttonList.Add(new Button(ButtonType.AvatarBuyCash, DepthParameter.InterfacePopupButtons, onBuyGold, new Vector2(startingX, 92)));
+                Button cashButton = new Button(ButtonType.AvatarBuyCash,
+                    DepthParameter.InterfacePopupButtons, onBuyCash,
+                    new Vector2(startingX, 92));
+
+                buttonList.Add(cashButton);
+
+                if (GameInformation.Instance.PlayerInformation.Cash - avatarMetadata.CashPrice < 0)
+                    cashButton.Disable();
             }            
 
             ShouldRender = true;

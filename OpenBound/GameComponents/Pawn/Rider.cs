@@ -86,6 +86,12 @@ namespace OpenBound.GameComponents.Pawn
             Update();
         }
 
+        public void Show()
+        {
+            Head.Show();
+            Body.Show();
+        }
+
         public void Hide()
         {
             Head.Hide();
@@ -96,6 +102,21 @@ namespace OpenBound.GameComponents.Pawn
         {
             Head.Flip();
             Body.Flip();
+        }
+
+        public int GetEquippedAvatarID(AvatarCategory avatarCategory)
+        {
+            switch (avatarCategory)
+            {
+                case AvatarCategory.Head:    return Head.Metadata.ID;
+                //case AvatarCategory.Body:    return Body.Metadata.ID;
+                //case AvatarCategory.Goggles: return EquippedAvatarGoggles;
+                //case AvatarCategory.Flag: return EquippedAvatarFlag;
+                //case AvatarCategory.ExItem: return EquippedAvatarExItem;
+                //case AvatarCategory.Pet: return EquippedAvatarPet;
+                //case AvatarCategory.Misc: return EquippedAvatarMisc;
+                default: return Body.Metadata.ID;// EquippedAvatarExtra;
+            }
         }
 
         public void ReplaceAvatar(AvatarMetadata avatarMetadata)

@@ -13,6 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Interactive.Misc;
@@ -86,6 +87,8 @@ namespace OpenBound.GameComponents.Interface.Popup
 
         public virtual void RealocateElements(Vector2 delta)
         {
+            delta = delta.ToIntegerDomain();
+
             Background.PositionOffset += delta;
             PositionOffset += delta;
             buttonList.ForEach((x) => x.ButtonOffset += delta);

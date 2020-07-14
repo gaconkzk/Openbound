@@ -62,13 +62,13 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             }
 
             //Equipped Indicator
-            if (GameInformation.Instance.PlayerInformation.GetEquippedAvatar(avatarMetadata.Category) == avatarMetadata.ID)
-            {
-                equippedIndicator = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/EquipedIndicator",
-                    position + new Vector2(-47, 0), layerDepth + 0.002f);
+            equippedIndicator = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/EquipedIndicator",
+                position + new Vector2(-47, 0), layerDepth + 0.002f);
 
-                spriteList.Add(equippedIndicator);
-            }
+            spriteList.Add(equippedIndicator);
+
+            if (GameInformation.Instance.PlayerInformation.GetEquippedAvatar(avatarMetadata.Category) != avatarMetadata.ID)
+                HideEquippedIndicator();
 
             //Owned check
             if (GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.Category].Contains(avatarMetadata.ID))
@@ -125,6 +125,10 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
                 spriteList.Add(cashIcon);
             }
         }
+
+        public void ShowEquippedIndicator() => equippedIndicator.ShowElement();
+
+        public void HideEquippedIndicator() => equippedIndicator.HideElement();
 
         public void Update(GameTime gameTime)
         {

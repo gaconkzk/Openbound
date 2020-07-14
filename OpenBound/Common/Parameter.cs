@@ -186,7 +186,7 @@ namespace OpenBound.Common
         //-- Main Menu - Various
         public const string ButtonTextExitText = "Exit";
         public const string ButtonTextBuddyList = "Buddy";
-        public const string ButtonTextCashCharge = "Cash Charge";
+        public const string ButtonTextCashCharge = "Charge";
         public const string ButtonTextReportPlayer = "Report";
         public const string ButtonTextAvatarShop = "Avatar Shop";
         public const string ButtonTextOptions = "Options";
@@ -244,6 +244,9 @@ namespace OpenBound.Common
         public const string IconSubtitleFull = "Full";
 
         public const string LoadingScreenMinimapCommand = "Press Up/Down to control the tactical map";
+        
+        public const string PreviewTextAvatarShop = "Room Preview";
+        public const string PreviewTextAvatarShopEquipped = "Room Preview - Equipped";
         #endregion
 
         #region Fonts

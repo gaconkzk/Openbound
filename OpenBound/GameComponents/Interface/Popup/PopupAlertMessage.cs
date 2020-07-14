@@ -12,6 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Text;
@@ -52,6 +53,8 @@ namespace OpenBound.GameComponents.Interface.Popup
 
         public override void RealocateElements(Vector2 delta)
         {
+            delta = delta.ToIntegerDomain();
+
             base.RealocateElements(delta);
         }
 
