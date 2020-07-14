@@ -136,5 +136,9 @@ namespace Openbound_Network_Object_Library.Common
         //Game Messages
         public static uint ServerMessageColor       = Color.DarkOrange.PackedValue;
         public static uint ServerMessageBorderColor = Color.Black.PackedValue;
+
+        //Player Status
+        public const int PlayerStatusPerLevel = 15;
+        public const int MaximumPlayerStatusPerLevel = 240;
     }
 }

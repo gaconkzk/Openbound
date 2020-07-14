@@ -54,7 +54,7 @@ namespace OpenBound.GameComponents.Pawn
             List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Head}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
-            Head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHead));
+            Head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHat));
             Body = new Avatar(bodyMetadata.Find((x) => x.ID == player.EquippedAvatarBody));
 
             Head.Position = positionOffset + new Vector2(((facing == Facing.Right) ? -1 : 1) * 10, -17);
@@ -70,7 +70,7 @@ namespace OpenBound.GameComponents.Pawn
             List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Head}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
-            Head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHead));
+            Head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHat));
             Body = new Avatar(bodyMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarBody));
 
             headBasePosition = positionOffset + new Vector2(10, -17);
