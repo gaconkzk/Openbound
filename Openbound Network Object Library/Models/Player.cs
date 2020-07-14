@@ -39,14 +39,24 @@ namespace Openbound_Network_Object_Library.Models
     public enum PlayerRank
     {
         Chick = 0,
-        WoodHammer1 = 1, WoodHammer2 = 2, StoneHammer1 = 3, StoneHammer2 = 4,
-        Axe1 = 5, Axe2 = 6, SilverAxe1 = 7, SilverAxe2 = 8, GoldenAxe1 = 9, GoldenAxe2 = 10,
-        DAxe1 = 11, DAxe2 = 12, DSilverAxe1 = 13, DSilverAxe2 = 14, DGoldenAxe1 = 15, DGoldenAxe2 = 16,
+
+        WoodHammer1 = 1, WoodHammer2 = 2,
+        StoneHammer1 = 3, StoneHammer2 = 4,
+
+        Axe1 = 5, Axe2 = 6,
+        SilverAxe1 = 7, SilverAxe2 = 8,
+        GoldenAxe1 = 9, GoldenAxe2 = 10,
+
+        DAxe1 = 11, DAxe2 = 12,
+        DSilverAxe1 = 13, DSilverAxe2 = 14,
+        DGoldenAxe1 = 15, DGoldenAxe2 = 16,
 
         Staff1 = 17, Staff2 = 18, Staff3 = 19, Staff4 = 20,
 
         Dragon1 = 21, Dragon2 = 22, Dragon3 = 23,
+
         Champion1 = 24, WorldChampion = 25, Vip = 26,
+        
         GM = 27,
     }
 
@@ -68,7 +78,8 @@ namespace Openbound_Network_Object_Library.Models
 
     public class Player
     {
-        //Player Credentials/Storable objects
+        #region Storable
+        //Storable - Player Credentials
         [Key]
         public int ID { get; set; }
 
@@ -81,69 +92,63 @@ namespace Openbound_Network_Object_Library.Models
         [Required, MaxLength(60), Index(IsUnique = true)]
         public string Email { get; set; }
 
-        [Required]
-        public Gender CharacterGender { get; set; }
-
-        public Guild Guild { get; set; }
-
-        [JsonIgnore]
-        public List<Player> FriendList { get; set; }
-
-        [NotMapped]
-        public SecurityToken SecurityToken { get; set; }
-
-        //In-game variables
-        [NotMapped]
-        public PlayerRoomStatus PlayerRoomStatus { get; set; }
-        [NotMapped]
-        public PlayerTeam PlayerTeam { get; set; }
-        [NotMapped]
-        public PlayerRank PlayerRank { get; set; }
-        [NotMapped]
-        public PlayerStatus PlayerStatus { get; set; }
-
-        [Required]
-        public MobileType PrimaryMobile { get; set; }
-        [Required]
-        public MobileType SecondaryMobile { get; set; }
-        public float LeavePercentage { get; set; }
-
-        [JsonIgnore, NotMapped]
-        public PlayerRoomStatus PlayerLoadingStatus { get; set; }
-        [JsonIgnore, NotMapped]
-        public int LoadingScreenPercentage { get; set; }
-        [JsonIgnore, NotMapped]
-        public PlayerNavigation PlayerNavigation;
+        //Storable - Game Information
+        [Required] public Gender CharacterGender { get; set; }
 
         public int Gold { get; set; }
 
         public int Cash { get; set; }
 
-        //Avatar Region
-        public int[] Avatar { get; set; }
+        public Guild Guild { get; set; }
+
+        public float LeavePercentage { get; set; }
+
+        //Storable - User Preferences
+        [Required] public MobileType PrimaryMobile { get; set; }
+        [Required] public MobileType SecondaryMobile { get; set; }
+
+        [JsonIgnore] public List<Player> FriendList { get; set; }
+        [NotMapped] public SecurityToken SecurityToken { get; set; }
+
+        [NotMapped] public int[] Avatar { get; set; }
+        [NotMapped] public int[] Status { get; set; }
+        #endregion
+
+        //In-game variables - General
+        [JsonIgnore, NotMapped] public PlayerNavigation PlayerNavigation;
+
+        //In-game variables - Room
+        [NotMapped] public PlayerRoomStatus PlayerRoomStatus { get; set; }
+        [NotMapped] public PlayerTeam PlayerTeam { get; set; }
+        [NotMapped] public PlayerRank PlayerRank { get; set; }
+        [NotMapped] public PlayerStatus PlayerStatus { get; set; }
         
-        [JsonIgnore, NotMapped] public int EquippedAvatarHead { get => Avatar[0]; set => Avatar[0] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarGoggles { get => Avatar[2]; set => Avatar[2] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarFlag { get => Avatar[3]; set => Avatar[3] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarExItem { get => Avatar[4]; set => Avatar[4] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarPet { get => Avatar[5]; set => Avatar[5] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarMisc { get => Avatar[6]; set => Avatar[6] = value; }
-        [JsonIgnore, NotMapped] public int EquippedAvatarExtra { get => Avatar[7]; set => Avatar[7] = value; }
+        //In-game variables - Loading
+        [JsonIgnore, NotMapped] public PlayerRoomStatus PlayerLoadingStatus { get; set; }
+        [JsonIgnore, NotMapped] public int LoadingScreenPercentage { get; set; }
+
+
+        //Avatar Region
+        [JsonIgnore] public int EquippedAvatarHat { get => Avatar[0]; set => Avatar[0] = value; }
+        [JsonIgnore] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
+        [JsonIgnore] public int EquippedAvatarGoggles { get => Avatar[2]; set => Avatar[2] = value; }
+        [JsonIgnore] public int EquippedAvatarFlag { get => Avatar[3]; set => Avatar[3] = value; }
+        [JsonIgnore] public int EquippedAvatarExItem { get => Avatar[4]; set => Avatar[4] = value; }
+        [JsonIgnore] public int EquippedAvatarPet { get => Avatar[5]; set => Avatar[5] = value; }
+        [JsonIgnore] public int EquippedAvatarMisc { get => Avatar[6]; set => Avatar[6] = value; }
+        [JsonIgnore] public int EquippedAvatarExtra { get => Avatar[7]; set => Avatar[7] = value; }
 
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
         //Status Region
-        public int[] Status { get; set; }
-
-        [JsonIgnore, NotMapped] public int Attack => Avatar[0];
-        [JsonIgnore, NotMapped] public int Health => Avatar[1];
-        [JsonIgnore, NotMapped] public int Defense => Avatar[2];
-        [JsonIgnore, NotMapped] public int Regeneration => Avatar[3];
-        [JsonIgnore, NotMapped] public int AttackDelay => Avatar[4];
-        [JsonIgnore, NotMapped] public int ItemDelay => Avatar[5];
-        [JsonIgnore, NotMapped] public int Dig => Avatar[6];
-        [JsonIgnore, NotMapped] public int Popularity => Avatar[7];
+        [JsonIgnore] public int Attack => Avatar[0];
+        [JsonIgnore] public int Health => Avatar[1];
+        [JsonIgnore] public int Defense => Avatar[2];
+        [JsonIgnore] public int Regeneration => Avatar[3];
+        [JsonIgnore] public int AttackDelay => Avatar[4];
+        [JsonIgnore] public int ItemDelay => Avatar[5];
+        [JsonIgnore] public int Dig => Avatar[6];
+        [JsonIgnore] public int Popularity => Avatar[7];
 
         public Player()
         {
@@ -173,7 +178,7 @@ namespace Openbound_Network_Object_Library.Models
         {
             switch (avatarCategory)
             {
-                case AvatarCategory.Head:    return EquippedAvatarHead;
+                case AvatarCategory.Head:    return EquippedAvatarHat;
                 case AvatarCategory.Body:    return EquippedAvatarBody;
                 case AvatarCategory.Goggles: return EquippedAvatarGoggles;
                 case AvatarCategory.Flag:    return EquippedAvatarFlag;
@@ -191,7 +196,7 @@ namespace Openbound_Network_Object_Library.Models
 
             switch (avatarCategory)
             {
-                case AvatarCategory.Head:    EquippedAvatarHead    = avatarID; return;
+                case AvatarCategory.Head:    EquippedAvatarHat    = avatarID; return;
                 case AvatarCategory.Body:    EquippedAvatarBody    = avatarID; return;
                 case AvatarCategory.Goggles: EquippedAvatarGoggles = avatarID; return;
                 case AvatarCategory.Flag:    EquippedAvatarFlag    = avatarID; return;

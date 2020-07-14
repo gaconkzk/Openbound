@@ -63,26 +63,22 @@ namespace GunboundImageFix.Utils
 
             // File data:
             //
-            // bits  |   i      | value
-            //  2x16 |   0      | zero - ? 
-            //  2x16 |   1      | number of images
-            //  2x16 |   2  (0) | color mode, 0 = no alpha (565 rgb), 1 = simple transparency, 2 = transparency (4444 rgba)
-            // ------+----------+ Loop starts here
-            //    32 |   3  (1) | width
-            //    32 |   4  (2) | height
-            //    32 |   5  (3) | pivot X
-            //    32 |   6  (4) | pivot Y
-            //   4x8 |   7  (5) | ? - v5
-            //   4x8 |   8  (6) | ? - v6
-            //    16 |   9  (7) | ? - v7
-            //     8 |  10  (8) | ? - v8
-            //     8 |  11  (9) | pilot pivot X
-            //    16 |  12 (10) | ? - v9
-            //     8 |  13 (11) | ? - v10
-            //     8 |  14 (12) | pilot pivot Y
-            //    32 |  15 (13) | Data stream length
-            // (9)x8 |  16 (14) | Image Begining...
-            // (9)x8 |  17+(09) | Image Ending
+            //  bits  |   i      | value
+            //   2x16 |   0      | zero - ? 
+            //   2x16 |   1      | number of images
+            //   2x16 |   2  (0) | color mode, 0 = no alpha (565 rgb), 1 = simple transparency, 2 = transparency (4444 rgba)
+            //  ------+----------+ Loop starts here
+            //     32 |   3  (1) | width
+            //     32 |   4  (2) | height
+            //     32 |   5  (3) | pivot X
+            //     32 |   6  (4) | pivot Y
+            //    4x8 |   7  (5) | ? - v5
+            //    4x8 |   8  (6) | ? - v6
+            //    4x8 |  11  (9) | pilot pivot X
+            //    4x8 |  14 (10) | pilot pivot Y
+            //     32 |  15 (11) | Data stream length
+            //(11)x16 |  16 (12) | Image Begining...
+            //     16 |  17+(11) | Image Ending
             // ------+----------+ Loop ends here
             //
             // After iterating dataStreamLength times, it will start another header, begining from the loop indicator.
