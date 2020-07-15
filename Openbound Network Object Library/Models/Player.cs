@@ -17,6 +17,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Remoting.Messaging;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Security;
 
@@ -32,10 +33,12 @@ namespace Openbound_Network_Object_Library.Models
     {
         Master, Ready, NotReady
     }
+
     public enum PlayerTeam
     {
         Red, Blue,
     }
+
     public enum PlayerRank
     {
         Chick = 0,
@@ -99,6 +102,8 @@ namespace Openbound_Network_Object_Library.Models
 
         public int Cash { get; set; }
 
+        public int Experience { get; set; }
+
         public Guild Guild { get; set; }
 
         public float LeavePercentage { get; set; }
@@ -111,7 +116,7 @@ namespace Openbound_Network_Object_Library.Models
         [NotMapped] public SecurityToken SecurityToken { get; set; }
 
         [NotMapped] public int[] Avatar { get; set; }
-        [NotMapped] public int[] Status { get; set; }
+        [NotMapped] public int[] Attribute { get; set; }
         #endregion
 
         //In-game variables - General
@@ -127,7 +132,6 @@ namespace Openbound_Network_Object_Library.Models
         [JsonIgnore, NotMapped] public PlayerRoomStatus PlayerLoadingStatus { get; set; }
         [JsonIgnore, NotMapped] public int LoadingScreenPercentage { get; set; }
 
-
         //Avatar Region
         [JsonIgnore] public int EquippedAvatarHat { get => Avatar[0]; set => Avatar[0] = value; }
         [JsonIgnore] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
@@ -140,25 +144,34 @@ namespace Openbound_Network_Object_Library.Models
 
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
-        //Status Region
-        [JsonIgnore] public int Attack => Avatar[0];
-        [JsonIgnore] public int Health => Avatar[1];
-        [JsonIgnore] public int Defense => Avatar[2];
-        [JsonIgnore] public int Regeneration => Avatar[3];
-        [JsonIgnore] public int AttackDelay => Avatar[4];
-        [JsonIgnore] public int ItemDelay => Avatar[5];
-        [JsonIgnore] public int Dig => Avatar[6];
-        [JsonIgnore] public int Popularity => Avatar[7];
+        [JsonIgnore] public List<AvatarMetadata> AvatarMetadata;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarBody;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarGoggles;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarFlag;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarExItem;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarPet;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarMisc;
+        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarExtra;
+
+        //Attribute Region
+        [JsonIgnore] public int Attack => Attribute[0];
+        [JsonIgnore] public int Health => Attribute[1];
+        [JsonIgnore] public int Defense => Attribute[2];
+        [JsonIgnore] public int Regeneration => Attribute[3];
+        [JsonIgnore] public int AttackDelay => Attribute[4];
+        [JsonIgnore] public int ItemDelay => Attribute[5];
+        [JsonIgnore] public int Dig => Attribute[6];
+        [JsonIgnore] public int Popularity => Attribute[7];
 
         public Player()
         {
             PlayerNavigation = PlayerNavigation.InGameMenus;
             Avatar = new int[8];
-            Status = new int[8];
+            Attribute = new int[8];
 
             OwnedAvatar = new Dictionary<AvatarCategory, HashSet<int>>()
             {
-                { AvatarCategory.Head,    new HashSet<int>(){ 0, } },
+                { AvatarCategory.Hat,     new HashSet<int>(){ 0, } },
                 { AvatarCategory.Body,    new HashSet<int>(){ 0, } },
                 { AvatarCategory.Goggles, new HashSet<int>() },
                 { AvatarCategory.Flag,    new HashSet<int>() },
@@ -178,7 +191,7 @@ namespace Openbound_Network_Object_Library.Models
         {
             switch (avatarCategory)
             {
-                case AvatarCategory.Head:    return EquippedAvatarHat;
+                case AvatarCategory.Hat:     return EquippedAvatarHat;
                 case AvatarCategory.Body:    return EquippedAvatarBody;
                 case AvatarCategory.Goggles: return EquippedAvatarGoggles;
                 case AvatarCategory.Flag:    return EquippedAvatarFlag;
@@ -196,7 +209,7 @@ namespace Openbound_Network_Object_Library.Models
 
             switch (avatarCategory)
             {
-                case AvatarCategory.Head:    EquippedAvatarHat    = avatarID; return;
+                case AvatarCategory.Hat:     EquippedAvatarHat     = avatarID; return;
                 case AvatarCategory.Body:    EquippedAvatarBody    = avatarID; return;
                 case AvatarCategory.Goggles: EquippedAvatarGoggles = avatarID; return;
                 case AvatarCategory.Flag:    EquippedAvatarFlag    = avatarID; return;
@@ -205,6 +218,11 @@ namespace Openbound_Network_Object_Library.Models
                 case AvatarCategory.Misc:    EquippedAvatarMisc    = avatarID; return;
                 default:                     EquippedAvatarExtra   = avatarID; return;
             }
+        }
+
+        public int GetCurrentAttributePoints()
+        {
+            return Math.Min((int)PlayerRank * NetworkObjectParameters.PlayerAttributePerLevel, NetworkObjectParameters.PlayerAttributeMaximumPerLevel);
         }
     }
 }

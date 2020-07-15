@@ -51,7 +51,7 @@ namespace OpenBound.GameComponents.Pawn
         //Used on Avatar shop. No updates are supported for variables instanced with this constructor.
         public Rider(Facing facing, Player player, Vector2 positionOffset)
         {
-            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Head}/Metadata"];
+            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Hat}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
             Head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHat));
@@ -67,7 +67,7 @@ namespace OpenBound.GameComponents.Pawn
         {
             this.mobile = mobile;
 
-            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Head}/Metadata"];
+            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Hat}/Metadata"];
             List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Body}/Metadata"];
 
             Head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHat));
@@ -108,7 +108,7 @@ namespace OpenBound.GameComponents.Pawn
         {
             switch (avatarCategory)
             {
-                case AvatarCategory.Head:    return Head.Metadata.ID;
+                case AvatarCategory.Hat:    return Head.Metadata.ID;
                 //case AvatarCategory.Body:    return Body.Metadata.ID;
                 //case AvatarCategory.Goggles: return EquippedAvatarGoggles;
                 //case AvatarCategory.Flag: return EquippedAvatarFlag;
@@ -126,7 +126,7 @@ namespace OpenBound.GameComponents.Pawn
 
             switch (avatarMetadata.Category)
             {
-                case AvatarCategory.Head:
+                case AvatarCategory.Hat:
                     previousAvatar = Head;
                     Head = avatar;
                     break;

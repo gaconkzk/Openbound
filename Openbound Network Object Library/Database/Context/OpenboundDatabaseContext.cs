@@ -36,6 +36,6 @@ namespace Openbound_Network_Object_Library.Database.Context
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Guild> Guilds { get; set; }
-
+        public DbSet<AvatarMetadata> AvatarMetadata { get; set; }
     }
 }
