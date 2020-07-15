@@ -149,7 +149,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             {
                 case AvatarCategory.Body:
                     return (gender == Gender.Male) ? 0 : 1;
-                case AvatarCategory.Head:
+                case AvatarCategory.Hat:
                     return (gender == Gender.Male) ? 2 : 3;
                 case AvatarCategory.Goggles:
                     return (gender == Gender.Male) ? 4 : 5;

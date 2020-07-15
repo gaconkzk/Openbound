@@ -7,6 +7,7 @@ using OpenBound.GameComponents.Interface.Interactive.AvatarShop;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Entity.Text;
+using Openbound_Network_Object_Library.Models;
 using System;
 
 namespace OpenBound.GameComponents.Interface.Popup

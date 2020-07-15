@@ -145,7 +145,7 @@
     <None Include="ContentMetadata\Avatar\Male\Goggles\Metadata.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ContentMetadata\Avatar\Male\Head\Metadata.json">
+    <None Include="ContentMetadata\Avatar\Male\Hat\Metadata.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ContentMetadata\Avatar\Male\Misc\Metadata.json">
@@ -699,6 +699,7 @@
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AttributeMenu.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AvatarButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\InGamePreview.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\OnlineUserList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using OpenBound.GameComponents.Pawn;
 using Openbound_Network_Object_Library.Common;
+using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

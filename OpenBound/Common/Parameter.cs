@@ -247,6 +247,9 @@ namespace OpenBound.Common
         
         public const string PreviewTextAvatarShop = "Room Preview";
         public const string PreviewTextAvatarShopEquipped = "Room Preview - Equipped";
+
+        public const string InGamePreviewTextAvatarShop = "In-Game Preview";
+        public const string InGamePreviewTextAvatarShopEquipped = "In-Game Preview - Equipped";
         #endregion
 
         #region Fonts

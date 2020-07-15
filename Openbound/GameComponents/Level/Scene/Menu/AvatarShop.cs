@@ -50,8 +50,13 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         private Button tabInventoryButton, tabShopButton;
         private SpriteText inventorySpriteText, shopSpriteText;
 
+        //Preview
         private Rider shopRiderPreview, inventoryRiderPreview;
         private SpriteText avatarPreviewSpriteText;
+
+        //In-Game Preview
+        private InGamePreview shopInGamePreview, inventoryInGamePreview;
+        private SpriteText inGamePreviewSpriteText;
 
         private AttributeMenu attributeMenu;
         public AvatarMetadata selectedAvatarMetadata;
@@ -91,7 +96,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             Background = new Sprite(@"Interface/InGame/Scene/AvatarShop/Background",
                 position: Parameter.ScreenCenter,
-                layerDepth: DepthParameter.Background,
+                layerDepth: DepthParameter.Foreground,
                 shouldCopyAsset: false);
 
             animatedButtonList = new List<AnimatedButton>();
@@ -101,8 +106,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteTextList = new List<SpriteText>();
             buttonList = new List<Button>();
 
-            foreground1 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground1", Vector2.Zero, DepthParameter.Background);
-            foreground2 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground2", Vector2.Zero, DepthParameter.Background);
+            foreground1 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground1", Vector2.Zero, DepthParameter.Foreground);
+            foreground2 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground2", Vector2.Zero, DepthParameter.Foreground);
             foreground2.Color = Color.Transparent;
             foreground1.Pivot = foreground2.Pivot = Vector2.Zero;
             foreground1.Position = foreground2.Position = Parameter.ScreenCenter - Background.Pivot;
@@ -122,10 +127,18 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             inventoryRiderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -40));
             inventoryRiderPreview.Hide();
 
-            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop, Color.White,
-                Alignment.Left, DepthParameter.InterfaceButton,
-                Parameter.ScreenCenter - new Vector2(385, 110),
-                Color.Black);
+            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,
+                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
+                Parameter.ScreenCenter - new Vector2(385, 110), Color.Black);
+
+            //Other preview
+            shopInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
+            inventoryInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
+            inventoryInGamePreview.Hide();
+
+            inGamePreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.InGamePreviewTextAvatarShop,
+                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
+                Parameter.ScreenCenter - new Vector2(385, -17), Color.Black);
 
             //AttributeButton
             attributeMenu = new AttributeMenu(new Vector2(-285, -235), GameInformation.Instance.PlayerInformation);
@@ -134,7 +147,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             //Filtering
             filterHatButton.ChangeButtonState(ButtonAnimationState.Activated, true);
             searchFilter = new AvatarSearchFilter();
-            searchFilter.AvatarCategory = AvatarCategory.Head;
+            searchFilter.AvatarCategory = AvatarCategory.Hat;
 
             //Filtering Text
             Vector2 dividerPosition = (filterLeftButton.Flipbook.Position + filterRightButton.Flipbook.Position) / 2 + new Vector2(0, -10);
@@ -152,7 +165,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteTextList.Add(filterLastPage);
             spriteTextList.Add(filterDivider);
 
-            UpdateFilter(AvatarCategory.Head, 0);
+            UpdateFilter(AvatarCategory.Hat, 0);
 
             //Buttons standard preset
             tryButton.Disable(true);
@@ -199,7 +212,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             Vector2 offset = new Vector2(45, 0);
             int i = 0;
             filterButtonList.Add(filterHatButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Hat,
-                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Head); }));
+                position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Hat); }));
             filterButtonList.Add(filterBodyButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Body,
                 position + offset * i++, (o) => { FilterButtonAction(o, AvatarCategory.Body); }));
             filterButtonList.Add(filterGogglesButton = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.Goggles,
@@ -309,6 +322,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 avatarButton.ShowEquippedIndicator();
 
                 inventoryRiderPreview.ReplaceAvatar(selectedAvatarMetadata);
+                inventoryInGamePreview.ReplaceAvatar(selectedAvatarMetadata);
 
                 tryButton.Disable(true);
                 buyButton.Disable(true);
@@ -341,8 +355,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             if (selectedAvatarMetadata != null)
             {
                 shopRiderPreview.ReplaceAvatar(selectedAvatarMetadata);
+                shopInGamePreview.ReplaceAvatar(selectedAvatarMetadata);
 
-                foreach(AvatarButton button in avatarButtonList)
+                foreach (AvatarButton button in avatarButtonList)
                 {
                     button.HideEquippedIndicator();
 
@@ -382,7 +397,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             shopRiderPreview.Show();
             inventoryRiderPreview.Hide();
 
+            shopInGamePreview.Show();
+            inventoryInGamePreview.Hide();
+
             avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShop;
+            inGamePreviewSpriteText.Text = Parameter.InGamePreviewTextAvatarShop;
 
             searchFilter.IsRenderingInventory = false;
             UpdateFilter(searchFilter.AvatarCategory, 0);
@@ -401,7 +420,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             shopRiderPreview.Hide();
             inventoryRiderPreview.Show();
 
+            shopInGamePreview.Hide();
+            inventoryInGamePreview.Show();
+
             avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShopEquipped;
+            inGamePreviewSpriteText.Text = Parameter.InGamePreviewTextAvatarShopEquipped;
 
             searchFilter.IsRenderingInventory = true;
             UpdateFilter(searchFilter.AvatarCategory, 0);
@@ -496,7 +519,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             switch (searchFilter.AvatarCategory)
             {
-                case AvatarCategory.Head: button = filterHatButton; break;
+                case AvatarCategory.Hat: button = filterHatButton; break;
                 case AvatarCategory.Body: button = filterBodyButton; break;
                 case AvatarCategory.Goggles: button = filterGogglesButton; break;
                 case AvatarCategory.Flag: button = filterFlagButton; break;
@@ -592,6 +615,9 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchTextField.Update(gameTime);
             buttonList.ForEach((x) => x.Update());
             attributeMenu.Update(gameTime);
+
+            shopInGamePreview.Update();
+            inventoryInGamePreview.Update();
         }
 
         public override void Draw(GameTime gameTime)
@@ -606,8 +632,14 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
             shopRiderPreview.Draw(gameTime, spriteBatch);
             inventoryRiderPreview.Draw(gameTime, spriteBatch);
+
             avatarPreviewSpriteText.Draw(spriteBatch);
+            inGamePreviewSpriteText.Draw(spriteBatch);
+            
             attributeMenu.Draw(gameTime, spriteBatch);
+
+            shopInGamePreview.Draw(gameTime, spriteBatch);
+            inventoryInGamePreview.Draw(gameTime, spriteBatch);
         }
     }
 }

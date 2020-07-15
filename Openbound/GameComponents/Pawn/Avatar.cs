@@ -13,39 +13,11 @@ using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.Pawn
 {
-    public class AvatarMetadata
-    {
-        public int ID;
-        public string Name;
-        public DateTime Date;
-        public AvatarCategory Category;
-        public Gender Gender;
-        public int GoldPrice;
-        public int CashPrice;
-        public float[] Pivot;
-        public int[] FrameDimensions;
-
-        public AvatarMetadata() { }
-
-        public AvatarMetadata(int id, string name, DateTime date, AvatarCategory category, Gender gender, int goldPrice, int cashPrice, float[] pivot, int[] frameDimensions)
-        {
-            ID = id;
-            Name = name;
-            Date = date;
-            Category = category;
-            Gender = gender;
-            GoldPrice = goldPrice;
-            CashPrice = cashPrice;
-            Pivot = pivot;
-            FrameDimensions = frameDimensions;
-        }
-    }
-
     public class Avatar
     {
         static Dictionary<AvatarCategory, float> depthDictioary = new Dictionary<AvatarCategory, float>()
         {
-            { AvatarCategory.Head,    DepthParameter.AvatarHead },
+            { AvatarCategory.Hat,     DepthParameter.AvatarHead },
             { AvatarCategory.Body,    DepthParameter.AvatarBody },
             { AvatarCategory.Goggles, DepthParameter.AvatarGoggles },
             { AvatarCategory.Flag,    DepthParameter.AvatarFlag },
@@ -58,7 +30,7 @@ namespace OpenBound.GameComponents.Pawn
             new Dictionary<AvatarCategory, Dictionary<AvatarState, AnimationInstance>>()
             {
                 {
-                    AvatarCategory.Head,
+                    AvatarCategory.Hat,
                     new Dictionary<AvatarState, AnimationInstance>()
                     {
                         { AvatarState.Normal, new AnimationInstance() { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
@@ -84,7 +56,7 @@ namespace OpenBound.GameComponents.Pawn
         {
             Metadata = metadata;
             Flipbook = new Flipbook(default, metadata.Pivot.ToVector2(),
-                metadata.FrameDimensions[0], metadata.FrameDimensions[1],
+                metadata.FrameDimensionX, metadata.FrameDimensionY,
                 $"Graphics/Avatar/{metadata.Gender}/{metadata.Category}/{metadata.Name}",
                 avatarState[metadata.Category][AvatarState.Normal],
                 depthDictioary[metadata.Category]);

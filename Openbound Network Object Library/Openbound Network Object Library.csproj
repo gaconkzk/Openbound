@@ -80,6 +80,7 @@
       <DependentUpon>202005241907359_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AvatarMetadata.cs" />
     <Compile Include="Models\Guild.cs" />
     <Compile Include="Entity\Map.cs" />
     <Compile Include="Entity\MatchManager.cs" />
