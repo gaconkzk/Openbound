@@ -7,8 +7,10 @@
     "Gender": 0,
     "GoldPrice": 0,
     "CashPrice": 0,
-    "Pivot": [ 22, 12 ],
-    "FrameDimensions": [ 44, 28 ]
+    "PivotX": 22,
+    "PivotY": 12,
+    "FrameDimensionX": 44,
+    "FrameDimensionY": 28
   },
   {
     "ID": 1,
@@ -19,7 +21,11 @@
     "GoldPrice": 100,
     "CashPrice": 100,
     "Pivot": [ 15, 15 ],
-    "FrameDimensions": [ 34, 34 ]
+    "FrameDimensions": [ 34, 34 ],
+    "PivotX": 15,
+    "PivotY": 15,
+    "FrameDimensionX": 34,
+    "FrameDimensionY": 34
   },
   {
     "ID": 2,
@@ -29,8 +35,10 @@
     "Gender": 0,
     "GoldPrice": 100,
     "CashPrice": 100,
-    "Pivot": [ 16, 15 ],
-    "FrameDimensions": [ 36, 34 ]
+    "PivotX": 16,
+    "PivotY": 15,
+    "FrameDimensionX": 36,
+    "FrameDimensionY": 34
   },
   {
     "ID": 3,
@@ -40,7 +48,9 @@
     "Gender": 0,
     "GoldPrice": 100,
     "CashPrice": 100,
-    "Pivot": [ 15, 15 ],
-    "FrameDimensions": [ 34, 34 ]
+    "PivotX": 15,
+    "PivotY": 15,
+    "FrameDimensionX": 34,
+    "FrameDimensionY": 34
   },
 ]

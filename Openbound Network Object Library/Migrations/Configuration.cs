@@ -1,7 +1,10 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.IO;
 using System.Linq;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Database.Context;
@@ -14,7 +17,7 @@ namespace Openbound_Network_Object_Library.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
             ConfigFileManager.LoadConfigFile(RequesterApplication.EFMigration);
         }
@@ -22,10 +25,11 @@ namespace Openbound_Network_Object_Library.Migrations
         
         protected override void Seed(OpenboundDatabaseContext context)
         {
-            if (!context.Players.Any()) SeedPlayers(context);
+            if (!context.AvatarMetadata.Any()) SeedAvatarMetadata(context);
+            if (!context.Players.Any()) SeedPlayer(context);
         }
 
-        private void SeedPlayers(OpenboundDatabaseContext context)
+        private void SeedPlayer(OpenboundDatabaseContext context)
         {
             string defaultPassword = "$2y$12$ZcVa8MvpkEUx5LlQ5BNjNOezed07s8b71I5OcYq5vf1q52tjASjki";
             context.Players.AddOrUpdate(x => x.ID,
@@ -35,6 +39,17 @@ namespace Openbound_Network_Object_Library.Migrations
                 new Player { Nickname = "Vinny", Email = "dev03@dev.com", Password = defaultPassword },
                 new Player { Nickname = "Test", Email = "test00@dev.com", Password = defaultPassword}
             );
+        }
+
+        private void SeedAvatarMetadata(OpenboundDatabaseContext context)
+        {
+            //
+            List<AvatarMetadata> list = ObjectWrapper
+                .DeserializeCommentedJSONFile<List<AvatarMetadata>>(
+                $"{Directory.GetCurrentDirectory()}/DatabaseSeed/AvatarMetadata.json"
+                );
+
+            context.AvatarMetadata.AddOrUpdate(list.ToArray());
         }
     } 
 }

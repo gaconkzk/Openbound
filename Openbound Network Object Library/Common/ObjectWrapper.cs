@@ -12,6 +12,7 @@
 
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -64,6 +65,19 @@ namespace Openbound_Network_Object_Library.Common
             if (!ObjectValidator.ValidateString(Param)) throw new Exception();
 
             return JsonConvert.DeserializeObject<T>(Param);
+        }
+
+        public static T DeserializeCommentedJSONFile<T>(string filePath)
+        {
+            string str = "";
+
+            File.ReadAllLines(filePath)
+                .ToList()
+                .Where((x) => x.Length > 0 && (x.Trim()[0] != '#' && x.Trim()[0] != '/'))
+                .ToList()
+                .ForEach((x) => str += x);
+
+            return DeserializeRequest<T>(str);
         }
 
         public static string Serialize<T>(T Param, Formatting formatting = Formatting.None)

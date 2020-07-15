@@ -12,14 +12,18 @@ namespace Openbound_Network_Object_Library.Models
 {
     public class AvatarMetadata
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column(Order = 1)]
         public int ID { get; set; }
+        
         [Required]
         public string Name { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        [Required]
+
+        [Key, Column(Order = 0)]
         public AvatarCategory Category { get; set; }
+        
         [Required]
         public Gender Gender { get; set; }
         [Required]

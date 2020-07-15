@@ -467,7 +467,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                 return;
             }
 
-            ConfigServerInformation csfc = ObjectWrapper.DeserializeRequest<ConfigServerInformation>(ReadFileInformation(path));
+            ConfigServerInformation csfc = ObjectWrapper.DeserializeCommentedJSONFile<ConfigServerInformation>(path);
 
             switch (requestApplication)
             {
@@ -483,7 +483,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigDatabaseInformation dbInfo = ObjectWrapper.DeserializeRequest<ConfigDatabaseInformation>(ReadFileInformation(path));
+                    ConfigDatabaseInformation dbInfo = ObjectWrapper.DeserializeCommentedJSONFile<ConfigDatabaseInformation>(path);
                     NetworkObjectParameters.DatabaseAddress = dbInfo.DatabaseAddress;
                     NetworkObjectParameters.DatabaseName = dbInfo.DatabaseName;
                     NetworkObjectParameters.DatabaseLogin = dbInfo.DatabaseLogin;
@@ -497,7 +497,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigDatabaseInformation cdi = ObjectWrapper.DeserializeRequest<ConfigDatabaseInformation>(ReadFileInformation(DatabaseConfigPath));
+                    ConfigDatabaseInformation cdi = ObjectWrapper.DeserializeCommentedJSONFile<ConfigDatabaseInformation>(DatabaseConfigPath);
                     NetworkObjectParameters.DatabaseAddress = cdi.DatabaseAddress;
                     NetworkObjectParameters.DatabaseName = cdi.DatabaseName;
                     NetworkObjectParameters.DatabaseLogin = cdi.DatabaseLogin;
@@ -516,7 +516,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigLobbyServerWhitelist gsrwl = ObjectWrapper.DeserializeRequest<ConfigLobbyServerWhitelist>(ReadFileInformation(LobbyServerWhitelistPath));
+                    ConfigLobbyServerWhitelist gsrwl = ObjectWrapper.DeserializeCommentedJSONFile<ConfigLobbyServerWhitelist>(LobbyServerWhitelistPath);
 
                     NetworkObjectParameters.GameServerRequestIPWhitelist = gsrwl.Whitelist;
                     break;
@@ -530,25 +530,12 @@ namespace Openbound_Network_Object_Library.FileOutput
 
         public static List<GameServerInformation> LoadServerlistPlaceholderFile()
         {
-            return ObjectWrapper.DeserializeRequest<ConfigServerInformation>(ReadFileInformation(ServerlistPlaceholderPath)).GameServerInformationList;
+            return ObjectWrapper.DeserializeCommentedJSONFile<ConfigServerInformation>(ServerlistPlaceholderPath).GameServerInformationList;
         }
 
         public static GameClientSettingsInformation ReadClientInformation()
         {
-            return ObjectWrapper.DeserializeRequest<GameClientSettingsInformation>(ReadFileInformation(GameClientSettingsPath));
-        }
-
-        public static string ReadFileInformation(string filePath)
-        {
-            string str = "";
-
-            File.ReadAllLines(filePath)
-                .ToList()
-                .Where((x) => x.Length > 0 && x.Trim()[0] != '#')
-                .ToList()
-                .ForEach((x) => str += x);
-
-            return str;
+            return ObjectWrapper.DeserializeCommentedJSONFile<GameClientSettingsInformation>(GameClientSettingsPath);
         }
     }
 }
