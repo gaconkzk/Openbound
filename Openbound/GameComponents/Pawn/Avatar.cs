@@ -44,6 +44,14 @@ namespace OpenBound.GameComponents.Pawn
                         { AvatarState.Normal,  new AnimationInstance() { StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
                     }
                 },
+                {
+                    AvatarCategory.Pet,
+                    new Dictionary<AvatarState, AnimationInstance>()
+                    {
+                        { AvatarState.Normal, new AnimationInstance() { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                        { AvatarState.Staring, new AnimationInstance() { StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                    }
+                },
             };
 
         public AvatarMetadata Metadata { get; private set; }
@@ -52,14 +60,31 @@ namespace OpenBound.GameComponents.Pawn
         public Vector2 Position { get => Flipbook.Position; set => Flipbook.Position = value; }
         public float Rotation { get => Flipbook.Rotation; set => Flipbook.Rotation = value; }
 
-        public Avatar(AvatarMetadata metadata)
+        public Avatar(AvatarMetadata metadata, bool canUseDummy = false)
         {
             Metadata = metadata;
+
+            string path;
+
+            if (canUseDummy && metadata.ID == 0)
+                path = "Misc/Dummy";
+            else
+                path = $"Graphics/Avatar/{metadata.Gender}/{metadata.Category}/{metadata.Name}";
+
+            //Extra animation logic
+            AnimationInstance animationInstance;
+            if (metadata.Category == AvatarCategory.Extra)
+                animationInstance = new AnimationInstance();
+            else
+                animationInstance = avatarState[metadata.Category][AvatarState.Normal];
+
             Flipbook = new Flipbook(default, metadata.Pivot.ToVector2(),
-                metadata.FrameDimensionX, metadata.FrameDimensionY,
-                $"Graphics/Avatar/{metadata.Gender}/{metadata.Category}/{metadata.Name}",
-                avatarState[metadata.Category][AvatarState.Normal],
-                depthDictioary[metadata.Category]);
+                metadata.FrameDimensionX, metadata.FrameDimensionY, path,
+                animationInstance, depthDictioary[metadata.Category]);
+
+            //Extra animation logic -> Use all frames possible on animation
+            if (metadata.Category == AvatarCategory.Extra)
+                Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1/4f }, true);
         }
 
         public void Flip() => Flipbook.Flip();

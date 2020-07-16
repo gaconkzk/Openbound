@@ -2,6 +2,7 @@
 	//Male
 	//--Hat
 	{
+		"ID": 0,
 		"Name": "Basic",
 		"Date": "2020-07-12",
 		"Category": 0,
@@ -14,6 +15,7 @@
 		"FrameDimensionY": 24
 	},
 	{
+		"ID": 1,
 		"Name": "Space Marine",
 		"Date": "2020-07-12",
 		"Category": 0,
@@ -26,6 +28,7 @@
 		"FrameDimensionY": 28
 	},
 	{
+		"ID": 2,
 		"Name": "Miner",
 		"Date": "2020-07-13",
 		"Category": 0,
@@ -38,6 +41,7 @@
 		"FrameDimensionY": 78
 	},
 	{
+		"ID": 3,
 		"Name": "Punk",
 		"Date": "2020-07-13",
 		"Category": 0,
@@ -51,6 +55,7 @@
 	},
 	//--Body
 	{
+		"ID": 0,
 		"Name": "Basic",
 		"Date": "2020-07-12",
 		"Category": 1,
@@ -63,6 +68,7 @@
 		"FrameDimensionY": 28
 	},
 	{
+		"ID": 1,
 		"Name": "Space Marine",
 		"Date": "2020-07-13",
 		"Category": 1,
@@ -77,6 +83,7 @@
 		"FrameDimensionY": 34
 	},
 	{
+		"ID": 2,
 		"Name": "Miner",
 		"Date": "2020-07-13",
 		"Category": 1,
@@ -89,6 +96,7 @@
 		"FrameDimensionY": 34
 	},
 	{
+		"ID": 3,
 		"Name": "Punk",
 		"Date": "2020-07-13",
 		"Category": 1,

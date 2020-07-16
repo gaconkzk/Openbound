@@ -20,8 +20,6 @@
     "Gender": 0,
     "GoldPrice": 100,
     "CashPrice": 100,
-    "Pivot": [ 15, 15 ],
-    "FrameDimensions": [ 34, 34 ],
     "PivotX": 15,
     "PivotY": 15,
     "FrameDimensionX": 34,

@@ -50,5 +50,18 @@
     "PivotY": 22,
     "FrameDimensionX": 38,
     "FrameDimensionY": 39
+  },
+  {
+    "ID": 138,
+    "Name": "Kappa",
+    "Date": "2020-07-13",
+    "Category": 0,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "PivotX": 18,
+    "PivotY": 27,
+    "FrameDimensionX": 39,
+    "FrameDimensionY": 48
   }
 ]

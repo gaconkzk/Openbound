@@ -173,12 +173,12 @@ namespace Openbound_Network_Object_Library.Models
             {
                 { AvatarCategory.Hat,     new HashSet<int>(){ 0, } },
                 { AvatarCategory.Body,    new HashSet<int>(){ 0, } },
-                { AvatarCategory.Goggles, new HashSet<int>() },
-                { AvatarCategory.Flag,    new HashSet<int>() },
-                { AvatarCategory.ExItem,  new HashSet<int>() },
-                { AvatarCategory.Pet,     new HashSet<int>() },
-                { AvatarCategory.Misc,    new HashSet<int>() },
-                { AvatarCategory.Extra,   new HashSet<int>() },
+                { AvatarCategory.Goggles, new HashSet<int>(){ 0, } },
+                { AvatarCategory.Flag,    new HashSet<int>(){ 0, } },
+                { AvatarCategory.ExItem,  new HashSet<int>(){ 0, } },
+                { AvatarCategory.Pet,     new HashSet<int>(){ 0, } },
+                { AvatarCategory.Misc,    new HashSet<int>(){ 0, } },
+                { AvatarCategory.Extra,   new HashSet<int>(){ 0, } },
             };
         }
 
