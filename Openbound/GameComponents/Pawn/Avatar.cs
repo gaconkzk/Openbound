@@ -52,6 +52,22 @@ namespace OpenBound.GameComponents.Pawn
                         { AvatarState.Staring, new AnimationInstance() { StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
                     }
                 },
+                {
+                    AvatarCategory.Flag,
+                    new Dictionary<AvatarState, AnimationInstance>()
+                    {
+                        { AvatarState.Normal, new AnimationInstance() { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                        { AvatarState.Staring, new AnimationInstance() { StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                    }
+                },
+                {
+                    AvatarCategory.Goggles,
+                    new Dictionary<AvatarState, AnimationInstance>()
+                    {
+                        { AvatarState.Normal, new AnimationInstance() { StartingFrame = 11, EndingFrame = 21, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                        { AvatarState.Staring, new AnimationInstance() { StartingFrame = 00, EndingFrame = 10, TimePerFrame = 1 / 10f, AnimationType = AnimationType.Cycle } },
+                    }
+                },
             };
 
         public AvatarMetadata Metadata { get; private set; }
@@ -73,7 +89,7 @@ namespace OpenBound.GameComponents.Pawn
 
             //Extra animation logic
             AnimationInstance animationInstance;
-            if (metadata.Category == AvatarCategory.Extra)
+            if (metadata.Category == AvatarCategory.Extra || metadata.Category == AvatarCategory.Misc)
                 animationInstance = new AnimationInstance();
             else
                 animationInstance = avatarState[metadata.Category][AvatarState.Normal];
@@ -84,7 +100,9 @@ namespace OpenBound.GameComponents.Pawn
 
             //Extra animation logic -> Use all frames possible on animation
             if (metadata.Category == AvatarCategory.Extra)
-                Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1/4f }, true);
+                Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1 / 4f }, true);
+            else if (metadata.Category == AvatarCategory.Misc)
+                Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1 / 4f, AnimationType = AnimationType.Cycle }, true);
         }
 
         public void Flip() => Flipbook.Flip();

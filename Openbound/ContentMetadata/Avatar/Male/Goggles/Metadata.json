@@ -1,1 +1,24 @@
-﻿[]
+﻿[
+  {
+    "ID": 0,
+    "Name": "No Goggles",
+    "Date": "2020-07-13",
+    "Category": 2,
+    "Gender": 0,
+    "FrameDimensionX": 1,
+    "FrameDimensionY": 1
+  },
+  {
+    "ID": 1,
+    "Name": "Pilot Goggles",
+    "Date": "2020-07-13",
+    "Category": 2,
+    "Gender": 0,
+    "GoldPrice": 100,
+    "CashPrice": 100,
+    "PivotX": 18,
+    "PivotY": 5,
+    "FrameDimensionX": 26,
+    "FrameDimensionY": 13
+  }
+]
