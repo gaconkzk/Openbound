@@ -77,6 +77,7 @@ namespace OpenBound.Launcher
             if (!_isLoginPossible) return;
             _launcherRequestManager.PrepareLoginThread(txtNickname.Text, txtPassword.Text);
             _launcherRequestManager.LauncherThread = new Thread(() => CheckLoginResult(_launcherRequestManager.RequestThread));
+            _launcherRequestManager.LauncherThread.IsBackground = true;
             _launcherRequestManager.LauncherThread.Start();
             _isLoginPossible = false;
         }

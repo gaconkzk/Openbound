@@ -79,7 +79,7 @@ namespace Openbound_Lobby_Server
                 case NetworkObjectParameters.LobbyServerPlayerUIDRequest:
                     answer = PlayerHandler.GenerateUIDForPlayerLogin(request[1]);
                     break;
-                case NetworkObjectParameters.LobbyLoginRequest:
+                case NetworkObjectParameters.LobbyServerLoginRequest:
                     answer = PlayerHandler.LobbyLoginRequest(request[1]);
                     break;
                 case NetworkObjectParameters.GameServerRegisterRequest:

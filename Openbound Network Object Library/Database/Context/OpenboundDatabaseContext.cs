@@ -32,6 +32,9 @@ namespace Openbound_Network_Object_Library.Database.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Player>()
+                .HasMany(am => am.AvatarMetadataList)
+                .WithMany(p => p.PlayerList);
         }
 
         public DbSet<Player> Players { get; set; }

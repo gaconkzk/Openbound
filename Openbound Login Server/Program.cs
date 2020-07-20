@@ -72,10 +72,10 @@ namespace Openbound_Login_Server
             switch (service)
             {
                 case NetworkObjectParameters.LoginServerLoginAttemptRequest:
-                    answer = PlayerHandler.StartListeningPlayerLoginAttempt(request[1]);
-                    break;
+                    PlayerHandler.StartListeningPlayerLoginAttempt(provider, request[1]);
+                    return;
                 case NetworkObjectParameters.LoginServerAccountCreationRequest:
-                    answer = RegistrationService.RegistrationAttempt(request[1]); 
+                    answer = PlayerHandler.RegistrationAttempt(request[1]); 
                     break;
             }
 

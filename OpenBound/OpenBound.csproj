@@ -130,30 +130,6 @@
     <Compile Include="GameComponents\Animation\ParticleBuilder.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffect.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffectHandler.cs" />
-    <None Include="ContentMetadata\Avatar\Male\Body\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\ExItem\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Extra\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Flag\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Goggles\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Hat\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Misc\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ContentMetadata\Avatar\Male\Pet\Metadata.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="ContentMetadata\Mobile\Random\RiderPivot.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

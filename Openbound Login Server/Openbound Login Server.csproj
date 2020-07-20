@@ -58,7 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\PlayerHandler.cs" />
-    <Compile Include="Service\RegistrationService.cs" />
+    <Compile Include="Service\PlayerSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Openbound Network Object Library\Openbound Network Object Library.csproj">

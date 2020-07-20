@@ -96,7 +96,7 @@ namespace Openbound_Network_Object_Library.Models
         public string Email { get; set; }
 
         //Storable - Game Information
-        [Required] public Gender CharacterGender { get; set; }
+        [Required] public Gender Gender { get; set; }
 
         public int Gold { get; set; }
 
@@ -112,9 +112,33 @@ namespace Openbound_Network_Object_Library.Models
         [Required] public MobileType PrimaryMobile { get; set; }
         [Required] public MobileType SecondaryMobile { get; set; }
 
-        [JsonIgnore] public List<Player> FriendList { get; set; }
+        //Avatar Region
+        [JsonIgnore] public virtual ICollection<AvatarMetadata> AvatarMetadataList { get; set; }
+        [JsonIgnore] public virtual ICollection<Player> FriendList { get; set; }
+
+        [JsonIgnore] public int EquippedAvatarHat { get => Avatar[0]; set => Avatar[0] = value; }
+        [JsonIgnore] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
+        [JsonIgnore] public int EquippedAvatarGoggles { get => Avatar[2]; set => Avatar[2] = value; }
+        [JsonIgnore] public int EquippedAvatarFlag { get => Avatar[3]; set => Avatar[3] = value; }
+        [JsonIgnore] public int EquippedAvatarExItem { get => Avatar[4]; set => Avatar[4] = value; }
+        [JsonIgnore] public int EquippedAvatarPet { get => Avatar[5]; set => Avatar[5] = value; }
+        [JsonIgnore] public int EquippedAvatarMisc { get => Avatar[6]; set => Avatar[6] = value; }
+        [JsonIgnore] public int EquippedAvatarExtra { get => Avatar[7]; set => Avatar[7] = value; }
+
+        //Attribute Region
+        [JsonIgnore] public int Attack { get => Attribute[0]; set => Attribute[0] = value; }
+        [JsonIgnore] public int Health { get => Attribute[1]; set => Attribute[1] = value; }
+        [JsonIgnore] public int Defense { get => Attribute[2]; set => Attribute[2] = value; }
+        [JsonIgnore] public int Regeneration { get => Attribute[3]; set => Attribute[3] = value; }
+        [JsonIgnore] public int AttackDelay { get => Attribute[4]; set => Attribute[4] = value; }
+        [JsonIgnore] public int ItemDelay { get => Attribute[5]; set => Attribute[5] = value; }
+        [JsonIgnore] public int Dig { get => Attribute[6]; set => Attribute[6] = value; }
+        [JsonIgnore] public int Popularity { get => Attribute[7]; set => Attribute[7] = value; }
+
+        //Security Items
         [NotMapped] public SecurityToken SecurityToken { get; set; }
 
+        //Avatar
         [NotMapped] public int[] Avatar { get; set; }
         [NotMapped] public int[] Attribute { get; set; }
         #endregion
@@ -132,19 +156,8 @@ namespace Openbound_Network_Object_Library.Models
         [JsonIgnore, NotMapped] public PlayerRoomStatus PlayerLoadingStatus { get; set; }
         [JsonIgnore, NotMapped] public int LoadingScreenPercentage { get; set; }
 
-        //Avatar Region
-        [JsonIgnore] public int EquippedAvatarHat { get => Avatar[0]; set => Avatar[0] = value; }
-        [JsonIgnore] public int EquippedAvatarBody { get => Avatar[1]; set => Avatar[1] = value; }
-        [JsonIgnore] public int EquippedAvatarGoggles { get => Avatar[2]; set => Avatar[2] = value; }
-        [JsonIgnore] public int EquippedAvatarFlag { get => Avatar[3]; set => Avatar[3] = value; }
-        [JsonIgnore] public int EquippedAvatarExItem { get => Avatar[4]; set => Avatar[4] = value; }
-        [JsonIgnore] public int EquippedAvatarPet { get => Avatar[5]; set => Avatar[5] = value; }
-        [JsonIgnore] public int EquippedAvatarMisc { get => Avatar[6]; set => Avatar[6] = value; }
-        [JsonIgnore] public int EquippedAvatarExtra { get => Avatar[7]; set => Avatar[7] = value; }
-
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
-        [JsonIgnore] public List<AvatarMetadata> AvatarMetadata;
         //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarBody;
         //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarGoggles;
         //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarFlag;
@@ -153,22 +166,14 @@ namespace Openbound_Network_Object_Library.Models
         //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarMisc;
         //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarExtra;
 
-        //Attribute Region
-        [JsonIgnore] public int Attack => Attribute[0];
-        [JsonIgnore] public int Health => Attribute[1];
-        [JsonIgnore] public int Defense => Attribute[2];
-        [JsonIgnore] public int Regeneration => Attribute[3];
-        [JsonIgnore] public int AttackDelay => Attribute[4];
-        [JsonIgnore] public int ItemDelay => Attribute[5];
-        [JsonIgnore] public int Dig => Attribute[6];
-        [JsonIgnore] public int Popularity => Attribute[7];
-
         public Player()
         {
             PlayerNavigation = PlayerNavigation.InGameMenus;
             Avatar = new int[8];
             Attribute = new int[8];
 
+#warning gender
+            AvatarMetadataList = new List<AvatarMetadata>();
             OwnedAvatar = new Dictionary<AvatarCategory, HashSet<int>>()
             {
                 { AvatarCategory.Hat,     new HashSet<int>(){ 0, } },
@@ -180,6 +185,14 @@ namespace Openbound_Network_Object_Library.Models
                 { AvatarCategory.Misc,    new HashSet<int>(){ 0, } },
                 { AvatarCategory.Extra,   new HashSet<int>(){ 0, } },
             };
+        }
+
+        public void LoadOwnedAvatarDictionary()
+        {
+            foreach(AvatarMetadata am in AvatarMetadataList)
+            {
+                OwnedAvatar[am.AvatarCategory].Add(am.ID);
+            }
         }
 
         public override int GetHashCode()

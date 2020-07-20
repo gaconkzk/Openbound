@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
+using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Asset;
 using OpenBound.GameComponents.Interface.Builder;
@@ -11,6 +12,9 @@ using OpenBound.GameComponents.Interface.Popup;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Pawn;
 using OpenBound.GameComponents.Pawn.Unit;
+using OpenBound.ServerCommunication;
+using OpenBound.ServerCommunication.Service;
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Entity.Text;
@@ -78,12 +82,19 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         // Popups
         private PopupBuyAvatar popupBuyAvatar;
 
+        //Object reference
+        private Player player;
+
+        private object asyncPadlock;
+
         public AvatarShop()
         {
+            asyncPadlock = new object();
+            /*
             GameInformation.Instance.PlayerInformation = new Player()
             {
                 ID = 1,
-                CharacterGender = Gender.Male,
+                Gender = Gender.Male,
                 Email = "c@c.c",
                 Guild = new Guild() { ID = 1, Name = "Zica", Tag = "Zik" },
                 LeavePercentage = 0,
@@ -92,7 +103,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 PlayerRank = PlayerRank.GM,
                 Gold = 500,
                 Cash = 400,
-            };
+            };*/
+            player = GameInformation.Instance.PlayerInformation;
 
             Background = new Sprite(@"Interface/InGame/Scene/AvatarShop/Background",
                 position: Parameter.ScreenCenter,
@@ -123,8 +135,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Room Button
-            shopRiderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -40));
-            inventoryRiderPreview = new Rider(Facing.Right, GameInformation.Instance.PlayerInformation, Parameter.ScreenCenter + new Vector2(-280, -40));
+            shopRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
+            inventoryRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
             inventoryRiderPreview.Hide();
 
             avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,
@@ -141,7 +153,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 Parameter.ScreenCenter - new Vector2(385, -17), Color.Black);
 
             //AttributeButton
-            attributeMenu = new AttributeMenu(new Vector2(-285, -235), GameInformation.Instance.PlayerInformation);
+            attributeMenu = new AttributeMenu(new Vector2(-285, -235), player);
 
             //Since Hats is the first selected filter, start the window rendering all hats
             //Filtering
@@ -172,7 +184,51 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             buyButton.Disable(true);
             giftButton.Disable(true);
             cashChargeButton.Disable(true);
+
+            //Feedbacks / Callbacks
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold, GoldPurchaseConfirmationAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerAvatarShopBuyAvatarCash, CashPurchaseConfirmationAsyncCallback);
         }
+
+        #region Networking / Callbacks
+        public void CashPurchaseConfirmationAsyncCallback(object param)
+        {
+            lock (asyncPadlock)
+            {
+                AvatarMetadata avatarMetadata = (AvatarMetadata)param;
+                player.Cash -= selectedAvatarMetadata.CashPrice;
+                PurchaseConfirmationAsyncCallback(avatarMetadata);
+            }
+        }
+
+        public void GoldPurchaseConfirmationAsyncCallback(object param)
+        {
+            lock (asyncPadlock)
+            {
+                AvatarMetadata avatarMetadata = (AvatarMetadata)param;
+                player.Gold -= selectedAvatarMetadata.GoldPrice;
+                PurchaseConfirmationAsyncCallback(avatarMetadata);
+            }
+        }
+
+        public void PurchaseConfirmationAsyncCallback(AvatarMetadata avatarMetadata)
+        {
+            PopupAlertMessageBuilder.BuildPopupAlertMessage(
+            avatarMetadata != null ?
+            PopupAlertMessageType.AvatarPurchaseSuccessful :
+            PopupAlertMessageType.AvatarPurchaseFailure, avatarMetadata);
+
+            player.OwnedAvatar[avatarMetadata.AvatarCategory].Add(avatarMetadata.ID);
+            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
+
+            attributeMenu.RefreshCurrencyValues();
+
+            EnableInterfaceButtons();
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
+        }
+        #endregion
 
         #region AddComponents Into Screen
         public void AddTabControlToScene()
@@ -269,15 +325,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         }
         #endregion
 
-        #region Networking
-        public void OnAcquireAvatarAsyncCallback(object avatar)
-        {
-            AvatarMetadata avatarMetadata = ((AvatarMetadata)avatar);
-            GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.Category].Add(avatarMetadata.ID);
-            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
-        }
-        #endregion
-
         #region Button Actions
         private void OptionsCloseAction(object sender)
         {
@@ -300,7 +347,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private void ExitDoorAction(object sender)
         {
-            //ServerInformationBroker.Instance.DisconnectFromGameServer();
+            ServerInformationHandler.AvatarShopUpdatePlayerData();
             SceneHandler.Instance.RequestSceneChange(SceneType.GameList, TransitionEffectType.RotatingRectangles);
             ((AnimatedButton)sender).Disable(true);
         }
@@ -314,8 +361,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             if (searchFilter.IsRenderingInventory)
             {
                 // Equip
-                GameInformation.Instance.PlayerInformation
-                    .EquipAvatar(selectedAvatarMetadata.Category, selectedAvatarMetadata.ID);
+                player.EquipAvatar(selectedAvatarMetadata.AvatarCategory, selectedAvatarMetadata.ID);
 
                 // Update Equipped
                 avatarButtonList.ForEach((x) => x.HideEquippedIndicator());
@@ -334,16 +380,15 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             avatarButtonList.ForEach((x) => { x.Disable(); x.Enable(); });
             avatarButton.ChangeButtonState(ButtonAnimationState.Activated, true);
 
-            if (shopRiderPreview.GetEquippedAvatarID(selectedAvatarMetadata.Category) != selectedAvatarMetadata.ID)
+            if (shopRiderPreview.GetEquippedAvatarID(selectedAvatarMetadata.AvatarCategory) != selectedAvatarMetadata.ID)
                 tryButton.Enable();
             else
                 tryButton.Disable(true);
 
-            if (GameInformation.Instance.PlayerInformation.Gold >= selectedAvatarMetadata.GoldPrice ||
-                GameInformation.Instance.PlayerInformation.Cash >= selectedAvatarMetadata.CashPrice)
+            if (player.Gold >= selectedAvatarMetadata.GoldPrice ||
+                player.Cash >= selectedAvatarMetadata.CashPrice)
             {
-                if (!GameInformation.Instance.PlayerInformation
-                    .OwnedAvatar[selectedAvatarMetadata.Category].Contains(selectedAvatarMetadata.ID))
+                if (!player.OwnedAvatar[selectedAvatarMetadata.AvatarCategory].Contains(selectedAvatarMetadata.ID))
                     buyButton.Enable();
                 else
                     buyButton.Disable(true);
@@ -361,7 +406,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 {
                     button.HideEquippedIndicator();
 
-                    if (button.AvatarMetadata.ID == shopRiderPreview.GetEquippedAvatarID(button.AvatarMetadata.Category))
+                    if (button.AvatarMetadata.ID == shopRiderPreview.GetEquippedAvatarID(button.AvatarMetadata.AvatarCategory))
                         button.ShowEquippedIndicator();
                 }
             }
@@ -457,31 +502,15 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         public void OnBuyCash(object sender)
         {
             //send request
-            GameInformation.Instance.PlayerInformation.Cash -= selectedAvatarMetadata.CashPrice;
-            OnAcquireAvatarAsyncCallback(selectedAvatarMetadata);
+            ServerInformationHandler.AvatarShopBuyAvatarCash(selectedAvatarMetadata);
             PopupHandler.Remove(popupBuyAvatar);
-
-            attributeMenu.RefreshCurrencyValues();
-
-            EnableInterfaceButtons();
-
-            buyButton.Disable(true);
-            tryButton.Disable(true);
         }
 
         public void OnBuyGold(object sender)
         {
             //send request
-            GameInformation.Instance.PlayerInformation.Gold -= selectedAvatarMetadata.GoldPrice;
-            OnAcquireAvatarAsyncCallback(selectedAvatarMetadata);
+            ServerInformationHandler.AvatarShopBuyAvatarGold(selectedAvatarMetadata);
             PopupHandler.Remove(popupBuyAvatar);
-
-            attributeMenu.RefreshCurrencyValues();
-
-            EnableInterfaceButtons();
-
-            buyButton.Disable(true);
-            tryButton.Disable(true);
         }
         #endregion
 
@@ -551,13 +580,13 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchFilter.AvatarCategory = category;
             searchFilter.CurrentPage = currentPage;
 
-            IEnumerable<AvatarMetadata> metadataList = (IEnumerable<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{Gender.Male}/{searchFilter.AvatarCategory}/Metadata"];
+            IEnumerable<AvatarMetadata> metadataList = MetadataManager.AvatarMetadataDictionary[player.Gender][searchFilter.AvatarCategory].Values;
 
             //Text filter
             metadataList = metadataList.Where((x) => x.Name.ToLower().Contains(searchFilter.AvatarName));
 
             if (searchFilter.IsRenderingInventory)
-                metadataList = metadataList.Where((x) => GameInformation.Instance.PlayerInformation.OwnedAvatar[category].Contains(x.ID));
+                metadataList = metadataList.Where((x) => player.OwnedAvatar[category].Contains(x.ID));
 
             searchFilter.LastPage = Math.Max((int)Math.Ceiling(metadataList.Count() / 25f), 1);
 
@@ -593,12 +622,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
                 if (searchFilter.IsRenderingInventory)
                 {
-                    if (inventoryRiderPreview.GetEquippedAvatarID(metadataList[i].Category) == metadataList[i].ID)
+                    if (inventoryRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
                         button.ShowEquippedIndicator();
                 }
                 else
                 {
-                    if (shopRiderPreview.GetEquippedAvatarID(metadataList[i].Category) == metadataList[i].ID)
+                    if (shopRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
                         button.ShowEquippedIndicator();
                 }
 
@@ -608,38 +637,44 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-            animatedButtonList.ForEach((x) => x.Update());
-            filterButtonList.ForEach((x) => x.Update());
-            avatarButtonList.ForEach((x) => x.Update(gameTime));
-            searchTextField.Update(gameTime);
-            buttonList.ForEach((x) => x.Update());
-            attributeMenu.Update(gameTime);
+            lock (asyncPadlock)
+            {
+                base.Update(gameTime);
+                animatedButtonList.ForEach((x) => x.Update());
+                filterButtonList.ForEach((x) => x.Update());
+                avatarButtonList.ForEach((x) => x.Update(gameTime));
+                searchTextField.Update(gameTime);
+                buttonList.ForEach((x) => x.Update());
+                attributeMenu.Update(gameTime);
 
-            shopInGamePreview.Update();
-            inventoryInGamePreview.Update();
+                shopInGamePreview.Update();
+                inventoryInGamePreview.Update();
+            }
         }
 
         public override void Draw(GameTime gameTime)
         {
-            base.Draw(gameTime);
-            spriteList.ForEach((x) => x.Draw(null, spriteBatch));
-            animatedButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            filterButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            avatarButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            spriteTextList.ForEach((x) => x.Draw(spriteBatch));
-            searchTextField.Draw(spriteBatch);
-            buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
-            shopRiderPreview.Draw(gameTime, spriteBatch);
-            inventoryRiderPreview.Draw(gameTime, spriteBatch);
+            lock (asyncPadlock)
+            {
+                base.Draw(gameTime);
+                spriteList.ForEach((x) => x.Draw(null, spriteBatch));
+                animatedButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+                filterButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+                avatarButtonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+                spriteTextList.ForEach((x) => x.Draw(spriteBatch));
+                searchTextField.Draw(spriteBatch);
+                buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+                shopRiderPreview.Draw(gameTime, spriteBatch);
+                inventoryRiderPreview.Draw(gameTime, spriteBatch);
 
-            avatarPreviewSpriteText.Draw(spriteBatch);
-            inGamePreviewSpriteText.Draw(spriteBatch);
-            
-            attributeMenu.Draw(gameTime, spriteBatch);
+                avatarPreviewSpriteText.Draw(spriteBatch);
+                inGamePreviewSpriteText.Draw(spriteBatch);
 
-            shopInGamePreview.Draw(gameTime, spriteBatch);
-            inventoryInGamePreview.Draw(gameTime, spriteBatch);
+                attributeMenu.Draw(gameTime, spriteBatch);
+
+                shopInGamePreview.Draw(gameTime, spriteBatch);
+                inventoryInGamePreview.Draw(gameTime, spriteBatch);
+            }
         }
     }
 }

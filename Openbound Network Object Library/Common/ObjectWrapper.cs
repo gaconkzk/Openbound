@@ -11,6 +11,7 @@
  */
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,15 @@ namespace Openbound_Network_Object_Library.Common
     {
         private static ASCIIEncoding encoder = new ASCIIEncoding();
 
-        private ObjectWrapper() { }
+        static ObjectWrapper()
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+            {
+                Formatting = Formatting.None,
+                NullValueHandling = NullValueHandling.Ignore,
+                //MaxDepth = 3
+            };
+        }
 
         public static T ConvertByteArrayToObject<T>(byte[] Param)
         {
@@ -63,7 +72,6 @@ namespace Openbound_Network_Object_Library.Common
         public static T DeserializeRequest<T>(string Param)
         {
             if (!ObjectValidator.ValidateString(Param)) throw new Exception();
-
             return JsonConvert.DeserializeObject<T>(Param);
         }
 
@@ -73,23 +81,21 @@ namespace Openbound_Network_Object_Library.Common
 
             File.ReadAllLines(filePath)
                 .ToList()
-                .Where((x) => x.Length > 0 && (x.Trim()[0] != '#' && x.Trim()[0] != '/'))
+                .Where((x) => x.Length > 0 && (x.Trim()[0] != '/'))
                 .ToList()
                 .ForEach((x) => str += x);
 
             return DeserializeRequest<T>(str);
         }
 
-        public static string Serialize<T>(T Param, Formatting formatting = Formatting.None)
+        public static string Serialize<T>(T param, Formatting formatting)
         {
-            return JsonConvert.SerializeObject(
-                Param,
-                formatting,
-                new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                }
-            );
+            return JsonConvert.SerializeObject(param, formatting);
+        }
+
+        public static string Serialize<T>(T Param)
+        {
+            return JsonConvert.SerializeObject(Param);
         }
     }
 }

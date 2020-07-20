@@ -63,7 +63,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Lightning),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Female,
+                    Gender = Gender.Female,
                     Email = "c@c.com",
                     ID = 0,
                     Nickname = "Wicked",

@@ -23,6 +23,8 @@ using System.Linq;
 using Openbound_Network_Object_Library.Models;
 using Openbound_Network_Object_Library.Entity.Text;
 using System.Data.Entity.Core.Metadata.Edm;
+using Openbound_Network_Object_Library.Database.Context;
+using Openbound_Network_Object_Library.Database.Controller;
 
 namespace Openbound_Game_Server.Service
 {
@@ -45,6 +47,12 @@ namespace Openbound_Game_Server.Service
                             return false;
                         else
                         {
+                            //Retrieve Player from database since player's connection request cant be trusted
+                            //Remember that I cant trust player ID either
+                            player = new OpenboundDatabaseContext().Players.FirstOrDefault((x) => x.ID == player.ID);
+                            if (player == null)
+                                throw new Exception();
+
                             PlayerSession pS = new PlayerSession() { Player = player, ProviderQueue = provider };
                             paramDictionary.Add(NetworkObjectParameters.PlayerSession, pS);
                             GameServerObjects.Instance.PlayerHashtable.Add(player.ID, pS);
@@ -56,7 +64,10 @@ namespace Openbound_Game_Server.Service
 
                 return true;
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Message: {ex.Message}");
+            }
 
             return false;
         }
@@ -826,6 +837,51 @@ namespace Openbound_Game_Server.Service
         {
             foreach(List<T> message in messageList)
                 playerSession.ProviderQueue.Enqueue(NetworkObjectParameters.GameServerChatSendSystemMessage, message);
+        }
+        #endregion
+
+        #region Avatar Shop / Transactions
+        public static AvatarMetadata GameServerAvatarShopBuyAvatarGold(string param, PlayerSession playerSession)
+        {
+            AvatarMetadata avatar = ObjectWrapper.DeserializeRequest<AvatarMetadata>(param);
+            bool success = new PlayerController().PurchaseAvatar(playerSession.Player, avatar, true);
+
+            if (success)
+                return avatar;
+
+            return null;
+        }
+
+        public static AvatarMetadata GameServerAvatarShopBuyAvatarCash(string param, PlayerSession playerSession)
+        {
+            AvatarMetadata avatar = ObjectWrapper.DeserializeRequest<AvatarMetadata>(param);
+            bool success = new PlayerController().PurchaseAvatar(playerSession.Player, ObjectWrapper.DeserializeRequest<AvatarMetadata>(param), false);
+            
+            if (success)
+                return avatar;
+
+            return null;
+        }
+
+        public static void GameServerAvatarShopUpdatePlayerMetadata(string param, PlayerSession playerSession)
+        {
+            Player player = ObjectWrapper.DeserializeRequest<Player>(param);
+            PlayerController pc = new PlayerController();
+
+            //Validate attributes
+            
+            // If player has placed more points than he should OR
+            if (player.GetCurrentAttributePoints() > player.Attribute.Sum() ||
+                // If player has placed more points in a specific category than the maximum amount OR
+                player.Attribute.ToList().Exists((x) => x > NetworkObjectParameters.PlayerAttributeMaximumPerCategory) ||
+                // Checks if all equipped avatars are owned 
+                !pc.CheckPlayerAvatarPossessions(player)
+                )
+                return;
+
+            pc.UpdatePlayerMetadata(player);
+            playerSession.Player.Attribute = player.Attribute;
+            playerSession.Player.Avatar = player.Attribute;
         }
         #endregion
 

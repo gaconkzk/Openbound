@@ -58,25 +58,15 @@ namespace OpenBound.GameComponents.Pawn
         //Used on Avatar shop. No updates are supported for variables instanced with this constructor.
         public Rider(Facing facing, Player player, Vector2 positionOffset)
         {
-            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Hat}/Metadata"];
-            List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Body}/Metadata"];
-            List<AvatarMetadata> gogglesMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Goggles}/Metadata"];
+            Head = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Hat][player.EquippedAvatarHat]);
+            Body = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Body][player.EquippedAvatarBody]);
 
-            List<AvatarMetadata> flagMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Flag}/Metadata"];
+            Goggles = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Goggles][player.EquippedAvatarGoggles], true);
+            Flag = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Flag][player.EquippedAvatarFlag], true);
 
-            List<AvatarMetadata> petMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Pet}/Metadata"];
-            List<AvatarMetadata> extraMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Extra}/Metadata"];
-            List<AvatarMetadata> miscMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{player.CharacterGender}/{AvatarCategory.Misc}/Metadata"];
-
-            Head = new Avatar(headMetadata.Find((x) => x.ID == player.EquippedAvatarHat));
-            Body = new Avatar(bodyMetadata.Find((x) => x.ID == player.EquippedAvatarBody));
-
-            Goggles = new Avatar(gogglesMetadata.Find((x) => x.ID == player.EquippedAvatarGoggles), true);
-            Flag = new Avatar(flagMetadata.Find((x) => x.ID == player.EquippedAvatarFlag), true);
-
-            Pet = new Avatar(petMetadata.Find((x) => x.ID == player.EquippedAvatarPet), true);
-            Extra = new Avatar(extraMetadata.Find((x) => x.ID == player.EquippedAvatarExtra), true);
-            Misc = new Avatar(extraMetadata.Find((x) => x.ID == player.EquippedAvatarMisc), true);
+            Pet = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Pet][player.EquippedAvatarPet], true);
+            Extra = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Extra][player.EquippedAvatarExtra], true);
+            Misc = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Misc][player.EquippedAvatarMisc], true);
 
             int facingFactor = (facing == Facing.Right) ? -1 : 1;
 
@@ -95,24 +85,14 @@ namespace OpenBound.GameComponents.Pawn
         {
             this.mobile = mobile;
 
-            List<AvatarMetadata> headMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Hat}/Metadata"];
-            List<AvatarMetadata> bodyMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Body}/Metadata"];
-            List<AvatarMetadata> gogglesMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Goggles}/Metadata"];
+            Head = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Hat][mobile.Owner.EquippedAvatarHat]);
+            Body = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Body][mobile.Owner.EquippedAvatarBody]);
 
-            List<AvatarMetadata> flagMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Flag}/Metadata"];
+            Goggles = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Goggles][mobile.Owner.EquippedAvatarGoggles], true);
+            Flag = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Flag][mobile.Owner.EquippedAvatarFlag], true);
 
-            List<AvatarMetadata> petMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Pet}/Metadata"];
-            //List<AvatarMetadata> extraMetadata = (List<AvatarMetadata>)MetadataManager.ElementMetadata[$@"Avatar/{mobile.Owner.CharacterGender}/{AvatarCategory.Extra}/Metadata"];
-
-            Head = new Avatar(headMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarHat));
-            Body = new Avatar(bodyMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarBody));
-
-            Goggles = new Avatar(gogglesMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarGoggles), true);
-            Flag = new Avatar(flagMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarFlag), true);
-
-            Pet = new Avatar(petMetadata.Find((x) => x.ID == mobile.Owner.EquippedAvatarPet), true);
-            //Extra = new Avatar(extraMetadata.Find((x) => x.ID == 0), true);
-
+            Pet = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Pet][mobile.Owner.EquippedAvatarPet], true);
+            
             headBasePosition = positionOffset + new Vector2(7, -17);
             bodyBasePosition = positionOffset;
             gogglesBasePosition = positionOffset + new Vector2(9, -17);
@@ -189,12 +169,12 @@ namespace OpenBound.GameComponents.Pawn
         public void ReplaceAvatar(AvatarMetadata avatarMetadata)
         {
             Avatar avatar = new Avatar(avatarMetadata, 
-                avatarMetadata.Category != AvatarCategory.Hat ||
-                avatarMetadata.Category != AvatarCategory.Body);
+                avatarMetadata.AvatarCategory != AvatarCategory.Hat ||
+                avatarMetadata.AvatarCategory != AvatarCategory.Body);
 
             Avatar previousAvatar = null;
 
-            switch (avatarMetadata.Category)
+            switch (avatarMetadata.AvatarCategory)
             {
                 case AvatarCategory.Hat:
                     previousAvatar = Head;

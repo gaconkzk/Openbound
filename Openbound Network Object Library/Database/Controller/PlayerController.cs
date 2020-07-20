@@ -86,6 +86,26 @@ namespace Openbound_Network_Object_Library.Database.Controller
             }
         }
 
+        public Dictionary<AvatarCategory, HashSet<int>> RetrivePlayerAvatarList(Player player)
+        {
+            using (var context =new OpenboundDatabaseContext())
+            {
+                try
+                {
+                    Player tmpPlayer = context.Players
+                        .Include(x => x.AvatarMetadataList)
+                        .FirstOrDefault((x) => x.ID == player.ID);
+
+                    tmpPlayer.LoadOwnedAvatarDictionary();
+                    return tmpPlayer.OwnedAvatar;
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public Player RetrivePlayer(Player Filter)
         {
             using (var context = new OpenboundDatabaseContext())
@@ -116,8 +136,9 @@ namespace Openbound_Network_Object_Library.Database.Controller
                     {
                         Nickname = newAccount.Nickname,
                         Password = Crypter.Blowfish.Crypt(newAccount.Password),
-                        CharacterGender = newAccount.CharacterGender,
-                        Email = newAccount.Email
+                        Gender = newAccount.CharacterGender,
+                        Email = newAccount.Email,
+                        AvatarMetadataList = context.AvatarMetadata.Where((x) => x.ID == 0).ToList(),
                     };
 
                     List<Player> sameIdPlayer = context.Players.Where(x => x.Nickname.ToLower() == newPlayer.Nickname.ToLower()
@@ -143,6 +164,78 @@ namespace Openbound_Network_Object_Library.Database.Controller
                     return $"Error: {ex.Message}";
                 }
             }
+        }
+
+        public bool PurchaseAvatar(Player player, AvatarMetadata avatarMetadata, bool usingGold)
+        {
+            try
+            {
+                OpenboundDatabaseContext odc = new OpenboundDatabaseContext();
+
+                AvatarMetadata databaseAvatar = odc.AvatarMetadata
+                    .FirstOrDefault((x) => x.ID == avatarMetadata.ID && x.AvatarCategory == avatarMetadata.AvatarCategory);
+
+                if ( (usingGold && player.Gold >= databaseAvatar.GoldPrice && databaseAvatar.GoldPrice > 0) ||
+                    (!usingGold && player.Cash >= databaseAvatar.CashPrice && databaseAvatar.CashPrice > 0))
+                {
+                    using (var dbContextTransaction = odc.Database.BeginTransaction())
+                    {
+                        Player p = odc.Players.Find(player.ID);
+                        
+                        p.AvatarMetadataList.Add(databaseAvatar);
+
+                        if (usingGold)
+                            p.Gold -= databaseAvatar.GoldPrice;
+                        else
+                            p.Cash -= databaseAvatar.CashPrice;
+                        
+                        odc.SaveChanges();
+
+                        dbContextTransaction.Commit();
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if all player's equipped avatar exists in player's owned avatar list,
+        /// otherwise returns false
+        /// </summary>
+        public bool CheckPlayerAvatarPossessions(Player player)
+        {
+            OpenboundDatabaseContext odc = new OpenboundDatabaseContext();
+
+            List<int> avL = player.Avatar.ToList();
+
+            //Searches for the 8 equipped avatars in players db avatar list.
+            //If the number of matchs is equal to the number of equipped avatars
+            //All avatars are owned, therefore returns true
+
+            return odc.Players
+               .Include(q => q.AvatarMetadataList)
+               .First((x) => x.ID == player.ID)
+               .AvatarMetadataList
+               .Where(am => avL.Contains(am.ID))
+               .Count() == avL.Count;
+        }
+
+        public void UpdatePlayerMetadata(Player player)
+        {
+            OpenboundDatabaseContext odc = new OpenboundDatabaseContext();
+
+            Player p = odc.Players.Find(player.ID);
+            p.Avatar = player.Avatar;
+            p.Attribute = player.Attribute;
+            
+            odc.SaveChanges();
         }
     }
 }

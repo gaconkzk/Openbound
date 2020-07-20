@@ -15,7 +15,6 @@ using Openbound_Game_Server.Server;
 using Openbound_Game_Server.Service;
 using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.FileOutput;
-using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Extension;
 using Openbound_Network_Object_Library.TCP.ServiceProvider;
 using System;
@@ -98,22 +97,22 @@ namespace Openbound_Game_Server
 
             switch (service)
             {
-                //Server Information
+                // Server Information
                 case NetworkObjectParameters.GameServerMetadataRequest:
                     answer = NetworkObjectParameters.GameServerInformation;
                     break;
 
-                //Connection
+                // Connection
                 case NetworkObjectParameters.GameServerPlayerAccessRequest:
                     answer = GameClientProvider.GameServerPlayerAccessRequest(request[1], paramDictionary, provider);
                     break;
 
-                //Server Information Request
+                // Server Information Request
                 case NetworkObjectParameters.GameServerSearchPlayer:
                     GameClientProvider.GameServerSearchPlayer(request[1]);
                     break;
 
-                //Game List / Requests
+                // Game List / Requests
                 case NetworkObjectParameters.GameServerRoomListCreateRoom:
                     answer = GameClientProvider.GameServerRoomListCreateRoom(request[1], playerSession);
                     break;
@@ -124,7 +123,7 @@ namespace Openbound_Game_Server
                     answer = GameClientProvider.GameServerRoomListRoomEnter(request[1], playerSession);
                     break;
 
-                //Game Room / Requests
+                // Game Room / Requests
                 case NetworkObjectParameters.GameServerRoomLeaveRoom:
                     answer = GameClientProvider.GameServerRoomLeaveRoom(playerSession);
                     break;
@@ -147,7 +146,7 @@ namespace Openbound_Game_Server
                     GameClientProvider.GameServerRoomStartInGameScene(playerSession);
                     return;
 
-                //InGame / Requests
+                // InGame / Requests
                 case NetworkObjectParameters.GameServerInGameStartMatch:
                     GameClientProvider.GameServerInGameStartMatch(playerSession);
                     return;
@@ -164,7 +163,7 @@ namespace Openbound_Game_Server
                     GameClientProvider.GameServerInGameRequestDeath(request[1], playerSession);
                     return;
 
-                //Messaging / Room List Chat Requests
+                // Messaging / Room List Chat Requests
                 case NetworkObjectParameters.GameServerChatEnter:
                     GameClientProvider.GameServerChatEnterRequest(request[1], playerSession);
                     return;
@@ -175,6 +174,16 @@ namespace Openbound_Game_Server
                     GameClientProvider.GameServerChatRoomSendMessage(request[1], playerSession);
                     return;
 
+                // Avatar Shop
+                case NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold:
+                    answer = GameClientProvider.GameServerAvatarShopBuyAvatarGold(request[1], playerSession);
+                    break;
+                case NetworkObjectParameters.GameServerAvatarShopBuyAvatarCash:
+                    answer = GameClientProvider.GameServerAvatarShopBuyAvatarCash(request[1], playerSession);
+                    break;
+                case NetworkObjectParameters.GameServerAvatarShopUpdatePlayerData:
+                    GameClientProvider.GameServerAvatarShopUpdatePlayerMetadata(request[1], playerSession);
+                    return;
             }
 
             provider.Enqueue(service, answer);

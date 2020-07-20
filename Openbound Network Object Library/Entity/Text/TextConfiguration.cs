@@ -22,5 +22,6 @@ namespace Openbound_Network_Object_Library.Entity.Text
         Consolas16,
 
         FontAwesome10,
+        FontAwesome11,
     }
 }

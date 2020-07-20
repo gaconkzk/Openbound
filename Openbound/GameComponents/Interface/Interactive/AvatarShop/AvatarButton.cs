@@ -43,7 +43,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             spriteList = new List<Sprite>();
             spriteTextList = new List<SpriteText>();
 
-            thumb = new Sprite($"Graphics/Avatar/{avatarMetadata.Gender}/Portrait/{avatarMetadata.Category}/{avatarMetadata.Name}",
+            thumb = new Sprite($"Graphics/Avatar/{avatarMetadata.Gender}/Portrait/{avatarMetadata.AvatarCategory}/{avatarMetadata.Name}",
                 position + new Vector2(1, 6f), layerDepth + 0.001f);
             Vector2 scaleFactor = new Vector2(87, 48) / new Vector2(thumb.SpriteWidth, thumb.SpriteHeight);
             float newScale = Math.Min(scaleFactor.X, scaleFactor.Y);
@@ -67,11 +67,11 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
             spriteList.Add(equippedIndicator);
 
-            if (GameInformation.Instance.PlayerInformation.GetEquippedAvatar(avatarMetadata.Category) != avatarMetadata.ID)
+            if (GameInformation.Instance.PlayerInformation.GetEquippedAvatar(avatarMetadata.AvatarCategory) != avatarMetadata.ID)
                 HideEquippedIndicator();
 
             //Owned check
-            if (GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.Category].Contains(avatarMetadata.ID))
+            if (GameInformation.Instance.PlayerInformation.OwnedAvatar[avatarMetadata.AvatarCategory].Contains(avatarMetadata.ID))
             {
                 ownedCheck = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/OwnedCheck",
                     position + new Vector2(38, -14), layerDepth + 0.002f);
@@ -81,7 +81,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             }
 
             //Selecting button icon
-            int index = GetCorrespondingIconIndex(avatarMetadata.Category, avatarMetadata.Gender);
+            int index = GetCorrespondingIconIndex(avatarMetadata.AvatarCategory, avatarMetadata.Gender);
             typeIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/ButtonIcons",
                 position + new Vector2(-32, -12), layerDepth + 0.002f,
                 new Rectangle((index % 6) * 26, (index / 6) * 17, 26, 17));

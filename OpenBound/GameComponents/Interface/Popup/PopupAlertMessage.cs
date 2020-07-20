@@ -27,7 +27,7 @@ namespace OpenBound.GameComponents.Interface.Popup
 
     public class PopupAlertMessage : PopupMenu
     {
-        public PopupAlertMessage(CompositeSpriteText title, CompositeSpriteText message) : base(true)
+        public PopupAlertMessage(CompositeSpriteText title, CompositeSpriteText message, AlertMessageType alertMessageType = AlertMessageType.AcceptCancel) : base(true)
         {
             Background = new Sprite("Interface/Popup/Blue/Alert/Background", layerDepth: DepthParameter.InterfacePopupMessageBackground);
 
@@ -37,8 +37,10 @@ namespace OpenBound.GameComponents.Interface.Popup
             title.PositionOffset = Background.Position - new Vector2(186, 50);
             message.PositionOffset = Background.Position - new Vector2(186, 50 - title.ElementDimensions.Y - 5);
 
-            buttonList.Add(new Button(ButtonType.Accept, DepthParameter.InterfacePopupMessageButtons, (sender) => { OnConfirm?.Invoke(sender); }, PositionOffset + new Vector2(125, 65)));
             buttonList.Add(new Button(ButtonType.Cancel, DepthParameter.InterfacePopupMessageButtons, CloseAction, PositionOffset + new Vector2(160, 65)));
+            
+            if (alertMessageType != AlertMessageType.Accept)
+                buttonList.Add(new Button(ButtonType.Accept, DepthParameter.InterfacePopupMessageButtons, (sender) => { OnConfirm?.Invoke(sender); }, PositionOffset + new Vector2(125, 65)));
 
             ShouldRender = true;
 

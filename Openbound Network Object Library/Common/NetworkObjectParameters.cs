@@ -38,8 +38,9 @@ namespace Openbound_Network_Object_Library.Common
 
         //Lobby Server
         public const int LobbyServerPlayerUIDRequest  = 0x0001;
-        public const int LobbyLoginRequest            = 0x0005;
+        public const int LobbyServerLoginRequest      = 0x0005;
         public const int LobbyServerServerListRequest = 0x0007;
+        public const int LobbyServerAvatarMetadata    = 0x003e;
 
         //Game Server
         public const int GameServerRegisterRequest     = 0x0020;
@@ -75,6 +76,11 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerChatSendPlayerMessage = 0x0039;
         public const int GameServerChatSendSystemMessage = 0x003a;
         public const int GameServerChatJoinChannel       = 0x003b;
+
+        //Avatar Shop - Buy Avatar
+        public const int GameServerAvatarShopBuyAvatarGold      = 0x003f;
+        public const int GameServerAvatarShopBuyAvatarCash      = 0x0040;
+        public const int GameServerAvatarShopUpdatePlayerData = 0x0041;
 
         //Chat - Game Server
         public const int  GameServerChatChannelsMaximumNumber  = 8;

@@ -85,23 +85,23 @@ namespace OpenBound.GameComponents.Pawn
             if (canUseDummy && metadata.ID == 0)
                 path = "Misc/Dummy";
             else
-                path = $"Graphics/Avatar/{metadata.Gender}/{metadata.Category}/{metadata.Name}";
+                path = $"Graphics/Avatar/{metadata.Gender}/{metadata.AvatarCategory}/{metadata.Name}";
 
             //Extra animation logic
             AnimationInstance animationInstance;
-            if (metadata.Category == AvatarCategory.Extra || metadata.Category == AvatarCategory.Misc)
+            if (metadata.AvatarCategory == AvatarCategory.Extra || metadata.AvatarCategory == AvatarCategory.Misc)
                 animationInstance = new AnimationInstance();
             else
-                animationInstance = avatarState[metadata.Category][AvatarState.Normal];
+                animationInstance = avatarState[metadata.AvatarCategory][AvatarState.Normal];
 
             Flipbook = new Flipbook(default, metadata.Pivot.ToVector2(),
                 metadata.FrameDimensionX, metadata.FrameDimensionY, path,
-                animationInstance, depthDictioary[metadata.Category]);
+                animationInstance, depthDictioary[metadata.AvatarCategory]);
 
             //Extra animation logic -> Use all frames possible on animation
-            if (metadata.Category == AvatarCategory.Extra)
+            if (metadata.AvatarCategory == AvatarCategory.Extra)
                 Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1 / 4f }, true);
-            else if (metadata.Category == AvatarCategory.Misc)
+            else if (metadata.AvatarCategory == AvatarCategory.Misc)
                 Flipbook.AppendAnimationIntoCycle(new AnimationInstance() { EndingFrame = Flipbook.Texture2D.Width / Flipbook.SpriteWidth - 1, TimePerFrame = 1 / 4f, AnimationType = AnimationType.Cycle }, true);
         }
 

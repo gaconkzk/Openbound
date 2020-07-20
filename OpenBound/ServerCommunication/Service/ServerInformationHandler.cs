@@ -18,12 +18,13 @@ using Openbound_Network_Object_Library.Entity.Sync;
 using Openbound_Network_Object_Library.Extension;
 using System;
 using System.Collections.Generic;
+using Openbound_Network_Object_Library.Models;
 
 namespace OpenBound.ServerCommunication.Service
 {
     class ServerInformationHandler
     {
-        //Login Server Handlers
+        //Lobby Server Handlers
         public static void RequestServerList()
         {
             ServerInformationBroker.Instance.LobbyServerServiceProvider.RequestList.Enqueue(
@@ -31,6 +32,7 @@ namespace OpenBound.ServerCommunication.Service
                 null);
         }
 
+        #region Server List Handlers
         public static void ServerListHandle(string request)
         {
             try
@@ -46,8 +48,10 @@ namespace OpenBound.ServerCommunication.Service
             }
             catch (Exception) { }
         }
+        #endregion
 
         //Game Server Handlers
+        #region Connection
         public static void ConnectToGameServer(GameServerInformation serverInformation)
         {
             ServerInformationBroker.Instance.ConnectToGameServer(serverInformation);
@@ -56,6 +60,7 @@ namespace OpenBound.ServerCommunication.Service
                 NetworkObjectParameters.GameServerPlayerAccessRequest,
                 GameInformation.Instance.PlayerInformation);
         }
+        #endregion
 
         #region GameList
         //Room
@@ -207,5 +212,28 @@ namespace OpenBound.ServerCommunication.Service
                 );
         }
         #endregion
+
+        public static void AvatarShopBuyAvatarGold(AvatarMetadata avatarMetadata)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold,
+                avatarMetadata
+                );
+        }
+
+        public static void AvatarShopBuyAvatarCash(AvatarMetadata avatarMetadata)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerAvatarShopBuyAvatarCash,
+                avatarMetadata
+                );
+        }
+
+        public static void AvatarShopUpdatePlayerData()
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerAvatarShopUpdatePlayerData,
+                GameInformation.Instance.PlayerInformation);
+        }
     }
 }

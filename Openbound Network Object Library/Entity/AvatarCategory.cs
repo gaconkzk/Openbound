@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Openbound_Network_Object_Library.Entity
 {
-    public enum AvatarCategory
+    public enum AvatarCategory : int
     {
         Hat = 0,
         Body = 1,

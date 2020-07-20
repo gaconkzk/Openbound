@@ -1139,6 +1139,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/FontAwesome10.spritefont
 
+#begin Fonts/FontAwesome11.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/FontAwesome11.spritefont
+
 #begin Graphics/Avatar/Female/Body/Basic.png
 /importer:TextureImporter
 /processor:TextureProcessor
