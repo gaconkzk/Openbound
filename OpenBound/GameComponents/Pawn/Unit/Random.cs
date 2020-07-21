@@ -21,7 +21,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Random : Mobile
     {
-        public Random(Player player, Vector2 position) : base(player, position, MobileType.Random, new Vector2(-20, 0))
+        public Random(Player player, Vector2 position) : base(player, position, MobileType.Random)
         {
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;

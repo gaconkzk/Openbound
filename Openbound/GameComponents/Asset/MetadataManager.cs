@@ -1,17 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using OpenBound.GameComponents.Pawn;
-using Openbound_Network_Object_Library.Common;
+﻿using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenBound.GameComponents.Asset
 {
@@ -63,6 +56,8 @@ namespace OpenBound.GameComponents.Asset
 
         private void LoadAvatarMetadata()
         {
+            ElementMetadata["DatabaseSeed/AvatarMetadata"] = ((List<AvatarMetadata>)ElementMetadata["DatabaseSeed/AvatarMetadata"]).OrderBy((x) => x.AvatarCategory).ThenBy((y) => y.ID).ToList();
+
             AvatarMetadataDictionary.Add(Gender.Male,   new Dictionary<AvatarCategory, Dictionary<int, AvatarMetadata>>());
             AvatarMetadataDictionary.Add(Gender.Female, new Dictionary<AvatarCategory, Dictionary<int, AvatarMetadata>>());
 

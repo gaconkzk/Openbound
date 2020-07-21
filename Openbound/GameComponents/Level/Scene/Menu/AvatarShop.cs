@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
@@ -7,11 +6,9 @@ using OpenBound.GameComponents.Asset;
 using OpenBound.GameComponents.Interface.Builder;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Interactive.AvatarShop;
-using OpenBound.GameComponents.Interface.Interactive.GameList;
 using OpenBound.GameComponents.Interface.Popup;
 using OpenBound.GameComponents.Interface.Text;
 using OpenBound.GameComponents.Pawn;
-using OpenBound.GameComponents.Pawn.Unit;
 using OpenBound.ServerCommunication;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Common;
@@ -22,7 +19,6 @@ using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -122,8 +118,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Room Button
-            shopRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
-            inventoryRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
+            shopRiderPreview = new Rider(Facing.Right, player);
+            shopRiderPreview.Position = Parameter.ScreenCenter + new Vector2(-280, -40);
+
+            inventoryRiderPreview = new Rider(Facing.Right, player);
+            inventoryRiderPreview.Position = Parameter.ScreenCenter + new Vector2(-280, -40);
+
             inventoryRiderPreview.Hide();
 
             avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,

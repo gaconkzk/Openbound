@@ -56,7 +56,7 @@ namespace OpenBound.GameComponents.Pawn
 #endif
 
         //Used on Avatar shop. No updates are supported for variables instanced with this constructor.
-        public Rider(Facing facing, Player player, Vector2 positionOffset)
+        public Rider(Facing facing, Player player)
         {
             Head = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Hat][player.EquippedAvatarHat]);
             Body = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Body][player.EquippedAvatarBody]);
@@ -70,18 +70,18 @@ namespace OpenBound.GameComponents.Pawn
 
             int facingFactor = (facing == Facing.Right) ? -1 : 1;
 
-            Head.Position = positionOffset + new Vector2(facingFactor * 7, -17);
-            Body.Position = positionOffset;
-            Goggles.Position = positionOffset + new Vector2(facingFactor * 9, -17);
-            Pet.Position = positionOffset + new Vector2(facingFactor * 7, -8);
-            Extra.Position = positionOffset + new Vector2(0, -10);
-            Misc.Position = positionOffset + new Vector2(0, -10);
-            Flag.Position = positionOffset + new Vector2(facingFactor * 11, -17);
+            Head.Position = new Vector2(facingFactor * 7, -17);
+            Body.Position = Vector2.Zero;
+            Goggles.Position = new Vector2(facingFactor * 9, -17);
+            Pet.Position = new Vector2(facingFactor * 7, -8);
+            Extra.Position = new Vector2(0, -10);
+            Misc.Position = new Vector2(0, -10);
+            Flag.Position = new Vector2(facingFactor * 11, -17);
 
             if (facing == Facing.Right) Flip();
         }
 
-        public Rider(Mobile mobile, Vector2 positionOffset)
+        public Rider(Mobile mobile)
         {
             this.mobile = mobile;
 
@@ -93,11 +93,11 @@ namespace OpenBound.GameComponents.Pawn
 
             Pet = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Pet][mobile.Owner.EquippedAvatarPet], true);
             
-            headBasePosition = positionOffset + new Vector2(7, -17);
-            bodyBasePosition = positionOffset;
-            gogglesBasePosition = positionOffset + new Vector2(9, -17);
-            flagBasePosition = positionOffset + new Vector2(11, -17);
-            petBasePosition = positionOffset + new Vector2(7, -8);
+            headBasePosition = new Vector2(7, -17);
+            bodyBasePosition = Vector2.Zero;
+            gogglesBasePosition = new Vector2(9, -17);
+            flagBasePosition = new Vector2(11, -17);
+            petBasePosition = new Vector2(7, -8);
 
             riderOffset = (List<int[]>)MetadataManager.ElementMetadata[$@"Mobile/{mobile.MobileType}/RiderPivot"];
 
@@ -187,7 +187,6 @@ namespace OpenBound.GameComponents.Pawn
                 case AvatarCategory.Goggles:
                     previousAvatar = Goggles;
                     Goggles = avatar;
-                    //Goggles.Flipbook.Scale *= 10;
                     break;
                 case AvatarCategory.Flag:
                     previousAvatar = Flag;
@@ -228,6 +227,31 @@ namespace OpenBound.GameComponents.Pawn
             int value = mobile.MobileFlipbook.GetCurrentFrame();
 
             Matrix transform = Matrix.CreateRotationZ(baseAngle);
+
+            //
+            // Each mobile contains different RiderOffsets.
+            // Exporting them with GunboundImageFix returns the
+            // right coordinates but they need to be "centralized"
+            // on the right position, for that, a fixed offset must
+            // be added on each element of the list.
+            //
+            // For that, I am running this small script ONCE on every
+            // RiderOffset export to fix the base coordinates and
+            // replace 'em inside the json file.
+            //
+            // var x = RiderOffset.json
+            // var y = "";
+            //
+            // x.forEach(myFunction);
+            //
+            // function myFunction(item, index)
+            // {
+            //   y += ("[ " + (item[0] + offsetX) + ", " + (item[1] + offsetY) + " ],\n");
+            // }
+            //
+            // This comment will be deleted after I have confirmed
+            // that all coordinates are working properly
+            //
 
             Vector2 basePos = new Vector2(riderOffset[value][0], riderOffset[value][1]);
             Vector2 headPos = Vector2.Transform((basePos + headBasePosition) * basePosition, transform);

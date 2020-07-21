@@ -22,7 +22,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Bigfoot : Mobile
     {
-        public Bigfoot(Player player, Vector2 position) : base(player, position, MobileType.Bigfoot, new Vector2(-20, 0))
+        public Bigfoot(Player player, Vector2 position) : base(player, position, MobileType.Bigfoot)
         {
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;

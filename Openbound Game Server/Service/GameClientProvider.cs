@@ -879,9 +879,12 @@ namespace Openbound_Game_Server.Service
                 )
                 return;
 
+            //Update DB
             pc.UpdatePlayerMetadata(player);
+
+            //Update current session avatars
             playerSession.Player.Attribute = player.Attribute;
-            playerSession.Player.Avatar = player.Attribute;
+            playerSession.Player.Avatar = player.Avatar;
         }
         #endregion
 

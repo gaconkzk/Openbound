@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Ice : Mobile
     {
-        public Ice(Player player, Vector2 position) : base(player, position, MobileType.Ice, new Vector2(-20, 0))
+        public Ice(Player player, Vector2 position) : base(player, position, MobileType.Ice)
         {
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;
