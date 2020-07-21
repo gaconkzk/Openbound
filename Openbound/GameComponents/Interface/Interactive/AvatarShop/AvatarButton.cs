@@ -81,7 +81,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             }
 
             //Selecting button icon
-            int index = GetCorrespondingIconIndex(avatarMetadata.AvatarCategory, avatarMetadata.Gender);
+            int index = GetCorrespondingIconIndex(avatarMetadata.AvatarCategory, GameInformation.Instance.PlayerInformation.Gender);
             typeIcon = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/ButtonIcons",
                 position + new Vector2(-32, -12), layerDepth + 0.002f,
                 new Rectangle((index % 6) * 26, (index / 6) * 17, 26, 17));

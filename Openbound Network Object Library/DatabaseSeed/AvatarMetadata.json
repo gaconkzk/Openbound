@@ -123,15 +123,6 @@
 	},
 	//--Goggles
 	{
-		"ID": 0,
-		"Name": "No Goggles",
-		"Date": "2020-07-13",
-		"AvatarCategory": 2,
-		"Gender": 0,
-		"FrameDimensionX": 1,
-		"FrameDimensionY": 1
-	},
-	{
 		"ID": 1,
 		"Name": "Pilot Goggles",
 		"Date": "2020-07-13",
@@ -145,12 +136,65 @@
 		"FrameDimensionY": 13
 	},
 	//--Flags
+	//--Extra
+	//--Misc
+	//--Pets
+
+	//Female
+	//--Hat
+	{
+		"ID": 0,
+		"Name": "Basic",
+		"Date": "2020-07-12",
+		"AvatarCategory": 0,
+		"Gender": 1,
+		"GoldPrice": 0,
+		"CashPrice": 0,
+		"PivotX": 28,
+		"PivotY": 14,
+		"FrameDimensionX": 41,
+		"FrameDimensionY": 33
+	},
+	//--Body
+	{
+		"ID": 0,
+		"Name": "Basic",
+		"Date": "2020-07-12",
+		"AvatarCategory": 1,
+		"Gender": 1,
+		"GoldPrice": 0,
+		"CashPrice": 0,
+		"PivotX": 22,
+		"PivotY": 13,
+		"FrameDimensionX": 34,
+		"FrameDimensionY": 28
+	},
+	//--Goggles
+	//--Flags
+	//--Extra
+	//--Misc
+	//--Pets
+
+	//Unisex
+	//--Hat
+	//--Body
+	//--Goggles
+	{
+		"ID": 0,
+		"Name": "No Goggles",
+		"Date": "2020-07-13",
+		"AvatarCategory": 2,
+		"Gender": 2,
+		"FrameDimensionX": 1,
+		"FrameDimensionY": 1
+	},
+	//--Flags
 	{
 		"ID": 0,
 		"Name": "No Flag",
 		"Date": "2020-07-13",
 		"AvatarCategory": 3,
-		"Gender": 0,
+		"Gender": 2,
 		"FrameDimensionX": 1,
 		"FrameDimensionY": 1
 	},
@@ -159,7 +203,7 @@
 		"Name": "Blue Flag",
 		"Date": "2020-07-13",
 		"AvatarCategory": 3,
-		"Gender": 0,
+		"Gender": 2,
 		"GoldPrice": 100,
 		"CashPrice": 100,
 		"PivotX": 11,
@@ -173,7 +217,7 @@
 		"Name": "No Extra",
 		"Date": "2020-07-13",
 		"AvatarCategory": 7,
-		"Gender": 0,
+		"Gender": 2,
 		"FrameDimensionX": 1,
 		"FrameDimensionY": 1
 	},
@@ -182,7 +226,7 @@
 		"Name": "Woods",
 		"Date": "2020-07-13",
 		"AvatarCategory": 7,
-		"Gender": 0,
+		"Gender": 2,
 		"GoldPrice": 100,
 		"CashPrice": 100,
 		"PivotX": 44,
@@ -196,7 +240,7 @@
 		"Name": "No Misc",
 		"Date": "2020-07-13",
 		"AvatarCategory": 6,
-		"Gender": 0,
+		"Gender": 2,
 		"FrameDimensionX": 1,
 		"FrameDimensionY": 1
 	},
@@ -205,7 +249,7 @@
 		"Name": "Bats",
 		"Date": "2020-07-13",
 		"AvatarCategory": 6,
-		"Gender": 0,
+		"Gender": 2,
 		"GoldPrice": 100,
 		"CashPrice": 100,
 		"PivotX": 45,
@@ -219,7 +263,7 @@
 		"Name": "No Pets",
 		"Date": "2020-07-13",
 		"AvatarCategory": 5,
-		"Gender": 0,
+		"Gender": 2,
 		"FrameDimensionX": 1,
 		"FrameDimensionY": 1
 	},
@@ -228,12 +272,12 @@
 		"Name": "Red Parrot",
 		"Date": "2020-07-13",
 		"AvatarCategory": 5,
-		"Gender": 0,
+		"Gender": 2,
 		"GoldPrice": 99999999,
 		"CashPrice": 99999999,
 		"PivotX": 14,
 		"PivotY": 24,
 		"FrameDimensionX": 30,
 		"FrameDimensionY": 28
-	},
+	}
 ]

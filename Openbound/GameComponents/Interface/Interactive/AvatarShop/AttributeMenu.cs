@@ -24,6 +24,8 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
         List<Sprite> spriteList;
         List<Button> buttonList;
+        List<Button> addAttributeButtonList;
+        List<Button> removeAttributeButtonList;
         List<NumericSpriteFont> numericSpriteFontList;
         List<NumericSpriteFont> attributeNumericSpriteFontList;
 
@@ -35,6 +37,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
 
         List<SpriteText> remainingPointsSpriteTextList;
         NumericSpriteFont remaningPointsNumericSpriteFont;
+        int remainingPoints;
 
         Button cancel, accept;
         int[] attributes;
@@ -48,6 +51,8 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             numericSpriteFontList = new List<NumericSpriteFont>();
             attributeNumericSpriteFontList = new List<NumericSpriteFont>();
             buttonList = new List<Button>();
+            addAttributeButtonList = new List<Button>();
+            removeAttributeButtonList = new List<Button>();
 
             attributes = GameInformation.Instance.PlayerInformation.Attribute;
 
@@ -72,15 +77,18 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             remainingPointsSpriteTextList[0].Position = basePosition + new Vector2(448, 380);
             remainingPointsSpriteTextList[1].Position = basePosition + new Vector2(448, 395);
 
+            //Calculate remaining points
+            remainingPoints = GameInformation.Instance.PlayerInformation.GetCurrentAttributePoints() - attributes.ToList().Sum();
+
             remaningPointsNumericSpriteFont = new NumericSpriteFont(FontType.AvatarShopStatusCounter, 3, DepthParameter.InterfaceButton,
                 PositionOffset: basePosition + new Vector2(-73, 25),
-                StartingValue: 300,
+                StartingValue: remainingPoints,
                 forceRendingAllNumbers: true);
 
             numericSpriteFontList.Add(remaningPointsNumericSpriteFont);
 
             //Attribute Points
-            AddAttributePointsAction();
+            AddAttributePoints();
 
             //Gold/Cash
             goldSpriteText = new SpriteText(FontTextType.Consolas10, "", Parameter.InterfaceAvatarShopButtonGoldColor, Alignment.Right, DepthParameter.InterfaceButton, basePosition, Parameter.InterfaceAvatarShopButtonGoldOutlineColor);
@@ -111,10 +119,12 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
                 nsf.UpdateValue(attributes[i]);
             }
 
+            remainingPoints = GameInformation.Instance.PlayerInformation.GetCurrentAttributePoints() - attributes.ToList().Sum();
+
             cancel.Disable();
             accept.Disable();
 
-            UpdateAttributes();
+            UpdateAttributeButtons();
         }
 
         public void AcceptChangesAction(object sender)
@@ -126,7 +136,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             cancel.Disable();
         }
 
-        public void AddAttributePointsAction()
+        public void AddAttributePoints()
         {
             //Perks icon and attributes
             attack = new Sprite("Interface/StaticButtons/AvatarShop/AvatarButton/ButtonIcons", default, DepthParameter.InterfaceButton, new Rectangle(26 * 1, 17 * 2, 26, 17));
@@ -169,70 +179,74 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
                 else if (GameInformation.Instance.PlayerInformation.Attribute[i] == 0)
                     b2.Disable();
 
-                buttonList.Add(b1);
-                buttonList.Add(b2);
+                addAttributeButtonList.Add(b1);
+                removeAttributeButtonList.Add(b2);
             }
+
+            buttonList.AddRange(addAttributeButtonList);
+            buttonList.AddRange(removeAttributeButtonList);
 
             numericSpriteFontList.AddRange(attributeNumericSpriteFontList);
 
-            UpdateAttributes();
+            UpdateAttributeButtons();
         }
 
         public void AddAttributeButtonAction(Button addButton, Button removeButton, NumericSpriteFont nsf)
         {
+            if (remainingPoints == 0) return;
+
+            remainingPoints--;
+
             if (nsf.CurrentValue == NetworkObjectParameters.PlayerAttributeMaximumPerCategory)
             {
-                addButton.Disable();
-                removeButton.Enable();
+                UpdateAttributeButtons();
                 return;
             }
-            else if (nsf.CurrentValue + 1 == NetworkObjectParameters.PlayerAttributeMaximumPerCategory)
-            {
-                addButton.Disable();
-            }
-
-            removeButton.Enable();
 
             nsf.UpdateValue((int)nsf.CurrentValue + 1);
-            UpdateAttributes();
+
+            UpdateAttributeButtons();
         }
 
         public void RemoveAttributeButtonAction(Button addButton, Button removeButton, NumericSpriteFont nsf)
         {
             if (nsf.CurrentValue == 0)
             {
-                addButton.Enable();
-                removeButton.Disable();
+                UpdateAttributeButtons();
                 return;
             }
-            else if (nsf.CurrentValue - 1 == 0)
-            {
-                removeButton.Disable();
-            }
 
-            addButton.Enable();
+            remainingPoints++;
 
             nsf.UpdateValue((int)nsf.CurrentValue - 1);
-            UpdateAttributes();
+
+            UpdateAttributeButtons();
         }
 
-        public void UpdateAttributes()
+        public void UpdateAttributeButtons()
         {
             for(int i = 0; i < attributes.Length; i++)
             {
+                if (attributeNumericSpriteFontList[i].CurrentValue == 0)
+                    removeAttributeButtonList[i].Disable();
+                else
+                    removeAttributeButtonList[i].Enable();
+
+                if (remainingPoints == 0 || attributes[i] >= NetworkObjectParameters.PlayerAttributeMaximumPerCategory)
+                    addAttributeButtonList[i].Disable();
+                else
+                    addAttributeButtonList[i].Enable();
+
                 if (attributes[i] != attributeNumericSpriteFontList[i].CurrentValue)
                 {
                     cancel.Enable();
-                    break;
                 }
             }
 
             if (cancel.IsEnabled)
                 accept.Enable();
 
-            remaningPointsNumericSpriteFont.UpdateValue(
-                GameInformation.Instance.PlayerInformation.GetCurrentAttributePoints() -
-                (int)attributeNumericSpriteFontList.Sum((x) => x.CurrentValue));
+            remaningPointsNumericSpriteFont.UpdateValue(remainingPoints);
         }
 
         public void RefreshCurrencyValues()

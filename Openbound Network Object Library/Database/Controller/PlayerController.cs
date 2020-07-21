@@ -138,7 +138,7 @@ namespace Openbound_Network_Object_Library.Database.Controller
                         Password = Crypter.Blowfish.Crypt(newAccount.Password),
                         Gender = newAccount.CharacterGender,
                         Email = newAccount.Email,
-                        AvatarMetadataList = context.AvatarMetadata.Where((x) => x.ID == 0).ToList(),
+                        AvatarMetadataList = context.AvatarMetadata.Where((x) => x.ID == 0 && (x.Gender == newAccount.CharacterGender || x.Gender == Gender.Unissex)).ToList(),
                     };
 
                     List<Player> sameIdPlayer = context.Players.Where(x => x.Nickname.ToLower() == newPlayer.Nickname.ToLower()

@@ -14,6 +14,7 @@ using Openbound_Network_Object_Library.Entity;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Openbound_Network_Object_Library.Models;
 
 namespace Openbound_Network_Object_Library.Common
 {
@@ -147,5 +148,43 @@ namespace Openbound_Network_Object_Library.Common
         public const int PlayerAttributePerLevel = 10;
         public const int PlayerAttributeMaximumPerLevel = 180;
         public const int PlayerAttributeMaximumPerCategory = 50;
+
+        public static Dictionary<int, PlayerRank> PlayerRankExperienceTable
+            = new Dictionary<int, PlayerRank>()
+        {
+            {     0, PlayerRank.Chick },        //  100
+            {   100, PlayerRank.WoodHammer1 },  //  200
+            {   300, PlayerRank.WoodHammer2 },  //  200
+            {   500, PlayerRank.StoneHammer1 }, //  300
+            {   800, PlayerRank.StoneHammer2 }, //  300
+            {  1100, PlayerRank.Axe1 },         //  400
+            {  1500, PlayerRank.Axe2 },         //  400
+            {  1900, PlayerRank.SilverAxe1 },   //  500
+            {  2400, PlayerRank.SilverAxe2 },   //  500
+            {  2900, PlayerRank.GoldenAxe1 },   //  600
+            {  3500, PlayerRank.GoldenAxe2 },   //  600
+            {  4100, PlayerRank.DAxe1 },        //  700
+            {  4800, PlayerRank.DAxe2 },        //  700
+            {  5500, PlayerRank.DSilverAxe1 },  //  800
+            {  6300, PlayerRank.DSilverAxe2 },  //  800
+            {  7100, PlayerRank.DGoldenAxe1 },  //  900
+            {  8000, PlayerRank.DGoldenAxe2 },  //  900
+            {  8900, PlayerRank.Staff1 },       // 1000
+            {  9900, PlayerRank.Staff2 },       // 1000
+            { 10900, PlayerRank.Staff3 },       // 1000
+            { 11900, PlayerRank.Staff4 },       // 1000
+            { 13000, PlayerRank.Dragon1 },      // 1100
+            { 14100, PlayerRank.Dragon2 },      // 1100
+            { 15200, PlayerRank.Dragon3 },      // 1100
+        };
+
+        public static Dictionary<int, PlayerRank> ExtraPlayerRankExperienceTable
+            = new Dictionary<int, PlayerRank>()
+        {
+            { -1, PlayerRank.Champion1     }, // 2nd team in championship
+            { -2, PlayerRank.WorldChampion }, // winner team in championship
+            { -3, PlayerRank.Vip           }, // to be decided
+            { -4, PlayerRank.GM            }  // game master
+        };
     }
 }

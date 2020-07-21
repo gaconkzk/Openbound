@@ -573,8 +573,8 @@ namespace OpenBound.GameComponents.Interface.Interactive
                 AnimatedButtonType.ExItem,
                 new AnimatedButtonPreset() {
                     SpritePath = "Interface/AnimatedButtons/AvatarShop/ExItem",
-                    SpriteWidth = 540/10, SpriteHeight = 204/4,
-                    Pivot = new Vector2((540/10)/2 + 2, (204/4)/2 - 8), CollisionRectangleOffset = new Vector2(15, 15),
+                    SpriteWidth = 540/10, SpriteHeight = 212/4,
+                    Pivot = new Vector2((540/10)/2 + 2, (212/4)/2 - 8), CollisionRectangleOffset = new Vector2(15, 15),
                     StatePreset = new Dictionary<ButtonAnimationState, AnimationInstance>()
                     {
                         { ButtonAnimationState.Normal,    new AnimationInstance() { StartingFrame = 000, EndingFrame = 000, TimePerFrame = 0.1f  } },

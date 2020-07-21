@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -25,8 +26,9 @@ namespace Openbound_Network_Object_Library.Models
 {
     public enum Gender
     {
-        Male,
-        Female
+        Male = 0,
+        Female = 1,
+        Unissex = 2,
     }
 
     public enum PlayerRoomStatus
@@ -102,7 +104,24 @@ namespace Openbound_Network_Object_Library.Models
 
         public int Cash { get; set; }
 
-        public int Experience { get; set; }
+        private int experience;
+        public int Experience 
+        {
+            get => experience;
+            set
+            {
+                //If non "negative" ranks
+                if (experience >= 0)
+                {
+                    experience = MathHelper.Clamp(
+                        value,
+                        0,
+                        NetworkObjectParameters.PlayerRankExperienceTable.Keys.Max());
+                }
+
+                PlayerRank = GetCurrentLevel(experience);
+            }
+        }
 
         public Guild Guild { get; set; }
 
@@ -149,22 +168,14 @@ namespace Openbound_Network_Object_Library.Models
         //In-game variables - Room
         [NotMapped] public PlayerRoomStatus PlayerRoomStatus { get; set; }
         [NotMapped] public PlayerTeam PlayerTeam { get; set; }
-        [NotMapped] public PlayerRank PlayerRank { get; set; }
         [NotMapped] public PlayerStatus PlayerStatus { get; set; }
-        
+        [JsonIgnore, NotMapped] public PlayerRank PlayerRank { get; set; }
+
         //In-game variables - Loading
         [JsonIgnore, NotMapped] public PlayerRoomStatus PlayerLoadingStatus { get; set; }
         [JsonIgnore, NotMapped] public int LoadingScreenPercentage { get; set; }
 
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
-
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarBody;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarGoggles;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarFlag;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarExItem;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarPet;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarMisc;
-        //[JsonIgnore] public List<AvatarMetadata> OwnedAvatarExtra;
 
         public Player()
         {
@@ -172,8 +183,8 @@ namespace Openbound_Network_Object_Library.Models
             Avatar = new int[8];
             Attribute = new int[8];
 
-#warning gender
             AvatarMetadataList = new List<AvatarMetadata>();
+
             OwnedAvatar = new Dictionary<AvatarCategory, HashSet<int>>()
             {
                 { AvatarCategory.Hat,     new HashSet<int>(){ 0, } },
@@ -189,7 +200,7 @@ namespace Openbound_Network_Object_Library.Models
 
         public void LoadOwnedAvatarDictionary()
         {
-            foreach(AvatarMetadata am in AvatarMetadataList)
+            foreach (AvatarMetadata am in AvatarMetadataList)
             {
                 OwnedAvatar[am.AvatarCategory].Add(am.ID);
             }
@@ -236,6 +247,32 @@ namespace Openbound_Network_Object_Library.Models
         public int GetCurrentAttributePoints()
         {
             return Math.Min((int)PlayerRank * NetworkObjectParameters.PlayerAttributePerLevel, NetworkObjectParameters.PlayerAttributeMaximumPerLevel);
+        }
+
+        public PlayerRank GetCurrentLevel(int currentExp)
+        {
+            PlayerRank playerRank = PlayerRank.Chick;
+
+            if (currentExp < 0)
+            {
+                playerRank = NetworkObjectParameters.ExtraPlayerRankExperienceTable[currentExp];
+            }
+            else
+            {
+                foreach (KeyValuePair<int, PlayerRank> kvp in NetworkObjectParameters.PlayerRankExperienceTable)
+                {
+                    if (currentExp >= kvp.Key)
+                    {
+                        playerRank = kvp.Value;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            
+            return playerRank;
         }
     }
 }

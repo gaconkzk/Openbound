@@ -74,7 +74,13 @@ namespace OpenBound.GameComponents.Asset
 
             foreach (AvatarMetadata am in (List<AvatarMetadata>)ElementMetadata["DatabaseSeed/AvatarMetadata"])
             {
-                AvatarMetadataDictionary[am.Gender][am.AvatarCategory].Add(am.ID, am);
+                if (am.Gender != Gender.Unissex)
+                    AvatarMetadataDictionary[am.Gender][am.AvatarCategory].Add(am.ID, am);
+                else
+                {
+                    AvatarMetadataDictionary[Gender.Male][am.AvatarCategory].Add(am.ID, am);
+                    AvatarMetadataDictionary[Gender.Female][am.AvatarCategory].Add(am.ID, am);
+                }
             }
         }
 

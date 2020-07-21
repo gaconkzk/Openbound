@@ -90,20 +90,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         public AvatarShop()
         {
             asyncPadlock = new object();
-            /*
-            GameInformation.Instance.PlayerInformation = new Player()
-            {
-                ID = 1,
-                Gender = Gender.Male,
-                Email = "c@c.c",
-                Guild = new Guild() { ID = 1, Name = "Zica", Tag = "Zik" },
-                LeavePercentage = 0,
-                Nickname = "Winged",
-                Password = "123",
-                PlayerRank = PlayerRank.GM,
-                Gold = 500,
-                Cash = 400,
-            };*/
+            
             player = GameInformation.Instance.PlayerInformation;
 
             Background = new Sprite(@"Interface/InGame/Scene/AvatarShop/Background",
