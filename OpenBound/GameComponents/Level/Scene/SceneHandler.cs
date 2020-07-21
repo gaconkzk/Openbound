@@ -90,7 +90,7 @@ namespace OpenBound.GameComponents.Level.Scene
 #if !DEBUGSCENE
             CurrentScene = new GameLogo();
 #else
-            CurrentScene = new DebugScene();
+            CurrentScene = new AvatarShop();
 #endif
             CurrentScene.OnSceneIsActive();
 

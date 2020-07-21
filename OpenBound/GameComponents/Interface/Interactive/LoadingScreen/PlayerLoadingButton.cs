@@ -90,17 +90,22 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
                 ButtonOffset + new Vector2(-20 * sidePositionFactor, 33),
                 DepthParameter.Mobile - 0.01f));
 
-            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(5 * sidePositionFactor, 7));
+            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(-20 * sidePositionFactor, 7));
 
             if (Player.PlayerTeam == PlayerTeam.Red)
             {
-                //Mobile.Flip();
-                Mobile.MobileFlipbook.Effect = SpriteEffects.FlipHorizontally;
+                Mobile.Flip();
             }
 
             Nameplate = new Nameplate(Player, Alignment.Left, ButtonOffset - new Vector2(100, 47));
 
             Mobile.MobileFlipbook.JumpToRandomAnimationFrame();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            Mobile.Rider.Update();
         }
 
         public void ChangePosition(Vector2 newPostion)

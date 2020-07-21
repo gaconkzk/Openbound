@@ -118,11 +118,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Room Button
-            shopRiderPreview = new Rider(Facing.Right, player);
-            shopRiderPreview.Position = Parameter.ScreenCenter + new Vector2(-280, -40);
-
-            inventoryRiderPreview = new Rider(Facing.Right, player);
-            inventoryRiderPreview.Position = Parameter.ScreenCenter + new Vector2(-280, -40);
+            shopRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
+            inventoryRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
 
             inventoryRiderPreview.Hide();
 

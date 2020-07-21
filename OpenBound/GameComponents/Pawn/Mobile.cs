@@ -225,6 +225,11 @@ namespace OpenBound.GameComponents.Pawn
             ///ServerInformationHandler.RequestNextPlayerTurn();
         }
 
+        public void HideLobbyExclusiveAvatars()
+        {
+            Rider.HideLobbyExclusiveAvatars();
+        }
+
         public virtual void LoseTurn()
         {
             Movement.IsAbleToMove = false;
