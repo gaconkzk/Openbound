@@ -41,7 +41,7 @@ namespace GunboundImageFix.Utils
 
         private void Start()
         {
-            (int, int) maxImageSize = (imgList.Max((x) => x.Image.Width), imgList.Max((x) => x.Image.Height));
+            (int, int) maxImageSize = (imgList.Max((x) => x.BitmapImage.Width), imgList.Max((x) => x.BitmapImage.Height));
             (int, int) maxImagePivot = (imgList.Max((x) => x.Pivot.Item1), imgList.Max((x) => x.Pivot.Item2));
             (int, int) minImagePivot = (imgList.Min((x) => x.Pivot.Item1), imgList.Min((x) => x.Pivot.Item2));
 
@@ -58,6 +58,12 @@ namespace GunboundImageFix.Utils
             Console.WriteLine("Squish Y factor:");
             int squishYFactor = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("Offset X factor:");
+            int offsetX = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Offset Y factor:");
+            int offsetY = int.Parse(Console.ReadLine());
+
             (int, int) newBigImageSize = ((newSize.Item1 - squishXFactor) * imgPerLine, (newSize.Item2 - squishYFactor) * (int)Math.Ceiling((double)imgList.Count() / imgPerLine));
 
             Color[][] nCM = ImageProcessing.CreateBlankColorMatrix(newBigImageSize.Item1, newBigImageSize.Item2);
@@ -68,9 +74,9 @@ namespace GunboundImageFix.Utils
 
             foreach (ImportedImage img in imgList)
             {
-                w = (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
-                h = (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
-                ImageProcessing.AddImageIntoMatrix(nCM, img.Image, w, h);
+                w = offsetX + (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
+                h = offsetY + (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
+                ImageProcessing.AddImageIntoMatrix(nCM, img.BitmapImage, w, h);
                 index++;
             }
 

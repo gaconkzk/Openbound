@@ -35,7 +35,11 @@ namespace OpenBound.Common
             ServerList = new List<GameServerInformation>();
         }
 
-        public Player PlayerInformation { get; set; }
+        public Player PlayerInformation
+        {
+            get;
+            set;
+        }
 
         private RoomMetadata roomMetadata;
         public RoomMetadata RoomMetadata {

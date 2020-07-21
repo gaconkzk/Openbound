@@ -13,7 +13,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using System;
 using System.Collections.Generic;
 
@@ -90,7 +90,7 @@ namespace OpenBound.GameComponents.Animation
             SetCurrentFrame(nextFrameIndex);
         }
 
-#warning Is it possible that all code commented here is unecessary
+#warning It is possible that all code commented here is unecessary
         public void Flip()
         {
             Effect = (Effect == SpriteEffects.None) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

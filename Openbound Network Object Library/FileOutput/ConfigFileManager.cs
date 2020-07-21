@@ -76,28 +76,28 @@ namespace Openbound_Network_Object_Library.FileOutput
         const string errorMessage = " file does not exist. Open the server program again and it should appear in your server folder.";
 
         #region Server Headers
-        private const string Separator = "#####################";
-        private const string ConfigurationGuide = "# Configuration Guide ";
-        private const string ServerNameGuide = "# - ServerName - I just left it as a identifier for anyone trying to change it. Don't worry, it is impossible for clients to read this string";
-        private const string ServerLocalAddressGuide = "# - ServerLocalAddress - Your local IP (usually it is 127.0.0.1) if you have a VPN you can leave your VPN's ip";
-        private const string ServerPublicAddressGuide = "# - ServerPublicAddress - Your public IP, if your modem ports are forwarded you can change this to your \"global\" IP";
-        private static string ServerPortGuide = $"# - ServerPort - Game's Standard port for Login server is {NetworkObjectParameters.LoginServerDefaultPort} and for Lobby server is {NetworkObjectParameters.LobbyServerDefaultPort}. I strongly suggest you not to change it, but if you do, remember to set this config for any other service's config file that connects to those services";
+        private const string Separator = "//####################";
+        private const string ConfigurationGuide = "// Configuration Guide ";
+        private const string ServerNameGuide = "// - ServerName - I just left it as a identifier for anyone trying to change it. Don't worry, it is impossible for clients to read this string";
+        private const string ServerLocalAddressGuide = "// - ServerLocalAddress - Your local IP (usually it is 127.0.0.1) if you have a VPN you can leave your VPN's ip";
+        private const string ServerPublicAddressGuide = "// - ServerPublicAddress - Your public IP, if your modem ports are forwarded you can change this to your \"global\" IP";
+        private static string ServerPortGuide = $"// - ServerPort - Game's Standard port for Login server is {NetworkObjectParameters.LoginServerDefaultPort} and for Lobby server is {NetworkObjectParameters.LobbyServerDefaultPort}. I strongly suggest you not to change it, but if you do, remember to set this config for any other service's config file that connects to those services";
 
-        private const string ServerIDGuide = "# - Server's ID. It starts from 1 to infinity. However, the interface only supports limited number of servers, it is advisable to not to exploit it.";
-        private const string GameServerNameGuide = "# - Game Server's name. This is the name shown inside any game room and on the login screen buttons. Text length is also (in theory) infinite.";
-        private const string IsAvatarOnGuide = "# - Enables/Disables avatar in the server";
-        private static string GameServerPortGuide = $"# - Game Server's starting port is {NetworkObjectParameters.GameServerDefaultStartingPort}, It must be unique for each Game Server instance, I suggest you to Add 1+ for each game server.";
-        private const string ServerDescriptionGuide = "# - This is an array. For each element in this array a new line is inserted on server's button on server selection screen";
-        private const string ConnectedClientCapacityGuide = "# - This number can be as big as you want, however the interface is going to break if it goes over 4 digits";
+        private const string ServerIDGuide = "// - Server's ID. It starts from 1 to infinity. However, the interface only supports limited number of servers, it is advisable to not to exploit it.";
+        private const string GameServerNameGuide = "// - Game Server's name. This is the name shown inside any game room and on the login screen buttons. Text length is also (in theory) infinite.";
+        private const string IsAvatarOnGuide = "// - Enables/Disables avatar in the server";
+        private static string GameServerPortGuide = $"// - Game Server's starting port is {NetworkObjectParameters.GameServerDefaultStartingPort}, It must be unique for each Game Server instance, I suggest you to Add 1+ for each game server.";
+        private const string ServerDescriptionGuide = "// - This is an array. For each element in this array a new line is inserted on server's button on server selection screen";
+        private const string ConnectedClientCapacityGuide = "// - This number can be as big as you want, however the interface is going to break if it goes over 4 digits";
 
-        private const string DeleteToRestoreGuide = "# If you saved bad configurations by accident delete this file and the program will create another one with standard presets.";
-        private const string JSONCommentDisclaimer = "# JSON DOES NOT SUPPORT COMMENTS. DONT GO HASHTAGGIN' AROUND BOY";
+        private const string DeleteToRestoreGuide = "// If you saved bad configurations by accident delete this file and the program will create another one with standard presets.";
+        private const string JSONCommentDisclaimer = "// JSON DOES NOT SUPPORT COMMENTS. DONT GO HASHTAGGIN' AROUND BOY";
 
         private static readonly string[] LauncherServerHeader =
         {
             Separator,
             ConfigurationGuide,
-            "# This file contains information about which server is the launcher going to connect.",
+            "// This file contains information about which server is the launcher going to connect.",
             ServerNameGuide,
             ServerLocalAddressGuide,
             ServerPublicAddressGuide,
@@ -112,8 +112,8 @@ namespace Openbound_Network_Object_Library.FileOutput
         {
             Separator,
             ConfigurationGuide,
-            "# The First element of the array is the login server.",
-            "# The Second element is Lobby's server address from Login's perspective. Keep in mind that after changing this element you must also apply such change in LobbyServer/LobbyServerConfig.txt",
+            "//The First element of the array is the login server.",
+            "// The Second element is Lobby's server address from Login's perspective. Keep in mind that after changing this element you must also apply such change in LobbyServer/LobbyServerConfig.txt",
             ServerNameGuide,
             ServerLocalAddressGuide,
             ServerPublicAddressGuide,
@@ -128,7 +128,7 @@ namespace Openbound_Network_Object_Library.FileOutput
         {
             Separator,
             ConfigurationGuide,
-            "# For each game server this file must be edited with similar configurations.",
+            "// For each game server this file must be edited with similar configurations.",
             ServerIDGuide,
             GameServerNameGuide,
             ServerLocalAddressGuide,
@@ -147,7 +147,7 @@ namespace Openbound_Network_Object_Library.FileOutput
         {
             Separator,
             ConfigurationGuide,
-            "# This document lists the IP addresses that can register their GS into Lobby server.",
+            "// This document lists the IP addresses that can register their GS into Lobby server.",
             DeleteToRestoreGuide,
             JSONCommentDisclaimer,
             Separator,
@@ -157,13 +157,13 @@ namespace Openbound_Network_Object_Library.FileOutput
         {
             Separator,
             ConfigurationGuide,
-            "# This file helps builds the database connection string used in entity's context.",
-            "# DatabaseAddress - Database IP. For instance: 127.0.0.1, 127.0.0.1\\\\SQLEXPRESS (yes, two backslashes), openbound.east.rds.amazonaws.com and so on",
-            "# DatabaseName - Database's name. Default is Openbound and I hope you keep it that way.",
-            "# DatabaseLogin - Database's admin login.",
-            "# DatabasePassword - Database's password.",
-            "# Database Connection String is going to be built like this: ",
-            "# Data Source=<DatabaseAddress>; Initial Catalog=<DatabaseName>; Persist Security Info=True; User ID=<DatabaseLogin>;Password=<DatabasePassword>;MultipleActiveResultSets=True",
+            "// This file helps builds the database connection string used in entity's context.",
+            "// DatabaseAddress - Database IP. For instance: 127.0.0.1, 127.0.0.1\\\\SQLEXPRESS (yes, two backslashes), openbound.east.rds.amazonaws.com and so on",
+            "// DatabaseName - Database's name. Default is Openbound and I hope you keep it that way.",
+            "// DatabaseLogin - Database's admin login.",
+            "// DatabasePassword - Database's password.",
+            "// Database Connection String is going to be built like this: ",
+            "// Data Source=<DatabaseAddress>; Initial Catalog=<DatabaseName>; Persist Security Info=True; User ID=<DatabaseLogin>;Password=<DatabasePassword>;MultipleActiveResultSets=True",
             DeleteToRestoreGuide,
             JSONCommentDisclaimer,
             Separator,
@@ -173,8 +173,8 @@ namespace Openbound_Network_Object_Library.FileOutput
         {
             Separator,
             ConfigurationGuide,
-            "# Do not change any of those parameters unless you know exacly what you are doing.",
-            "# Do not share this file with anyone, by doing so you are jeopardize your account safety.",
+            "// Do not change any of those parameters unless you know exacly what you are doing.",
+            "// Do not share this file with anyone, by doing so you are jeopardize your account safety.",
             DeleteToRestoreGuide,
             Separator,
         };
@@ -278,7 +278,7 @@ namespace Openbound_Network_Object_Library.FileOutput
             ObjectWrapper.Serialize(new ConfigLobbyServerWhitelist() { Whitelist = new List<string>() { "localhost", "127.0.0.1" } }, Formatting.Indented);
 #endregion
 
-#region Serverlist Placeholders
+        #region Serverlist Placeholders
         private static readonly string[] LobbyServerlistPlaceholder =
             ObjectWrapper.Serialize(
                 new ConfigServerInformation()
@@ -440,6 +440,9 @@ namespace Openbound_Network_Object_Library.FileOutput
                 case RequesterApplication.GameServer:
                     if (!File.Exists(path))
                         File.WriteAllText(path, $"{string.Join("\n", GameServerHeader)}\n{GameServerInformation}");
+
+                    if (!File.Exists(DatabaseConfigPath))
+                        File.WriteAllText(DatabaseConfigPath, $"{string.Join("\n", DatabaseConfigFileHeader)}\n{DatabaseInformation}");
                     break;
             }
         }
@@ -467,7 +470,8 @@ namespace Openbound_Network_Object_Library.FileOutput
                 return;
             }
 
-            ConfigServerInformation csfc = ObjectWrapper.DeserializeRequest<ConfigServerInformation>(ReadFileInformation(path));
+            ConfigServerInformation csfc = ObjectWrapper.DeserializeCommentedJSONFile<ConfigServerInformation>(path);
+            ConfigDatabaseInformation cdi;
 
             switch (requestApplication)
             {
@@ -483,7 +487,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigDatabaseInformation dbInfo = ObjectWrapper.DeserializeRequest<ConfigDatabaseInformation>(ReadFileInformation(path));
+                    ConfigDatabaseInformation dbInfo = ObjectWrapper.DeserializeCommentedJSONFile<ConfigDatabaseInformation>(path);
                     NetworkObjectParameters.DatabaseAddress = dbInfo.DatabaseAddress;
                     NetworkObjectParameters.DatabaseName = dbInfo.DatabaseName;
                     NetworkObjectParameters.DatabaseLogin = dbInfo.DatabaseLogin;
@@ -497,7 +501,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigDatabaseInformation cdi = ObjectWrapper.DeserializeRequest<ConfigDatabaseInformation>(ReadFileInformation(DatabaseConfigPath));
+                    cdi = ObjectWrapper.DeserializeCommentedJSONFile<ConfigDatabaseInformation>(DatabaseConfigPath);
                     NetworkObjectParameters.DatabaseAddress = cdi.DatabaseAddress;
                     NetworkObjectParameters.DatabaseName = cdi.DatabaseName;
                     NetworkObjectParameters.DatabaseLogin = cdi.DatabaseLogin;
@@ -516,7 +520,7 @@ namespace Openbound_Network_Object_Library.FileOutput
                         return;
                     }
 
-                    ConfigLobbyServerWhitelist gsrwl = ObjectWrapper.DeserializeRequest<ConfigLobbyServerWhitelist>(ReadFileInformation(LobbyServerWhitelistPath));
+                    ConfigLobbyServerWhitelist gsrwl = ObjectWrapper.DeserializeCommentedJSONFile<ConfigLobbyServerWhitelist>(LobbyServerWhitelistPath);
 
                     NetworkObjectParameters.GameServerRequestIPWhitelist = gsrwl.Whitelist;
                     break;
@@ -524,31 +528,24 @@ namespace Openbound_Network_Object_Library.FileOutput
                 case RequesterApplication.GameServer:
                     NetworkObjectParameters.LobbyServerInformation = csfc.ServerInformationList[0];
                     NetworkObjectParameters.GameServerInformation = csfc.GameServerInformationList[0];
+
+                    cdi = ObjectWrapper.DeserializeCommentedJSONFile<ConfigDatabaseInformation>(DatabaseConfigPath);
+                    NetworkObjectParameters.DatabaseAddress = cdi.DatabaseAddress;
+                    NetworkObjectParameters.DatabaseName = cdi.DatabaseName;
+                    NetworkObjectParameters.DatabaseLogin = cdi.DatabaseLogin;
+                    NetworkObjectParameters.DatabasePassword = cdi.DatabasePassword;
                     break;
             }
         }
 
         public static List<GameServerInformation> LoadServerlistPlaceholderFile()
         {
-            return ObjectWrapper.DeserializeRequest<ConfigServerInformation>(ReadFileInformation(ServerlistPlaceholderPath)).GameServerInformationList;
+            return ObjectWrapper.DeserializeCommentedJSONFile<ConfigServerInformation>(ServerlistPlaceholderPath).GameServerInformationList;
         }
 
         public static GameClientSettingsInformation ReadClientInformation()
         {
-            return ObjectWrapper.DeserializeRequest<GameClientSettingsInformation>(ReadFileInformation(GameClientSettingsPath));
-        }
-
-        public static string ReadFileInformation(string filePath)
-        {
-            string str = "";
-
-            File.ReadAllLines(filePath)
-                .ToList()
-                .Where((x) => x.Length > 0 && x.Trim()[0] != '#')
-                .ToList()
-                .ForEach((x) => str += x);
-
-            return str;
+            return ObjectWrapper.DeserializeCommentedJSONFile<GameClientSettingsInformation>(GameClientSettingsPath);
         }
     }
 }

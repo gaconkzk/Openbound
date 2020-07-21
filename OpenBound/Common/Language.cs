@@ -11,6 +11,7 @@
  */
 
 using System.Globalization;
+using System.Windows.Forms.VisualStyles;
 
 namespace OpenBound.Common
 {
@@ -93,5 +94,16 @@ namespace OpenBound.Common
         public static string PopupCreateRoomNamePlaceholder => $"{GameInformation.Instance.PlayerInformation.Nickname}'s Room";
 
         //public static string GamemodeSolo = "Solo";
+
+        //Popup - AlertMessage - Avatar Purchase Feedback
+        public const string PopupAlertMessageAvatarPurchaseSuccessTitle     = "  Congratulations!  ";
+        public const int    PopupAlertMessageAvatarPurchaseSuccessTitleIcon = 0xf005;
+
+        public const string PopupAlertMessageAvatarPurchaseSuccessMessage11 = "Your new aquisition [";
+        public const string PopupAlertMessageAvatarPurchaseSuccessMessage12 = "]";
+        public const string PopupAlertMessageAvatarPurchaseSuccessMessage21 = "Is already available at your inventory.\nIf you are unnable to see it then you should\nrefresh your search filters.";
+
+        public const string PopupAlertMessageAvatarPurchaseFailureTitle = "Something unexpected ocurred.";
+        public const string PopupAlertMessageAvatarPurchaseFailureMessage11 = "For some odd reason the server\ncould not process your transaction\ntry again later and if the problem\npersists, contact the support.";
     }
 }

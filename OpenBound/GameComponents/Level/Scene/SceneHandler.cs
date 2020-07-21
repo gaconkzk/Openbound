@@ -35,6 +35,7 @@ namespace OpenBound.GameComponents.Level.Scene
         ServerSelection,
         GameList,
         GameRoom,
+        AvatarShop,
         InGame,
         Exit,
         LoadingScreen,
@@ -89,7 +90,7 @@ namespace OpenBound.GameComponents.Level.Scene
 #if !DEBUGSCENE
             CurrentScene = new GameLogo();
 #else
-            CurrentScene = new DebugScene();
+            CurrentScene = new AvatarShop();
 #endif
             CurrentScene.OnSceneIsActive();
 
@@ -125,6 +126,8 @@ namespace OpenBound.GameComponents.Level.Scene
                 return new ServerSelection();
             else if (SceneType == SceneType.GameList)
                 return new GameList();
+            else if (SceneType == SceneType.AvatarShop)
+                return new AvatarShop();
             else if (SceneType == SceneType.GameRoom)
                 return new GameRoom();
             else if (SceneType == SceneType.LoadingScreen)

@@ -25,7 +25,7 @@ using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Level.Scene;
 using OpenBound.GameComponents.MobileAction;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using OpenBound.ServerCommunication.Service;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Entity.Sync;
@@ -40,6 +40,8 @@ namespace OpenBound.GameComponents.Pawn
 {
     public abstract class Mobile : Actor
     {
+        public Rider Rider;
+
         public MobileFlipbook MobileFlipbook;
 
         // Mobile Name
@@ -89,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, MobileType mobileType, bool IsSummon = false) : base()
+        public Mobile(Player player, Vector2 position, MobileType mobileType, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -113,6 +115,17 @@ namespace OpenBound.GameComponents.Pawn
                 Movement = new RemoteMovement(this);
 
             MobileMetadata = MobileMetadata.BuildMobileMetadata(mobileType);
+
+            Position = position;
+            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType, position);
+
+            if (!IsSummon)
+            {
+                Rider = new Rider(this);
+
+                if (MobileType != MobileType.Random)
+                    Crosshair = new Crosshair(this);
+            }
 
             //Sync
             SyncMobile = new SyncMobile();
@@ -161,6 +174,8 @@ namespace OpenBound.GameComponents.Pawn
 
             SendRequestToServer();
 
+            Rider?.Update();
+
 #if DEBUG
                 //Debug
             debugCrosshair.Update(Position);
@@ -184,6 +199,8 @@ namespace OpenBound.GameComponents.Pawn
         {
             if (!IsAlive) return;
 
+            if (Rider != null) Rider.Hide();
+
             DeathAnimation.Add(this);
             ChangeFlipbookState(ActorFlipbookState.Dead, true);
             IsAlive = false;
@@ -206,6 +223,11 @@ namespace OpenBound.GameComponents.Pawn
         {
             LoseTurn();
             ///ServerInformationHandler.RequestNextPlayerTurn();
+        }
+
+        public void HideLobbyExclusiveAvatars()
+        {
+            Rider.HideLobbyExclusiveAvatars();
         }
 
         public virtual void LoseTurn()
@@ -248,6 +270,7 @@ namespace OpenBound.GameComponents.Pawn
             base.Flip();
             MobileFlipbook.Flip();
             Crosshair?.Flip();
+            Rider?.Flip();
         }
 
         public void SendRequestToServer()
@@ -600,12 +623,13 @@ namespace OpenBound.GameComponents.Pawn
             LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
         }
 
-        public new virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
+        public new virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            MobileFlipbook.Draw(GameTime, SpriteBatch);
-            if (IsAlive) Crosshair?.Draw(null, SpriteBatch);
+            MobileFlipbook.Draw(gameTime, spriteBatch);
+            if (IsAlive) Crosshair?.Draw(null, spriteBatch);
 
-            ProjectileList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
+            ProjectileList.ForEach((x) => x.Draw(gameTime, spriteBatch));
+            Rider?.Draw(gameTime, spriteBatch);
         }
     }
 }

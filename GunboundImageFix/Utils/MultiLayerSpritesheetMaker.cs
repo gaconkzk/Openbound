@@ -52,7 +52,7 @@ namespace GunboundImageFix.Utils
 
             imgList.AddRange(imgListSFX);
 
-            (int, int) maxImageSize = (imgList.Max((x) => x.Image.Width), imgList.Max((x) => x.Image.Height));
+            (int, int) maxImageSize = (imgList.Max((x) => x.BitmapImage.Width), imgList.Max((x) => x.BitmapImage.Height));
             (int, int) maxImagePivot = (imgList.Max((x) => x.Pivot.Item1), imgList.Max((x) => x.Pivot.Item2));
             (int, int) minImagePivot = (imgList.Min((x) => x.Pivot.Item1), imgList.Min((x) => x.Pivot.Item2));
 
@@ -72,6 +72,9 @@ namespace GunboundImageFix.Utils
             Console.WriteLine("Inicial X Shift factor:");
             int initialXFactor = int.Parse(Console.ReadLine());
 
+            Console.WriteLine("Inicial Y Shift factor:");
+            int initialYFactor = int.Parse(Console.ReadLine());
+
             (int, int) newBigImageSize = ((newSize.Item1 - squishXFactor + initialXFactor) * imgPerLine, (newSize.Item2 - squishYFactor) * (int)Math.Ceiling((double)imagePerLayer[0] / imgPerLine));
 
             Color[][] nCM1 = ImageProcessing.CreateBlankColorMatrix(newBigImageSize.Item1, newBigImageSize.Item2);
@@ -85,22 +88,22 @@ namespace GunboundImageFix.Utils
 
             foreach (ImportedImage img in imgList)
             {
-                w = initialXFactor * (1 + (index % imgPerLine)) + (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
-                h = (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
+                w = initialXFactor + /* * (1 + (index % imgPerLine))*/ + (newSize.Item1 - squishXFactor) * (index % imgPerLine) + newSize.Item1 / 2 + img.Pivot.Item1;
+                h = initialYFactor + (newSize.Item2 - squishYFactor) * (index / imgPerLine) + newSize.Item2 / 2 + img.Pivot.Item2;
 
                 if (!reaply)
                 {
-                    ImageProcessing.AddImageIntoMatrix(nCM1, img.Image, w, h);
-                    ImageProcessing.AddImageIntoMatrix(nCM2, img.Image, w, h);
+                    ImageProcessing.AddImageIntoMatrix(nCM1, img.BitmapImage, w, h);
+                    ImageProcessing.AddImageIntoMatrix(nCM2, img.BitmapImage, w, h);
                 }
                 else
                 {
-                    ImageProcessing.BlendImageIntoMatrix(nCM1, img.Image, w, h, (y, x) =>
+                    ImageProcessing.BlendImageIntoMatrix(nCM1, img.BitmapImage, w, h, (y, x) =>
                     {
                         return ColorBlending.MultiChannelAlphaBlending(x, y);
                     });
 
-                    ImageProcessing.BlendImageIntoMatrix(nCM2, img.Image, w, h, (x, y) =>
+                    ImageProcessing.BlendImageIntoMatrix(nCM2, img.BitmapImage, w, h, (x, y) =>
                     {
                         return ColorBlending.MultiChannelAlphaBlending(x, y);
                     });

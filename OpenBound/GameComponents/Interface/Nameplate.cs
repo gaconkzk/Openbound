@@ -46,7 +46,7 @@ namespace OpenBound.GameComponents.Interface
         public readonly Player Player;
 
         /// <summary>
-        /// Must be used only on menu components, for in-game nameplate, you must specify the
+        /// Must be used only on menu components. For in-game nameplate you must specify the
         /// attatched mobile on the other constructor
         /// </summary>
         /// <param name="player"></param>

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Level.Scene;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using Openbound_Network_Object_Library.Entity.Text;
 using System.Text;
 

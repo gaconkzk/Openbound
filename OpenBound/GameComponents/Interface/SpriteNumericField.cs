@@ -19,6 +19,7 @@ using OpenBound.GameComponents.Debug;
 using OpenBound.GameComponents.Level.Scene;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace OpenBound.GameComponents.Interface
@@ -52,6 +53,9 @@ namespace OpenBound.GameComponents.Interface
         //Thor
         HUDBlueThorLevelIndicator,
         HUDBlueThorExperienceIndicator,
+
+        //Avatar Shop
+        AvatarShopStatusCounter,
     }
 
     public enum TextAnchor
@@ -94,6 +98,9 @@ namespace OpenBound.GameComponents.Interface
 
             { FontType.HUDBlueThorLevelIndicator, "Interface/Spritefont/HUD/Blue/ThorLevel" },
             { FontType.HUDBlueThorExperienceIndicator, "Interface/Spritefont/HUD/Blue/Defense" },
+
+            //Avatar Shop
+            { FontType.AvatarShopStatusCounter, "Interface/Spritefont/AvatarShop/AvatarStatusCounter" },
         };
 
         private static readonly Dictionary<FontType, Dictionary<Number, Rectangle>> numericTextFieldStatePresets
@@ -345,6 +352,23 @@ namespace OpenBound.GameComponents.Interface
                     }
                 },
                 #endregion
+                #region AvatarShop
+                {
+                    FontType.AvatarShopStatusCounter, new Dictionary<Number, Rectangle>()
+                    {
+                        { Number.N0, new Rectangle(0  * 8, 0, 8, 13) },
+                        { Number.N1, new Rectangle(1  * 8, 0, 8, 13) },
+                        { Number.N2, new Rectangle(2  * 8, 0, 8, 13) },
+                        { Number.N3, new Rectangle(3  * 8, 0, 8, 13) },
+                        { Number.N4, new Rectangle(4  * 8, 0, 8, 13) },
+                        { Number.N5, new Rectangle(5  * 8, 0, 8, 13) },
+                        { Number.N6, new Rectangle(6  * 8, 0, 8, 13) },
+                        { Number.N7, new Rectangle(7  * 8, 0, 8, 13) },
+                        { Number.N8, new Rectangle(8  * 8, 0, 8, 13) },
+                        { Number.N9, new Rectangle(9  * 8, 0, 8, 13) },
+                    }
+                },
+                #endregion
             };
 
         public float CurrentValue { get; protected set; }
@@ -357,6 +381,7 @@ namespace OpenBound.GameComponents.Interface
         private readonly int numericFieldLenght;
 
         private bool attachToCamera;
+        private string stringConversionMask;
 
         private Vector2 position;
         public Vector2 Position { get => position; set => position = value.ToIntegerDomain(); }
@@ -389,7 +414,8 @@ namespace OpenBound.GameComponents.Interface
 
         //Updating Value
         public SpriteNumericField(FontType FontType, int NumericFieldLength, float LayerDepth, Vector2 Position = default,
-            Vector2 PositionOffset = default, TextAnchor TextAnchor = TextAnchor.Left, int StartingValue = 0, bool AttachToCamera = true)
+            Vector2 PositionOffset = default, TextAnchor TextAnchor = TextAnchor.Left, int StartingValue = 0, bool AttachToCamera = true,
+            bool forceRendingAllNumbers = false)
         {
             CurrentValue = StartingValue;
             fontType = FontType;
@@ -398,6 +424,16 @@ namespace OpenBound.GameComponents.Interface
             numericFieldLenght = NumericFieldLength;
             textAnchor = TextAnchor;
             attachToCamera = AttachToCamera;
+
+            if (forceRendingAllNumbers)
+            {
+                stringConversionMask = "";
+                for (int i = 0; i < numericFieldLenght; i++)
+                    stringConversionMask += "0";
+            } else
+            {
+                stringConversionMask = "0";
+            }
 
             spriteList = new List<Sprite>();
             unusedSpriteList = new List<Sprite>();
@@ -469,7 +505,7 @@ namespace OpenBound.GameComponents.Interface
 
         protected void ReassignTextValue()
         {
-            string numberText = (int)CurrentValue + "";
+            string numberText = CurrentValue.ToString(stringConversionMask);
 
             if (numberText.Length > numericFieldLenght)
                 return;
@@ -531,8 +567,9 @@ namespace OpenBound.GameComponents.Interface
     public class NumericSpriteFont : SpriteNumericField
     {
         public NumericSpriteFont(FontType FontType, int NumericFieldLength, float LayerDepth, Vector2 Position = default,
-            Vector2 PositionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int StartingValue = 0, bool attachToCamera = true)
-            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, textAnchor, StartingValue, attachToCamera)
+            Vector2 PositionOffset = default, TextAnchor textAnchor = TextAnchor.Left, int StartingValue = 0, bool attachToCamera = true,
+            bool forceRendingAllNumbers = false)
+            : base(FontType, NumericFieldLength, LayerDepth, Position, PositionOffset, textAnchor, StartingValue, attachToCamera, forceRendingAllNumbers: forceRendingAllNumbers)
         { }
 
         public void UpdateValue(int Value)

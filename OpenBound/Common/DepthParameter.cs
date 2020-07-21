@@ -32,6 +32,15 @@ namespace OpenBound.Common
         public const float MatchGridMinimapPortraitBackground = 0.005f;
         public const float MatchGridMinimapPortraitForeground = 0.006f;
 
+        //Avatar
+        public const float AvatarExtra   = 0.042f;
+        public const float AvatarFlag    = 0.043f;
+        public const float AvatarHead    = 0.044f;
+        public const float AvatarGoggles = 0.045f;
+        public const float AvatarBody    = 0.046f;
+        public const float AvatarPet     = 0.047f;
+        public const float AvatarMisc    = 0.048f;
+
         //Mobile
         //Player's button shadow goes in here~
         public const float Mobile                     = 0.05f;
@@ -76,6 +85,7 @@ namespace OpenBound.Common
         public const float InterfacePopupBackground = 0.4f;
         public const float InterfacePopupForeground = InterfacePopupBackground + 0.01f;
         public const float InterfacePopupButtons    = InterfacePopupBackground + 0.02f;
+        public const float InterfacePopupButtonIcon = InterfacePopupBackground + 0.03f;
         public const float InterfacePopupText       = InterfacePopupBackground + 0.04f;
 
         //Game Interface - Popups - Message

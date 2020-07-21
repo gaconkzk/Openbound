@@ -10,14 +10,14 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using GunboundImageFix.Entity;
+using GunboundImageFix.Extension;
 using GunboundImageFix.Utils;
-using GunboundImageProcessing.ImageUtils;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 
 namespace GunboundImageFix
 {
@@ -30,83 +30,86 @@ namespace GunboundImageFix
                 Console.WriteLine("Gunbound Raw Image Fix Tools");
 
                 Console.WriteLine("SpriteSheet tools");
-                Console.WriteLine("1 - Create Spritesheet [SFX][Custom Image Size][1-Layer]");
-                Console.WriteLine("2 - Create Spritesheet [SFX][Custom Image Size][2-Layer - AlphaBlend]");
-                Console.WriteLine("3 - Create Spritesheet [Equal Images]");
+                Console.WriteLine("A1 - Create Spritesheet [SFX][Custom Image Size][1-Layer]");
+                Console.WriteLine("A2 - Create Spritesheet [SFX][Custom Image Size][2-Layer - AlphaBlend]");
+                Console.WriteLine("A3 - Create Spritesheet [Equal Images]");
 
                 Console.WriteLine("\nImage Utils");
-                Console.WriteLine("4 - Image Border Fixer");
+                Console.WriteLine("B1 - Image Border Fixer");
 
                 Console.WriteLine("\nImage Processing");
-                Console.WriteLine("5 - Massive .IMG import.");
-                Console.WriteLine("6 - Image Sync Comparer [DEPRECATED]");
-                Console.WriteLine("7 - Image Comparer");
+                Console.WriteLine("C1 - Massive .IMG import.");
+                Console.WriteLine("C2 - IMG Crack [Mobiles]");
+                Console.WriteLine("C3 - Image Sync Comparer [DEPRECATED]");
+                Console.WriteLine("C4 - Image Comparer");
 
                 Console.WriteLine("\nFile manipulation");
-                Console.WriteLine("8 - Name Fixer.");
-                Console.WriteLine("9 - Pivot Offset Fixer");
+                Console.WriteLine("D1 - Name Fixer.");
+                Console.WriteLine("D2 - Pivot Offset Fixer");
 
                 Console.WriteLine("\nDecrypt/Cypher");
-                Console.WriteLine("0 - XTF Crack");
+                Console.WriteLine("E1 - XTF Crack");
 
                 Console.WriteLine("\nCreate Assets");
-                Console.WriteLine("a - Crosshair Drawer");
-                Console.WriteLine("b - Mobile Buttons");
-                Console.WriteLine("c - Create Minimap Tumbnails");
-                Console.WriteLine("d - Spritefont Range Builder");
-
+                Console.WriteLine("F1 - Crosshair Drawer");
+                Console.WriteLine("F2 - Mobile Buttons");
+                Console.WriteLine("F3 - Create Minimap Tumbnails");
+                Console.WriteLine("F4 - Spritefont Range Builder");
 
                 try
                 {
                     DateTime sDate = DateTime.Now;
 
-                    switch (Console.ReadLine()[0])
+                    switch (Console.ReadLine().ToUpper())
                     {
-                        case '1':
+                        case "A1":
                             new SingleLayerSpritesheetMaker().CreateSpritesheet();
                             break;
-                        case '2':
+                        case "A2":
                             new MultiLayerSpritesheetMaker().CreateSpritesheet();
                             break;
-                        case '3':
+                        case "A3":
                             new SimpleSpritesheetMaker().CreateSpritesheet();
                             break;
 
-                        case '4':
+                        case "B1":
                             ImageBorderFix.FixBorder();
                             break;
 
-                        case '5':
+                        case "C1":
                             new SpriteImportManager().ImportSprites();
                             break;
-                        case '6':
+                        case "C2":
+                            IMGCracker.ExportIMGData();
+                            break;
+                        case "C3":
                             ImageSyncComparer.ImageSyncCompare();
                             break;
-                        case '7':
+                        case "C4":
                             ImageComparer.CompareImages();
                             break;
 
-                        case '8':
+                        case "D1":
                             new FileNameFixer().ImportSprites();
                             break;
-                        case '9':
+                        case "D2":
                             PivotFileManager.FixPivotFile();
                             break;
 
-                        case '0':
+                        case "E1":
                             XTFCracker.Crack();
                             break;
 
-                        case 'a':
+                        case "F1":
                             CrosshairDrawer.DrawCrosshairs();
                             break;
-                        case 'b':
+                        case "F2":
                             new AssetMaker().CreateButton();
                             break;
-                        case 'c':
+                        case "F3":
                             MinimapThumbGenerator.GenerateButtonThumbnails();
                             break;
-                        case 'd':
+                        case "F4":
                             SpritefontRangeBuilder.BuildSpritefontRange();
                             break;
                         default:

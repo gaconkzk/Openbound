@@ -69,11 +69,11 @@ For further information read the README.md inside each project directory.
  - [WickedPeanuts](https://github.com/WickedPeanuts/) (Carlos Henrique)
  - [Icy Willow](https://github.com/IcyWillow/) (Vinícius Pontes) - Since 05/21/2020
 
-<h2>Bug Reports/Testers</h2>
+<h3>Bug Reports/Testers</h3>
 
  - [sdyalor](https://github.com/sdyalor)
 
-<h2>Game client assets/Datamined values</h2>
+<h3>Game client assets/Datamined values</h3>
 
  - ursoGb
 

@@ -200,6 +200,15 @@ namespace OpenBound.ServerCommunication
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerChatSendSystemMessage](answer);
                     break;
 
+                //Avatar Shop
+                case NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold:
+                    answer = ObjectWrapper.DeserializeRequest<AvatarMetadata>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold](answer);
+                    break;
+                case NetworkObjectParameters.GameServerAvatarShopBuyAvatarCash:
+                    answer = ObjectWrapper.DeserializeRequest<AvatarMetadata>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerAvatarShopBuyAvatarCash](answer);
+                    break;
             }
         }
     }

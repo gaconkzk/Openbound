@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using OpenBound.Common;
 using OpenBound.GameComponents.Audio;
 using Openbound_Network_Object_Library.Common;
+using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Extension;
 using Openbound_Network_Object_Library.FileOutput;
 using Openbound_Network_Object_Library.Models;
@@ -46,12 +47,14 @@ namespace OpenBound.Launcher.Connection
         public void PrepareLoginThread(string nickname, string password)
         {
             RequestThread = new Thread(() => Login(nickname, password));
+            RequestThread.IsBackground = true;
             RequestThread.Start();
         }
 
         public void PrepareRegistration(Account account)
         {
             RequestThread = new Thread(() => DoRegistration(account));
+            RequestThread.IsBackground = true;
             RequestThread.Start();
         }
 
@@ -103,8 +106,35 @@ namespace OpenBound.Launcher.Connection
                     NetworkObjectParameters.LoginServerBufferSize,
                     (serviceProvider, message) =>
                     {
-                        player = ObjectWrapper.DeserializeRequest<Player>(message[1]);
-                        waiting = true;
+                        if (message.Length == 2)
+                        { 
+                            player = ObjectWrapper.DeserializeRequest<Player>(message[1]);
+
+                            if (player == null)
+                            {
+                                waiting = true;
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            List<int> idList = ObjectWrapper.DeserializeRequest<List<int>>(message[2]);
+                            
+                            if (idList == null)
+                            {
+                                waiting = true;
+                                return;
+                            }
+
+                            foreach (int i in idList)
+                            {
+                                player.AvatarMetadataList.Add(new AvatarMetadata()
+                                {
+                                    ID = i,
+                                    AvatarCategory = (AvatarCategory)int.Parse(message[1])
+                                });
+                            }
+                        }
                     });
                 csp.StartOperation();
                 csp.RequestList.Enqueue(NetworkObjectParameters.LoginServerLoginAttemptRequest, player);
@@ -121,6 +151,8 @@ namespace OpenBound.Launcher.Connection
                 else
                 {
                     GameInformation.Instance.PlayerInformation = player;
+                    player.LoadOwnedAvatarDictionary();
+
                     lock (LoginResult)
                         LoginResult = "success";
                 }

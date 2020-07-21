@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using OpenBound.Common;
 using OpenBound.GameComponents.Level;
 using OpenBound.GameComponents.Pawn;
+using OpenBound.GameComponents.Pawn.Unit;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 
@@ -25,11 +26,11 @@ namespace OpenBound.GameComponents.Animation.InGame
         private static List<DeathAnimation> deathAnimationList;
         private static List<DeathAnimation> toBeDestroyedDeathAnimationList;
 
-        Rider rider;
+        Mobile mobile;
 
         private DeathAnimation(Mobile mobile)
         {
-            rider = new Rider(MobileType.Random, mobile.MobileFlipbook.Position);
+            this.mobile = new Random(mobile.Owner, mobile.Position);
         }
 
         public static void Initialize()
@@ -40,14 +41,15 @@ namespace OpenBound.GameComponents.Animation.InGame
 
         private void UpdateElement(GameTime gameTime)
         {
-            rider.Position += Parameter.AnimationInGameDeathAnimationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (Topography.IsNotInsideMapBoundaries(rider.Position - new Vector2(0, 300)) && Topography.IsNotInsideMapBoundaries(rider.Position + new Vector2(0, 300)))
+            mobile.Rider.Update();
+            mobile.MobileFlipbook.Position += Parameter.AnimationInGameDeathAnimationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (Topography.IsNotInsideMapBoundaries(mobile.MobileFlipbook.Position - new Vector2(0, 300)) && Topography.IsNotInsideMapBoundaries(mobile.MobileFlipbook.Position + new Vector2(0, 300)))
                 toBeDestroyedDeathAnimationList.Add(this);
         }
 
         private void DrawElement(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            rider.Draw(gameTime, spriteBatch);
+            mobile.Draw(gameTime, spriteBatch);
         }
 
         public static void Add(Mobile mobile)

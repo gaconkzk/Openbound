@@ -24,6 +24,8 @@ using System.Collections;
 using System.Collections.Generic;
 using OpenBound.GameComponents.Level.Scene;
 using System.Linq;
+using System.IO;
+using System.Data.SqlTypes;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
@@ -31,16 +33,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         bool mineTurn;
 
-        public RaonLauncher(Player player, Vector2 position) : base(player, MobileType.RaonLauncher)
+        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher)
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.RaonLauncher, position);
-
             Movement.CollisionOffset = 20;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 38), new Vector2(0, 0));
 

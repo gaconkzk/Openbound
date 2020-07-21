@@ -17,6 +17,13 @@ namespace Openbound_Network_Object_Library.Extension
 {
     public static class EConcurrentQueue
     {
+        public static void Enqueue(this ConcurrentQueue<byte[]> queue, int service, int part, object serviceObject)
+        {
+            string serviceObjectJSON = ObjectWrapper.Serialize(serviceObject);
+            byte[] req = ObjectWrapper.ConvertObjectToByteArray($"{service}|{part}|{serviceObjectJSON}");
+            lock (queue) queue.Enqueue(req);
+        }
+
         public static void Enqueue(this ConcurrentQueue<byte[]> queue, int service, object serviceObject)
         {
             string serviceObjectJSON = ObjectWrapper.Serialize(serviceObject);

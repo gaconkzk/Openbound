@@ -24,10 +24,9 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         protected readonly Mobile mobile;
 
-        public RaonLauncherMine(Mobile mobile, Vector2 position, MobileType mobileType) : base(mobile.Owner, mobileType, true)
+        public RaonLauncherMine(Mobile mobile, Vector2 position, MobileType mobileType) : base(mobile.Owner, position, mobileType, IsSummon: true)
         {
             this.mobile = mobile;
-            Position = position;
         }
 
         public override void Update(GameTime gameTime)

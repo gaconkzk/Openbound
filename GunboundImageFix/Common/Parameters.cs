@@ -17,6 +17,8 @@ namespace GunboundImageFix.Common
 {
     public class Parameters
     {
+        public const string PivotFileHeader = "#ID,PivotX,PivotY,RiderPivotX,RiderPivotY,PivotX+RiderPivotX,PivotY+RiderPivotY";
+
         public static string BaseDirectory { get; } = $@"{Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName}\";
 
         //Input Directories

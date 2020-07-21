@@ -53,6 +53,9 @@ namespace OpenBound.GameComponents.Interface.Interactive
         RenameButton,
         ChangeMapLeftArrow, ChangeMapRightArrow,
 
+        //Avatar Shop
+        AvatarButton, AvatarTabIndex,
+
         //Scroll Bar
         ScrollBarLeft, ScrollBarRight, ScrollBarUp, ScrollBarDown,
 
@@ -69,6 +72,9 @@ namespace OpenBound.GameComponents.Interface.Interactive
         SelectMobileNak, SelectMobilePhoenix, SelectMobileRandom, SelectMobileRaonLauncher,
         SelectMobileTiburon, SelectMobileTrico, SelectMobileTurtle, SelectMobileBlueWhale,
         SelectMobileWolf,
+
+        //Popup - Buy Avatar
+        AvatarBuyCash, AvatarBuyGold,
     }
 
     public enum ButtonAnimationState
@@ -394,6 +400,34 @@ namespace OpenBound.GameComponents.Interface.Interactive
                             { ButtonAnimationState.Hoover,    new Rectangle(18*1, 0, 18, 18) },
                             { ButtonAnimationState.Clicked,   new Rectangle(18*2, 0, 18, 18) },
                             { ButtonAnimationState.Disabled,  new Rectangle(18*3, 0, 18, 18) },
+                        }
+                    }
+                },
+                #endregion
+                #region AvatarShop
+                {
+                    ButtonType.AvatarButton,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/AvatarButton/Background",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,    new Rectangle(105 * 0, 0, 105, 83) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(105 * 1, 0, 105, 83) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(105 * 2, 0, 105, 83) },
+                            { ButtonAnimationState.Activated, new Rectangle(105 * 2, 0, 105, 83) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.AvatarTabIndex,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/TabIndex",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Disabled,   new Rectangle(82 * 0, 0, 82, 30) },
+                            { ButtonAnimationState.Normal, new Rectangle(82 * 1, 0, 82, 30) },
                         }
                     }
                 },
@@ -985,6 +1019,36 @@ namespace OpenBound.GameComponents.Interface.Interactive
                     }
                 },
                 #endregion
+                #region Popup - Buy Avatar
+                {
+                    ButtonType.AvatarBuyCash,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/Cash",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(32 * 0, 0, 32, 31) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(32 * 1, 0, 32, 31) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(32 * 2, 0, 32, 31) },
+                            { ButtonAnimationState.Disabled, new Rectangle(32 * 3, 0, 32, 31) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.AvatarBuyGold,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/AvatarShop/Gold",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(32 * 0, 0, 32, 31) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(32 * 1, 0, 32, 31) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(32 * 2, 0, 32, 31) },
+                            { ButtonAnimationState.Disabled, new Rectangle(32 * 3, 0, 32, 31) },
+                        }
+                    }
+                },
+                #endregion
             };
 
         public Sprite ButtonSprite { get; private set; }
@@ -1081,9 +1145,10 @@ namespace OpenBound.GameComponents.Interface.Interactive
         protected virtual Rectangle CalculateCollisionRectangle()
         {
             return new Rectangle(
-                (int)ButtonSprite.Position.X - (int)ButtonSprite.Pivot.X,
-                (int)ButtonSprite.Position.Y - (int)ButtonSprite.Pivot.Y,
-                ButtonSprite.SourceRectangle.Width, ButtonSprite.SourceRectangle.Height);
+                (int)ButtonSprite.Position.X - (int)(ButtonSprite.Pivot.X * ButtonSprite.Scale.X),
+                (int)ButtonSprite.Position.Y - (int)(ButtonSprite.Pivot.Y * ButtonSprite.Scale.Y),
+                (int)(ButtonSprite.SourceRectangle.Width  * ButtonSprite.Scale.X),
+                (int)(ButtonSprite.SourceRectangle.Height * ButtonSprite.Scale.Y));
         }
 
         public virtual void UpdateAttatchedPosition()

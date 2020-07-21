@@ -16,6 +16,7 @@ using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity.Text;
 using Openbound_Network_Object_Library.FileOutput;
 using System;
+using System.Data;
 
 namespace OpenBound.Common
 {
@@ -65,6 +66,14 @@ namespace OpenBound.Common
 
         public const float InterfaceInGameTextBoxTimeToStartFading = 10;
         public const float InterfaceInGameTextBoxTimeFadeTime = 5;
+
+        public static readonly Color InterfaceAvatarShopButtonGoldColor = new Color(237, 232, 128);
+        public static readonly Color InterfaceAvatarShopButtonGoldOutlineColor = new Color(85, 88, 59);
+
+        public static readonly Color InterfaceAvatarShopButtonCashColor = new Color(137, 190, 234);
+        public static readonly Color InterfaceAvatarShopButtonCashOutlineColor = new Color(9, 55, 104);
+
+        public const int InterfaceAvatarShopAvatarButtonNewStampDay = 14; //Two weeks
         #endregion
 
         #region Misc
@@ -177,7 +186,7 @@ namespace OpenBound.Common
         //-- Main Menu - Various
         public const string ButtonTextExitText = "Exit";
         public const string ButtonTextBuddyList = "Buddy";
-        public const string ButtonTextCashCharge = "Cash Charge";
+        public const string ButtonTextCashCharge = "Charge";
         public const string ButtonTextReportPlayer = "Report";
         public const string ButtonTextAvatarShop = "Avatar Shop";
         public const string ButtonTextOptions = "Options";
@@ -207,6 +216,27 @@ namespace OpenBound.Common
         public const string ButtonTextInRoomChangeItem = "Item";
         public const string ButtonTextInRoomChangeTeam = "Team";
 
+        //-- Avatar Shop - Avatar
+        public const string ButtonTextAvatarShopTry = "Try";
+        public const string ButtonTextAvatarShopBuy = "Buy";
+        public const string ButtonTextAvatarShopGift = "Gift";
+
+        //-- Avatar Shop - Filter
+        public const string ButtonTextAvatarShopHat = "Hat";
+        public const string ButtonTextAvatarShopBody = "Body";
+        public const string ButtonTextAvatarShopGoggles = "Goggles";
+        public const string ButtonTextAvatarShopFlag = "Flag";
+        public const string ButtonTextAvatarShopExItem = "ExItem";
+        public const string ButtonTextAvatarShopPet = "Pet";
+        public const string ButtonTextAvatarShopNecklace = "Misc";
+        public const string ButtonTextAvatarShopRing = "Extra";
+
+        //--Avatar Shop - Popup - Buy
+        public const string PopupTextConfirmPuchase = "Confirm puchase with";
+        public const string PopupTextBalance = "Balance";
+        public const string PopupTextCurrencyGold = "Gold";
+        public const string PopupTextCurrencyCash = "Cash";
+
         public const string IconSubtitleOffline = "Offline";
         public const string IconSubtitleLowPopulation = "Low";
         public const string IconSubtitleMediumPopulation = "Medium";
@@ -214,6 +244,12 @@ namespace OpenBound.Common
         public const string IconSubtitleFull = "Full";
 
         public const string LoadingScreenMinimapCommand = "Press Up/Down to control the tactical map";
+        
+        public const string PreviewTextAvatarShop = "Room Preview";
+        public const string PreviewTextAvatarShopEquipped = "Room Preview - Equipped";
+
+        public const string InGamePreviewTextAvatarShop = "In-Game Preview";
+        public const string InGamePreviewTextAvatarShopEquipped = "In-Game Preview - Equipped";
         #endregion
 
         #region Fonts

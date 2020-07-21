@@ -116,6 +116,7 @@
   <ItemGroup>
     <Compile Include="Entity\ColorBlending.cs" />
     <Compile Include="Entity\ImportedImage.cs" />
+    <Compile Include="Extension\EQueue.cs" />
     <Compile Include="Helper\ExplorerHelper.cs" />
     <Compile Include="Helper\PaintHelper.cs" />
     <Compile Include="Helper\RestartHelper.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Utils\CrosshairDrawer.cs" />
     <Compile Include="Utils\ImageComparer.cs" />
     <Compile Include="Utils\ImageSyncComparer.cs" />
+    <Compile Include="Utils\IMGCracker.cs" />
     <Compile Include="Utils\MinimapThumbGenerator.cs" />
     <Compile Include="Utils\FileNameFixer.cs" />
     <Compile Include="Utils\PivotFileManager.cs" />

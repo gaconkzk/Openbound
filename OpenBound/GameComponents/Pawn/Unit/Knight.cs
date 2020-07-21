@@ -12,9 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Collision;
-using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;
@@ -26,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         public KnightSword Satellite;
 
-        public Knight(Player player, Vector2 position) : base(player, MobileType.Knight)
+        public Knight(Player player, Vector2 position) : base(player, position, MobileType.Knight)
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Knight, position);
-
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 100;
-
-            Crosshair = new Crosshair(this);
 
             Satellite = new KnightSword(this);
 

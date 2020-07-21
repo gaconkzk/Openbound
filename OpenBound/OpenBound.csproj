@@ -130,6 +130,81 @@
     <Compile Include="GameComponents\Animation\ParticleBuilder.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffect.cs" />
     <Compile Include="GameComponents\Animation\SpecialEffectHandler.cs" />
+    <None Include="ContentMetadata\Mobile\Random\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\RaonLauncher\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Armor\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Lightning\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Ice\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Aduka\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\ASate\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Bigfoot\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\BlueWhale\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Boomer\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Dragon\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Frank\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Grub\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\JD\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\JFrog\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Kalsiddon\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Knight\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Mage\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Maya\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Nak\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Phoenix\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Tiburon\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Trico\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Turtle\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ContentMetadata\Mobile\Wolf\RiderPivot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Audio\Music\GameRoom\GameRoomS1.mp3" />
     <Content Include="Content\Audio\Music\GameRoom\GameRoomS2.mp3" />
     <Content Include="Content\Audio\Music\LevelScene\Event\BirthdayS2.mp3" />
@@ -302,6 +377,12 @@
     <Content Include="Content\Audio\SFX\Tank\Shoot\TurtleSS.mp3" />
     <Content Include="Content\Debug\DebugCrosshair.png" />
     <Content Include="Content\Debug\DebugDot.png" />
+    <Content Include="Content\Graphics\Avatar\Female\Body\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Female\Head\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Male\Body\Base.png" />
+    <Content Include="Content\Graphics\Avatar\Male\Head\Base.png" />
+    <Content Include="Content\Graphics\Entity\Thor\Spritesheet.png" />
+    <Content Include="Content\Graphics\Entity\Thor\ThorLaser.png" />
     <Content Include="Content\Graphics\Maps\Metamine\Background.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation1.png" />
     <Content Include="Content\Graphics\Maps\Metamine\BackgroundAnimation2.png" />
@@ -332,6 +413,7 @@
     <Content Include="Content\Graphics\Tank\Armor\Bullet2.png" />
     <Content Include="Content\Graphics\Tank\Armor\Bullet3.png" />
     <Content Include="Content\Graphics\Tank\Armor\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Armor\Pivot.txt" />
     <Content Include="Content\Graphics\Tank\Bigfoot\Bullet1.png" />
     <Content Include="Content\Graphics\Tank\Bigfoot\Bullet2.png" />
     <Content Include="Content\Graphics\Tank\Bigfoot\Bullet3.png" />
@@ -351,7 +433,29 @@
     <Content Include="Content\Graphics\Tank\Knight\SatelliteSFX.png" />
     <Content Include="Content\Graphics\Tank\Knight\Shot1.png" />
     <Content Include="Content\Graphics\Tank\Knight\Shot3.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Lightning\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Mage\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Mage\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Mage\S1T.png" />
+    <Content Include="Content\Graphics\Tank\Mage\S2T.png" />
     <Content Include="Content\Graphics\Tank\Random\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncherMineS2\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncherMineSS\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet2.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\RaonLauncher\RiderPivot.txt" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet1.png" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet2.png" />
+    <Content Include="Content\Graphics\Tank\Trico\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Trico\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\Bullet3.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\CharacterSpritesheet.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\S1T.png" />
+    <Content Include="Content\Graphics\Tank\Turtle\Shot3.png" />
     <Content Include="Content\Interface\AnimatedButtons\Buddy.png" />
     <Content Include="Content\Interface\AnimatedButtons\CashCharge.png" />
     <Content Include="Content\Interface\AnimatedButtons\Exit.png" />
@@ -622,6 +726,8 @@
     <None Include="LICENCE.GPL" />
     <None Include="Resources\GBIcon.ico" />
     <Compile Include="GameComponents\Animation\SpecialEffectBuilder.cs" />
+    <Compile Include="GameComponents\Asset\IOManager.cs" />
+    <Compile Include="GameComponents\Asset\MetadataManager.cs" />
     <Compile Include="GameComponents\Collision\CollisionBox.cs" />
     <Compile Include="GameComponents\Debug\DebugCircle.cs" />
     <Compile Include="GameComponents\Debug\DebugElement.cs" />
@@ -636,6 +742,9 @@
     <Compile Include="GameComponents\Interface\Builder\IconBuilder.cs" />
     <Compile Include="GameComponents\Interface\IncomingWeather.cs" />
     <Compile Include="GameComponents\Interface\Interactive\AnimatedButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AttributeMenu.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\AvatarButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\AvatarShop\InGamePreview.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\OnlineUserList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameList\RoomButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />
@@ -651,6 +760,7 @@
     <Compile Include="GameComponents\Interface\Nameplate.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessage.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessageBuilder.cs" />
+    <Compile Include="GameComponents\Interface\Popup\PopupBuyAvatar.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupCreateGame.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupGameOptions.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupGameResults.cs" />
@@ -666,6 +776,7 @@
     <Compile Include="GameComponents\Interface\Interactive\General\ScrollBar.cs" />
     <Compile Include="GameComponents\Interface\WeatherDisplay.cs" />
     <Compile Include="GameComponents\Interface\WindCompass.cs" />
+    <Compile Include="GameComponents\Level\Scene\Menu\AvatarShop.cs" />
     <Compile Include="GameComponents\Level\Scene\Menu\GameList.cs" />
     <Compile Include="GameComponents\Level\Scene\DebugScene.cs" />
     <Compile Include="GameComponents\Level\Scene\Menu\GameRoom.cs" />
@@ -692,6 +803,7 @@
     <Compile Include="GameComponents\Pawn\ActorBuilder.cs" />
     <Compile Include="GameComponents\MobileAction\Motion\LocalMovement.cs" />
     <Compile Include="GameComponents\MobileAction\Motion\RemoteMovement.cs" />
+    <Compile Include="GameComponents\Pawn\Avatar.cs" />
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
@@ -724,8 +836,8 @@
     <Compile Include="GameComponents\Physics\AcceleratedMovement.cs" />
     <Compile Include="GameComponents\Physics\DefinedAcceleratedMovement.cs" />
     <Compile Include="GameComponents\Animation\Renderable.cs" />
-    <Compile Include="GameComponents\Renderer\AssetHandler.cs" />
-    <Compile Include="GameComponents\Renderer\AssetManager.cs" />
+    <Compile Include="GameComponents\Asset\AssetHandler.cs" />
+    <Compile Include="GameComponents\Asset\AssetManager.cs" />
     <Compile Include="GameComponents\Level\Scene\GameScene.cs" />
     <Compile Include="GameComponents\MobileAction\Projectile.cs" />
     <Compile Include="GameComponents\Animation\Sprite.cs" />
@@ -785,6 +897,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -836,6 +949,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ContentMetadata\Mobile\Assassin\" />
+    <Folder Include="ContentMetadata\Mobile\Carrior\" />
+    <Folder Include="ContentMetadata\Mobile\Princess\" />
+    <Folder Include="ContentMetadata\Mobile\ShadowWalker\" />
+    <Folder Include="Content\Graphics\Tank\Mine\" />
     <Folder Include="Content\Interface\Alert\" />
     <Folder Include="Content\Interface\CreateRoom\" />
     <Folder Include="Content\Interface\FontNumber\" />

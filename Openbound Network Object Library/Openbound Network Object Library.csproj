@@ -66,6 +66,7 @@
     <Compile Include="Common\ObjectValidator.cs" />
     <Compile Include="Common\ObjectWrapper.cs" />
     <Compile Include="Common\NetworkObjectParameters.cs" />
+    <Compile Include="Entity\AvatarCategory.cs" />
     <Compile Include="Entity\Text\Message.cs" />
     <Compile Include="Entity\Text\TextConfiguration.cs" />
     <Compile Include="Extension\EBitwiseOperators.cs" />
@@ -79,6 +80,7 @@
       <DependentUpon>202005241907359_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AvatarMetadata.cs" />
     <Compile Include="Models\Guild.cs" />
     <Compile Include="Entity\Map.cs" />
     <Compile Include="Entity\MatchManager.cs" />
@@ -111,6 +113,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DatabaseSeed\AvatarMetadata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LICENCE.GPL" />
   </ItemGroup>
   <ItemGroup>
@@ -132,5 +137,6 @@
       <Version>4.8.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

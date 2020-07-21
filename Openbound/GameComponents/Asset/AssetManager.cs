@@ -15,14 +15,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenBound.GameComponents.Renderer
+namespace OpenBound.GameComponents.Asset
 {
-    internal class AssetManager
+    public class AssetManager
     {
         private Dictionary<string, object> assetDictionary;
         private ContentManager contentManager;
 
-        internal AssetManager(ContentManager ContentManager)
+        public AssetManager(ContentManager ContentManager)
         {
             contentManager = ContentManager;
             assetDictionary = new Dictionary<string, object>();

@@ -13,7 +13,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using OpenBound.Common;
-using OpenBound.GameComponents.Renderer;
+using OpenBound.GameComponents.Asset;
 using Openbound_Network_Object_Library.FileOutput;
 using System;
 using System.Collections.Generic;

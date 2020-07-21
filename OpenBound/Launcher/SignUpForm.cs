@@ -42,7 +42,7 @@ namespace OpenBound.Launcher
             {
                 Email = txtEmail.Text,
                 Nickname = txtNickname.Text,
-                CharacterGender = rdbMale.Checked ? Gender.Masculine : Gender.Feminine,
+                CharacterGender = rdbMale.Checked ? Gender.Male : Gender.Female,
                 Password = txtPassword.Text,
                 PasswordConfirmation = txtPasswordConfirmation.Text
             };
@@ -125,7 +125,7 @@ namespace OpenBound.Launcher
             Email = "sopa@hotmail.com",
             Password = "123456",
             PasswordConfirmation = "123456",
-            CharacterGender = Gender.Feminine
+            CharacterGender = Gender.Female
         });
 
 

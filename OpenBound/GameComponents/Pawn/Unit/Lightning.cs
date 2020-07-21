@@ -24,16 +24,10 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Lightning : Mobile
     {
-        public Lightning(Player player, Vector2 position) : base(player, MobileType.Lightning)
+        public Lightning(Player player, Vector2 position) : base(player, position, MobileType.Lightning)
         {
-            Position = position;
-
-            MobileFlipbook = MobileFlipbook.CreateMobileFlipbook(MobileType.Lightning, position);
-
             Movement.CollisionOffset = 23;
             Movement.MaximumStepsPerTurn = 90;
-
-            Crosshair = new Crosshair(this);
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 41, 30), new Vector2(0, 10));
         }

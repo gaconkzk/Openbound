@@ -18,8 +18,10 @@ namespace Openbound_Network_Object_Library.Entity.Text
         Consolas10,
         Consolas10Bold,
         Consolas11,
+        Consolas14,
         Consolas16,
 
         FontAwesome10,
+        FontAwesome11,
     }
 }

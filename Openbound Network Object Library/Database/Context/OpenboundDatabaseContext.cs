@@ -26,16 +26,20 @@ namespace Openbound_Network_Object_Library.Database.Context
         public OpenboundDatabaseContext()
             : base($"Data Source={NetworkObjectParameters.DatabaseAddress};Initial Catalog={NetworkObjectParameters.DatabaseName};Persist Security Info=True;User ID={NetworkObjectParameters.DatabaseLogin};Password={NetworkObjectParameters.DatabasePassword};MultipleActiveResultSets=True;PersistSecurityInfo=True")
         {
+            Configuration.LazyLoadingEnabled = true;
             System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<OpenboundDatabaseContext, Configuration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Player>()
+                .HasMany(am => am.AvatarMetadataList)
+                .WithMany(p => p.PlayerList);
         }
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Guild> Guilds { get; set; }
-
+        public DbSet<AvatarMetadata> AvatarMetadata { get; set; }
     }
 }
