@@ -19,25 +19,29 @@ namespace OpenBound.GameComponents.Pawn
 {
     public class ActorBuilder
     {
-        public static Mobile BuildMobile(MobileType mobileType, Player player, Vector2 position)
+        public static Mobile BuildMobile(MobileType mobileType, Player player, Vector2 position, bool isInGame = true)
         {
+            Mobile mobile = null;
+
             switch (mobileType)
             {
-                case MobileType.Random:       return new Random(player, position);
-
-                case MobileType.Armor:        return new Armor(player, position);
-                case MobileType.Bigfoot:      return new Bigfoot(player, position);
-                case MobileType.Dragon:       return new Dragon(player, position);
-                case MobileType.Mage:         return new Mage(player, position);
-                case MobileType.Ice:          return new Ice(player, position);
-                case MobileType.Knight:       return new Knight(player, position);
-                case MobileType.RaonLauncher: return new RaonLauncher(player, position);
-                case MobileType.Trico:        return new Trico(player, position);
-                case MobileType.Turtle:       return new Turtle(player, position);
-                case MobileType.Lightning:    return new Lightning(player, position);
+                case MobileType.Random:       mobile = new Random(player, position);       break;
+                case MobileType.Armor:        mobile = new Armor(player, position);        break;
+                case MobileType.Bigfoot:      mobile = new Bigfoot(player, position);      break;
+                case MobileType.Dragon:       mobile = new Dragon(player, position);       break;
+                case MobileType.Mage:         mobile = new Mage(player, position);         break;
+                case MobileType.Ice:          mobile = new Ice(player, position);          break;
+                case MobileType.Knight:       mobile = new Knight(player, position);       break;
+                case MobileType.RaonLauncher: mobile = new RaonLauncher(player, position); break;
+                case MobileType.Trico:        mobile = new Trico(player, position);        break;
+                case MobileType.Turtle:       mobile = new Turtle(player, position);       break;
+                case MobileType.Lightning:    mobile = new Lightning(player, position);    break;
             }
 
-            return null;
+            if (isInGame)
+                mobile.HideLobbyExclusiveAvatars();
+
+            return mobile;
         }
     }
 }

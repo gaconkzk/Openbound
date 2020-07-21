@@ -12,9 +12,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Collision;
-using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using OpenBound.GameComponents.MobileAction;
 using Openbound_Network_Object_Library.Entity;

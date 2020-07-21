@@ -34,9 +34,9 @@ namespace OpenBound.GameComponents.Pawn
 
     public class Rider
     {
-        public Vector2 Position;
         public Vector2 headBasePosition, bodyBasePosition,
-            gogglesBasePosition, flagBasePosition, petBasePosition;
+            gogglesBasePosition, flagBasePosition, petBasePosition,
+            extraBasePosition, miscBasePosition;
 
         public Avatar Head;
         public Avatar Body;
@@ -56,7 +56,7 @@ namespace OpenBound.GameComponents.Pawn
 #endif
 
         //Used on Avatar shop. No updates are supported for variables instanced with this constructor.
-        public Rider(Facing facing, Player player)
+        public Rider(Facing facing, Player player, Vector2 position)
         {
             Head = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Hat][player.EquippedAvatarHat]);
             Body = new Avatar(MetadataManager.AvatarMetadataDictionary[player.Gender][AvatarCategory.Body][player.EquippedAvatarBody]);
@@ -70,13 +70,13 @@ namespace OpenBound.GameComponents.Pawn
 
             int facingFactor = (facing == Facing.Right) ? -1 : 1;
 
-            Head.Position = new Vector2(facingFactor * 7, -17);
-            Body.Position = Vector2.Zero;
-            Goggles.Position = new Vector2(facingFactor * 9, -17);
-            Pet.Position = new Vector2(facingFactor * 7, -8);
-            Extra.Position = new Vector2(0, -10);
-            Misc.Position = new Vector2(0, -10);
-            Flag.Position = new Vector2(facingFactor * 11, -17);
+            Head.Position = position + new Vector2(facingFactor * 7, -17);
+            Body.Position = position + Vector2.Zero;
+            Goggles.Position = position + new Vector2(facingFactor * 9, -17);
+            Pet.Position = position + new Vector2(facingFactor * 7, -8);
+            Extra.Position = position + new Vector2(0, -7);
+            Misc.Position = position + new Vector2(0, -7);
+            Flag.Position = position + new Vector2(facingFactor * 11, -17);
 
             if (facing == Facing.Right) Flip();
         }
@@ -92,12 +92,16 @@ namespace OpenBound.GameComponents.Pawn
             Flag = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Flag][mobile.Owner.EquippedAvatarFlag], true);
 
             Pet = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Pet][mobile.Owner.EquippedAvatarPet], true);
-            
+            Extra = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Extra][mobile.Owner.EquippedAvatarPet], true);
+            Misc = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Misc][mobile.Owner.EquippedAvatarPet], true);
+
             headBasePosition = new Vector2(7, -17);
             bodyBasePosition = Vector2.Zero;
             gogglesBasePosition = new Vector2(9, -17);
             flagBasePosition = new Vector2(11, -17);
             petBasePosition = new Vector2(7, -8);
+            extraBasePosition = new Vector2(0, -7);
+            miscBasePosition = new Vector2(0, -7);
 
             riderOffset = (List<int[]>)MetadataManager.ElementMetadata[$@"Mobile/{mobile.MobileType}/RiderPivot"];
 
@@ -107,6 +111,12 @@ namespace OpenBound.GameComponents.Pawn
 #endif
 
             Update();
+        }
+
+        public void HideLobbyExclusiveAvatars()
+        {
+            Extra.Hide();
+            Misc.Hide();
         }
 
         public void Show()
@@ -119,8 +129,8 @@ namespace OpenBound.GameComponents.Pawn
 
             Pet.Show();
 
-            Extra?.Show();
-            Misc?.Show();
+            Extra.Show();
+            Misc.Show();
         }
 
         public void Hide()
@@ -133,8 +143,8 @@ namespace OpenBound.GameComponents.Pawn
 
             Pet.Hide();
 
-            Extra?.Hide();
-            Misc?.Hide();
+            Extra.Hide();
+            Misc.Hide();
         }
 
         public void Flip()
@@ -147,8 +157,8 @@ namespace OpenBound.GameComponents.Pawn
 
             Pet.Flip();
 
-            Extra?.Flip();
-            Misc?.Flip();
+            Extra.Flip();
+            Misc.Flip();
         }
 
         public int GetEquippedAvatarID(AvatarCategory avatarCategory)
@@ -279,6 +289,9 @@ namespace OpenBound.GameComponents.Pawn
 
             Pet.Position = mobile.MobileFlipbook.Position + petPos;
             Pet.Rotation = mobile.MobileFlipbook.Rotation;
+
+            Extra.Position = mobile.MobileFlipbook.Position + extraBasePosition;
+            Misc.Position = mobile.MobileFlipbook.Position + miscBasePosition;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -290,8 +303,8 @@ namespace OpenBound.GameComponents.Pawn
             Flag.Draw(gameTime, spriteBatch);
             Pet.Draw(gameTime, spriteBatch);
 
-            Extra?.Draw(gameTime, spriteBatch);
-            Misc?.Draw(gameTime, spriteBatch);
+            Extra.Draw(gameTime, spriteBatch);
+            Misc.Draw(gameTime, spriteBatch);
         }
 
         internal void ResetCurrentAnimation()
@@ -303,8 +316,8 @@ namespace OpenBound.GameComponents.Pawn
             Flag.Flipbook.ResetCurrentAnimation();
             Pet.Flipbook.ResetCurrentAnimation();
 
-            Extra?.Flipbook.ResetCurrentAnimation();
-            Misc?.Flipbook.ResetCurrentAnimation();
+            Extra.Flipbook.ResetCurrentAnimation();
+            Misc.Flipbook.ResetCurrentAnimation();
         }
     }
 }

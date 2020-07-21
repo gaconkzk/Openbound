@@ -161,7 +161,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
                 ButtonOffset + new Vector2(-20 * sidePositionFactor, 33),
                 DepthParameter.Mobile - 0.01f));
 
-            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(5 * sidePositionFactor, 7));
+            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(-20 * sidePositionFactor, 7), false);
 
             if (Player.PlayerTeam == PlayerTeam.Red)
             {
