@@ -96,7 +96,7 @@ namespace OpenBound.Common
         //public static string GamemodeSolo = "Solo";
 
         //Popup - AlertMessage - Avatar Purchase Feedback
-        public const string PopupAlertMessageAvatarPurchaseSuccessTitle     = "Congratulations!";
+        public const string PopupAlertMessageAvatarPurchaseSuccessTitle     = "  Congratulations!  ";
         public const int    PopupAlertMessageAvatarPurchaseSuccessTitleIcon = 0xf005;
 
         public const string PopupAlertMessageAvatarPurchaseSuccessMessage11 = "Your new aquisition [";

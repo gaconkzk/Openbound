@@ -86,9 +86,9 @@ namespace OpenBound.GameComponents.Interface.Popup
             List<List<SpriteText>> stMatrix;
             List<SpriteText> titleSTList, messageSTList1, messageSTList2;
             titleSTList = new List<SpriteText>();
-            titleSTList.Add(new SpriteText(FontTextType.FontAwesome11, "  " + (char)Language.PopupAlertMessageAvatarPurchaseSuccessTitleIcon + "  ", Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));
+            titleSTList.Add(new SpriteText(FontTextType.FontAwesome11, "" + (char)Language.PopupAlertMessageAvatarPurchaseSuccessTitleIcon, Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));
             titleSTList.Add(new SpriteText(FontTextType.Consolas11, Language.PopupAlertMessageAvatarPurchaseSuccessTitle, Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));
-            titleSTList.Add(new SpriteText(FontTextType.FontAwesome11, "  " + (char)Language.PopupAlertMessageAvatarPurchaseSuccessTitleIcon + "  ", Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));
+            titleSTList.Add(new SpriteText(FontTextType.FontAwesome11, "" + (char)Language.PopupAlertMessageAvatarPurchaseSuccessTitleIcon, Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));
 
             messageSTList1 = new List<SpriteText>();
             messageSTList1.Add(new SpriteText(FontTextType.Consolas10, Language.PopupAlertMessageAvatarPurchaseSuccessMessage11, Color.White, Alignment.Left, layerDepth: DepthParameter.SceneTransitioningEffectBase));

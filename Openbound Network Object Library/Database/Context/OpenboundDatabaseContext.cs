@@ -26,6 +26,7 @@ namespace Openbound_Network_Object_Library.Database.Context
         public OpenboundDatabaseContext()
             : base($"Data Source={NetworkObjectParameters.DatabaseAddress};Initial Catalog={NetworkObjectParameters.DatabaseName};Persist Security Info=True;User ID={NetworkObjectParameters.DatabaseLogin};Password={NetworkObjectParameters.DatabasePassword};MultipleActiveResultSets=True;PersistSecurityInfo=True")
         {
+            Configuration.LazyLoadingEnabled = true;
             System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<OpenboundDatabaseContext, Configuration>());
         }
 

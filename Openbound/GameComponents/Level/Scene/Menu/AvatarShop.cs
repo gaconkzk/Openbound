@@ -1,8 +1,32 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* 
+ * Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
+ * This file is part of OpenBound.
+ * OpenBound is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
+ * 
+ * OpenBound is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
+ */
+
+using Microsoft.Xna.Framework;
 using OpenBound.Common;
 using OpenBound.Extension;
 using OpenBound.GameComponents.Animation;
 using OpenBound.GameComponents.Asset;
+/* 
+ * Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
+ * This file is part of OpenBound.
+ * OpenBound is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
+ * 
+ * OpenBound is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
+ */
+
 using OpenBound.GameComponents.Interface.Builder;
 using OpenBound.GameComponents.Interface.Interactive;
 using OpenBound.GameComponents.Interface.Interactive.AvatarShop;
@@ -22,6 +46,9 @@ using System.Linq;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
+    /// <summary>
+    /// Object meant for controlling the avatar shop filtering routines
+    /// </summary>
     public class AvatarSearchFilter
     {
         public AvatarCategory AvatarCategory;
@@ -32,38 +59,44 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         public AvatarSearchFilter() { AvatarName = ""; }
     }
+
     public class AvatarShop : GameScene
     {
-        //Interface animated buttons
+        // Interface animated buttons
         private List<AnimatedButton> animatedButtonList;
         private AnimatedButton cashChargeButton;
 
+        // Sprites
         private List<Sprite> spriteList;
         private Sprite foreground1, foreground2;
 
+        // List of avatar buttons
         public List<AvatarButton> avatarButtonList;
+
+        // List of regular buttons (currently only the tab buttons)
         private List<Button> buttonList;
-
-        private List<SpriteText> spriteTextList;
-        private TextField searchTextField;
-
         private Button tabInventoryButton, tabShopButton;
+
+        // All texts that are being used on the scene, except the ones
+        // wrapped on other objects
+        private List<SpriteText> spriteTextList;
         private SpriteText inventorySpriteText, shopSpriteText;
+        private SpriteText avatarPreviewSpriteText;
+        private SpriteText inGamePreviewSpriteText;
+        private SpriteText filterCurrentPage, filterLastPage, filterDivider;
 
         //Preview
         private Rider shopRiderPreview, inventoryRiderPreview;
-        private SpriteText avatarPreviewSpriteText;
 
         //In-Game Preview
         private InGamePreview shopInGamePreview, inventoryInGamePreview;
-        private SpriteText inGamePreviewSpriteText;
 
         private AttributeMenu attributeMenu;
         public AvatarMetadata selectedAvatarMetadata;
 
-        private SpriteText filterCurrentPage, filterLastPage, filterDivider;
+        // Filter variables
+        private TextField searchTextField;
 
-        // Filter buttons
         private List<AnimatedButton> filterButtonList;
         private AnimatedButton filterHatButton, filterBodyButton, filterGogglesButton, filterFlagButton;
         private AnimatedButton filterExItemButton, filterPetButton, filterMiscButton, filterExtraButton;
@@ -78,28 +111,23 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         // Popups
         private PopupBuyAvatar popupBuyAvatar;
 
-        //Object reference
-        private Player player;
-
+        // Padlocks for asynchronous operations controls
         private object asyncPadlock;
+
+        // Object references
+        private readonly Player player;
 
         public AvatarShop()
         {
             asyncPadlock = new object();
-            
+
             player = GameInformation.Instance.PlayerInformation;
 
+            //Background / Foreground
             Background = new Sprite(@"Interface/InGame/Scene/AvatarShop/Background",
                 position: Parameter.ScreenCenter,
                 layerDepth: DepthParameter.Foreground,
                 shouldCopyAsset: false);
-
-            animatedButtonList = new List<AnimatedButton>();
-            filterButtonList = new List<AnimatedButton>();
-            spriteList = new List<Sprite>();
-            avatarButtonList = new List<AvatarButton>();
-            spriteTextList = new List<SpriteText>();
-            buttonList = new List<Button>();
 
             foreground1 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground1", Vector2.Zero, DepthParameter.Foreground);
             foreground2 = new Sprite("Interface/InGame/Scene/AvatarShop/Foreground2", Vector2.Zero, DepthParameter.Foreground);
@@ -110,64 +138,32 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             spriteList.Add(foreground1);
             spriteList.Add(foreground2);
 
+            animatedButtonList = new List<AnimatedButton>();
+            filterButtonList = new List<AnimatedButton>();
+            spriteList = new List<Sprite>();
+            avatarButtonList = new List<AvatarButton>();
+            spriteTextList = new List<SpriteText>();
+            buttonList = new List<Button>();
+
+            //Interface components
             AddBottomAnimatedButtonsToScene();
             AddFilterAnimatedButtonsToScene();
             AddSearchTextToScene();
             AddTabControlToScene();
-
-            PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
-
-            //Room Button
-            shopRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
-            inventoryRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
-
-            inventoryRiderPreview.Hide();
-
-            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,
-                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
-                Parameter.ScreenCenter - new Vector2(385, 110), Color.Black);
-
-            //Other preview
-            shopInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
-            inventoryInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
-            inventoryInGamePreview.Hide();
-
-            inGamePreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.InGamePreviewTextAvatarShop,
-                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
-                Parameter.ScreenCenter - new Vector2(385, -17), Color.Black);
+            AddPreviewsToScene();
+            AddFilteringToScene();
 
             //AttributeButton
             attributeMenu = new AttributeMenu(new Vector2(-285, -235), player);
-
-            //Since Hats is the first selected filter, start the window rendering all hats
-            //Filtering
-            filterHatButton.ChangeButtonState(ButtonAnimationState.Activated, true);
-            searchFilter = new AvatarSearchFilter();
-            searchFilter.AvatarCategory = AvatarCategory.Hat;
-
-            //Filtering Text
-            Vector2 dividerPosition = (filterLeftButton.Flipbook.Position + filterRightButton.Flipbook.Position) / 2 + new Vector2(0, -10);
-            filterDivider = new SpriteText(FontTextType.Consolas14, "/", Color.White,
-                Alignment.Center, DepthParameter.InterfaceButton,
-                dividerPosition, Color.Black);
-            filterCurrentPage = new SpriteText(FontTextType.Consolas14, "", Color.White,
-                Alignment.Right, DepthParameter.InterfaceButton,
-                dividerPosition - new Vector2(6, 0), Color.Black);
-            filterLastPage = new SpriteText(FontTextType.Consolas14, "", Color.White,
-                Alignment.Left, DepthParameter.InterfaceButton,
-                dividerPosition + new Vector2(6, 0), Color.Black);
-
-            spriteTextList.Add(filterCurrentPage);
-            spriteTextList.Add(filterLastPage);
-            spriteTextList.Add(filterDivider);
-
-            UpdateFilter(AvatarCategory.Hat, 0);
 
             //Buttons standard preset
             tryButton.Disable(true);
             buyButton.Disable(true);
             giftButton.Disable(true);
             cashChargeButton.Disable(true);
+
+            //Popup configuration
+            PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
 
             //Feedbacks / Callbacks
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerAvatarShopBuyAvatarGold, GoldPurchaseConfirmationAsyncCallback);
@@ -195,30 +191,121 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             }
         }
 
+        /// <summary>
+        /// Created a popup informing the player about the status of the previously
+        /// requested purchase. If the parameter is null, the purchase has failed.
+        /// </summary>
         public void PurchaseConfirmationAsyncCallback(AvatarMetadata avatarMetadata)
         {
             PopupAlertMessageBuilder.BuildPopupAlertMessage(
-            avatarMetadata != null ?
-            PopupAlertMessageType.AvatarPurchaseSuccessful :
-            PopupAlertMessageType.AvatarPurchaseFailure, avatarMetadata);
+                avatarMetadata != null ?
+                PopupAlertMessageType.AvatarPurchaseSuccessful :
+                PopupAlertMessageType.AvatarPurchaseFailure, avatarMetadata);
 
             player.OwnedAvatar[avatarMetadata.AvatarCategory].Add(avatarMetadata.ID);
             UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
 
             attributeMenu.RefreshCurrencyValues();
 
-            EnableInterfaceButtons();
+            EnableInterfaceElements();
 
-            buyButton.Disable(true);
-            tryButton.Disable(true);
+            // If the player is still selecting the purchased avatar
+            if (avatarMetadata != null && selectedAvatarMetadata.ID == avatarMetadata.ID)
+            {
+                buyButton.Disable(true);
+                tryButton.Disable(true);
+            }
         }
         #endregion
 
-        #region AddComponents Into Screen
+        #region Add/Instance Components
+        public void AddAvatarButtonList(List<AvatarMetadata> metadataList)
+        {
+            avatarButtonList.Clear();
+
+            const int offsetX = 108;
+            const int offsetY = 86;
+
+            for (int i = 0; i < 25 && i < metadataList.Count(); i++)
+            {
+                AvatarButton button = new AvatarButton(
+                    new Vector2(-95, -175) + new Vector2(offsetX * (i % 5), offsetY * (i / 5)),
+                    metadataList[i], AvatarButtonAction, DepthParameter.InterfaceButton);
+
+                button.HideEquippedIndicator();
+
+                if (searchFilter.IsRenderingInventory)
+                {
+                    if (inventoryRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
+                        button.ShowEquippedIndicator();
+                }
+                else
+                {
+                    if (shopRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
+                        button.ShowEquippedIndicator();
+                }
+
+                avatarButtonList.Add(button);
+            }
+        }
+
+        public void AddFilteringToScene()
+        {
+            //Filtering
+
+            //Filtering Text
+            Vector2 dividerPosition = (filterLeftButton.Flipbook.Position + filterRightButton.Flipbook.Position) / 2 + new Vector2(0, -10);
+            filterDivider = new SpriteText(FontTextType.Consolas14, "/", Color.White,
+                Alignment.Center, DepthParameter.InterfaceButton,
+                dividerPosition, Color.Black);
+            filterCurrentPage = new SpriteText(FontTextType.Consolas14, "", Color.White,
+                Alignment.Right, DepthParameter.InterfaceButton,
+                dividerPosition - new Vector2(6, 0), Color.Black);
+            filterLastPage = new SpriteText(FontTextType.Consolas14, "", Color.White,
+                Alignment.Left, DepthParameter.InterfaceButton,
+                dividerPosition + new Vector2(6, 0), Color.Black);
+
+            spriteTextList.Add(filterCurrentPage);
+            spriteTextList.Add(filterLastPage);
+            spriteTextList.Add(filterDivider);
+
+            //Since Hats is the first selected filter, start the window rendering all hats
+            filterHatButton.ChangeButtonState(ButtonAnimationState.Activated, true);
+            searchFilter = new AvatarSearchFilter();
+            searchFilter.AvatarCategory = AvatarCategory.Hat;
+            UpdateFilter(AvatarCategory.Hat, 0);
+        }
+
+        public void AddPreviewsToScene()
+        {
+            //Room Button Preview
+            shopRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
+            inventoryRiderPreview = new Rider(Facing.Right, player, Parameter.ScreenCenter + new Vector2(-280, -40));
+
+            inventoryRiderPreview.Hide();
+
+            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,
+                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
+                Parameter.ScreenCenter - new Vector2(385, 110), Color.Black);
+
+            spriteTextList.Add(avatarPreviewSpriteText);
+
+            //In-Game (mobile) preview
+            shopInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
+            inventoryInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
+            inventoryInGamePreview.Hide();
+
+            inGamePreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.InGamePreviewTextAvatarShop,
+                Color.White, Alignment.Left, DepthParameter.InterfaceButton,
+                Parameter.ScreenCenter - new Vector2(385, -17), Color.Black);
+
+            spriteTextList.Add(inGamePreviewSpriteText);
+        }
+
         public void AddTabControlToScene()
         {
-            tabShopButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, ShopButtonAction, new Vector2(-110, -285));
-            tabInventoryButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, InventoryButtonAction, new Vector2(-030, -285));
+            tabShopButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, ShopTabButtonAction, new Vector2(-110, -285));
+            tabInventoryButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, InventoryTabButtonAction, new Vector2(-030, -285));
             tabShopButton.UpdateAttatchedPosition();
             tabInventoryButton.UpdateAttatchedPosition();
 
@@ -316,7 +403,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             animatedButtonList.ForEach((x) => x.ShouldUpdate = true);
             ((Button)sender).Enable();
 
-            EnableInterfaceButtons();
+            EnableInterfaceElements();
         }
 
         private void OptionsAction(object sender)
@@ -326,19 +413,23 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             PopupHandler.PopupGameOptions.ShouldRender = true;
             ((AnimatedButton)sender).Disable(true);
 
-            DisableInterfaceButtons();
+            DisableInterfaceElements();
         }
 
         private void ExitDoorAction(object sender)
         {
+            //Sends the server information about the attributes and equipped avatars
             ServerInformationHandler.AvatarShopUpdatePlayerData();
             SceneHandler.Instance.RequestSceneChange(SceneType.GameList, TransitionEffectType.RotatingRectangles);
             ((AnimatedButton)sender).Disable(true);
         }
 
+        /// <summary>
+        /// This action is meant for avatar inventory and shop buttons.
+        /// </summary>
         private void AvatarButtonAction(object sender)
         {
-            AvatarButton avatarButton = ((AvatarButton)sender);
+            AvatarButton avatarButton = (AvatarButton)sender;
             selectedAvatarMetadata = avatarButton.AvatarMetadata;
 
             // If it is a inventory button
@@ -379,6 +470,10 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             }
         }
 
+        /// <summary>
+        /// Equip the selected avatar on the ShopPreview and then disable the button.
+        /// </summary>
+        /// <param name="sender"></param>
         private void TryButtonAction(object sender)
         {
             if (selectedAvatarMetadata != null)
@@ -398,10 +493,14 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             tryButton.Disable(true);
         }
 
+        /// <summary>
+        /// Creates a popup for avatar purchase and disable the try/buy button.
+        /// While the popup is open the interface buttons are disabled.
+        /// </summary>
         private void BuyButtonAction(object sender)
         {
             popupBuyAvatar = new PopupBuyAvatar(selectedAvatarMetadata,
-                OnClosePopupDialog,
+                OnCloseBuyAvatarPopupDialog,
                 OnBuyCash,
                 OnBuyGold);
 
@@ -410,10 +509,14 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             buyButton.Disable(true);
             tryButton.Disable(true);
 
-            DisableInterfaceButtons();
+            DisableInterfaceElements();
         }
 
-        private void ShopButtonAction(object sender)
+        /// <summary>
+        /// Changes the foreground, the search filters and the rendered rider
+        /// preview when clicked.
+        /// </summary>
+        private void ShopTabButtonAction(object sender)
         {
             shopSpriteText.BaseColor = shopSpriteText.Color = Color.White;
 
@@ -436,7 +539,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             UpdateFilter(searchFilter.AvatarCategory, 0);
         }
 
-        private void InventoryButtonAction(object sender)
+        /// <summary>
+        /// Changes the foreground, the search filters and the rendered rider
+        /// preview when clicked.
+        /// </summary>
+        private void InventoryTabButtonAction(object sender)
         {
             inventorySpriteText.BaseColor = inventorySpriteText.Color = Color.White;
 
@@ -462,6 +569,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             tryButton.Disable(true);
         }
 
+        /// <summary>
+        /// Action being called on each avatar shop filter.
+        /// This action changes the filtering options and refresh the
+        /// AvatarButtonList.
+        /// </summary>
         public void FilterButtonAction(object sender, AvatarCategory category)
         {
             filterButtonList.ForEach((x) =>
@@ -474,39 +586,50 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             UpdateFilter(category, 0);
         }
 
-        public void OnClosePopupDialog(object sender)
+        public void OnCloseBuyAvatarPopupDialog(object sender)
         {
-            EnableInterfaceButtons();
+            EnableInterfaceElements();
 
             buyButton.Enable();
             tryButton.Enable();
-
         }
 
+        /// <summary>
+        /// Sends the server a request for purchasing the selected avatar 
+        /// in cash, closes <see cref="popupBuyAvatar">. The confirmation
+        /// occurs after the server process the request and a popup will show up.
+        /// With the confirmation status.
+        /// </summary>
         public void OnBuyCash(object sender)
         {
             //send request
             ServerInformationHandler.AvatarShopBuyAvatarCash(selectedAvatarMetadata);
             PopupHandler.Remove(popupBuyAvatar);
+
+            buyButton.Disable(true);
+            tryButton.Disable(true);
         }
 
+        /// <summary>
+        /// Sends the server a request for purchasing the selected avatar 
+        /// in gold, closes <see cref="popupBuyAvatar">. The confirmation
+        /// occurs after the server process the request and a popup will show up.
+        /// With the confirmation status.
+        /// </summary>
         public void OnBuyGold(object sender)
         {
             //send request
             ServerInformationHandler.AvatarShopBuyAvatarGold(selectedAvatarMetadata);
             PopupHandler.Remove(popupBuyAvatar);
-        }
-        #endregion
 
-        #region Action handlers
-        public void OnFilterTextChange(string newText)
-        {
-            searchFilter.AvatarName = newText;
-            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
+            buyButton.Disable(true);
+            tryButton.Disable(true);
         }
-        #endregion
 
-        private void DisableInterfaceButtons()
+        /// <summary>
+        /// Disables all interface elements. Including buttons and text fields.
+        /// </summary>
+        private void DisableInterfaceElements()
         {
             animatedButtonList.ForEach((x) => x.Disable(true));
             filterButtonList.ForEach((x) => x.Disable(true));
@@ -517,7 +640,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchTextField.DeactivateElement();
         }
 
-        private void EnableInterfaceButtons()
+        /// <summary>
+        /// Enables all interface elements. Including buttons and text fields.
+        /// The search button states are preserved.
+        /// </summary>
+        private void EnableInterfaceElements()
         {
             animatedButtonList.ForEach((x) => x.Enable());
             filterButtonList.ForEach((x) => x.Enable());
@@ -558,7 +685,24 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             searchTextField.Enable();
             searchTextField.ActivateElement();
         }
+        #endregion
 
+        #region Action handlers
+        /// <summary>
+        /// This method is called whenever a letter is typed on the textfield.
+        /// </summary>
+        public void OnFilterTextChange(string newText)
+        {
+            searchFilter.AvatarName = newText;
+            UpdateFilter(searchFilter.AvatarCategory, searchFilter.CurrentPage);
+        }
+        #endregion
+
+        #region Filtering
+        /// <summary>
+        /// This method updates <see cref="searchFilter"/> and refreshes the
+        /// AvatarButtonList.
+        /// </summary>
         public void UpdateFilter(AvatarCategory category, int currentPage)
         {
             searchFilter.AvatarCategory = category;
@@ -576,7 +720,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             metadataList = metadataList.Skip(searchFilter.CurrentPage * 25).Take(searchFilter.CurrentPage * 25 + 25).ToList();
 
-            RenderAvatarList(metadataList.ToList());
+            AddAvatarButtonList(metadataList.ToList());
 
             filterCurrentPage.Text = (searchFilter.CurrentPage + 1).ToString();
             filterLastPage.Text = searchFilter.LastPage.ToString();
@@ -588,36 +732,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             if (currentPage + 1 == searchFilter.LastPage) filterRightButton.Disable(true);
             else if (filterRightButton.IsDisabled) filterRightButton.Enable();
         }
-
-        public void RenderAvatarList(List<AvatarMetadata> metadataList)
-        {
-            avatarButtonList.Clear();
-
-            const int offsetX = 108;
-            const int offsetY = 86;
-
-            for (int i = 0; i < 25 && i < metadataList.Count(); i++)
-            {
-                AvatarButton button = new AvatarButton(
-                    new Vector2(-95, -175) + new Vector2(offsetX * (i % 5), offsetY * (i / 5)),
-                    metadataList[i], AvatarButtonAction, DepthParameter.InterfaceButton);
-
-                button.HideEquippedIndicator();
-
-                if (searchFilter.IsRenderingInventory)
-                {
-                    if (inventoryRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
-                        button.ShowEquippedIndicator();
-                }
-                else
-                {
-                    if (shopRiderPreview.GetEquippedAvatarID(metadataList[i].AvatarCategory) == metadataList[i].ID)
-                        button.ShowEquippedIndicator();
-                }
-
-                avatarButtonList.Add(button);
-            }
-        }
+        #endregion
 
         public override void Update(GameTime gameTime)
         {
@@ -650,9 +765,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                 buttonList.ForEach((x) => x.Draw(gameTime, spriteBatch));
                 shopRiderPreview.Draw(gameTime, spriteBatch);
                 inventoryRiderPreview.Draw(gameTime, spriteBatch);
-
-                avatarPreviewSpriteText.Draw(spriteBatch);
-                inGamePreviewSpriteText.Draw(spriteBatch);
 
                 attributeMenu.Draw(gameTime, spriteBatch);
 

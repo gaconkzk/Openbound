@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Openbound_Network_Object_Library.Models;
 using Openbound_Network_Object_Library.Entity.Text;
-using System.Data.Entity.Core.Metadata.Edm;
 using Openbound_Network_Object_Library.Database.Context;
 using Openbound_Network_Object_Library.Database.Controller;
 
@@ -49,7 +48,9 @@ namespace Openbound_Game_Server.Service
                         {
                             //Retrieve Player from database since player's connection request cant be trusted
                             //Remember that I cant trust player ID either
-                            player = new OpenboundDatabaseContext().Players.FirstOrDefault((x) => x.ID == player.ID);
+                            player = new OpenboundDatabaseContext()
+                                .Players.Where((x) => x.ID == player.ID)
+                                .FirstOrDefault();
                             if (player == null)
                                 throw new Exception();
 
@@ -396,7 +397,6 @@ namespace Openbound_Game_Server.Service
             try
             {
                 int loadingPercentage = int.Parse(param);
-                playerSession.Player.LoadingScreenPercentage = loadingPercentage;
 
                 Console.WriteLine($"{playerSession.Player.ID} - {playerSession.Player.Nickname} is {loadingPercentage}%");
 

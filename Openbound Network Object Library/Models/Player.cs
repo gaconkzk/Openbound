@@ -171,10 +171,9 @@ namespace Openbound_Network_Object_Library.Models
         [NotMapped] public PlayerStatus PlayerStatus { get; set; }
         [JsonIgnore, NotMapped] public PlayerRank PlayerRank { get; set; }
 
-        //In-game variables - Loading
+        //In-game variables
         [JsonIgnore, NotMapped] public PlayerRoomStatus PlayerLoadingStatus { get; set; }
-        [JsonIgnore, NotMapped] public int LoadingScreenPercentage { get; set; }
-
+        
         [JsonIgnore, NotMapped] public Dictionary<AvatarCategory, HashSet<int>> OwnedAvatar;
 
         public Player()

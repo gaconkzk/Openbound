@@ -1,4 +1,16 @@
-﻿using Openbound_Network_Object_Library.Common;
+﻿/* 
+ * Copyright (C) 2020, Carlos H.M.S. <carlos_judo@hotmail.com>
+ * This file is part of OpenBound.
+ * OpenBound is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or(at your option) any later version.
+ * 
+ * OpenBound is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
+ */
+
+using Openbound_Network_Object_Library.Common;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
 using System;
@@ -8,6 +20,11 @@ using System.Linq;
 
 namespace OpenBound.GameComponents.Asset
 {
+    /// <summary>
+    /// This method reads all documents inside ContentMetadata folder and saves the metadata files
+    /// on <see cref="ElementMetadata"/>. <see cref="Initialize"/> and <see cref="LoadAssetMetadata"/>
+    /// must be called before using any elements whithin.
+    /// </summary>
     public class MetadataManager
     {
         public static Dictionary<string, object> ElementMetadata = new Dictionary<string, object>();
@@ -34,6 +51,7 @@ namespace OpenBound.GameComponents.Asset
         public MetadataManager() { }
 
         string metadataBasePath;
+
         //ideally the game should fetch the information from a browser
         string downloadedMetadataBasePath;
 
@@ -53,7 +71,9 @@ namespace OpenBound.GameComponents.Asset
             LoadAvatarMetadata();
         }
         
-
+        /// <summary>
+        /// Saves the AvatarMetadata elements into <see cref="AvatarMetadataDictionary"/>.
+        /// </summary>
         private void LoadAvatarMetadata()
         {
             ElementMetadata["DatabaseSeed/AvatarMetadata"] = ((List<AvatarMetadata>)ElementMetadata["DatabaseSeed/AvatarMetadata"]).OrderBy((x) => x.AvatarCategory).ThenBy((y) => y.ID).ToList();
