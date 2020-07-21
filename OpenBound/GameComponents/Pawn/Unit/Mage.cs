@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Mage : Mobile
     {
-        public Mage(Player player, Vector2 position) : base(player, position, MobileType.Mage, new Vector2(-20, 0))
+        public Mage(Player player, Vector2 position) : base(player, position, MobileType.Mage)
         {
             Movement.CollisionOffset = 30;
             Movement.MaximumStepsPerTurn = 90;

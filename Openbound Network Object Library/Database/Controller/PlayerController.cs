@@ -213,18 +213,23 @@ namespace Openbound_Network_Object_Library.Database.Controller
         {
             OpenboundDatabaseContext odc = new OpenboundDatabaseContext();
 
-            List<int> avL = player.Avatar.ToList();
-
             //Searches for the 8 equipped avatars in players db avatar list.
             //If the number of matchs is equal to the number of equipped avatars
             //All avatars are owned, therefore returns true
-
             return odc.Players
                .Include(q => q.AvatarMetadataList)
                .First((x) => x.ID == player.ID)
                .AvatarMetadataList
-               .Where(am => avL.Contains(am.ID))
-               .Count() == avL.Count;
+               .Where(am =>
+                (am.ID == player.EquippedAvatarHat && am.AvatarCategory == AvatarCategory.Hat) ||
+                (am.ID == player.EquippedAvatarBody && am.AvatarCategory == AvatarCategory.Body) ||
+                (am.ID == player.EquippedAvatarGoggles && am.AvatarCategory == AvatarCategory.Goggles) ||
+                (am.ID == player.EquippedAvatarFlag && am.AvatarCategory == AvatarCategory.Flag) ||
+                (am.ID == player.EquippedAvatarExItem && am.AvatarCategory == AvatarCategory.ExItem) ||
+                (am.ID == player.EquippedAvatarPet && am.AvatarCategory == AvatarCategory.Pet) ||
+                (am.ID == player.EquippedAvatarMisc && am.AvatarCategory == AvatarCategory.Misc) ||
+                (am.ID == player.EquippedAvatarExtra && am.AvatarCategory == AvatarCategory.Extra)
+               ).Count() == player.Avatar.Count();
         }
 
         public void UpdatePlayerMetadata(Player player)
@@ -234,7 +239,7 @@ namespace Openbound_Network_Object_Library.Database.Controller
             Player p = odc.Players.Find(player.ID);
             p.Avatar = player.Avatar;
             p.Attribute = player.Attribute;
-            
+                        
             odc.SaveChanges();
         }
     }

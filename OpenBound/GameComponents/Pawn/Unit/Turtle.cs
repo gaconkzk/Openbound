@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Turtle : Mobile
     {
-        public Turtle(Player player, Vector2 position) : base(player, position, MobileType.Turtle, new Vector2(-20, 0))
+        public Turtle(Player player, Vector2 position) : base(player, position, MobileType.Turtle)
         {
             Movement.CollisionOffset = 23;
             Movement.MaximumStepsPerTurn = 90;

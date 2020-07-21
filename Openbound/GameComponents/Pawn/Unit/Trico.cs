@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Trico : Mobile
     {
-        public Trico(Player player, Vector2 position) : base(player, position, MobileType.Trico, new Vector2(-20, 0))
+        public Trico(Player player, Vector2 position) : base(player, position, MobileType.Trico)
         {
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;

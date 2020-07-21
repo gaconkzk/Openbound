@@ -91,7 +91,7 @@ namespace OpenBound.GameComponents.Pawn
         DebugCrosshair debugCrosshair2 = new DebugCrosshair(Color.HotPink);
 #endif
 
-        public Mobile(Player player, Vector2 position, MobileType mobileType, Vector2 riderPositionOffset = default, bool IsSummon = false) : base()
+        public Mobile(Player player, Vector2 position, MobileType mobileType, bool IsSummon = false) : base()
         {
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
@@ -121,8 +121,10 @@ namespace OpenBound.GameComponents.Pawn
 
             if (!IsSummon)
             {
-                Rider = new Rider(this, riderPositionOffset);
-                Crosshair = new Crosshair(this);
+                Rider = new Rider(this);
+
+                if (MobileType != MobileType.Random)
+                    Crosshair = new Crosshair(this);
             }
 
             //Sync

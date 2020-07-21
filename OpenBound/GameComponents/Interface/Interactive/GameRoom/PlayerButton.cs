@@ -165,8 +165,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
 
             if (Player.PlayerTeam == PlayerTeam.Red)
             {
-                //Mobile.Flip();
-                Mobile.MobileFlipbook.Effect = SpriteEffects.FlipHorizontally;
+                Mobile.Flip();
             }
 
             Nameplate = new Nameplate(Player, Alignment.Left, ButtonOffset - new Vector2(100, 47));
@@ -192,7 +191,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
         public override void Update()
         {
             base.Update();
-
+            Mobile.Rider.Update();
             UpdatePlayerStatus();
         }
 

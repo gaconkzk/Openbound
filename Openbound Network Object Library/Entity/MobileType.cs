@@ -15,51 +15,22 @@ namespace Openbound_Network_Object_Library.Entity
     public enum MobileType
     {
         Random = 0,
-        Aduka, //1
-        Armor,
-        ASate, //2
-        Assassin,
-
-        Bigfoot,
-        BlueWhale,
-        Boomer, //3
-
-        Carrior,
-
-        Dragon,
-
-        Frank,
-
-        Grub, //4
-
-        Ice,
-
-        JD, //5
-        JFrog, //6
-
-        Kalsiddon, //7
-        Knight,
-
-        Lightning, //8
-
-        Mage,
-        Maya,
-
-        Nak, //9
-
-        Princess,
-        Phoenix,
-
-        RaonLauncher, //10
-        RaonLauncherMineS2,
-        RaonLauncherMineSS,
-
-        ShadowWalker,
-
-        Tiburon,
-        Trico,
-        Turtle,
-
-        Wolf,
+        Aduka = 1, Armor = 2, ASate = 3, Assassin = 4,
+        Bigfoot = 5, BlueWhale = 6, Boomer = 7,
+        Carrior = 8,
+        Dragon = 9,
+        Frank = 10,
+        Grub = 11,
+        Ice = 12,
+        JD = 13, JFrog = 14,
+        Kalsiddon = 15, Knight = 16,
+        Lightning = 17,
+        Mage = 18, Maya = 19,
+        Nak = 20,
+        Phoenix = 21, Princess = 22,
+        RaonLauncher = 24, RaonLauncherMineS2, RaonLauncherMineSS,
+        ShadowWalker = 25,
+        Tiburon = 26, Trico = 27, Turtle = 28,
+        Wolf = 29,
     }
 }

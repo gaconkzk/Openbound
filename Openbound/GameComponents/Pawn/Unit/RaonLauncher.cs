@@ -33,7 +33,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
     {
         bool mineTurn;
 
-        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher, new Vector2(10, 26))
+        public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher)
         {
             Movement.CollisionOffset = 20;
             Movement.MaximumStepsPerTurn = 90;

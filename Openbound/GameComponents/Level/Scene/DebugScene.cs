@@ -49,6 +49,7 @@ namespace OpenBound.GameComponents.Level.Scene
             GameInformation.Instance.PlayerInformation = new Player()
             {
                 ID = 0,
+                Gender = Gender.Female,
                 Nickname = "Jebomancer",
             };
 
@@ -70,7 +71,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.RaonLauncher,
+                    PrimaryMobile = MobileType.Lightning,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -78,11 +79,11 @@ namespace OpenBound.GameComponents.Level.Scene
                     PlayerStatus = PlayerStatus.Normal,
                     SecurityToken = new SecurityToken() { DateTime = DateTime.Now, Token = "123123123", UnifiedSecurityToken = "123123123" }
                 },
-                Position = new int[] { 300, 100 },
+                Position = new int[] { 340, 100 },
                 SelectedShotType = ShotType.SS,
                 SynchronizableActionList = new List<SynchronizableAction>() { SynchronizableAction.LeftMovement, SynchronizableAction.ChargingShot }
             });
-            /*
+
             sMobList.Add(new SyncMobile()
             {
                 CrosshairAngle = 10,
@@ -91,14 +92,14 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
+                    Gender = Gender.Male,
                     Email = "c@c.com",
                     ID = 1,
                     Nickname = "Zicoman",
                     Password = "123",
                     PlayerRank = PlayerRank.Dragon1,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.Lightning,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Blue,
                     FriendList = new List<Player>(),
@@ -119,7 +120,6 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
                     Email = "c@c.com",
                     ID = 2,
                     Nickname = "Big String  To Test The Box Size Calc",
@@ -147,14 +147,13 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
                     Email = "c@c.com",
                     ID = 3,
                     Nickname = "Winged",
                     Password = "123",
                     PlayerRank = PlayerRank.GM,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.Ice,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Blue,
                     FriendList = new List<Player>(),
@@ -175,14 +174,13 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
                     Email = "c@c.com",
                     ID = 4,
                     Nickname = "You woke me up!",
                     Password = "123",
                     PlayerRank = PlayerRank.DGoldenAxe2,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.Dragon,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Blue,
                     FriendList = new List<Player>(),
@@ -203,14 +201,13 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
                     Email = "c@c.com",
                     ID = 5,
                     Nickname = "Ordinary World",
                     Password = "123",
                     PlayerRank = PlayerRank.Chick,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.Turtle,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Blue,
                     FriendList = new List<Player>(),
@@ -231,14 +228,13 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
                     Email = "c@c.com",
                     ID = 6,
                     Nickname = "JonathanJoestar",
                     Password = "123",
                     PlayerRank = PlayerRank.Champion1,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.Trico,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -259,14 +255,14 @@ namespace OpenBound.GameComponents.Level.Scene
                 MobileMetadata = MobileMetadata.BuildMobileMetadata(MobileType.Knight),
                 Owner = new Player()
                 {
-                    CharacterGender = Gender.Feminine,
+                    Gender = Gender.Female,
                     Email = "c@c.com",
                     ID = 7,
                     Nickname = "JosephJoestar",
                     Password = "123",
                     PlayerRank = PlayerRank.Axe1,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Knight,
+                    PrimaryMobile = MobileType.RaonLauncher,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -277,7 +273,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 Position = new int[] { 1, 0 },
                 SelectedShotType = ShotType.SS,
                 SynchronizableActionList = new List<SynchronizableAction>() { SynchronizableAction.LeftMovement, SynchronizableAction.ChargingShot }
-            });*/
+            });
             #endregion
 
             //delayboard = new Delayboard(mobList, new Vector2(0, 0) /* Parameter.ScreenCenter */);
@@ -286,14 +282,14 @@ namespace OpenBound.GameComponents.Level.Scene
             {
                 SpawnPositions = new Dictionary<int, int[]>()
                 {
-                    { 0, new int[] { 1100, 700 } },
+                    { 0, new int[] { 1150, 700 } },
                     { 1, new int[] { 300, 700 } }, { 2, new int[] { 700, 700 } },
                     { 3, new int[] { 400, 700 } }, { 4, new int[] { 800, 700 } },
                     { 5, new int[] { 500, 700 } }, { 6, new int[] { 900, 700 } },
                     { 7, new int[] { 600, 700 } }, { 8, new int[] { 1000, 700 } },
                 },
-                TeamA = new List<Player>() { sMobList[0].Owner /*, sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner */ },
-                TeamB = new List<Player>() { /*sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner*/ },
+                TeamA = new List<Player>() { sMobList[0].Owner , sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner  },
+                TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
             GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
         }

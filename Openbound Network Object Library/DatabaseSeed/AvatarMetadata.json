@@ -279,5 +279,15 @@
 		"PivotY": 24,
 		"FrameDimensionX": 30,
 		"FrameDimensionY": 28
+	},
+	//--ExItem
+	{
+		"ID": 0,
+		"Name": "No ExItem",
+		"Date": "2020-07-13",
+		"AvatarCategory": 4,
+		"Gender": 2,
+		"FrameDimensionX": 1,
+		"FrameDimensionY": 1
 	}
 ]

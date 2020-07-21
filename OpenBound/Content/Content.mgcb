@@ -1482,6 +1482,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Avatar/Unissex/Pet/Red Parrot.png
 
+#begin Graphics/Avatar/Unissex/Portrait/ExItem/No ExItem.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Avatar/Unissex/Portrait/ExItem/No ExItem.png
+
 #begin Graphics/Avatar/Unissex/Portrait/Extra/No Extra.png
 /importer:TextureImporter
 /processor:TextureProcessor

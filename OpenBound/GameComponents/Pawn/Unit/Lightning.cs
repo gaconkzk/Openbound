@@ -24,7 +24,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Lightning : Mobile
     {
-        public Lightning(Player player, Vector2 position) : base(player, position, MobileType.Lightning, new Vector2(-20, 0))
+        public Lightning(Player player, Vector2 position) : base(player, position, MobileType.Lightning)
         {
             Movement.CollisionOffset = 23;
             Movement.MaximumStepsPerTurn = 90;

@@ -11,11 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
-using OpenBound.Common;
-using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Collision;
-using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
@@ -24,7 +20,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Dragon : Mobile
     {
-        public Dragon(Player player, Vector2 position) : base(player, position, MobileType.Dragon, new Vector2(-20, 0))
+        public Dragon(Player player, Vector2 position) : base(player, position, MobileType.Dragon)
         {
             Movement.CollisionOffset = 25;
             Movement.MaximumStepsPerTurn = 90;

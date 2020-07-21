@@ -50,6 +50,12 @@ namespace OpenBound.GameComponents.Debug
             }
         }
 
+        public void Add(DebugElement de) { }
+        public void AddRange(List<DebugElement> deList) { }
+        public void AddRange(List<DebugCrosshair> deList) { }
+        public void AddRange(DebugCrosshair[] deList) { }
+
+        /*
         public void Add(DebugElement de)
         {
             lock (debugElementList)
@@ -72,7 +78,7 @@ namespace OpenBound.GameComponents.Debug
             foreach (DebugElement de in deList)
                 lock (debugElementList)
                     toBeAddedElements.Add(de);
-        }
+        }*/
 
         public void Update()
         {
