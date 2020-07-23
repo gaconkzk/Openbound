@@ -50,6 +50,9 @@ namespace OpenBound.GameComponents.Pawn
         readonly Mobile mobile;
         readonly List<int[]> riderOffset;
 
+        //Rendering
+        public bool ShouldRenderExtraAvatars;
+
 #if DEBUG
         DebugCrosshair dc1 = new DebugCrosshair(Color.Blue);
         DebugCrosshair dc2 = new DebugCrosshair(Color.White);
@@ -79,6 +82,8 @@ namespace OpenBound.GameComponents.Pawn
             Flag.Position = position + new Vector2(facingFactor * 11, -17);
 
             if (facing == Facing.Right) Flip();
+
+            ShouldRenderExtraAvatars = true;
         }
 
         public Rider(Mobile mobile)
@@ -92,8 +97,8 @@ namespace OpenBound.GameComponents.Pawn
             Flag = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Flag][mobile.Owner.EquippedAvatarFlag], true);
 
             Pet = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Pet][mobile.Owner.EquippedAvatarPet], true);
-            Extra = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Extra][mobile.Owner.EquippedAvatarPet], true);
-            Misc = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Misc][mobile.Owner.EquippedAvatarPet], true);
+            Extra = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Extra][mobile.Owner.EquippedAvatarExtra], true);
+            Misc = new Avatar(MetadataManager.AvatarMetadataDictionary[mobile.Owner.Gender][AvatarCategory.Misc][mobile.Owner.EquippedAvatarMisc], true);
 
             headBasePosition = new Vector2(7, -17);
             bodyBasePosition = Vector2.Zero;
@@ -111,12 +116,8 @@ namespace OpenBound.GameComponents.Pawn
 #endif
 
             Update();
-        }
 
-        public void HideLobbyExclusiveAvatars()
-        {
-            Extra.Hide();
-            Misc.Hide();
+            ShouldRenderExtraAvatars = true;
         }
 
         public void Show()
@@ -179,7 +180,7 @@ namespace OpenBound.GameComponents.Pawn
         public void ReplaceAvatar(AvatarMetadata avatarMetadata)
         {
             Avatar avatar = new Avatar(avatarMetadata, 
-                avatarMetadata.AvatarCategory != AvatarCategory.Hat ||
+                avatarMetadata.AvatarCategory != AvatarCategory.Hat &&
                 avatarMetadata.AvatarCategory != AvatarCategory.Body);
 
             Avatar previousAvatar = null;
@@ -303,8 +304,11 @@ namespace OpenBound.GameComponents.Pawn
             Flag.Draw(gameTime, spriteBatch);
             Pet.Draw(gameTime, spriteBatch);
 
-            Extra.Draw(gameTime, spriteBatch);
-            Misc.Draw(gameTime, spriteBatch);
+            if (ShouldRenderExtraAvatars)
+            {
+                Extra.Draw(gameTime, spriteBatch);
+                Misc.Draw(gameTime, spriteBatch);
+            }
         }
 
         internal void ResetCurrentAnimation()

@@ -162,6 +162,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.GameRoom
                 DepthParameter.Mobile - 0.01f));
 
             Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(-20 * sidePositionFactor, 7), false);
+            Mobile.Rider.Update();
 
             if (Player.PlayerTeam == PlayerTeam.Red)
             {

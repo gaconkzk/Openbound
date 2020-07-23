@@ -345,6 +345,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private void AvatarShopAction(object sender)
         {
+            ServerInformationHandler.SendChatDisconnectionRequest();
             SceneHandler.Instance.RequestSceneChange(SceneType.AvatarShop, TransitionEffectType.RotatingRectangles);
         }
 

@@ -120,6 +120,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         public AvatarShop()
         {
             asyncPadlock = new object();
+            animatedButtonList = new List<AnimatedButton>();
+            filterButtonList = new List<AnimatedButton>();
+            spriteList = new List<Sprite>();
+            avatarButtonList = new List<AvatarButton>();
+            spriteTextList = new List<SpriteText>();
+            buttonList = new List<Button>();
 
             player = GameInformation.Instance.PlayerInformation;
 
@@ -137,13 +143,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             spriteList.Add(foreground1);
             spriteList.Add(foreground2);
-
-            animatedButtonList = new List<AnimatedButton>();
-            filterButtonList = new List<AnimatedButton>();
-            spriteList = new List<Sprite>();
-            avatarButtonList = new List<AvatarButton>();
-            spriteTextList = new List<SpriteText>();
-            buttonList = new List<Button>();
 
             //Interface components
             AddBottomAnimatedButtonsToScene();
@@ -711,7 +710,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             IEnumerable<AvatarMetadata> metadataList = MetadataManager.AvatarMetadataDictionary[player.Gender][searchFilter.AvatarCategory].Values;
 
             //Text filter
-            metadataList = metadataList.Where((x) => x.Name.ToLower().Contains(searchFilter.AvatarName));
+            metadataList = metadataList.Where((x) => x.Name.ToLower().Contains(searchFilter.AvatarName.ToLower()));
 
             if (searchFilter.IsRenderingInventory)
                 metadataList = metadataList.Where((x) => player.OwnedAvatar[category].Contains(x.ID));

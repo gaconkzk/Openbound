@@ -90,7 +90,8 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
                 ButtonOffset + new Vector2(-20 * sidePositionFactor, 33),
                 DepthParameter.Mobile - 0.01f));
 
-            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(-20 * sidePositionFactor, 7));
+            Mobile = ActorBuilder.BuildMobile(Player.PrimaryMobile, Player, ButtonOffset + new Vector2(-20 * sidePositionFactor, 7), false);
+            Mobile.Rider.Update();
 
             if (Player.PlayerTeam == PlayerTeam.Red)
             {

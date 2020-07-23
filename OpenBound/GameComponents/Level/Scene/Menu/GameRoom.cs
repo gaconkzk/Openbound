@@ -150,7 +150,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             lock (animatedButtonList)
             {
-                if (!popupSelectMobile.ShouldRender)
+                if (popupSelectMobile != null && !popupSelectMobile.ShouldRender)
                     ready.Enable();
             }
 
@@ -243,7 +243,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private void ChangeTeamAction(object sender)
         {
-            AnimatedButton b = ((AnimatedButton)sender);
+            AnimatedButton b = (AnimatedButton)sender;
 
             b.Disable();
             b.OnDisabled = (a) => { b.Enable(); };

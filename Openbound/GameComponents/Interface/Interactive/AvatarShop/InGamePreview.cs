@@ -31,6 +31,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
             foreground = new Sprite("Interface/InGame/Scene/AvatarShop/InGamePreview/MiramoTown/Foreground2", position, DepthParameter.BackgroundAnim);
 
             mobile = new RaonLauncher(GameInformation.Instance.PlayerInformation, position);
+            mobile.HideLobbyExclusiveAvatars();
             mobile.Flip();
         }
 
@@ -44,6 +45,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.AvatarShop
         {
             mobile.ShowElement();
             mobile.Rider.Show();
+            mobile.HideLobbyExclusiveAvatars();
         }
 
         public void ReplaceAvatar(AvatarMetadata avatarMetadata)

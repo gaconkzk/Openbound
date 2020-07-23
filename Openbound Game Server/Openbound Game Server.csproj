@@ -60,7 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\PlayerSession.cs" />
     <Compile Include="Service\GameClientProvider.cs" />
-    <Compile Include="Service\LobbyServerHandler.cs" />
+    <Compile Include="Common\LobbyServerHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

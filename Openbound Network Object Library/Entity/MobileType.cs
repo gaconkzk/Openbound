@@ -28,9 +28,12 @@ namespace Openbound_Network_Object_Library.Entity
         Mage = 18, Maya = 19,
         Nak = 20,
         Phoenix = 21, Princess = 22,
-        RaonLauncher = 24, RaonLauncherMineS2, RaonLauncherMineSS,
+        RaonLauncher = 24,
         ShadowWalker = 25,
         Tiburon = 26, Trico = 27, Turtle = 28,
         Wolf = 29,
+
+        //Extra mobiles
+        RaonLauncherMineS2 = 100, RaonLauncherMineSS = 101,
     }
 }

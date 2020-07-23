@@ -48,9 +48,18 @@ namespace Openbound_Game_Server.Service
                         {
                             //Retrieve Player from database since player's connection request cant be trusted
                             //Remember that I cant trust player ID either
-                            player = new OpenboundDatabaseContext()
-                                .Players.Where((x) => x.ID == player.ID)
-                                .FirstOrDefault();
+
+                            using (OpenboundDatabaseContext context = new OpenboundDatabaseContext())
+                            {
+                                context.Configuration.ProxyCreationEnabled = false;
+                                
+                                player = context.Players
+                                    .Where((x) => x.ID == player.ID)
+                                    .FirstOrDefault();
+
+                                player.Password = null;
+                            }
+
                             if (player == null)
                                 throw new Exception();
 
@@ -632,14 +641,14 @@ namespace Openbound_Game_Server.Service
                 Console.WriteLine($"Ex: When GameServerChatEnterRequest {ex.Message}");
             }
 
-            return false;
+             return false;
         }
 
         public static void GameServerChatEnter(string param, PlayerSession playerSession)
         {
             try
             {
-                if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat) return;
+                        if (string.IsNullOrEmpty(param) || param == playerSession.CurrentConnectedChat) return;
 
                 //Parse the player selected channel to find out its index
                 (char, int) tuple = playerSession.GetCurrentConnectChatAsTuple(param);
@@ -871,7 +880,7 @@ namespace Openbound_Game_Server.Service
             //Validate attributes
             
             // If player has placed more points than he should OR
-            if (player.GetCurrentAttributePoints() > player.Attribute.Sum() ||
+            if (player.GetCurrentAttributePoints() < player.Attribute.Sum() ||
                 // If player has placed more points in a specific category than the maximum amount OR
                 player.Attribute.ToList().Exists((x) => x > NetworkObjectParameters.PlayerAttributeMaximumPerCategory) ||
                 // Checks if all equipped avatars are owned 

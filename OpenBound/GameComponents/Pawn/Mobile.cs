@@ -227,7 +227,7 @@ namespace OpenBound.GameComponents.Pawn
 
         public void HideLobbyExclusiveAvatars()
         {
-            Rider.HideLobbyExclusiveAvatars();
+            Rider.ShouldRenderExtraAvatars = false;
         }
 
         public virtual void LoseTurn()

@@ -26,11 +26,12 @@ namespace OpenBound.GameComponents.Animation.InGame
         private static List<DeathAnimation> deathAnimationList;
         private static List<DeathAnimation> toBeDestroyedDeathAnimationList;
 
-        Mobile mobile;
+        private readonly Mobile mobile;
 
         private DeathAnimation(Mobile mobile)
         {
             this.mobile = new Random(mobile.Owner, mobile.Position);
+            this.mobile.HideLobbyExclusiveAvatars();
         }
 
         public static void Initialize()

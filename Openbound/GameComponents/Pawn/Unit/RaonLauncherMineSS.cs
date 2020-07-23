@@ -72,13 +72,11 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
         public override Projectile BuildMineProjectile()
         {
-            Projectile p = new RaonProjectile3Explosion((RaonLauncher)mobile);
-            p.OnFinalizeExecutionAction += onMineIsDestroyed;
+            return new RaonProjectile3Explosion((RaonLauncher)mobile);
+            ///p.OnFinalizeExecutionAction += onMineIsDestroyed;
 
             //Remove it so it wont be called twice on Die() method.
-            onMineIsDestroyed = default;
-
-            return p;
+            //onMineIsDestroyed = default;
         }
 
         public override void Die()
