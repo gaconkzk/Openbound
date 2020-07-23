@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Openbound Game Server", "Op
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Openbound Network Object Library", "Openbound Network Object Library\Openbound Network Object Library.csproj", "{F8C0C7A5-574E-4CD6-BDC6-6B97D2262516}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avatar API", "Avatar API\Avatar API.csproj", "{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +158,24 @@ Global
 		{F8C0C7A5-574E-4CD6-BDC6-6B97D2262516}.Release|x64.Build.0 = Release|Any CPU
 		{F8C0C7A5-574E-4CD6-BDC6-6B97D2262516}.Release|x86.ActiveCfg = Release|Any CPU
 		{F8C0C7A5-574E-4CD6-BDC6-6B97D2262516}.Release|x86.Build.0 = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|x64.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Debug|x86.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|Any CPU.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|x64.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|x64.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|x86.ActiveCfg = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.DebugScene|x86.Build.0 = Debug|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|x64.ActiveCfg = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|x64.Build.0 = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|x86.ActiveCfg = Release|Any CPU
+		{A4BCF5F3-3260-47AA-BC4F-26BFF014E203}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
