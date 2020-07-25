@@ -11,6 +11,5 @@ namespace Avatar_API.Data.Services
         IBraintreeGateway CreateGateway();
 
         IBraintreeGateway GetGateway();
-        string GetCurrency();
     }
 }

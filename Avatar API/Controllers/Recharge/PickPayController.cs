@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Avatar_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RechargeController : ControllerBase
+    [Route("recharge/[controller]/[action]"), ApiExplorerSettings(IgnoreApi = true)]
+    public class PickPayController : Controller
     {
     }
 }

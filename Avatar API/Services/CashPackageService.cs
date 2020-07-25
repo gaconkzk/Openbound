@@ -15,19 +15,23 @@ namespace Avatar_API.Data.Services
             _config = config;
         }
 
-        public List<Product> GetPackages(string controller)
+        public List<Product> GetPackages()
         {
             List<Product> products = new List<Product>();
             var cashPackages = _config.GetSection("CashPackages").GetChildren().ToList();
 
             foreach (var item in cashPackages)
             {
-                products.Add(new Product() {    Controller = controller, 
-                                                Amount = Convert.ToInt32(item.Value), 
+                products.Add(new Product() {    Amount = Convert.ToInt32(item.Value), 
                                                 Price = Convert.ToInt32(item.Key) });
             }
 
             return products;
+        }
+
+        public string GetCurrency()
+        {
+            return _config.GetValue<string>("AppCurrency:Currency").ToUpper();
         }
 
         public int GetCashValue(int price)

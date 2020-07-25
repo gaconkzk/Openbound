@@ -4,6 +4,6 @@
     <div class="card-body">
         <p class="card-text">@Model.Amount cash</p>
         <p class="card-text">@Model.Price @ViewBag.Currency</p>
-        <a href=@Url.Action("Purchase", Model.Controller, new { price = Model.Price})>Proceed</a>
+        <a href=@Url.Action("Gateway", "Recharge", new { price = Model.Price})>Proceed</a>
     </div>
 </div>  

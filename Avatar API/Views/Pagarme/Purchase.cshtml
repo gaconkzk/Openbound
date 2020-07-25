@@ -1,0 +1,39 @@
+﻿<head>
+    <!-- SCRIPT PAGAR.ME -->
+    <script src="https://assets.pagar.me/checkout/1.1.0/checkout.js"></script>
+</head>
+
+    <button id="pay-button">Abrir modal de pagamento</button>
+
+    <script>
+        var button = document.querySelector('button');
+
+        // Abrir o modal ao clicar no botão
+        button.addEventListener('click', function () {
+
+            // inicia a instância do checkout
+            var checkout = new PagarMeCheckout.Checkout({
+                encryption_key: '@ViewBag.EncryptionKey',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+                close: function () {
+                    console.log('The modal has been closed.');
+                }
+            });
+
+            checkout.open({
+                amount: @ViewBag.Price,
+                customerData: 'false',
+                createToken: 'true',
+                items: [{
+                    title: '@ViewBag.Cash cash',
+                    quantity: 1,
+                    tangible: 'false'
+              }]
+            })
+          });
+    </script>

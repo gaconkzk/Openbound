@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Avatar_API.Data.Services;
+using Avatar_API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -46,6 +47,8 @@ namespace Avatar_API
             services.AddTransient<IBraintreeService, BraintreeService>();
             services.AddTransient<StripeService>();
             services.AddTransient<CashPackageService>();
+            services.AddTransient<MercadoPagoService>();
+            services.AddTransient<PagarmeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +80,7 @@ namespace Avatar_API
             });
 
             app.UseStaticFiles();
-   
+
         }
     }
 }

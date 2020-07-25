@@ -7,5 +7,6 @@ namespace Avatar_API.Data.Services
 {
     public class RechargeService
     {
+        //
     }
 }

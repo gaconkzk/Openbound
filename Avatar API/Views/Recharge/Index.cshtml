@@ -4,13 +4,12 @@
     Layout = "_Layout";
 }
 
-
 <link rel="stylesheet" href="~/css/select-product.css">
 
 <div class="wrapper">
     <div class="product container">
         <h3>Select your product:</h3>
-        <form id="payment-form" method="get" asp-controller="@ViewBag.Controller" asp-action="Purchase">
+        <form>
 
             @foreach (var product in Model.ProductList)
             {

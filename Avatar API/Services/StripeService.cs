@@ -21,10 +21,5 @@ namespace Avatar_API.Data.Services
             return _config.GetValue<string>("Stripe:PublishableKey");
         }
 
-        public string GetCurrency()
-        {
-            return _config.GetValue<string>("Stripe:Currency").ToUpper();
-        }
-
     }
 }

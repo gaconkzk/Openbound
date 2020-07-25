@@ -31,12 +31,5 @@ namespace Avatar_API.Data.Services
         {
             return CreateGateway();
         }
-
-        public string GetCurrency()
-        {
-            //This currency is just for the view. The app's currency need to be defined on Braintree.
-            return _config.GetValue<string>("BraintreeGateway:CurrencyPreview").ToUpper();
-        }
-
     }
 }
