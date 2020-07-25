@@ -10,6 +10,7 @@ using Stripe;
 
 namespace Avatar_API.Controllers
 {
+    [Route("recharge/[controller]/[action]"), ApiExplorerSettings(IgnoreApi = true)]
     public class StripeController : Controller
     {
         private readonly StripeService _stripeService;
@@ -20,25 +21,11 @@ namespace Avatar_API.Controllers
             _cashPackageService = cashPackageService;
         }
 
-        public IActionResult Index()
-        {
-            ViewBag.Controller = "Stripe";
-            ViewBag.Currency = _stripeService.GetCurrency();
-            var model = new ProductsModel
-            {
-                ProductList = _cashPackageService.GetPackages("Stripe")
-            };
-
-
-            ViewData.Model = model;
-            return View("SelectProduct");
-        }
-
         public IActionResult Purchase(int price)
         {
             if (!_cashPackageService.IsPackageValid(price)) return View("Invalid");
             ViewBag.PublishableKey = _stripeService.GetPublishableKey();
-            ViewBag.Currency = _stripeService.GetCurrency();
+            ViewBag.Currency = _cashPackageService.GetCurrency();
             CashRecharge cashRecharge = new CashRecharge
             {
                 Price = price,
@@ -56,7 +43,7 @@ namespace Avatar_API.Controllers
             var chargeOptions = new ChargeCreateOptions()
             {
                 Amount = (long)(Convert.ToDouble(cashRecharge.Price) * 100),
-                Currency = _stripeService.GetCurrency(),
+                Currency = _cashPackageService.GetCurrency(),
                 Source = stripeToken,
                 Metadata = new Dictionary<string, string>()
                 {

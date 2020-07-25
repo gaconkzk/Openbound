@@ -12,7 +12,10 @@
 
   <ItemGroup>
     <PackageReference Include="Braintree" Version="4.18.0" />
+    <PackageReference Include="MercadoPagoNetCore" Version="1.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="PagarMeCore" Version="1.0.0" />
+    <PackageReference Include="PicPay" Version="1.0.1" />
     <PackageReference Include="Stripe.net" Version="37.24.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.5.1" />

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Avatar_API.Controllers
 {
+    [Route("recharge/[controller]/[action]"), ApiExplorerSettings(IgnoreApi = true)]
     public class BraintreeController : Controller
     {
         private readonly IBraintreeService _braintreeService;
@@ -20,26 +21,13 @@ namespace Avatar_API.Controllers
             _cashPackageService = cashPackageService;
         }
 
-        public IActionResult Index()
-        {
-            ViewBag.Controller = "Braintree";
-            ViewBag.Currency = _braintreeService.GetCurrency();
-            var model = new ProductsModel
-            {
-                ProductList = _cashPackageService.GetPackages("Braintree")
-            };
-
-            ViewData.Model = model;
-            return View("SelectProduct");
-        }
-
         public IActionResult Purchase(int price)
         {
             if (!_cashPackageService.IsPackageValid(price)) return View("Invalid");
             var gateway = _braintreeService.GetGateway();
             var clientToken = gateway.ClientToken.Generate();
             ViewBag.ClientToken = clientToken;
-            ViewBag.Currency = _braintreeService.GetCurrency();
+            ViewBag.Currency = _cashPackageService.GetCurrency();
 
             CashRecharge cashRecharge = new CashRecharge
             {
