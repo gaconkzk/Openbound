@@ -90,19 +90,10 @@ namespace OpenBound.GameComponents.Animation
             SetCurrentFrame(nextFrameIndex);
         }
 
-#warning It is possible that all code commented here is unecessary
         public void Flip()
         {
             Effect = (Effect == SpriteEffects.None) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            //Rotation += (float)Math.PI;
-
-            //if (Rotation > MathHelper.TwoPi)
-                //Rotation = Rotation % MathHelper.TwoPi;
-
             Pivot = new Vector2(SpriteWidth - Pivot.X, Pivot.Y);
-
-            //Texture2D = AssetHandler.Instance.RequestTexture(Texture2DPath);
-            //SourceRectangle = new Rectangle((int)Position.X, (int)Position.Y, SpriteWidth, SpriteHeight);
         }
 
         private void CreateFlipbookInstances()

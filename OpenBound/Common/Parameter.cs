@@ -179,77 +179,12 @@ namespace OpenBound.Common
         //-- Loading Screen - Minimap
         public static readonly Color TextColorTeamRed = new Color(246, 161, 98);
         public static readonly Color TextColorTeamBlue = new Color(98, 149, 230);
-        #endregion
 
-        #region Texts
-        //Animated Buttons
-        //-- Main Menu - Various
-        public const string ButtonTextExitText = "Exit";
-        public const string ButtonTextBuddyList = "Buddy";
-        public const string ButtonTextCashCharge = "Charge";
-        public const string ButtonTextReportPlayer = "Report";
-        public const string ButtonTextAvatarShop = "Avatar Shop";
-        public const string ButtonTextOptions = "Options";
-        public const string ButtonTextMyInfo = "My Info";
-        public const string ButtonTextMuteList = "Mute List";
-
-        //-- Room Selection - Room Filtering - By GameMode
-        public const string ButtonTextRoomFilteringSolo = "Solo";
-        public const string ButtonTextRoomFilteringTag = "Tag";
-        public const string ButtonTextRoomFilteringScore = "Score";
-        public const string ButtonTextRoomFilteringJewel = "Jewel";
-
-        //-- Room Selection - Room Filtering - By Status
-        public const string ButtonTextRoomFilteringViewAll = "All";
-        public const string ButtonTextRoomFilteringViewWaiting = "Waiting";
-        public const string ButtonTextRoomFilteringViewFriend = "Friend";
-
-        //-- Room Selection - Room Options
-        public const string ButtonTextGoTo = "Go To";
-        public const string ButtonTextCreate = "Create";
-        public const string ButtonTextQuickJoin = "Quick Join";
-
-        //-- Room Selection - InRoom
-        public const string ButtonTextInRoomReady = "Ready";
-        public const string ButtonTextInRoomChangeMobile = "Mobile";
-        public const string ButtonTextInRoomMatchSettings = "Settings";
-        public const string ButtonTextInRoomChangeItem = "Item";
-        public const string ButtonTextInRoomChangeTeam = "Team";
-
-        //-- Avatar Shop - Avatar
-        public const string ButtonTextAvatarShopTry = "Try";
-        public const string ButtonTextAvatarShopBuy = "Buy";
-        public const string ButtonTextAvatarShopGift = "Gift";
-
-        //-- Avatar Shop - Filter
-        public const string ButtonTextAvatarShopHat = "Hat";
-        public const string ButtonTextAvatarShopBody = "Body";
-        public const string ButtonTextAvatarShopGoggles = "Goggles";
-        public const string ButtonTextAvatarShopFlag = "Flag";
-        public const string ButtonTextAvatarShopExItem = "ExItem";
-        public const string ButtonTextAvatarShopPet = "Pet";
-        public const string ButtonTextAvatarShopNecklace = "Misc";
-        public const string ButtonTextAvatarShopRing = "Extra";
-
-        //--Avatar Shop - Popup - Buy
-        public const string PopupTextConfirmPuchase = "Confirm puchase with";
-        public const string PopupTextBalance = "Balance";
-        public const string PopupTextCurrencyGold = "Gold";
-        public const string PopupTextCurrencyCash = "Cash";
-
-        public const string IconSubtitleOffline = "Offline";
-        public const string IconSubtitleLowPopulation = "Low";
-        public const string IconSubtitleMediumPopulation = "Medium";
-        public const string IconSubtitleHighPopulation = "High";
-        public const string IconSubtitleFull = "Full";
-
-        public const string LoadingScreenMinimapCommand = "Press Up/Down to control the tactical map";
-        
-        public const string PreviewTextAvatarShop = "Room Preview";
-        public const string PreviewTextAvatarShopEquipped = "Room Preview - Equipped";
-
-        public const string InGamePreviewTextAvatarShop = "In-Game Preview";
-        public const string InGamePreviewTextAvatarShopEquipped = "In-Game Preview - Equipped";
+        //-- PopupSelectItem - Item Colors
+        public static readonly Color TextColorItemRed    = new Color(156,  56,  16);
+        public static readonly Color TextColorItemGreen  = new Color( 98, 149,  74);
+        public static readonly Color TextColorItemBlue   = new Color( 82, 121, 164);
+        public static readonly Color TextColorItemPurple = new Color(131, 105, 131);
         #endregion
 
         #region Fonts

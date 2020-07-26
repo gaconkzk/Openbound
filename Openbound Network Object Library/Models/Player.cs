@@ -162,6 +162,8 @@ namespace Openbound_Network_Object_Library.Models
         [NotMapped] public int[] Attribute { get; set; }
         #endregion
 
+        [NotMapped] public List<ItemType> SelectedItemTypeList;
+
         //In-game variables - General
         [JsonIgnore, NotMapped] public PlayerNavigation PlayerNavigation;
 
@@ -195,6 +197,8 @@ namespace Openbound_Network_Object_Library.Models
                 { AvatarCategory.Misc,    new HashSet<int>(){ 0, } },
                 { AvatarCategory.Extra,   new HashSet<int>(){ 0, } },
             };
+
+            SelectedItemTypeList = new List<ItemType>();
         }
 
         public void LoadOwnedAvatarDictionary()

@@ -186,5 +186,35 @@ namespace Openbound_Network_Object_Library.Common
             { -3, PlayerRank.Vip           }, // to be decided
             { -4, PlayerRank.GM            }  // game master
         };
+
+        //Item balancing
+
+        public const float InGameItemEnergyUp1Value       = 12f;
+        public const float InGameItemEnergyUp1ExtraValue  =  3f;
+
+        public const float InGameItemEnergyUp2Value       = 30f;
+        public const float InGameItemEnergyUp2ExtraValue  =  3f;
+
+        public const float InGameItemBloodValue           = 33f;
+        public const float InGameItemBloodExtraValue      =  8f;
+
+        public const float InGameItemPowerUpValue         = 30f;
+
+        public const float InGameItemBungeShotValue       = 25f;
+
+        public const int InGameItemDualCost         = 600;
+        public const int InGameItemDualPlusCost     = 300;
+        public const int InGameItemEnergyUp2Cost    = 300;
+        public const int InGameItemTeamTeleportCost = 50;
+        public const int InGameItemTeleportCost     = 150;
+        public const int InGameItemThunder          = 200;
+
+        public const int InGameItemEnergyUp1Cost    = 100;
+        public const int InGameItemBloodCost        =   0;
+        public const int InGameItemChangeWindCost   = 120;
+        public const int InGameItemBungeShotCost    =  80;
+        public const int InGameItemPowerUpCost      = 150;
+
+
     }
 }

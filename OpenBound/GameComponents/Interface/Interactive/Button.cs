@@ -20,6 +20,7 @@ using OpenBound.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Input;
 
 namespace OpenBound.GameComponents.Interface.Interactive
 {
@@ -75,6 +76,24 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
         //Popup - Buy Avatar
         AvatarBuyCash, AvatarBuyGold,
+
+        //Popup - Select Item
+        
+        //Red - 2 slots
+        SelectItemDual, SelectItemDualPlus, SelectItemThunder,
+        //Red - 1 Slot
+        SelectItemBlood, SelectItemBungeShot, SelectItemPowerUp,
+
+        //Green - 2 Slots
+        SelectItemEnergyUp2,
+        //Green - 1 Slot
+        SelectItemEnergyUp1,
+
+        //Blue - 1 Slot
+        SelectItemChangeWind,
+
+        //Purple - 2 Slots
+        SelectItemTeamTeleport, SelectItemTeleport,
     }
 
     public enum ButtonAnimationState
@@ -1049,6 +1068,164 @@ namespace OpenBound.GameComponents.Interface.Interactive
                     }
                 },
                 #endregion
+                #region Popup - Select Item - 2 Slots Items
+                {
+                    ButtonType.SelectItemDual,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/Dual",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },                        
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemDualPlus,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/DualPlus",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemThunder,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/Thunder",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemEnergyUp2,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/EnergyUp2",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemTeamTeleport,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/TeamTeleport",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemTeleport,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/Teleport",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                        }
+                    }
+                },
+                #endregion
+                #region Popup - Select Item - 1 Slot Item
+                {
+                    ButtonType.SelectItemBlood,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/Blood",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemBungeShot,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/BungeShot",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemPowerUp,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/PowerUp",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemEnergyUp1,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/EnergyUp1",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                        }
+                    }
+                },
+                {
+                    ButtonType.SelectItemChangeWind,
+                    new ButtonPreset()
+                    {
+                        SpritePath = "Interface/StaticButtons/Popup/SelectItem/ChangeWind",
+                        StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
+                        {
+                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                        }
+                    }
+                },
+                #endregion
             };
 
         public Sprite ButtonSprite { get; private set; }
@@ -1068,6 +1245,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
         public Action<object> OnBeingPressed;
         public Action<object> OnBeingDragged;
         public Action<object> OnClick;
+        public Action<object> OnBeginHoover;
         public Action<object> OnHoover;
         public Action<object> OnUnhoover;
         public Action<object> OnBeingReleased;
@@ -1097,7 +1275,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
             ChangeButtonState(ButtonAnimationState.Normal);
 
             OnClick = onClick;
-            OnHoover = OnUnhoover = OnBeingReleased = OnBeingPressed = OnBeingDragged = default;
+            OnBeginHoover = OnHoover = OnUnhoover = OnBeingReleased = OnBeingPressed = OnBeingDragged = default;
 
             ShouldUpdate = true;
             IsEnabled = true;
@@ -1194,9 +1372,14 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
                     OnClick?.Invoke(this);
                 }
-                else
+                else if (buttonAnimationState != ButtonAnimationState.Hoover)
                 {
                     ChangeButtonState(ButtonAnimationState.Hoover);
+                    OnBeginHoover?.Invoke(this);
+                }
+                else
+                {
+                    OnHoover?.Invoke(this);
                 }
             }
             else

@@ -11,6 +11,7 @@
  */
 
 using GunboundImageFix.Common;
+using GunboundImageProcessing.Extension;
 using GunboundImageProcessing.ImageUtils;
 using System;
 using System.Collections.Generic;
@@ -184,6 +185,33 @@ namespace GunboundImageFix.Utils
 
                 newImg = ImageProcessing.CreateImage(bi);
                 newImg.Save(@"C:\Users\Carlos\source\repos\OpenBound\GunboundImageFix\Output\Buttons\output3.png");
+            }
+        }
+
+        public void CreateItemButton()
+        {
+            List<Entity.ImportedImage> _imgList = FileImportManager.ReadMultipleImages();
+
+            Bitmap bmpHoover;
+            Bitmap bmpDisabled;
+            int i = 0;
+            foreach (var img in _imgList)
+            {
+                bmpHoover = new Bitmap(img.BitmapImage.Width, img.BitmapImage.Height);
+                bmpDisabled = new Bitmap(img.BitmapImage.Width, img.BitmapImage.Height);
+
+                for (int h = 0; h < img.BitmapImage.Height; h++)
+                {
+                    for(int w = 0; w < img.BitmapImage.Width; w++)
+                    {
+                        Color c = img.BitmapImage.GetPixel(w, h);
+                        bmpHoover.SetPixel(w, h, Color.FromArgb(255, Math.Min(c.R + 20, 255), Math.Min(c.G + 20, 255), Math.Min(c.B + 20, 255)));
+                        bmpDisabled.SetPixel(w, h, Color.FromArgb(255, (c.R + c.G + c.B) / 3, (c.R + c.G + c.B) / 3, (c.R + c.G + c.B) / 3));
+                    }
+                }
+
+                bmpHoover.Save($"{Parameters.ButtonOutputDirectory}/{i++} - Hoover.png");
+                bmpDisabled.Save($"{Parameters.ButtonOutputDirectory}/{i} - Disabled.png");
             }
         }
 

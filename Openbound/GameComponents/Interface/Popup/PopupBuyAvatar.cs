@@ -27,7 +27,7 @@ namespace OpenBound.GameComponents.Interface.Popup
 
             spriteTextList.Add(
                 new SpriteText(
-                    FontTextType.Consolas10, Parameter.PopupTextConfirmPuchase,
+                    FontTextType.Consolas10, Language.PopupTextConfirmPuchase,
                     Color.White, Alignment.Center, DepthParameter.InterfacePopupText,
                     default, outlineColor: Color.Black)
                 {
@@ -37,7 +37,7 @@ namespace OpenBound.GameComponents.Interface.Popup
             //Before
             spriteTextList.Add(
                 new SpriteText(
-                    FontTextType.Consolas10, Parameter.PopupTextBalance,
+                    FontTextType.Consolas10, Language.PopupTextBalance,
                     Color.White, Alignment.Center, DepthParameter.InterfacePopupText,
                     default, outlineColor: Color.Black)
                 {
@@ -50,7 +50,7 @@ namespace OpenBound.GameComponents.Interface.Popup
                 //Gold
                 spriteTextList.Add(
                     new SpriteText(
-                        FontTextType.Consolas10, Parameter.PopupTextCurrencyGold,
+                        FontTextType.Consolas10, Language.PopupTextCurrencyGold,
                         Color.White, Alignment.Center, DepthParameter.InterfacePopupText,
                         default, outlineColor: Color.Black)
                     {
@@ -103,7 +103,7 @@ namespace OpenBound.GameComponents.Interface.Popup
                 //Cash
                 spriteTextList.Add(
                     new SpriteText(
-                        FontTextType.Consolas10, Parameter.PopupTextCurrencyCash,
+                        FontTextType.Consolas10, Language.PopupTextCurrencyCash,
                         Color.White, Alignment.Center, DepthParameter.InterfacePopupText,
                         default, outlineColor: Color.Black)
                     {

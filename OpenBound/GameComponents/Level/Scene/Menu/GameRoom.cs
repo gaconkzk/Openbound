@@ -54,6 +54,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         };
 
         AnimatedButton options, matchSettings, exitDoor, ready;
+        AnimatedButton selectItem;
+
         List<AnimatedButton> animatedButtonList;
 
         Button metadataRenameRoom, metadataPreviousMap, metadataNextMap;
@@ -66,6 +68,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         CompositeSpriteText serverName;
 
         PopupSelectMobile popupSelectMobile;
+        PopupSelectItem popupSelectItem;
 
         Sprite mobilePortrait;
         Sprite mobilePortraitAtkBar, mobilePortraitDefBar, mobilePortraitMobBar;
@@ -117,8 +120,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             //Popup menus
             popupSelectMobile = new PopupSelectMobile(SelectMobileAction, CloseSelectMobileAction);
             PopupHandler.Add(popupSelectMobile);
-
+            
             PopupHandler.PopupGameOptions.OnClose = OptionsCloseAction;
+
+            popupSelectItem = new PopupSelectItem();
+            popupSelectItem.OnClose += SelectItemCloseAction;
 
             //Connect to channel
             ServerInformationHandler.SendChatConnectionRequest(Message.BuildGameServerChatGameRoom(GameInformation.Instance.RoomMetadata.ID));
@@ -197,6 +203,18 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         #endregion
 
         #region Button Actions
+        private void SelectItemButtonAction(object sender)
+        {
+            ((AnimatedButton)sender).Disable();
+            popupSelectItem.ShouldRender = true;
+            DisableAllButtons();
+        }
+
+        private void SelectItemCloseAction(object sender)
+        {
+            EnableAllButtons();
+        }
+
         private void ExitDoorAction(object sender)
         {
             exitDoor.Disable();
@@ -263,14 +281,20 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         private void DisableAllButtons()
         {
-            lock (buttonList) buttonList.ForEach((x) => x.Disable());
-            lock (animatedButtonList) animatedButtonList.ForEach((x) => x.Disable());
+            lock (buttonList)
+            {
+                buttonList.ForEach((x) => x.Disable());
+                animatedButtonList.ForEach((x) => x.Disable());
+            }
         }
 
         private void EnableAllButtons()
         {
-            lock (buttonList) buttonList.ForEach((x) => x.Enable());
-            lock (animatedButtonList) animatedButtonList.ForEach((x) => x.Enable());
+            lock (buttonList)
+            {
+                buttonList.ForEach((x) => x.Enable());
+                animatedButtonList.ForEach((x) => x.Enable());
+            }
         }
         #endregion
 
@@ -386,11 +410,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
                     Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++,
                     MobileAction));
 
-            animatedButtonList.Add(
-                AnimatedButtonBuilder.BuildButton(
-                    AnimatedButtonType.ChangeItem,
-                    Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++,
-                    (sender) => { }));
+            animatedButtonList.Add(selectItem = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.ChangeItem, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++, SelectItemButtonAction));
 
             //Make the bigger version of the options button smaller
             matchSettings = AnimatedButtonBuilder.BuildButton(AnimatedButtonType.MatchSettings, Parameter.ScreenCenter + initialOffset + shiftingFactor * buttonIndex++, (sender) => { });

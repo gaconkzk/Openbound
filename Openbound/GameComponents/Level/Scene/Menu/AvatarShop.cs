@@ -43,6 +43,7 @@ using Openbound_Network_Object_Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Language = OpenBound.Common.Language;
 
 namespace OpenBound.GameComponents.Level.Scene.Menu
 {
@@ -75,12 +76,12 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
         // List of regular buttons (currently only the tab buttons)
         private List<Button> buttonList;
-        private Button tabInventoryButton, tabShopButton;
+
+        private TabButtonList tabButtonList;
 
         // All texts that are being used on the scene, except the ones
         // wrapped on other objects
         private List<SpriteText> spriteTextList;
-        private SpriteText inventorySpriteText, shopSpriteText;
         private SpriteText avatarPreviewSpriteText;
         private SpriteText inGamePreviewSpriteText;
         private SpriteText filterCurrentPage, filterLastPage, filterDivider;
@@ -148,9 +149,15 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             AddBottomAnimatedButtonsToScene();
             AddFilterAnimatedButtonsToScene();
             AddSearchTextToScene();
-            AddTabControlToScene();
             AddPreviewsToScene();
             AddFilteringToScene();
+
+            //Tab Index
+            tabButtonList = new TabButtonList(new Vector2(-110, -285),
+                new List<TabButtonParameter>() {
+                    new TabButtonParameter(Language.AvatarShopTabShop, ShopTabButtonAction),
+                    new TabButtonParameter(Language.AvatarShopTabInventory, InventoryTabButtonAction),
+                });
 
             //AttributeButton
             attributeMenu = new AttributeMenu(new Vector2(-285, -235), player);
@@ -283,7 +290,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
             inventoryRiderPreview.Hide();
 
-            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.PreviewTextAvatarShop,
+            avatarPreviewSpriteText = new SpriteText(FontTextType.Consolas10, Language.PreviewTextAvatarShop,
                 Color.White, Alignment.Left, DepthParameter.InterfaceButton,
                 Parameter.ScreenCenter - new Vector2(385, 110), Color.Black);
 
@@ -294,31 +301,11 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             inventoryInGamePreview = new InGamePreview(Parameter.ScreenCenter + new Vector2(-290, 80));
             inventoryInGamePreview.Hide();
 
-            inGamePreviewSpriteText = new SpriteText(FontTextType.Consolas10, Parameter.InGamePreviewTextAvatarShop,
+            inGamePreviewSpriteText = new SpriteText(FontTextType.Consolas10, Language.InGamePreviewTextAvatarShop,
                 Color.White, Alignment.Left, DepthParameter.InterfaceButton,
                 Parameter.ScreenCenter - new Vector2(385, -17), Color.Black);
 
             spriteTextList.Add(inGamePreviewSpriteText);
-        }
-
-        public void AddTabControlToScene()
-        {
-            tabShopButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, ShopTabButtonAction, new Vector2(-110, -285));
-            tabInventoryButton = new Button(ButtonType.AvatarTabIndex, DepthParameter.InterfaceButton, InventoryTabButtonAction, new Vector2(-030, -285));
-            tabShopButton.UpdateAttatchedPosition();
-            tabInventoryButton.UpdateAttatchedPosition();
-
-            tabShopButton.Disable();
-
-            buttonList.Add(tabShopButton);
-            buttonList.Add(tabInventoryButton);
-
-            shopSpriteText = new SpriteText(FontTextType.Consolas10, "Shop", Color.White, Alignment.Center, DepthParameter.InterfaceButtonText, tabShopButton.ButtonSprite.Position, Color.Black);
-            inventorySpriteText = new SpriteText(FontTextType.Consolas10, "Inventory", Color.LightGray, Alignment.Center, DepthParameter.InterfaceButtonText, tabInventoryButton.ButtonSprite.Position, Color.Black);
-            shopSpriteText.Position -= (shopSpriteText.MeasureSize * Vector2.UnitY) / 3;
-            inventorySpriteText.Position -= (inventorySpriteText.MeasureSize * Vector2.UnitY) / 3;
-            spriteTextList.Add(shopSpriteText);
-            spriteTextList.Add(inventorySpriteText);
         }
 
         public void AddSearchTextToScene()
@@ -517,11 +504,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         /// </summary>
         private void ShopTabButtonAction(object sender)
         {
-            shopSpriteText.BaseColor = shopSpriteText.Color = Color.White;
-
-            tabInventoryButton.Enable();
-            tabShopButton.Disable();
-
             foreground1.SetTransparency(1);
             foreground2.SetTransparency(0);
 
@@ -531,8 +513,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             shopInGamePreview.Show();
             inventoryInGamePreview.Hide();
 
-            avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShop;
-            inGamePreviewSpriteText.Text = Parameter.InGamePreviewTextAvatarShop;
+            avatarPreviewSpriteText.Text = Language.PreviewTextAvatarShop;
+            inGamePreviewSpriteText.Text = Language.InGamePreviewTextAvatarShop;
 
             searchFilter.IsRenderingInventory = false;
             UpdateFilter(searchFilter.AvatarCategory, 0);
@@ -544,11 +526,6 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
         /// </summary>
         private void InventoryTabButtonAction(object sender)
         {
-            inventorySpriteText.BaseColor = inventorySpriteText.Color = Color.White;
-
-            tabShopButton.Enable();
-            tabInventoryButton.Disable();
-            
             foreground1.SetTransparency(0);
             foreground2.SetTransparency(1);
 
@@ -558,8 +535,8 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             shopInGamePreview.Hide();
             inventoryInGamePreview.Show();
 
-            avatarPreviewSpriteText.Text = Parameter.PreviewTextAvatarShopEquipped;
-            inGamePreviewSpriteText.Text = Parameter.InGamePreviewTextAvatarShopEquipped;
+            avatarPreviewSpriteText.Text = Language.PreviewTextAvatarShopEquipped;
+            inGamePreviewSpriteText.Text = Language.InGamePreviewTextAvatarShopEquipped;
 
             searchFilter.IsRenderingInventory = true;
             UpdateFilter(searchFilter.AvatarCategory, 0);
@@ -633,10 +610,10 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             animatedButtonList.ForEach((x) => x.Disable(true));
             filterButtonList.ForEach((x) => x.Disable(true));
             avatarButtonList.ForEach((x) => x.ShouldUpdate = false);
-            tabInventoryButton.Disable();
-            tabShopButton.Disable();
             searchTextField.Disable();
             searchTextField.DeactivateElement();
+
+            tabButtonList.Disable();
         }
 
         /// <summary>
@@ -649,10 +626,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
             filterButtonList.ForEach((x) => x.Enable());
             avatarButtonList.ForEach((x) => x.ShouldUpdate = true);
 
-            if (searchFilter.IsRenderingInventory)
-                tabShopButton.Enable();
-            else
-                tabInventoryButton.Enable();
+            tabButtonList.Enable();
 
             AnimatedButton button;
 
@@ -747,6 +721,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
                 shopInGamePreview.Update();
                 inventoryInGamePreview.Update();
+                tabButtonList.Update();
             }
         }
 
@@ -769,6 +744,7 @@ namespace OpenBound.GameComponents.Level.Scene.Menu
 
                 shopInGamePreview.Draw(gameTime, spriteBatch);
                 inventoryInGamePreview.Draw(gameTime, spriteBatch);
+                tabButtonList.Draw(gameTime, spriteBatch);
             }
         }
     }

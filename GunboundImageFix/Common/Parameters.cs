@@ -39,6 +39,9 @@ namespace GunboundImageFix.Common
         public static string TextureOutputDirectory { get; } =
             OutputDirectory + @"Texture\";
 
+        public static string ButtonOutputDirectory { get; } =
+            OutputDirectory + @"Button\";
+
         //Content Directory
         public static string ContentDirectory { get; } =
             BaseDirectory + @"Files\";

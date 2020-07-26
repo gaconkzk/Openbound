@@ -452,7 +452,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
                 for (int i = 0; i < 10; i++)
                 {
-                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(green, blue, i/9f), 6, 0);
+                    SpecialEffectBuilder.ThorShot(position, Color.Lerp(green, blue, i / 9f), 6, 0);
                     position += Vector2.UnitX * 15;
                 }
 
@@ -503,6 +503,16 @@ namespace OpenBound.GameComponents.Level.Scene
             if (InputHandler.IsBeingPressed(Keys.D3))
             {
                 MobileList[0].ChangeFlipbookState(ActorFlipbookState.BeingDamaged2, true);
+            }
+
+
+            if (InputHandler.IsBeingPressed(Keys.D4))
+            {
+                new PopupSelectItem()
+                {
+                    ShouldRender = true
+                };
+
             }
         }
 

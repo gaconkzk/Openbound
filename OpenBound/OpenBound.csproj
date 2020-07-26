@@ -757,6 +757,7 @@
     <Compile Include="GameComponents\Interface\Interactive\RadioButtonSet.cs" />
     <Compile Include="GameComponents\Interface\Interactive\ServerSelection\ServerButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\ShotButton.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\TabButtonList.cs" />
     <Compile Include="GameComponents\Interface\Nameplate.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessage.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupAlertMessageBuilder.cs" />
@@ -766,6 +767,7 @@
     <Compile Include="GameComponents\Interface\Popup\PopupGameResults.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupHandler.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupMenu.cs" />
+    <Compile Include="GameComponents\Interface\Popup\PopupSelectItem.cs" />
     <Compile Include="GameComponents\Interface\Popup\PopupSelectMobile.cs" />
     <Compile Include="GameComponents\Interface\SceneTransition\RotatingRectangles.cs" />
     <Compile Include="GameComponents\Interface\Delayboard.cs" />

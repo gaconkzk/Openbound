@@ -55,6 +55,7 @@ namespace GunboundImageFix
                 Console.WriteLine("F2 - Mobile Buttons");
                 Console.WriteLine("F3 - Create Minimap Tumbnails");
                 Console.WriteLine("F4 - Spritefont Range Builder");
+                Console.WriteLine("F5 - Item buttons thumbnails");
 
                 try
                 {
@@ -111,6 +112,9 @@ namespace GunboundImageFix
                             break;
                         case "F4":
                             SpritefontRangeBuilder.BuildSpritefontRange();
+                            break;
+                        case "F5":
+                            new AssetMaker().CreateItemButton();
                             break;
                         default:
                             throw new Exception();

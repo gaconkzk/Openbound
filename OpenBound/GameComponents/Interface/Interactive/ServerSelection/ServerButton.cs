@@ -44,11 +44,11 @@ namespace OpenBound.GameComponents.Interface.Interactive.ServerSelection
     {
         public static Dictionary<ServerStatus, ServerStatusFlipbookIcon> ServerStatusFlipbookIconPresets = new Dictionary<ServerStatus, ServerStatusFlipbookIcon>()
         {
-            { ServerStatus.Offline,          new ServerStatusFlipbookIcon(){ IconSubtitle = Parameter.IconSubtitleOffline,          FlipbookInstance = new AnimationInstance() { StartingFrame = 0,   EndingFrame = 70,  TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
-            { ServerStatus.LowPopulation,    new ServerStatusFlipbookIcon(){ IconSubtitle = Parameter.IconSubtitleLowPopulation,    FlipbookInstance = new AnimationInstance() { StartingFrame = 71,  EndingFrame = 125, TimePerFrame = 1/20f }, AnimationType = AnimationType.Cycle  } },
-            { ServerStatus.MediumPopulation, new ServerStatusFlipbookIcon(){ IconSubtitle = Parameter.IconSubtitleMediumPopulation, FlipbookInstance = new AnimationInstance() { StartingFrame = 126, EndingFrame = 166, TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
-            { ServerStatus.HighPopulation,   new ServerStatusFlipbookIcon(){ IconSubtitle = Parameter.IconSubtitleHighPopulation,   FlipbookInstance = new AnimationInstance() { StartingFrame = 167, EndingFrame = 232, TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
-            { ServerStatus.Full,             new ServerStatusFlipbookIcon(){ IconSubtitle = Parameter.IconSubtitleFull,             FlipbookInstance = new AnimationInstance() { StartingFrame = 233, EndingFrame = 273, TimePerFrame = 1/20f }, AnimationType = AnimationType.Cycle  } },
+            { ServerStatus.Offline,          new ServerStatusFlipbookIcon(){ IconSubtitle = Language.IconSubtitleOffline,          FlipbookInstance = new AnimationInstance() { StartingFrame = 0,   EndingFrame = 70,  TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
+            { ServerStatus.LowPopulation,    new ServerStatusFlipbookIcon(){ IconSubtitle = Language.IconSubtitleLowPopulation,    FlipbookInstance = new AnimationInstance() { StartingFrame = 71,  EndingFrame = 125, TimePerFrame = 1/20f }, AnimationType = AnimationType.Cycle  } },
+            { ServerStatus.MediumPopulation, new ServerStatusFlipbookIcon(){ IconSubtitle = Language.IconSubtitleMediumPopulation, FlipbookInstance = new AnimationInstance() { StartingFrame = 126, EndingFrame = 166, TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
+            { ServerStatus.HighPopulation,   new ServerStatusFlipbookIcon(){ IconSubtitle = Language.IconSubtitleHighPopulation,   FlipbookInstance = new AnimationInstance() { StartingFrame = 167, EndingFrame = 232, TimePerFrame = 1/20f }, AnimationType = AnimationType.Foward } },
+            { ServerStatus.Full,             new ServerStatusFlipbookIcon(){ IconSubtitle = Language.IconSubtitleFull,             FlipbookInstance = new AnimationInstance() { StartingFrame = 233, EndingFrame = 273, TimePerFrame = 1/20f }, AnimationType = AnimationType.Cycle  } },
         };
 
         List<CompositeSpriteText> compositeSpriteTextList;

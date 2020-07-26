@@ -27,79 +27,79 @@ namespace OpenBound.GameComponents.Interface.Builder
 
             //Animated Buttons
             if (type == AnimatedButtonType.ExitDoor)
-                buttonText = Parameter.ButtonTextExitText;
+                buttonText = Language.ButtonTextExitText;
             else if (type == AnimatedButtonType.Buddy)
-                buttonText = Parameter.ButtonTextBuddyList;
+                buttonText = Language.ButtonTextBuddyList;
             else if (type == AnimatedButtonType.CashCharge)
-                buttonText = Parameter.ButtonTextCashCharge;
+                buttonText = Language.ButtonTextCashCharge;
             else if (type == AnimatedButtonType.ReportPlayer)
-                buttonText = Parameter.ButtonTextReportPlayer;
+                buttonText = Language.ButtonTextReportPlayer;
             else if (type == AnimatedButtonType.AvatarShop)
-                buttonText = Parameter.ButtonTextAvatarShop;
+                buttonText = Language.ButtonTextAvatarShop;
             else if (type == AnimatedButtonType.Options)
-                buttonText = Parameter.ButtonTextOptions;
+                buttonText = Language.ButtonTextOptions;
             else if (type == AnimatedButtonType.MyInfo)
-                buttonText = Parameter.ButtonTextMyInfo;
+                buttonText = Language.ButtonTextMyInfo;
             else if (type == AnimatedButtonType.MuteList)
-                buttonText = Parameter.ButtonTextMuteList;
+                buttonText = Language.ButtonTextMuteList;
             //Room Filtering - Gamemode
             else if (type == AnimatedButtonType.Solo)
-                buttonText = Parameter.ButtonTextRoomFilteringSolo;
+                buttonText = Language.ButtonTextRoomFilteringSolo;
             else if (type == AnimatedButtonType.Tag)
-                buttonText = Parameter.ButtonTextRoomFilteringTag;
+                buttonText = Language.ButtonTextRoomFilteringTag;
             else if (type == AnimatedButtonType.Score)
-                buttonText = Parameter.ButtonTextRoomFilteringScore;
+                buttonText = Language.ButtonTextRoomFilteringScore;
             else if (type == AnimatedButtonType.Jewel)
-                buttonText = Parameter.ButtonTextRoomFilteringJewel;
+                buttonText = Language.ButtonTextRoomFilteringJewel;
             //Room Filtering - Type
             else if (type == AnimatedButtonType.ViewAll)
-                buttonText = Parameter.ButtonTextRoomFilteringViewAll;
+                buttonText = Language.ButtonTextRoomFilteringViewAll;
             else if (type == AnimatedButtonType.ViewWaiting)
-                buttonText = Parameter.ButtonTextRoomFilteringViewWaiting;
+                buttonText = Language.ButtonTextRoomFilteringViewWaiting;
             else if (type == AnimatedButtonType.ViewFriend)
-                buttonText = Parameter.ButtonTextRoomFilteringViewFriend;
+                buttonText = Language.ButtonTextRoomFilteringViewFriend;
             //Room Options
             else if (type == AnimatedButtonType.GoTo)
-                buttonText = Parameter.ButtonTextGoTo;
+                buttonText = Language.ButtonTextGoTo;
             else if (type == AnimatedButtonType.Create)
-                buttonText = Parameter.ButtonTextCreate;
+                buttonText = Language.ButtonTextCreate;
             else if (type == AnimatedButtonType.QuickJoin)
-                buttonText = Parameter.ButtonTextQuickJoin;
+                buttonText = Language.ButtonTextQuickJoin;
             //Room Buttons
             else if (type == AnimatedButtonType.Ready)
-                buttonText = Parameter.ButtonTextInRoomReady;
+                buttonText = Language.ButtonTextInRoomReady;
             else if (type == AnimatedButtonType.MatchSettings)
-                buttonText = Parameter.ButtonTextInRoomMatchSettings;
+                buttonText = Language.ButtonTextInRoomMatchSettings;
             else if (type == AnimatedButtonType.ChangeMobile)
-                buttonText = Parameter.ButtonTextInRoomChangeMobile;
+                buttonText = Language.ButtonTextInRoomChangeMobile;
             else if (type == AnimatedButtonType.ChangeItem)
-                buttonText = Parameter.ButtonTextInRoomChangeItem;
+                buttonText = Language.ButtonTextInRoomChangeItem;
             else if (type == AnimatedButtonType.ChangeTeam)
-                buttonText = Parameter.ButtonTextInRoomChangeTeam;
+                buttonText = Language.ButtonTextInRoomChangeTeam;
             //Avatar Shop Buttons
             else if (type == AnimatedButtonType.Try)
-                buttonText = Parameter.ButtonTextAvatarShopTry;
+                buttonText = Language.ButtonTextAvatarShopTry;
             else if (type == AnimatedButtonType.Buy)
-                buttonText = Parameter.ButtonTextAvatarShopBuy;
+                buttonText = Language.ButtonTextAvatarShopBuy;
             else if (type == AnimatedButtonType.Gift)
-                buttonText = Parameter.ButtonTextAvatarShopGift;
+                buttonText = Language.ButtonTextAvatarShopGift;
             //Avatar Shop Buttons - Filter
             else if (type == AnimatedButtonType.Hat)
-                buttonText = Parameter.ButtonTextAvatarShopHat;
+                buttonText = Language.ButtonTextAvatarShopHat;
             else if (type == AnimatedButtonType.Body)
-                buttonText = Parameter.ButtonTextAvatarShopBody;
+                buttonText = Language.ButtonTextAvatarShopBody;
             else if (type == AnimatedButtonType.Goggles)
-                buttonText = Parameter.ButtonTextAvatarShopGoggles;
+                buttonText = Language.ButtonTextAvatarShopGoggles;
             else if (type == AnimatedButtonType.Flag)
-                buttonText = Parameter.ButtonTextAvatarShopFlag;
+                buttonText = Language.ButtonTextAvatarShopFlag;
             else if (type == AnimatedButtonType.ExItem)
-                buttonText = Parameter.ButtonTextAvatarShopExItem;
+                buttonText = Language.ButtonTextAvatarShopExItem;
             else if (type == AnimatedButtonType.Pet)
-                buttonText = Parameter.ButtonTextAvatarShopPet;
+                buttonText = Language.ButtonTextAvatarShopPet;
             else if (type == AnimatedButtonType.Necklace)
-                buttonText = Parameter.ButtonTextAvatarShopNecklace;
+                buttonText = Language.ButtonTextAvatarShopNecklace;
             else if (type == AnimatedButtonType.Ring)
-                buttonText = Parameter.ButtonTextAvatarShopRing;
+                buttonText = Language.ButtonTextAvatarShopRing;
 
             return new AnimatedButton(type, position, onClick,
                 new SpriteText(Parameter.AnimatedButtonFont,

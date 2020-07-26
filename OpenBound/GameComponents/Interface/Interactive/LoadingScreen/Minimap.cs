@@ -134,7 +134,7 @@ namespace OpenBound.GameComponents.Interface.Interactive.LoadingScreen
                 Color.White, Alignment.Left, DepthParameter.InterfaceButton,
                 position + new Vector2(-365, -72), Color.Black);
 
-            mapHelper = new SpriteText(FontTextType.Consolas11, Parameter.LoadingScreenMinimapCommand, Color.White, Alignment.Right, DepthParameter.InterfaceButton, position + new Vector2(365, 67), Color.Black);
+            mapHelper = new SpriteText(FontTextType.Consolas11, Language.LoadingScreenMinimapCommand, Color.White, Alignment.Right, DepthParameter.InterfaceButton, position + new Vector2(365, 67), Color.Black);
 
             UpdateElementPositions(Vector2.Zero);
             totalButtonPushTime = 0;
