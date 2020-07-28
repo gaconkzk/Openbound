@@ -77,10 +77,13 @@ namespace OpenBound.GameComponents.Pawn
         public bool IsAbleToShoot;
         public bool IsAlive;
         public bool IsSummon;
+        public bool IsAbleToUseItem;
 
         //IsActionsLocked
         public bool IsActionsLocked;
         bool hasShotSequenceStarted;
+
+        public List<ItemType> ItemsUnderEffectList;
 
         //Sound Effect
         public SoundEffect movingSE, unableToMoveSE;
@@ -96,6 +99,7 @@ namespace OpenBound.GameComponents.Pawn
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
             LastCreatedProjectileList = new List<Projectile>();
+            ItemsUnderEffectList = new List<ItemType>();
 
             MobileType = mobileType;
             Owner = player;
@@ -235,6 +239,7 @@ namespace OpenBound.GameComponents.Pawn
             Movement.IsAbleToMove = false;
             LevelScene.HUD.LoseTurn();
             IsAbleToShoot = false;
+            IsAbleToUseItem = false;
             //MobileFlipbook.ChangeState(MobileFlipbookState.Stand, true);
             //MobileFlipbook.EnqueueAnimation(MobileFlipbookState.Stand);
 
@@ -251,6 +256,7 @@ namespace OpenBound.GameComponents.Pawn
             Movement.RemainingStepsThisTurn = Movement.MaximumStepsPerTurn;
             Movement.IsAbleToMove = true;
             IsAbleToShoot = true;
+            IsAbleToUseItem = true;
 
             if (IsPlayable)
                 LevelScene.HUD.GrantTurn();
@@ -370,13 +376,43 @@ namespace OpenBound.GameComponents.Pawn
             SyncMobile.Facing = Facing;
         }
 
-        public virtual void ChangeShot(ShotType ShotType)
+        public virtual void ChangeShot(ShotType shotType)
         {
-            if (SelectedShotType == ShotType) return;
-            SelectedShotType = ShotType;
-            Crosshair.ChangeShot(ShotType);
+            if (SelectedShotType == shotType) return;
+            SelectedShotType = shotType;
+            Crosshair.ChangeShot(shotType);
 
             if (IsPlayable) ForceSynchronize = true;
+        }
+
+        public virtual void RequestUseItem(ItemType itemType)
+        {
+            //Send message to srv
+            SyncMobile.UsedItem = itemType;
+
+#if !DEBUGSCENE
+            ServerInformationHandler.SynchronizeItemUsage(SyncMobile);
+#else
+            UseItem(itemType);
+#endif
+        }
+
+        public void UseItem(ItemType itemType)
+        {
+            ChangeFlipbookState(ActorFlipbookState.UsingItem, true);
+
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
+
+            switch (itemType)
+            {
+                case ItemType.Dual:
+                    ItemsUnderEffectList.Add(ItemType.Dual);
+                    break;
+                case ItemType.DualPlus:
+                    ItemsUnderEffectList.Add(ItemType.DualPlus);
+                    break;
+            }
         }
 
         /// <summary>
@@ -589,15 +625,15 @@ namespace OpenBound.GameComponents.Pawn
 #if !DEBUGSCENE
             ServerInformationHandler.RequestShot(SyncMobile);
 #else
-            Shoot();
+            ShootWithModifiers();
 #endif
 
-            IsAbleToShoot = Movement.IsAbleToMove = false;
+            IsAbleToShoot = IsAbleToUseItem = Movement.IsAbleToMove = false;
         }
 
         public void ConsumeShootAction()
         {
-            Shoot();
+            ShootWithModifiers();
 
             LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction = () => 
             {
@@ -606,19 +642,51 @@ namespace OpenBound.GameComponents.Pawn
             GameScene.Camera.TrackObject(LastCreatedProjectileList.First());
         }
 
-        protected virtual void Shoot()
+        private void ShootWithModifiers()
+        {
+            Shoot(SelectedShotType);
+
+            foreach (ItemType it in ItemsUnderEffectList) {
+                switch (it)
+                {
+                    case ItemType.Dual:
+                        Shoot(SelectedShotType, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
+                        break;
+                    case ItemType.DualPlus:
+                        if (SelectedShotType == ShotType.S1)
+                            Shoot(ShotType.S2, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
+                        else
+                            Shoot(ShotType.S1, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
+                        break;
+                }
+            }
+
+            ItemsUnderEffectList.Clear();
+
+        }
+
+        /// <summary>
+        /// The projectile now triggers this method
+        /// </summary>
+        public void PlayShootingAnimation(ShotType shotType)
         {
             //Animation
-            if (SelectedShotType == ShotType.S1)
+            //Reset current animation to force ChangeFlipbook validation succeed
+            ChangeFlipbookState(ActorFlipbookState.All, true);
+
+            if (shotType == ShotType.S1)
                 ChangeFlipbookState(ActorFlipbookState.ShootingS1, true);
-            else if (SelectedShotType == ShotType.S2)
+            else if (shotType == ShotType.S2)
                 ChangeFlipbookState(ActorFlipbookState.ShootingS2, true);
-            else if (SelectedShotType == ShotType.SS)
+            else if (shotType == ShotType.SS)
                 ChangeFlipbookState(ActorFlipbookState.ShootingSS, true);
 
             if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
             else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
+        }
 
+        protected virtual void Shoot(ShotType shotType, double timeOffset = 0)
+        {
             //Initialize Projectiles
             LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
         }

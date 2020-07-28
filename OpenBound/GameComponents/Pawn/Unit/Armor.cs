@@ -17,6 +17,7 @@ using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
+using System.Linq;
 
 namespace OpenBound.GameComponents.Pawn.Unit
 {
@@ -30,16 +31,16 @@ namespace OpenBound.GameComponents.Pawn.Unit
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 40), new Vector2(0, 10));
         }
 
-        protected override void Shoot()
+        protected override void Shoot(ShotType shotType, double spawnTime = 0)
         {
-            if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new ArmorProjectile1(this));
-            else if (SelectedShotType == ShotType.S2)
-                LastCreatedProjectileList.Add(new ArmorProjectile2(this));
-            else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new ArmorProjectile3(this));
+            if (shotType == ShotType.S1)
+                LastCreatedProjectileList.Add(new ArmorProjectile1(this, spawnTime));
+            else if (shotType == ShotType.S2)
+                LastCreatedProjectileList.Add(new ArmorProjectile2(this, spawnTime));
+            else if (shotType == ShotType.SS)
+                LastCreatedProjectileList.Add(new ArmorProjectile3(this, spawnTime));
 
-            base.Shoot();
+            base.Shoot(shotType, spawnTime);            
         }
     }
 }

@@ -165,6 +165,10 @@ namespace OpenBound.ServerCommunication
                     answer = ObjectWrapper.DeserializeRequest<SyncMobile>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerInGameRequestShot](answer);
                     break;
+                case NetworkObjectParameters.GameServerInGameRequestItemUsage:
+                    answer = ObjectWrapper.DeserializeRequest<SyncMobile>(request[1]);
+                    ActionCallbackDictionary[NetworkObjectParameters.GameServerInGameRequestItemUsage](answer);
+                    break;
                 case NetworkObjectParameters.GameServerInGameRequestDeath:
                     answer = ObjectWrapper.DeserializeRequest<SyncMobile>(request[1]);
                     ActionCallbackDictionary[NetworkObjectParameters.GameServerInGameRequestDeath](answer);

@@ -29,7 +29,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 46, 40), new Vector2(0, 10));
         }
-
+        /*
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
@@ -40,6 +40,6 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 BigfootProjectileEmitter.Shot3(this);
 
             base.Shoot();
-        }
+        }*/
     }
 }

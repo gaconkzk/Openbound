@@ -162,6 +162,9 @@ namespace Openbound_Game_Server
                 case NetworkObjectParameters.GameServerInGameRequestDeath:
                     GameClientProvider.GameServerInGameRequestDeath(request[1], playerSession);
                     return;
+                case NetworkObjectParameters.GameServerInGameRequestItemUsage:
+                    GameClientProvider.GameServerInGameRequestItemUsage(request[1], playerSession);
+                    return;
 
                 // Messaging / Room List Chat Requests
                 case NetworkObjectParameters.GameServerChatEnter:

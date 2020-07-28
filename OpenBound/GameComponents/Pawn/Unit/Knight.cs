@@ -61,6 +61,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
             Satellite.ChangeShotType(ShotType);
         }
 
+        /*
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
@@ -71,6 +72,6 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 LastCreatedProjectileList.Add(new KnightProjectile3(this));
 
             base.Shoot();
-        }
+        }*/
     }
 }

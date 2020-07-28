@@ -33,6 +33,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
             base.PlayUnableToMoveSE(pitch: 0.75f);
         }
 
+        /*
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
@@ -43,6 +44,6 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 LastCreatedProjectileList.Add(new DragonProjectile3(this));
 
             base.Shoot();
-        }
+        }*/
     }
 }

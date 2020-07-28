@@ -545,6 +545,20 @@ namespace Openbound_Game_Server.Service
             }
         }
 
+        public static void GameServerInGameRequestItemUsage(string param, PlayerSession playerSession)
+        {
+            try
+            {
+                SyncMobile filter = ObjectWrapper.DeserializeRequest<SyncMobile>(param);
+                MatchManager mm = playerSession.MatchManager;
+                BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestItemUsage, filter, mm.MatchUnion);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ex: {ex.Message}");
+            }
+        }
+
         public static void GameServerInGameRequestDeath(string param, PlayerSession playerSession)
         {
             try

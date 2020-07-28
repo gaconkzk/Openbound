@@ -122,6 +122,7 @@ namespace OpenBound.GameComponents.Level.Scene
 
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameStartMatch, StartMatchAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestShot, RequestShotAsyncCallback);
+            ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestItemUsage, RequestInGameAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRefreshSyncMobile, RefreshSyncMobileAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestNextPlayerTurn, RequestNextPlayerTurnAsyncCallback);
             ServerInformationBroker.Instance.ActionCallbackDictionary.AddOrReplace(NetworkObjectParameters.GameServerInGameRequestDeath, RequestDeathAsyncCallback);
@@ -273,6 +274,11 @@ namespace OpenBound.GameComponents.Level.Scene
             }
         }
 
+        private void RequestItemUsage(object answer)
+        {
+            ItemType itemType = (ItemType)answer;
+        }
+
         private void RequestGameEndAsyncCallback(object answer)
         {
             RoomMetadata room = GameInformation.Instance.RoomMetadata;
@@ -403,6 +409,27 @@ namespace OpenBound.GameComponents.Level.Scene
                     mob.LoseTurn();
                 }
                 //Helper.EuclideanDistance(mob.Position, mob.Movement.DesiredPosition)
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ex: " + ex.Message);
+                Console.WriteLine("Ex: " + ex.StackTrace);
+            }
+        }
+
+        public void RequestInGameAsyncCallback(object answer)
+        {
+            try
+            {
+                SyncMobile syncMobile = (SyncMobile)answer;
+
+                Mobile mob = null;
+
+                lock (MobileList)
+                {
+                    mob = MobileList.Find((x) => syncMobile.Owner.ID == x.Owner.ID);
+                    mob.UseItem(syncMobile.UsedItem);
+                }
             }
             catch (Exception ex)
             {

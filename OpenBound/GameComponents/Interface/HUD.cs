@@ -28,6 +28,7 @@ using Microsoft.Xna.Framework.Input;
 using OpenBound.GameComponents.Input;
 using System.Linq;
 using OpenBound.ServerCommunication.Service;
+using System;
 
 namespace OpenBound.GameComponents.Interface
 {
@@ -77,6 +78,10 @@ namespace OpenBound.GameComponents.Interface
         public TextBox[] TextBoxes;
         float[] textBoxesTransparencyElapsedTime;
         float[] textBoxesTransparencyFadeTime;
+
+        //Items
+        public EquippedButtonBar EquippedButtonBar;
+        Action useItemOnGrantBeginAction, removeItemFromBarAction;
 
         private Vector2 origin;
 
@@ -156,15 +161,20 @@ namespace OpenBound.GameComponents.Interface
             MovementBar.Reset();
 
             //Panel that spawns above the items
+            EquippedButtonBar = new EquippedButtonBar(new Vector2(-116, -37) + origin,
+                defaultLayerIndex: DepthParameter.HUDL2,
+                onClick: UseItemAction);
+            //EquippedButtonList.Disable();
+
             Sprite matchStatusClosed = new Sprite("Interface/InGame/HUD/Blue/ActionBar/MatchStatus", layerDepth: DepthParameter.HUDL3,
                 sourceRectangle: new Rectangle(0, 0, 211, 33))
             { PositionOffset = new Vector2(312, -20) + origin };
-            spriteList.Add(matchStatusClosed);
+            //spriteList.Add(matchStatusClosed);
 
             Sprite matchStatus = new Sprite("Interface/InGame/HUD/Blue/ActionBar/MatchStatus", layerDepth: DepthParameter.HUDL4,
                 sourceRectangle: new Rectangle(((int)room.MatchSuddenDeathType + 1) * 211, 0, 211, 33))
             { PositionOffset = new Vector2(312, -20) + origin };
-            spriteList.Add(matchStatus);
+            //spriteList.Add(matchStatus);
 
             currentAngle = new NumericSpriteFont(FontType.HUDBlueCurrentAngle, 3, DepthParameter.HUDL5,
                 PositionOffset: new Vector2(-149, -26) + origin, textAnchor: TextAnchor.Right);
@@ -339,6 +349,41 @@ namespace OpenBound.GameComponents.Interface
         }
         #endregion
 
+        public void UseItemAction(Button sender, ItemButtonPreset preset)
+        {
+            if (mobile.IsAbleToUseItem)
+            {
+                if (!sender.IsEnabled)
+                {
+                    sender.ChangeButtonState(ButtonAnimationState.Activated, true);
+                    return;
+                }
+
+                removeItemFromBarAction = () => EquippedButtonBar.RemoveButton(sender, preset);
+                EquippedButtonBar.Disable();
+                sender.ChangeButtonState(ButtonAnimationState.Activated, true);
+                sender.IsEnabled = false;
+                mobile.RequestUseItem(preset.ItemPreset.ItemType);
+
+            }
+            else
+            {
+                foreach (Button b in EquippedButtonBar.ButtonList)
+                {
+                    if (b != sender && b.IsActivated)
+                    {
+                        b.Disable();
+                        b.Enable();
+                    }
+                }
+
+                if (sender.IsActivated)
+                    useItemOnGrantBeginAction = () => { UseItemAction(sender, preset); };
+                else
+                    useItemOnGrantBeginAction = default;
+            }
+        }
+
         public void MobileDeath(Mobile mobile)
         {
             Delayboard.RemoveEntry(mobile);
@@ -361,6 +406,11 @@ namespace OpenBound.GameComponents.Interface
             StrenghtBar.Reset();
             MovementBar.Reset();
             passTurnButton.Enable();
+
+            removeItemFromBarAction?.Invoke();
+            removeItemFromBarAction = default;
+            useItemOnGrantBeginAction?.Invoke();
+            useItemOnGrantBeginAction = default;
         }
 
         public void GameOptionsOnClickAction(object sender)
@@ -416,6 +466,10 @@ namespace OpenBound.GameComponents.Interface
             //Text
             UpdateTextboxTransparencies(gameTime);
             UpdateTextBoxes(gameTime);
+
+            //Items
+            EquippedButtonBar.Update();
+            EquippedButtonBar.UpdateAttatchMentPosition();
         }
 
         public void UpdatePreviousShotMarker()
@@ -463,6 +517,9 @@ namespace OpenBound.GameComponents.Interface
             //Text
             TextBoxes[0].Draw(spriteBatch);
             TextBoxes[1].Draw(spriteBatch);
+
+            //Items
+            EquippedButtonBar.Draw(gameTime, spriteBatch);
         }
 
         public void Dispose()

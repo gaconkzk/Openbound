@@ -51,7 +51,21 @@ namespace OpenBound.GameComponents.Level.Scene
                 ID = 0,
                 Gender = Gender.Female,
                 Nickname = "Jebomancer",
+                //SelectedItemTypeList,
             };
+
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.Dual);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.Dual);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.DualPlus);
+
+            /*
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            */
 
             #region Sync Mobile List
             sMobList = new List<SyncMobile>();
@@ -71,7 +85,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.RaonLauncher,
+                    PrimaryMobile = MobileType.Armor,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),

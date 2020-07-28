@@ -70,6 +70,7 @@ namespace Openbound_Network_Object_Library.Common
         public const int GameServerInGameRequestDeath          = 0x0031;
         public const int GameServerInGameRequestGameEnd        = 0x0032;
         public const int GameServerInGameRequestDisconnect     = 0x0033;
+        public const int GameServerInGameRequestItemUsage      = 0x0042;
 
         //Messaging / Chat Requests
         public const int GameServerChatEnter             = 0x0037;
@@ -81,7 +82,7 @@ namespace Openbound_Network_Object_Library.Common
         //Avatar Shop - Buy Avatar
         public const int GameServerAvatarShopBuyAvatarGold      = 0x003f;
         public const int GameServerAvatarShopBuyAvatarCash      = 0x0040;
-        public const int GameServerAvatarShopUpdatePlayerData = 0x0041;
+        public const int GameServerAvatarShopUpdatePlayerData   = 0x0041;
 
         //Chat - Game Server
         public const int  GameServerChatChannelsMaximumNumber  = 8;
@@ -207,14 +208,12 @@ namespace Openbound_Network_Object_Library.Common
         public const int InGameItemEnergyUp2Cost    = 300;
         public const int InGameItemTeamTeleportCost = 50;
         public const int InGameItemTeleportCost     = 150;
-        public const int InGameItemThunder          = 200;
+        public const int InGameItemThunderCost      = 200;
 
         public const int InGameItemEnergyUp1Cost    = 100;
         public const int InGameItemBloodCost        =   0;
         public const int InGameItemChangeWindCost   = 120;
         public const int InGameItemBungeShotCost    =  80;
         public const int InGameItemPowerUpCost      = 150;
-
-
     }
 }

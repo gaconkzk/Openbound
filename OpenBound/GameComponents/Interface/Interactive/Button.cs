@@ -1076,10 +1076,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/Dual",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },                        
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1090,10 +1091,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/DualPlus",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1104,10 +1106,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/Thunder",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1118,10 +1121,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/EnergyUp2",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1132,10 +1136,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/TeamTeleport",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1146,10 +1151,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/Teleport",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(73 * 0, 0, 73, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(73 * 1, 0, 73, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(73 * 2, 0, 73, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(73 * 0, 0, 73, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(73 * 1, 0, 73, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(73 * 2, 0, 73, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(73 * 3, 0, 73, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(73 * 2, 0, 73, 36) },
                         }
                     }
                 },
@@ -1162,10 +1168,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/Blood",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(37 * 2, 0, 37, 36) },
                         }
                     }
                 },
@@ -1176,10 +1183,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/BungeShot",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(37 * 2, 0, 37, 36) },
                         }
                     }
                 },
@@ -1190,10 +1198,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/PowerUp",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(37 * 2, 0, 37, 36) },
                         }
                     }
                 },
@@ -1204,10 +1213,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/EnergyUp1",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(37 * 2, 0, 37, 36) },
                         }
                     }
                 },
@@ -1218,10 +1228,11 @@ namespace OpenBound.GameComponents.Interface.Interactive
                         SpritePath = "Interface/StaticButtons/Popup/SelectItem/ChangeWind",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
                         {
-                            { ButtonAnimationState.Normal,   new Rectangle(37 * 0, 0, 37, 36) },
-                            { ButtonAnimationState.Hoover,   new Rectangle(37 * 1, 0, 37, 36) },
-                            { ButtonAnimationState.Clicked,  new Rectangle(37 * 2, 0, 37, 36) },
-                            { ButtonAnimationState.Disabled, new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Normal,    new Rectangle(37 * 0, 0, 37, 36) },
+                            { ButtonAnimationState.Hoover,    new Rectangle(37 * 1, 0, 37, 36) },
+                            { ButtonAnimationState.Clicked,   new Rectangle(37 * 2, 0, 37, 36) },
+                            { ButtonAnimationState.Disabled,  new Rectangle(37 * 3, 0, 37, 36) },
+                            { ButtonAnimationState.Activated, new Rectangle(37 * 2, 0, 37, 36) },
                         }
                     }
                 },

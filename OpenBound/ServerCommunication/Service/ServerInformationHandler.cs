@@ -196,6 +196,14 @@ namespace OpenBound.ServerCommunication.Service
                 );
         }
 
+        public static void SynchronizeItemUsage(SyncMobile syncMobile)
+        {
+            ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(
+                NetworkObjectParameters.GameServerInGameRequestItemUsage,
+                syncMobile
+                );
+        }
+
         public static void RequestShot(SyncMobile syncMobile)
         {
             ServerInformationBroker.Instance.GameServerServiceProvider.RequestList.Enqueue(

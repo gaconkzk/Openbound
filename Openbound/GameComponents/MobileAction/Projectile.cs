@@ -76,8 +76,11 @@ namespace OpenBound.GameComponents.MobileAction
         public int ExplosionRadius { get; set; }
 
         //Behaviour
-        protected double SpawnTimeCounter, FreezeTimeCounter;
-        protected double SpawnTime, FreezeTime;
+        public double InteractionTime { get; protected set; }
+        public double FreezeTime { get; protected set; }
+        public double SpawnTime { get; protected set; }
+
+        protected double FreezeTimeCounter, SpawnTimeCounter, InteractionTimeCounter;
 
         //Object References
         public Mobile Mobile { get; protected set; }
@@ -106,7 +109,7 @@ namespace OpenBound.GameComponents.MobileAction
 #if Debug
         DebugCrosshair debugCrosshair;
 #endif
-        public Projectile(Mobile owner, ShotType shotType, int explosionRadius, int baseDamage, Vector2 projectileInitialPosition = default, float angleModifier = 0, float forceModifier = 0, bool canCollide = true)
+        public Projectile(Mobile owner, ShotType shotType, int explosionRadius, int baseDamage, double interactionTime = 0, Vector2 projectileInitialPosition = default, float angleModifier = 0, float forceModifier = 0, bool canCollide = true)
         {
             this.shotType = shotType;
             CanCollide = canCollide;
@@ -115,8 +118,6 @@ namespace OpenBound.GameComponents.MobileAction
 
             FlipbookList = new List<Flipbook>();
 
-            Mobile = owner;
-
             //Weather
             WeatherInfluenceList = new List<WeatherType>();
 
@@ -124,7 +125,10 @@ namespace OpenBound.GameComponents.MobileAction
             yMovement = new AcceleratedMovement();
             xMovement = new AcceleratedMovement();
 
+            Mobile = owner;
             projectileOffset = Vector2.Zero;
+
+            InteractionTime = interactionTime;
 
             IsAbleToRefreshPosition = true;
             IsExternallyRefreshingPosition = false;
@@ -163,6 +167,16 @@ namespace OpenBound.GameComponents.MobileAction
 
         public virtual void Update()
         {
+            if (InteractionTimeCounter < InteractionTime || (InteractionTime == 0 && InteractionTimeCounter == 0))
+            {
+                InteractionTimeCounter += Parameter.GameplayTimeFrameMaximumDeltaTime;
+
+                if (InteractionTimeCounter >= InteractionTime)
+                    OnStartInteracting();
+
+                return;
+            }
+
             OnBeforeUpdateAction?.Invoke();
 
             if (SpawnTimeCounter < SpawnTime || (SpawnTime == 0 && SpawnTimeCounter == 0))
@@ -206,6 +220,12 @@ namespace OpenBound.GameComponents.MobileAction
             AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileExplosion(Mobile.MobileType, st));
         }
 
+        public virtual void OnStartInteracting()
+        {
+            Mobile.PlayShootingAnimation(shotType);
+            Console.WriteLine("asdasd");
+        }
+
         public virtual void OnSpawn()
         {
             PlayLaunchSFX();
@@ -218,7 +238,7 @@ namespace OpenBound.GameComponents.MobileAction
 
         /// <summary>
         /// This method updates the projectile position and interpolates it.
-        /// All the motion is calculated using the parabolic throw formula.
+        /// All the motion is calculated using the parabolic projectile motion formulas.
         /// </summary>
         /// <param name="GameTime"></param>
         protected virtual void UpdatePosition()
@@ -449,7 +469,7 @@ namespace OpenBound.GameComponents.MobileAction
 
         public virtual void Draw(GameTime GameTime, SpriteBatch SpriteBatch)
         {
-            if (SpawnTimeCounter < SpawnTime) return;
+            if (InteractionTimeCounter < InteractionTime  || SpawnTimeCounter < SpawnTime) return;
 
             FlipbookList.ForEach((x) => x.Draw(GameTime, SpriteBatch));
         }

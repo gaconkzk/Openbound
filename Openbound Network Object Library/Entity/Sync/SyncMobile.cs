@@ -33,8 +33,9 @@ namespace Openbound_Network_Object_Library.Entity.Sync
         public int Delay;
         public bool IsAlive;
 
+        public ItemType UsedItem;
         public List<SynchronizableAction> SynchronizableActionList;
-
+        
         public SyncMobile()
         {
             SynchronizableActionList = new List<SynchronizableAction>();

@@ -279,7 +279,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     public class TurtleProjectile3SS : Projectile
     {
         public TurtleProjectile3SS(Turtle mobile, Vector2 positionModifier, float force, float angle)
-            : base(mobile, ShotType.SS, Parameter.ProjectileTurtleSSEExplosionRadius, Parameter.ProjectileTurtleSSEBaseDamage, positionModifier)
+            : base(mobile, ShotType.SS, Parameter.ProjectileTurtleSSEExplosionRadius, Parameter.ProjectileTurtleSSEBaseDamage,
+                  projectileInitialPosition: positionModifier)
         {
             //Initializing Flipbook
             FlipbookList.Add(new Flipbook(

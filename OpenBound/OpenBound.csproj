@@ -750,6 +750,7 @@
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\MatchConfigurationGrid.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\PlayerButton.cs" />
     <Compile Include="GameComponents\Interface\Interactive\GameRoom\PlayerButtonList.cs" />
+    <Compile Include="GameComponents\Interface\Interactive\EquippedButtonBar.cs" />
     <Compile Include="GameComponents\Interface\Interactive\LoadingScreen\Minimap.cs" />
     <Compile Include="GameComponents\Interface\Interactive\LoadingScreen\PlayerLoadingButtonList.cs" />
     <Compile Include="GameComponents\Interface\Interactive\LoadingScreen\PlayerLoadingButton.cs" />

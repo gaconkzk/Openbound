@@ -74,6 +74,7 @@ namespace OpenBound.GameComponents.Pawn.Unit
             base.GrantTurn();
         }
 
+        /*
         protected override void Shoot()
         {
             if (SelectedShotType == ShotType.S1)
@@ -84,6 +85,6 @@ namespace OpenBound.GameComponents.Pawn.Unit
                 LastCreatedProjectileList.Add(new RaonProjectile3(this));
 
             base.Shoot();
-        }
+        }*/
     }
 }

@@ -100,7 +100,7 @@ namespace OpenBound.GameComponents.MobileAction.Motion
                 }
                 else
                 {
-                    Mobile.ChangeFlipbookState(ActorFlipbookState.Stand, true);
+                    Mobile.ChangeFlipbookState(ActorFlipbookState.Stand);
                 }
 
                 if (IsReadyToDequeue)

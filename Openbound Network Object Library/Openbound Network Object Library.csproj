@@ -67,7 +67,7 @@
     <Compile Include="Common\ObjectWrapper.cs" />
     <Compile Include="Common\NetworkObjectParameters.cs" />
     <Compile Include="Entity\AvatarCategory.cs" />
-    <Compile Include="Entity\ItemType.cs" />
+    <Compile Include="Entity\Item.cs" />
     <Compile Include="Entity\Text\Message.cs" />
     <Compile Include="Entity\Text\TextConfiguration.cs" />
     <Compile Include="Extension\EBitwiseOperators.cs" />
