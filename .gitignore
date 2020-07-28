@@ -261,3 +261,5 @@ __pycache__/
 *.pyc
 /GunboundImageFix/Input/
 /GunboundImageFix/Output/
+
+Avatar API/appsettings.json
