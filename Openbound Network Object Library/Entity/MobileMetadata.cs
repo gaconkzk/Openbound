@@ -99,8 +99,8 @@ namespace Openbound_Network_Object_Library.Entity
 
     public class MobileMetadata
     {
-        //Crosshair Presets, this variable contains all the information about
-        //all mobile crosshairs and supported angles, source: http://creedo.gbgl-hq.com/mobiles.htm
+        // Crosshair Presets, this variable contains all the information about
+        // all mobiles crosshairs and supported angles, source: http://creedo.gbgl-hq.com/mobiles.htm
         public static readonly Dictionary<MobileType, Dictionary<ShotType, AimPreset>> AimPresets = new Dictionary<MobileType, Dictionary<ShotType, AimPreset>>()
         {
             //Aduka
@@ -308,6 +308,7 @@ namespace Openbound_Network_Object_Library.Entity
             { MobileType.Turtle,       new DelayPreset() { Base = 690, Shot1 = 740, Shot2 = 890, SS = 1290 } }, // Turtle    690 740 890 1290
         };
 
+        //Archetypes sources: https://strategywiki.org/wiki/Gunbound
         public static readonly Dictionary<MobileType, MobileStatus> MobileStatusPresets = new Dictionary<MobileType, MobileStatus>()
         {
             { MobileType.Aduka,        new MobileStatus(30, 40, 30, 40, 50, MobileArmorArchetype.Steel,  MobileAttackArchetype.Electrical, MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
@@ -318,7 +319,7 @@ namespace Openbound_Network_Object_Library.Entity
 
             { MobileType.Boomer,       new MobileStatus(50, 40, 40, 40, 30, MobileArmorArchetype.Bionic, MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
             { MobileType.Carrior,      new MobileStatus(30, 40, 30, 50, 30) },
-            { MobileType.Dragon,       new MobileStatus(60, 30, 40, 50, 30) },
+            { MobileType.Dragon,       new MobileStatus(60, 30, 40, 50, 30, MobileArmorArchetype.Bionic, MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire) },
             { MobileType.Frank,        new MobileStatus(50, 40, 30, 30, 50) },
             { MobileType.Grub,         new MobileStatus(40, 30, 40, 20, 40, MobileArmorArchetype.Bionic, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical, MobileAttackArchetype.Fire) },
 
@@ -336,7 +337,7 @@ namespace Openbound_Network_Object_Library.Entity
 
             { MobileType.Princess,     new MobileStatus(30, 50, 20, 40, 50) },
             { MobileType.Random,       new MobileStatus(30, 30, 30, 30, 30) },
-            { MobileType.RaonLauncher, new MobileStatus(30, 40, 30, 40, 60, MobileArmorArchetype.Steel,  MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser)) },
+            { MobileType.RaonLauncher, new MobileStatus(30, 40, 30, 40, 60, MobileArmorArchetype.Steel,  MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
             { MobileType.ShadowWalker, new MobileStatus(40, 20, 50, 40, 30) },
             { MobileType.Tiburon,      new MobileStatus(40, 40, 30, 50, 40) },
 

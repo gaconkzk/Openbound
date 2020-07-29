@@ -35,6 +35,7 @@ using System.Linq;
 using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.Collision;
 using OpenBound.GameComponents.MobileAction.Motion;
+using Openbound_Network_Object_Library.Common;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -410,11 +411,6 @@ namespace OpenBound.GameComponents.Pawn
 
         public void UseItem(ItemType itemType)
         {
-            ChangeFlipbookState(ActorFlipbookState.UsingItem, true);
-
-            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
-            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
-
             switch (itemType)
             {
                 case ItemType.Dual:
@@ -423,7 +419,26 @@ namespace OpenBound.GameComponents.Pawn
                 case ItemType.DualPlus:
                     ItemsUnderEffectList.Add(ItemType.DualPlus);
                     break;
+                case ItemType.EnergyUp1:
+                    Heal(NetworkObjectParameters.InGameItemEnergyUp1Value, NetworkObjectParameters.InGameItemEnergyUp1ExtraValue);
+                    break;
+                case ItemType.EnergyUp2:
+                    Heal(NetworkObjectParameters.InGameItemEnergyUp2Value, NetworkObjectParameters.InGameItemEnergyUp2ExtraValue);
+                    break;
             }
+
+            ChangeFlipbookState(ActorFlipbookState.UsingItem, true);
+
+            if (IsHealthCritical) MobileFlipbook.EnqueueAnimation(ActorFlipbookState.StandLowHealth);
+            else MobileFlipbook.EnqueueAnimation(ActorFlipbookState.Stand);
+        }
+
+        public void Heal(float healPercentage, float extraHealPercentage)
+        {
+            if (MobileMetadata.MobileStatusPresets[MobileType].ArmorArchetype == MobileArmorArchetype.Bionic)
+                healPercentage += extraHealPercentage;
+
+            MobileMetadata.CurrentHealth += Math.Min(MobileMetadata.BaseHealth, MobileMetadata.BaseHealth * healPercentage / 100f);
         }
 
         /// <summary>
@@ -501,7 +516,7 @@ namespace OpenBound.GameComponents.Pawn
                     NewState = ActorFlipbookState.MovingLowHealth;
             }
 
-            if (NewState == MobileFlipbook.State) return;
+            if (NewState == MobileFlipbook.State && !IsStateUsingItem(MobileFlipbook.State)) return;
 
             if (IsStateDead(MobileFlipbook.State)) return;
 

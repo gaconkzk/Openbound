@@ -54,9 +54,10 @@ namespace OpenBound.GameComponents.Level.Scene
                 //SelectedItemTypeList,
             };
 
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.Dual);
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.Dual);
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.DualPlus);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp2);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp2);
 
             /*
             GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
