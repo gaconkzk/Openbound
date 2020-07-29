@@ -30,7 +30,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
         Dummy,
 
         //In Game
-        BlueShot1, BlueShot2, BlueShotSS,
+        BlueShotS1, BlueShotS2, BlueShotSS,
 
         BlueTag,
 
@@ -118,7 +118,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
             {
                 #region InGame
                 {
-                    ButtonType.BlueShot1,
+                    ButtonType.BlueShotS1,
                     new ButtonPreset() {
                         SpritePath = "Interface/StaticButtons/HUD/Blue/ShotSelector",
                         StatePreset = new Dictionary<ButtonAnimationState, Rectangle>()
@@ -132,7 +132,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
                     }
                 },
                 {
-                    ButtonType.BlueShot2,
+                    ButtonType.BlueShotS2,
                     new ButtonPreset()
                     {
                         SpritePath = "Interface/StaticButtons/HUD/Blue/ShotSelector",

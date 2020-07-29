@@ -76,9 +76,10 @@ namespace OpenBound.GameComponents.Interface.Interactive
                     }
                 }
 
-                nextIndex = prevIndex + 1;
-                if (nextIndex == OtherButtons.Count)
-                    nextIndex = 0;
+                nextIndex = (prevIndex + 1) % 3;
+
+                if (OtherButtons[nextIndex].IsEnabled == false)
+                    nextIndex = (nextIndex + 1) % 3;
 
                 OtherButtons[prevIndex].IsActivated = false;
                 OtherButtons[prevIndex].ChangeButtonState(ButtonAnimationState.Normal, true);
@@ -116,7 +117,7 @@ namespace OpenBound.GameComponents.Interface.Interactive
 
                     OtherButtons.ForEach((x) =>
                     {
-                        if (x != this)
+                        if (x != this && x.IsEnabled)
                         {
                             x.IsActivated = false;
                             x.ChangeButtonState(ButtonAnimationState.Normal, true);
@@ -156,6 +157,9 @@ namespace OpenBound.GameComponents.Interface.Interactive
         public override void Update()
         {
             UpdateAttatchedPosition();
+
+            if (!IsEnabled) return;
+
             UpdateMouse();
             if (OtherButtons[0] == this) UpdateKeyboard();
         }

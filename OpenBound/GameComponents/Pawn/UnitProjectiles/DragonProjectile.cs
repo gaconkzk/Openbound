@@ -30,10 +30,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         {
             int factor = mobile.Facing == Facing.Left ? 1 : -1;
             int i = 0;
-            mobile.LastCreatedProjectileList.Add(new DragonProjectile2(mobile,  5, MathHelper.ToRadians(-3 * factor), 0.2f * i++));
-            mobile.LastCreatedProjectileList.Add(new DragonProjectile2(mobile,  0, MathHelper.ToRadians( 3 * factor), 0.2f * i++));
-            mobile.LastCreatedProjectileList.Add(new DragonProjectile2(mobile, 10, MathHelper.ToRadians(-3 * factor), 0.2f * i++));
-            mobile.LastCreatedProjectileList.Add(new DragonProjectile2(mobile,  0, MathHelper.ToRadians( 3 * factor), 0.2f * i++));
+            mobile.UninitializedProjectileList.Add(new DragonProjectile2(mobile,  5, MathHelper.ToRadians(-3 * factor), 0.2f * i++));
+            mobile.UninitializedProjectileList.Add(new DragonProjectile2(mobile,  0, MathHelper.ToRadians( 3 * factor), 0.2f * i++));
+            mobile.UninitializedProjectileList.Add(new DragonProjectile2(mobile, 10, MathHelper.ToRadians(-3 * factor), 0.2f * i++));
+            mobile.UninitializedProjectileList.Add(new DragonProjectile2(mobile,  0, MathHelper.ToRadians( 3 * factor), 0.2f * i++));
 
             GameScene.Camera.TrackObject(mobile.LastCreatedProjectileList.First());
         }
@@ -44,7 +44,10 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         Vector2 previousSESpawnPosition;
         double currentDistance = 0;
 
-        public DragonProjectile(Dragon mobile, int damage, int blastRadius, float forceModifier, float angleModifier = 0, float spawnTime = 0) : base(mobile, ShotType.S1, blastRadius, damage, angleModifier: angleModifier, forceModifier: forceModifier)
+        public DragonProjectile(Dragon mobile, int damage, int blastRadius, float forceModifier, float angleModifier, float spawnTime)
+            : base(mobile, ShotType.S1, blastRadius, damage,
+                  angleModifier: angleModifier,
+                  forceModifier: forceModifier)
         {
             //Initializing Flipbook
             FlipbookList.Add(new Flipbook(
@@ -122,8 +125,6 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public DragonProjectile3(Dragon mobile) : base(mobile, ShotType.SS, 0, 0)
         {
-            this.Mobile = mobile;
-
             //Initializing Flipbook
             FlipbookList.Add(new Flipbook(
                 mobile.Crosshair.CannonPosition, new Vector2(19.5f, 19.5f),
@@ -174,10 +175,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         ProjectileAnimationState animationState;
 
         public DragonProjectile3SS(Dragon mobile, Vector2 initialPosition, Vector2 finalPosition, float spawnTime)
-            : base(mobile, ShotType.SS, Parameter.ProjectileDragonSSExplosionRadius, Parameter.ProjectileDragonSSBaseDamage, projectileInitialPosition: initialPosition)
+            : base(mobile, ShotType.SS, Parameter.ProjectileDragonSSExplosionRadius, Parameter.ProjectileDragonSSBaseDamage,
+                  projectileInitialPosition: initialPosition)
         {
-            this.Mobile = mobile;
-
             //Calculate the angle of the swords
             double angle = (float)Helper.AngleBetween(finalPosition, initialPosition);
 

@@ -92,7 +92,11 @@ namespace OpenBound.GameComponents.Interface
         //Incoming Weather pointer
         Queue<IncomingWeatherPointer> incomingWeatherPointers;
 
+#if !DEBUGSCENE
         public WeatherMetadata ActiveWeather => displayingWeatherList[displayingWeatherList.Count > 4 ? 1 : 0];
+#else
+        public WeatherMetadata ActiveWeather => (displayingWeatherList.Count == 0) ? null : displayingWeatherList[displayingWeatherList.Count > 4 ? 1 : 0];
+#endif
         private WeatherMetadata previousWeather;
 
         public WeatherDisplay(Vector2 position)

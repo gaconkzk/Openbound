@@ -30,9 +30,9 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public static void Shot2(Trico mobile)
         {
             float angleModifier = mobile.Facing == Facing.Left ? -1 : 1;
-            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2( 35, 0), angleModifier));
-            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, Vector2.Zero,        angleModifier));
-            mobile.LastCreatedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2(-35, 0), angleModifier));
+            mobile.UninitializedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2( 35, 0), angleModifier));
+            mobile.UninitializedProjectileList.Add(new TricoBaseProjectile2(mobile, Vector2.Zero,        angleModifier));
+            mobile.UninitializedProjectileList.Add(new TricoBaseProjectile2(mobile, new Vector2(-35, 0), angleModifier));
         }
     }
 

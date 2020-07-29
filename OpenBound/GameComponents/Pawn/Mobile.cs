@@ -58,8 +58,8 @@ namespace OpenBound.GameComponents.Pawn
 
         //Projectiles
         public List<Projectile> ProjectileList;
-
         public List<Projectile> LastCreatedProjectileList;
+        public List<Projectile> UninitializedProjectileList;
 
         public List<Projectile> UnusedProjectile;
 
@@ -99,6 +99,7 @@ namespace OpenBound.GameComponents.Pawn
             ProjectileList = new List<Projectile>();
             UnusedProjectile = new List<Projectile>();
             LastCreatedProjectileList = new List<Projectile>();
+            UninitializedProjectileList = new List<Projectile>();
             ItemsUnderEffectList = new List<ItemType>();
 
             MobileType = mobileType;
@@ -221,6 +222,10 @@ namespace OpenBound.GameComponents.Pawn
 
             //ShotType
             ChangeShot(SyncMobile.SelectedShotType);
+
+            //Enable SS
+            if (syncMobile.SSLockRemainingTurns == 0)
+                LevelScene.HUD.EnableSS();
         }
 
         public void RequestLoseTurn()
@@ -259,7 +264,13 @@ namespace OpenBound.GameComponents.Pawn
             IsAbleToUseItem = true;
 
             if (IsPlayable)
+            {
+                SyncMobile.ReduceSSCooldown();
+                if (SyncMobile.SSLockRemainingTurns == 0)
+                    LevelScene.HUD.EnableSS();
+
                 LevelScene.HUD.GrantTurn();
+            }
 
             Crosshair.PlayAnimation();
 
@@ -640,6 +651,8 @@ namespace OpenBound.GameComponents.Pawn
                 ServerInformationHandler.RequestNextPlayerTurn(); 
             });
             GameScene.Camera.TrackObject(LastCreatedProjectileList.First());
+
+            LevelScene.HUD.DisableSS();
         }
 
         private void ShootWithModifiers()
@@ -688,7 +701,14 @@ namespace OpenBound.GameComponents.Pawn
         protected virtual void Shoot(ShotType shotType, double timeOffset = 0)
         {
             //Initialize Projectiles
-            LastCreatedProjectileList.ForEach((x) => x.InitializeMovement());
+            foreach(Projectile p in UninitializedProjectileList)
+            {
+                LastCreatedProjectileList.Add(p);
+                p.InitializeMovement();
+                p.InteractionTime = timeOffset;
+            }
+
+            UninitializedProjectileList.Clear();
         }
 
         public new virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)

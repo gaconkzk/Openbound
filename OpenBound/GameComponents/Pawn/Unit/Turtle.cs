@@ -42,17 +42,16 @@ namespace OpenBound.GameComponents.Pawn.Unit
             base.PlayUnableToMoveSE(pitch: -0.75f);
         }
 
-        /*
-        protected override void Shoot()
+        protected override void Shoot(ShotType shotType, double interactionTime = 0)
         {
-            if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new TurtleProjectile1(this));
-            else if (SelectedShotType == ShotType.S2)
+            if (shotType == ShotType.S1)
+                UninitializedProjectileList.Add(new TurtleProjectile1(this));
+            else if (shotType == ShotType.S2)
                 TurtleProjectileEmitter.Shot2(this);
-            else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new TurtleProjectile3(this));
+            else if (shotType == ShotType.SS)
+                UninitializedProjectileList.Add(new TurtleProjectile3(this));
 
-            base.Shoot();
-        }*/
+            base.Shoot(shotType, interactionTime);
+        }
     }
 }

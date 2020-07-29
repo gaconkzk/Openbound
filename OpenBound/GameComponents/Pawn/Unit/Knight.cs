@@ -61,17 +61,16 @@ namespace OpenBound.GameComponents.Pawn.Unit
             Satellite.ChangeShotType(ShotType);
         }
 
-        /*
-        protected override void Shoot()
+        protected override void Shoot(ShotType shotType, double interactionTime = 0)
         {
-            if (SelectedShotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new KnightProjectile1(this));
-            else if (SelectedShotType == ShotType.S2)
-                LastCreatedProjectileList.Add(new KnightProjectile2(this));
-            else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new KnightProjectile3(this));
+            if (shotType == ShotType.S1)
+                UninitializedProjectileList.Add(new KnightProjectile1(this));
+            else if (shotType == ShotType.S2)
+                UninitializedProjectileList.Add(new KnightProjectile2(this));
+            else if (shotType == ShotType.SS)
+                UninitializedProjectileList.Add(new KnightProjectile3(this));
 
-            base.Shoot();
-        }*/
+            base.Shoot(shotType, interactionTime);
+        }
     }
 }

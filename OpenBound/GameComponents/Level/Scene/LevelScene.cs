@@ -274,11 +274,6 @@ namespace OpenBound.GameComponents.Level.Scene
             }
         }
 
-        private void RequestItemUsage(object answer)
-        {
-            ItemType itemType = (ItemType)answer;
-        }
-
         private void RequestGameEndAsyncCallback(object answer)
         {
             RoomMetadata room = GameInformation.Instance.RoomMetadata;

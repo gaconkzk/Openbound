@@ -31,16 +31,16 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         public static void Shot1(RaonLauncher mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 1 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 2 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 3 * MathHelper.PiOver2));
-            mobile.LastCreatedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 4 * MathHelper.PiOver2));
+            mobile.UninitializedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 1 * MathHelper.PiOver2));
+            mobile.UninitializedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 2 * MathHelper.PiOver2));
+            mobile.UninitializedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 3 * MathHelper.PiOver2));
+            mobile.UninitializedProjectileList.Add(new RaonBaseProjectile1(mobile, new Vector2(12, 0), 4 * MathHelper.PiOver2));
         }
 
         public static void Shot2(RaonLauncher mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile,  3));
-            mobile.LastCreatedProjectileList.Add(new RaonProjectile2(mobile, -3));
+            mobile.UninitializedProjectileList.Add(new RaonProjectile2(mobile,  3));
+            mobile.UninitializedProjectileList.Add(new RaonProjectile2(mobile, -3));
         }
     }
 

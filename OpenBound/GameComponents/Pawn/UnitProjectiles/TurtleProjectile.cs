@@ -31,8 +31,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         //This method was created to prevent hurricane positions
         public static void Shot2(Turtle mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new TurtleProjectile2(mobile, 0));
-            mobile.LastCreatedProjectileList.Add(new TurtleProjectile2(mobile, MathHelper.Pi));
+            mobile.UninitializedProjectileList.Add(new TurtleProjectile2(mobile, 0));
+            mobile.UninitializedProjectileList.Add(new TurtleProjectile2(mobile, MathHelper.Pi));
         }
 
         public static void Shot3(Turtle mobile, float force, Vector2 position, float rotation, Action onFinalizeExecution)
@@ -171,6 +171,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void Update()
         {
             base.Update();
+            if (InteractionTimeCounter < InteractionTime) return;
 
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
@@ -200,7 +201,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (SpawnTimeCounter < SpawnTime) return;
+            if (InteractionTimeCounter < InteractionTime || SpawnTimeCounter < SpawnTime) return;
             base.Draw(gameTime, spriteBatch);
             trace.Draw(gameTime, spriteBatch);
         }

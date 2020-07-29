@@ -76,7 +76,7 @@ namespace OpenBound.GameComponents.MobileAction
         public int ExplosionRadius { get; set; }
 
         //Behaviour
-        public double InteractionTime { get; protected set; }
+        public double InteractionTime { get; set; }
         public double FreezeTime { get; protected set; }
         public double SpawnTime { get; protected set; }
 
@@ -109,7 +109,7 @@ namespace OpenBound.GameComponents.MobileAction
 #if Debug
         DebugCrosshair debugCrosshair;
 #endif
-        public Projectile(Mobile owner, ShotType shotType, int explosionRadius, int baseDamage, double interactionTime = 0, Vector2 projectileInitialPosition = default, float angleModifier = 0, float forceModifier = 0, bool canCollide = true)
+        public Projectile(Mobile owner, ShotType shotType, int explosionRadius, int baseDamage, Vector2 projectileInitialPosition = default, float angleModifier = 0, float forceModifier = 0, bool canCollide = true)
         {
             this.shotType = shotType;
             CanCollide = canCollide;
@@ -127,8 +127,6 @@ namespace OpenBound.GameComponents.MobileAction
 
             Mobile = owner;
             projectileOffset = Vector2.Zero;
-
-            InteractionTime = interactionTime;
 
             IsAbleToRefreshPosition = true;
             IsExternallyRefreshingPosition = false;

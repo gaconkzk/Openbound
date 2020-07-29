@@ -29,17 +29,17 @@ namespace OpenBound.GameComponents.Pawn.Unit
 
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 46, 40), new Vector2(0, 10));
         }
-        /*
-        protected override void Shoot()
+
+        protected override void Shoot(ShotType shotType, double interactionTime = 0)
         {
-            if (SelectedShotType == ShotType.S1)
+            if (shotType == ShotType.S1)
                 BigfootProjectileEmitter.Shot1(this);
-            else if (SelectedShotType == ShotType.S2)
+            else if (shotType == ShotType.S2)
                 BigfootProjectileEmitter.Shot2(this);
-            else if (SelectedShotType == ShotType.SS)
+            else if (shotType == ShotType.SS)
                 BigfootProjectileEmitter.Shot3(this);
 
-            base.Shoot();
-        }*/
+            base.Shoot(shotType, interactionTime);
+        }
     }
 }

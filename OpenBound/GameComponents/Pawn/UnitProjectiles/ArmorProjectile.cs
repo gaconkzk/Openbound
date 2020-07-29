@@ -23,8 +23,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 {
     public class ArmorProjectile1 : Projectile
     {
-        public ArmorProjectile1(Armor mobile, double interactionTime)
-            : base(mobile, ShotType.S1, Parameter.ProjectileArmorS1ExplosionRadius, Parameter.ProjectileArmorS1BaseDamage, interactionTime)
+        public ArmorProjectile1(Armor mobile)
+            : base(mobile, ShotType.S1, Parameter.ProjectileArmorS1ExplosionRadius, Parameter.ProjectileArmorS1BaseDamage)
         {
             //Initializing Flipbook
             FlipbookList.Add(new Flipbook(
@@ -61,9 +61,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
     {
         bool primaryExplosion;
 
-        public ArmorProjectile2(Armor mobile, double interactionTime)
-            : base(mobile, ShotType.S2, Parameter.ProjectileArmorS2ExplosionRadius, Parameter.ProjectileArmorS2BaseDamage,
-                  interactionTime)
+        public ArmorProjectile2(Armor mobile)
+            : base(mobile, ShotType.S2, Parameter.ProjectileArmorS2ExplosionRadius, Parameter.ProjectileArmorS2BaseDamage)
         {
             Mobile = mobile;
 
@@ -135,9 +134,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         float totalTravelledTime;
 
-        public ArmorProjectile3(Armor mobile, double interactionTime)
-            : base(mobile, ShotType.SS, Parameter.ProjectileArmorSSExplosionRadius, Parameter.ProjectileArmorSSBaseDamage,
-                  interactionTime)
+        public ArmorProjectile3(Armor mobile)
+            : base(mobile, ShotType.SS, Parameter.ProjectileArmorSSExplosionRadius, Parameter.ProjectileArmorSSBaseDamage)
         {
             Mobile = mobile;
 

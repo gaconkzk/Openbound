@@ -197,6 +197,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
             InitializeMovement();
         }
 
+        public override void OnStartInteracting() { }
+
         public override void InitializeMovement()
         {
             yMovement.Preset((float)(Math.Sin(CurrentFlipbookRotation) * Parameter.ProjectileKnightSpeed), 0);

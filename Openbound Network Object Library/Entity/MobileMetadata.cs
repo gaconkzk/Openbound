@@ -28,7 +28,23 @@ namespace Openbound_Network_Object_Library.Entity
     public enum ShotType
     {
         S1, S2, SS,
-        Satellite, Dummy // This state should only be used for projectile's constructoor for identification
+        Satellite,
+        Dummy // This state should only be used for DummyProjectile constructor's identification
+    }
+
+    public enum MobileAttackArchetype
+    {
+        Hit,
+        Electrical,
+        Laser,
+        Fire,
+    }
+
+    public enum MobileArmorArchetype
+    {
+        Bionic,
+        Steel,
+        Shield,
     }
 
     public struct AimPreset
@@ -62,6 +78,23 @@ namespace Openbound_Network_Object_Library.Entity
         public int Energy;
         public int Mobility;
         public int Delay;
+        public MobileArmorArchetype ArmorArchetype;
+        public MobileAttackArchetype AttackArchetypeS1, AttackArchetypeS2, AttackArchetypeSS;
+
+        public MobileStatus(int attack, int defence, int energy, int mobility, int delay,
+            MobileArmorArchetype armorArchetype = MobileArmorArchetype.Steel, MobileAttackArchetype attackArchetypeS1 = MobileAttackArchetype.Hit,
+            MobileAttackArchetype attackArchetypeS2 = MobileAttackArchetype.Hit, MobileAttackArchetype attackArchetypeSS = MobileAttackArchetype.Hit)
+        {
+            Attack = attack;
+            Defence = defence;
+            Energy = energy;
+            Mobility = mobility;
+            Delay = delay;
+            ArmorArchetype = armorArchetype;
+            AttackArchetypeS1 = attackArchetypeS1;
+            AttackArchetypeS2 = attackArchetypeS2;
+            AttackArchetypeSS = attackArchetypeSS;
+        }
     }
 
     public class MobileMetadata
@@ -277,49 +310,48 @@ namespace Openbound_Network_Object_Library.Entity
 
         public static readonly Dictionary<MobileType, MobileStatus> MobileStatusPresets = new Dictionary<MobileType, MobileStatus>()
         {
-            { MobileType.Aduka,        new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 40, Delay = 50 } },
-            { MobileType.Armor,        new MobileStatus(){ Attack = 50, Defence = 40, Energy = 30, Mobility = 30, Delay = 50 } },
-            { MobileType.ASate,        new MobileStatus(){ Attack = 50, Defence = 50, Energy = 20, Mobility = 50, Delay = 30 } },
-            { MobileType.Assassin,     new MobileStatus(){ Attack = 30, Defence = 30, Energy = 50, Mobility = 40, Delay = 50 } },
-            { MobileType.Bigfoot,      new MobileStatus(){ Attack = 50, Defence = 30, Energy = 40, Mobility = 40, Delay = 30 } },
+            { MobileType.Aduka,        new MobileStatus(30, 40, 30, 40, 50, MobileArmorArchetype.Steel,  MobileAttackArchetype.Electrical, MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
+            { MobileType.Armor,        new MobileStatus(50, 40, 30, 30, 50, MobileArmorArchetype.Steel,  MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire) },
+            { MobileType.ASate,        new MobileStatus(50, 50, 20, 50, 30, MobileArmorArchetype.Shield, MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
+            { MobileType.Assassin,     new MobileStatus(30, 30, 50, 40, 50) },
+            { MobileType.Bigfoot,      new MobileStatus(50, 30, 40, 40, 30, MobileArmorArchetype.Steel,  MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire) },
 
-            { MobileType.Boomer,       new MobileStatus(){ Attack = 50, Defence = 40, Energy = 40, Mobility = 40, Delay = 30 } },
-            { MobileType.Carrior,      new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 50, Delay = 30 } },
-            { MobileType.Dragon,       new MobileStatus(){ Attack = 60, Defence = 30, Energy = 40, Mobility = 50, Delay = 30 } },
-            { MobileType.Frank,        new MobileStatus(){ Attack = 50, Defence = 40, Energy = 30, Mobility = 30, Delay = 50 } },
-            { MobileType.Grub,         new MobileStatus(){ Attack = 40, Defence = 30, Energy = 40, Mobility = 20, Delay = 40 } },
+            { MobileType.Boomer,       new MobileStatus(50, 40, 40, 40, 30, MobileArmorArchetype.Bionic, MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
+            { MobileType.Carrior,      new MobileStatus(30, 40, 30, 50, 30) },
+            { MobileType.Dragon,       new MobileStatus(60, 30, 40, 50, 30) },
+            { MobileType.Frank,        new MobileStatus(50, 40, 30, 30, 50) },
+            { MobileType.Grub,         new MobileStatus(40, 30, 40, 20, 40, MobileArmorArchetype.Bionic, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical, MobileAttackArchetype.Fire) },
 
-            { MobileType.Ice,          new MobileStatus(){ Attack = 40, Defence = 30, Energy = 40, Mobility = 40, Delay = 40 } },
-            { MobileType.JD,           new MobileStatus(){ Attack = 40, Defence = 50, Energy = 20, Mobility = 50, Delay = 40 } },
-            { MobileType.JFrog,        new MobileStatus(){ Attack = 50, Defence = 30, Energy = 40, Mobility = 40, Delay = 40 } },
-            { MobileType.Kalsiddon,    new MobileStatus(){ Attack = 60, Defence = 30, Energy = 40, Mobility = 50, Delay = 30 } },
-            { MobileType.Knight,       new MobileStatus(){ Attack = 60, Defence = 40, Energy = 30, Mobility = 40, Delay = 40 } },
+            { MobileType.Ice,          new MobileStatus(40, 30, 40, 40, 40, MobileArmorArchetype.Bionic, MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
+            { MobileType.JD,           new MobileStatus(40, 50, 20, 50, 40, MobileArmorArchetype.Shield, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical) },
+            { MobileType.JFrog,        new MobileStatus(50, 30, 40, 40, 40, MobileArmorArchetype.Bionic, MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
+            { MobileType.Kalsiddon,    new MobileStatus(60, 30, 40, 50, 30, MobileArmorArchetype.Steel,  MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire) },
+            { MobileType.Knight,       new MobileStatus(60, 40, 30, 40, 40, MobileArmorArchetype.Steel,  MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
 
-            { MobileType.Lightning,    new MobileStatus(){ Attack = 40, Defence = 50, Energy = 20, Mobility = 30, Delay = 30 } },
-            { MobileType.Mage,         new MobileStatus(){ Attack = 40, Defence = 50, Energy = 50, Mobility = 40, Delay = 40 } },
-            { MobileType.Maya,         new MobileStatus(){ Attack = 40, Defence = 40, Energy = 30, Mobility = 40, Delay = 40 } },
-            { MobileType.Nak,          new MobileStatus(){ Attack = 50, Defence = 40, Energy = 30, Mobility = 40, Delay = 40 } },
-            { MobileType.Phoenix,      new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 50, Delay = 30 } },
+            { MobileType.Lightning,    new MobileStatus(40, 50, 20, 30, 30, MobileArmorArchetype.Shield, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical, MobileAttackArchetype.Electrical) },
+            { MobileType.Mage,         new MobileStatus(40, 50, 50, 40, 40, MobileArmorArchetype.Shield, MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser) },
+            { MobileType.Maya,         new MobileStatus(40, 40, 30, 40, 40, MobileArmorArchetype.Shield, MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
+            { MobileType.Nak,          new MobileStatus(50, 40, 30, 40, 40, MobileArmorArchetype.Steel,  MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
+            { MobileType.Phoenix,      new MobileStatus(30, 40, 30, 50, 30) },
 
-            { MobileType.Princess,     new MobileStatus(){ Attack = 30, Defence = 50, Energy = 20, Mobility = 40, Delay = 50 } },
-            { MobileType.Random,       new MobileStatus(){ Attack = 30, Defence = 30, Energy = 30, Mobility = 30, Delay = 30 } },
-            { MobileType.RaonLauncher, new MobileStatus(){ Attack = 30, Defence = 40, Energy = 30, Mobility = 40, Delay = 60 } },
-            { MobileType.ShadowWalker, new MobileStatus(){ Attack = 40, Defence = 20, Energy = 50, Mobility = 40, Delay = 30 } },
-            { MobileType.Tiburon,      new MobileStatus(){ Attack = 40, Defence = 40, Energy = 30, Mobility = 50, Delay = 40 } },
+            { MobileType.Princess,     new MobileStatus(30, 50, 20, 40, 50) },
+            { MobileType.Random,       new MobileStatus(30, 30, 30, 30, 30) },
+            { MobileType.RaonLauncher, new MobileStatus(30, 40, 30, 40, 60, MobileArmorArchetype.Steel,  MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser,      MobileAttackArchetype.Laser)) },
+            { MobileType.ShadowWalker, new MobileStatus(40, 20, 50, 40, 30) },
+            { MobileType.Tiburon,      new MobileStatus(40, 40, 30, 50, 40) },
 
-            { MobileType.Trico,        new MobileStatus(){ Attack = 50, Defence = 30, Energy = 40, Mobility = 40, Delay = 30 } },
-            { MobileType.Turtle,       new MobileStatus(){ Attack = 40, Defence = 30, Energy = 40, Mobility = 40, Delay = 40 } },
-            { MobileType.Wolf,         new MobileStatus(){ Attack = 30, Defence = 30, Energy = 40, Mobility = 40, Delay = 60 } },
+            { MobileType.Trico,        new MobileStatus(50, 30, 40, 40, 30, MobileArmorArchetype.Bionic, MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire,       MobileAttackArchetype.Fire) },
+            { MobileType.Turtle,       new MobileStatus(40, 30, 40, 40, 40, MobileArmorArchetype.Bionic, MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit,        MobileAttackArchetype.Hit) },
+            { MobileType.Wolf,         new MobileStatus(30, 30, 40, 40, 60) },
         };
 
-        public static readonly MobileStatus BestMobileStatus = new MobileStatus()
-        {
-            Attack = MobileStatusPresets.Max((x) => x.Value.Attack),
-            Defence = MobileStatusPresets.Max((x) => x.Value.Defence),
-            Delay = MobileStatusPresets.Max((x) => x.Value.Delay),
-            Energy = MobileStatusPresets.Max((x) => x.Value.Energy),
-            Mobility = MobileStatusPresets.Max((x) => x.Value.Mobility),
-        };
+        public static readonly MobileStatus BestMobileStatus
+            = new MobileStatus(
+                MobileStatusPresets.Max((x) => x.Value.Attack),
+                MobileStatusPresets.Max((x) => x.Value.Defence),
+                MobileStatusPresets.Max((x) => x.Value.Delay),
+                MobileStatusPresets.Max((x) => x.Value.Energy),
+                MobileStatusPresets.Max((x) => x.Value.Mobility));
 
         public static MobileMetadata BuildMobileMetadata(MobileType mobileType)
         {

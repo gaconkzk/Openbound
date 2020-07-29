@@ -82,6 +82,10 @@ namespace Openbound_Network_Object_Library.Entity
             //Turn pass
             MatchMetadata.PassTurn(roomMetadata.OriginalTeamSize);
             MatchMetadata.CurrentTurnOwner = CurrentTurnOwner;
+
+            //SS Lock (if necessary)
+            if (filter.SelectedShotType == ShotType.SS /* && filter.SSLockRemainingTurns == 0 */)
+                filter.SSLockRemainingTurns += NetworkObjectParameters.SSCooldownTimer + 1;
         }
     }
 }

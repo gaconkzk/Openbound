@@ -31,16 +31,16 @@ namespace OpenBound.GameComponents.Pawn.Unit
             CollisionBox = new CollisionBox(this, new Rectangle(0, 0, 30, 40), new Vector2(0, 10));
         }
 
-        protected override void Shoot(ShotType shotType, double spawnTime = 0)
+        protected override void Shoot(ShotType shotType, double interactionTime = 0)
         {
             if (shotType == ShotType.S1)
-                LastCreatedProjectileList.Add(new ArmorProjectile1(this, spawnTime));
+                UninitializedProjectileList.Add(new ArmorProjectile1(this));
             else if (shotType == ShotType.S2)
-                LastCreatedProjectileList.Add(new ArmorProjectile2(this, spawnTime));
+                UninitializedProjectileList.Add(new ArmorProjectile2(this));
             else if (shotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new ArmorProjectile3(this, spawnTime));
+                UninitializedProjectileList.Add(new ArmorProjectile3(this));
 
-            base.Shoot(shotType, spawnTime);            
+            base.Shoot(shotType, interactionTime);            
         }
     }
 }

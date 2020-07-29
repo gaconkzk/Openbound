@@ -215,5 +215,8 @@ namespace Openbound_Network_Object_Library.Common
         public const int InGameItemChangeWindCost   = 120;
         public const int InGameItemBungeShotCost    =  80;
         public const int InGameItemPowerUpCost      = 150;
+
+        // SS Lock
+        public const int SSCooldownTimer = 3;
     }
 }

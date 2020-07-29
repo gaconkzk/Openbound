@@ -40,7 +40,7 @@ namespace OpenBound.GameComponents.Interface
         private List<Sprite> spriteList;
         private Sprite strenghtBarPreviousShotMarker, shotStrenghtSelector;
 
-        private ShotButton shot1Button;
+        private ShotButton shot1Button, shot2Button, shotSSButton;
         private List<Button> menuButtonList;
 
         private List<SpriteNumericField> spriteNumericFieldList;
@@ -185,9 +185,9 @@ namespace OpenBound.GameComponents.Interface
             spriteNumericFieldList.Add(previousAngle);
 
             //Menu Buttons
-            shot1Button = new ShotButton(ButtonType.BlueShot1, this.mobile, DepthParameter.HUDForeground, ShotType.S1, true, new Vector2(-371, -4) + origin);
-            ShotButton shot2Button = new ShotButton(ButtonType.BlueShot2, this.mobile, DepthParameter.HUDForeground, ShotType.S2, ButtonOffset: new Vector2(-328, -4) + origin);
-            ShotButton shotSSButton = new ShotButton(ButtonType.BlueShotSS, this.mobile, DepthParameter.HUDForeground, ShotType.SS, ButtonOffset: new Vector2(-285, -4) + origin);
+            shot1Button = new ShotButton(ButtonType.BlueShotS1, this.mobile, DepthParameter.HUDForeground, ShotType.S1, ButtonOffset: new Vector2(-371, -4) + origin, IsActivated: true);
+            shot2Button = new ShotButton(ButtonType.BlueShotS2, this.mobile, DepthParameter.HUDForeground, ShotType.S2, ButtonOffset: new Vector2(-328, -4) + origin);
+            shotSSButton = new ShotButton(ButtonType.BlueShotSS, this.mobile, DepthParameter.HUDForeground, ShotType.SS, ButtonOffset: new Vector2(-285, -4) + origin);
 
             shot1Button.OtherButtons = shot2Button.OtherButtons = shotSSButton.OtherButtons = new List<ShotButton>() { shot1Button, shot2Button, shotSSButton };
             shot1Button.ChangeButtonState(ButtonAnimationState.Activated);
@@ -226,9 +226,9 @@ namespace OpenBound.GameComponents.Interface
             });
 
             textFilterButton = new Button(ButtonType.MessageFilter, DepthParameter.HUDForeground, OnTeamMessageFilterIsClicked, new Vector2(-40, -60) + origin);
-            allTextFilterSpriteFont  = new SpriteText(FontTextType.Consolas10, Language.HUDTextAllText,  Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
+            allTextFilterSpriteFont = new SpriteText(FontTextType.Consolas10, Language.HUDTextAllText, Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
             teamTextFilterSpriteFont = new SpriteText(FontTextType.Consolas10, Language.HUDTextTeamText, Color.White, Alignment.Center, DepthParameter.HUDL1, outlineColor: Color.Black);
-            
+
             allTextFilterSpriteFont.PositionOffset = teamTextFilterSpriteFont.PositionOffset = new Vector2(-40, -55) + origin;
             teamTextFilterSpriteFont.SetTransparency(0);
 
@@ -264,6 +264,18 @@ namespace OpenBound.GameComponents.Interface
 
             textBoxesTransparencyElapsedTime = new float[2];
             textBoxesTransparencyFadeTime = new float[2];
+        }
+
+        public void EnableSS() => shotSSButton.Enable();
+        public void DisableSS()
+        {
+            if (mobile.SelectedShotType == ShotType.SS)
+            {
+                mobile.ChangeShot(ShotType.S2);
+                shot2Button.IsActivated = true;
+            }
+
+            shotSSButton.Disable();
         }
 
         #region Textbox
@@ -359,12 +371,18 @@ namespace OpenBound.GameComponents.Interface
                     return;
                 }
 
-                removeItemFromBarAction = () => EquippedButtonBar.RemoveButton(sender, preset);
+                removeItemFromBarAction = () =>
+                {
+                    EquippedButtonBar.RemoveButton(sender, preset);
+                };
+
                 EquippedButtonBar.Disable();
                 sender.ChangeButtonState(ButtonAnimationState.Activated, true);
                 sender.IsEnabled = false;
                 mobile.RequestUseItem(preset.ItemPreset.ItemType);
 
+                //Changing SS button state if activated
+                DisableSS();
             }
             else
             {
@@ -406,6 +424,9 @@ namespace OpenBound.GameComponents.Interface
             StrenghtBar.Reset();
             MovementBar.Reset();
             passTurnButton.Enable();
+
+            if (WeatherDisplay.ActiveWeather?.Weather != WeatherType.Weakness)
+                EquippedButtonBar.Enable();
 
             removeItemFromBarAction?.Invoke();
             removeItemFromBarAction = default;

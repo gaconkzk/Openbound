@@ -30,8 +30,8 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         //This method was created to prevent hurricane positions
         public static void Shot2(Mage mobile)
         {
-            mobile.LastCreatedProjectileList.Add(new MageProjectile2(mobile, 0, new Color(200, 60, 100, 60)));
-            mobile.LastCreatedProjectileList.Add(new MageProjectile2(mobile, MathHelper.Pi, new Color(150, 150, 200, 100)));
+            mobile.UninitializedProjectileList.Add(new MageProjectile2(mobile, 0, new Color(200, 60, 100, 60)));
+            mobile.UninitializedProjectileList.Add(new MageProjectile2(mobile, MathHelper.Pi, new Color(150, 150, 200, 100)));
         }
     }
 
@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void Update()
         {
             base.Update();
-
+            if (InteractionTimeCounter < InteractionTime) return;
             trace.Update(FlipbookList[0].Position, Vector2.Zero, FlipbookList[0].Rotation, 0, 0);
         }
 
@@ -72,7 +72,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (SpawnTimeCounter < SpawnTime) return;
+            if (InteractionTimeCounter < InteractionTime || SpawnTimeCounter < SpawnTime) return;
             base.Draw(gameTime, spriteBatch);
             trace.Draw(gameTime, spriteBatch);
         }
@@ -160,6 +160,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
         public override void Update()
         {
             base.Update();
+            if (InteractionTimeCounter < InteractionTime) return;
 
             for (float i = 0; i < Parameter.ProjectileMovementTotalTimeElapsed; i += Parameter.ProjectileMovementTimeElapsedPerInteraction)
             {
@@ -185,7 +186,7 @@ namespace OpenBound.GameComponents.Pawn.UnitProjectiles
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (SpawnTimeCounter < SpawnTime) return;
+            if (InteractionTimeCounter < InteractionTime || SpawnTimeCounter < SpawnTime) return;
             base.Draw(gameTime, spriteBatch);
             trace.Draw(gameTime, spriteBatch);
         }

@@ -74,17 +74,16 @@ namespace OpenBound.GameComponents.Pawn.Unit
             base.GrantTurn();
         }
 
-        /*
-        protected override void Shoot()
+        protected override void Shoot(ShotType shotType, double interactionTime = 0)
         {
-            if (SelectedShotType == ShotType.S1)
+            if (shotType == ShotType.S1)
                 RaonLauncherProjectileEmitter.Shot1(this);
-            else if (SelectedShotType == ShotType.S2)
+            else if (shotType == ShotType.S2)
                 RaonLauncherProjectileEmitter.Shot2(this);
-            else if (SelectedShotType == ShotType.SS)
-                LastCreatedProjectileList.Add(new RaonProjectile3(this));
+            else if (shotType == ShotType.SS)
+                UninitializedProjectileList.Add(new RaonProjectile3(this));
 
-            base.Shoot();
-        }*/
+            base.Shoot(shotType, interactionTime);
+        }
     }
 }

@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with OpenBound. If not, see http://www.gnu.org/licenses/.
  */
 
+using System;
 using System.Collections.Generic;
 using Openbound_Network_Object_Library.Models;
 
@@ -32,6 +33,7 @@ namespace Openbound_Network_Object_Library.Entity.Sync
         public SyncProjectile SyncProjectile;
         public int Delay;
         public bool IsAlive;
+        public int SSLockRemainingTurns;
 
         public ItemType UsedItem;
         public List<SynchronizableAction> SynchronizableActionList;
@@ -67,6 +69,7 @@ namespace Openbound_Network_Object_Library.Entity.Sync
             SelectedShotType = syncMobile.SelectedShotType;
             Facing = syncMobile.Facing;
             IsAlive = syncMobile.IsAlive;
+            SSLockRemainingTurns = syncMobile.SSLockRemainingTurns;
         }
 
         public void AddSynchronizableAction(SynchronizableAction synchronizableAction)
@@ -83,6 +86,14 @@ namespace Openbound_Network_Object_Library.Entity.Sync
         public bool ContainsAction(SynchronizableAction synchronizableAction)
         {
             return SynchronizableActionList.Contains(synchronizableAction);
+        }
+
+        public void ReduceSSCooldown()
+        {
+            //If its sudden death
+            if (SSLockRemainingTurns == -1) return;
+
+            SSLockRemainingTurns = Math.Max(SSLockRemainingTurns - 1, 0);
         }
     }
 }
