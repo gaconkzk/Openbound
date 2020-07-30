@@ -551,6 +551,12 @@ namespace Openbound_Game_Server.Service
             {
                 SyncMobile filter = ObjectWrapper.DeserializeRequest<SyncMobile>(param);
                 MatchManager mm = playerSession.MatchManager;
+
+                lock (mm)
+                {
+                    mm.ComputePlayerItem(filter);    
+                }
+
                 BroadcastToPlayer(NetworkObjectParameters.GameServerInGameRequestItemUsage, filter, mm.MatchUnion);
             }
             catch (Exception ex)

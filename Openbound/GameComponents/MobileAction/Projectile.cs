@@ -77,8 +77,8 @@ namespace OpenBound.GameComponents.MobileAction
 
         //Behaviour
         public double InteractionTime { get; set; }
-        public double FreezeTime { get; protected set; }
-        public double SpawnTime { get; protected set; }
+        public double FreezeTime { get; set; }
+        public double SpawnTime { get; set; }
 
         protected double FreezeTimeCounter, SpawnTimeCounter, InteractionTimeCounter;
 
@@ -194,13 +194,13 @@ namespace OpenBound.GameComponents.MobileAction
             OnAfterUpdateAction?.Invoke();
         }
 
-        public void PlayLaunchSFX()
+        public virtual void PlayLaunchSFX()
         {
             //Sound
             AudioHandler.PlaySoundEffect(SoundEffectParameter.MobileProjectileLaunch(Mobile.MobileType, shotType));
         }
 
-        public void PlayExplosionSFX()
+        public virtual void PlayExplosionSFX()
         {
             ShotType st = shotType;
 
@@ -221,7 +221,6 @@ namespace OpenBound.GameComponents.MobileAction
         public virtual void OnStartInteracting()
         {
             Mobile.PlayShootingAnimation(shotType);
-            Console.WriteLine("asdasd");
         }
 
         public virtual void OnSpawn()

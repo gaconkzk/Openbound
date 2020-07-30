@@ -205,6 +205,10 @@ namespace OpenBound.Common
         #endregion
 
         #region Mobile Projectile and Balancing
+        //Generic
+        public const float ProjectileTeleportationBeaconMass = 10f;
+        public const float ProjectileTeleportationBeaconWindInfluence = 0f;
+
         //Armor
         public const int ProjectileArmorS1ExplosionRadius  = 25;
         public const int ProjectileArmorS2ExplosionRadius  = 25;

@@ -31,6 +31,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class RaonLauncher : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.7d;
+
         bool mineTurn;
 
         public RaonLauncher(Player player, Vector2 position) : base(player, position, MobileType.RaonLauncher)

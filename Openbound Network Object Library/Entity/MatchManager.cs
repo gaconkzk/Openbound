@@ -87,5 +87,11 @@ namespace Openbound_Network_Object_Library.Entity
             if (filter.SelectedShotType == ShotType.SS /* && filter.SSLockRemainingTurns == 0 */)
                 filter.SSLockRemainingTurns += NetworkObjectParameters.SSCooldownTimer + 1;
         }
+
+        public void ComputePlayerItem(SyncMobile filter)
+        {
+            SyncMobile sMob = SyncMobileList.Find((x) => x.Owner.ID == filter.Owner.ID);
+            filter.Delay = sMob.Delay += Item.ItemPresets.Find((x) => x.ItemType == filter.UsedItem).ItemCost;
+        }
     }
 }

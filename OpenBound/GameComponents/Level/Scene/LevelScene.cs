@@ -300,7 +300,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     HUD.WeatherDisplay.AppendWeatherToList(MatchMetadata.IncomingWeatherList);
 
                     //Change Wind (If Necessary)
-                    HUD.windCompass.ChangeWind(MatchMetadata.WindAngleDegrees, MatchMetadata.WindForce);
+                    HUD.WindCompass.ChangeWind(MatchMetadata.WindAngleDegrees, MatchMetadata.WindForce);
                 }
 
                 Thread.Sleep(Parameter.GameplayConstantDelayTimerWindChange);
@@ -399,7 +399,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     mob.ConsumeShootAction();
 
                     if (syncMobile.Owner.ID == GameInformation.Instance.PlayerInformation.ID)
-                        HUD.Delayboard.ComputeDelay(syncMobile);
+                        HUD.Delayboard.ComputeDelay();
 
                     mob.LoseTurn();
                 }
@@ -423,6 +423,11 @@ namespace OpenBound.GameComponents.Level.Scene
                 lock (MobileList)
                 {
                     mob = MobileList.Find((x) => syncMobile.Owner.ID == x.Owner.ID);
+                    mob.SyncMobile.Delay = syncMobile.Delay;
+
+                    if (syncMobile.Owner.ID == GameInformation.Instance.PlayerInformation.ID)
+                        HUD.Delayboard.ComputeDelay();
+
                     mob.UseItem(syncMobile.UsedItem);
                 }
             }

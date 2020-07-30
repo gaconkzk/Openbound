@@ -24,6 +24,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Mage : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0d;
+
         public Mage(Player player, Vector2 position) : base(player, position, MobileType.Mage)
         {
             Movement.CollisionOffset = 30;

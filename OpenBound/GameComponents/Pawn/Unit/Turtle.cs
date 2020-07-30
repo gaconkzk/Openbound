@@ -24,6 +24,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Turtle : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0d;
+
         public Turtle(Player player, Vector2 position) : base(player, position, MobileType.Turtle)
         {
             Movement.CollisionOffset = 23;

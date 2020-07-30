@@ -168,9 +168,11 @@ namespace OpenBound.GameComponents.Interface
             playerScoreboardEntryList = tmpPSE;
         }
 
-        public void ComputeDelay(SyncMobile syncMobile)
+        public void ComputeDelay()
         {
-            OwningPlayerScoreboardEntry.DisplayingDelay = OwningPlayerScoreboardEntry.Mobile.MobileMetadata.GetDelay(OwningPlayerScoreboardEntry.Mobile.SelectedShotType);
+            OwningPlayerScoreboardEntry.DisplayingDelay =
+                OwningPlayerScoreboardEntry.Mobile.MobileMetadata
+                .GetDelay(OwningPlayerScoreboardEntry.Mobile.SelectedShotType);
         }
 
         public PlayerScoreboardEntry GetEntryByPlayerID(int ID)

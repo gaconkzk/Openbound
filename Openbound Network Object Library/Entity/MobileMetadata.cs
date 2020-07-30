@@ -29,7 +29,8 @@ namespace Openbound_Network_Object_Library.Entity
     {
         S1, S2, SS,
         Satellite,
-        Dummy // This state should only be used for DummyProjectile constructor's identification
+        Dummy, // This state should only be used for DummyProjectile constructor's identification
+        TeleportationBeacon,
     }
 
     public enum MobileAttackArchetype
@@ -358,24 +359,24 @@ namespace Openbound_Network_Object_Library.Entity
         {
             switch (mobileType)
             {
-                case MobileType.Aduka: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
-                case MobileType.Armor: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
-                case MobileType.ASate: return new MobileMetadata(mobileType, 760, 0, 35, 220, 20);
-                case MobileType.Bigfoot: return new MobileMetadata(mobileType, 1100, 0, 35, 0, 0);
-                case MobileType.Boomer: return new MobileMetadata(mobileType, 1000, 10, 70, 0, 0);
-                case MobileType.Dragon: return new MobileMetadata(mobileType, 1000, 10, 70, 0, 0);
-                case MobileType.Grub: return new MobileMetadata(mobileType, 1000, 10, 70, 0, 0);
-                case MobileType.Ice: return new MobileMetadata(mobileType, 1200, 10, 70, 0, 0);
-                case MobileType.JD: return new MobileMetadata(mobileType, 750, 0, 35, 250, 20);
-                case MobileType.JFrog: return new MobileMetadata(mobileType, 930, 10, 70, 0, 0);
-                case MobileType.Kalsiddon: return new MobileMetadata(mobileType, 1100, 0, 35, 0, 0);
-                case MobileType.Knight: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
-                case MobileType.Lightning: return new MobileMetadata(mobileType, 760, 0, 35, 220, 20);
-                case MobileType.Mage: return new MobileMetadata(mobileType, 760, 0, 35, 220, 20);
-                case MobileType.Nak: return new MobileMetadata(mobileType, 1100, 0, 35, 0, 0);
-                case MobileType.RaonLauncher: return new MobileMetadata(mobileType, 1000, 0, 35, 0, 0);
-                case MobileType.Trico: return new MobileMetadata(mobileType, 1100, 10, 70, 0, 0);
-                case MobileType.Turtle: return new MobileMetadata(mobileType, 950, 10, 70, 0, 0);
+                case MobileType.Aduka:        return new MobileMetadata(mobileType, 1000,  0, 35,   0,  0);
+                case MobileType.Armor:        return new MobileMetadata(mobileType, 1000,  0, 35,   0,  0);
+                case MobileType.ASate:        return new MobileMetadata(mobileType,  760,  0, 35, 220, 20);
+                case MobileType.Bigfoot:      return new MobileMetadata(mobileType, 1100,  0, 35,   0,  0);
+                case MobileType.Boomer:       return new MobileMetadata(mobileType, 1000, 10, 70,   0,  0);
+                case MobileType.Dragon:       return new MobileMetadata(mobileType, 1000, 10, 70,   0,  0);
+                case MobileType.Grub:         return new MobileMetadata(mobileType, 1000, 10, 70,   0,  0);
+                case MobileType.Ice:          return new MobileMetadata(mobileType, 1200, 10, 70,   0,  0);
+                case MobileType.JD:           return new MobileMetadata(mobileType,  750,  0, 35, 250, 20);
+                case MobileType.JFrog:        return new MobileMetadata(mobileType,  930, 10, 70,   0,  0);
+                case MobileType.Kalsiddon:    return new MobileMetadata(mobileType, 1100,  0, 35,   0,  0);
+                case MobileType.Knight:       return new MobileMetadata(mobileType, 1000,  0, 35,   0,  0);
+                case MobileType.Lightning:    return new MobileMetadata(mobileType,  760,  0, 35, 220, 20);
+                case MobileType.Mage:         return new MobileMetadata(mobileType,  760,  0, 35, 220, 20);
+                case MobileType.Nak:          return new MobileMetadata(mobileType, 1100,  0, 35,   0,  0);
+                case MobileType.RaonLauncher: return new MobileMetadata(mobileType, 1000,  0, 35,   0,  0);
+                case MobileType.Trico:        return new MobileMetadata(mobileType, 1100, 10, 70,   0,  0);
+                case MobileType.Turtle:       return new MobileMetadata(mobileType,  950, 10, 70,   0,  0);
             }
 
             return null;

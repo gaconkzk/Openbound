@@ -36,6 +36,8 @@ using Openbound_Network_Object_Library.Models;
 using OpenBound.GameComponents.Collision;
 using OpenBound.GameComponents.MobileAction.Motion;
 using Openbound_Network_Object_Library.Common;
+using OpenBound.GameComponents.WeatherEffect;
+using OpenBound.GameComponents.Pawn.UnitProjectiles;
 
 namespace OpenBound.GameComponents.Pawn
 {
@@ -71,6 +73,7 @@ namespace OpenBound.GameComponents.Pawn
 
         public SyncMobile SyncMobile;
         public bool ForceSynchronize;
+
         //Positioning sync variable
         public Vector2 SyncPosition;
 
@@ -85,9 +88,13 @@ namespace OpenBound.GameComponents.Pawn
         bool hasShotSequenceStarted;
 
         public List<ItemType> ItemsUnderEffectList;
+        public Action OnGrantTurn;
 
         //Sound Effect
         public SoundEffect movingSE, unableToMoveSE;
+
+        //Animation - Generic Projectile Properties
+        public virtual double TeleportationBeaconInteractionTime => 0;
 
 #if DEBUG
         //Debug Variables
@@ -219,7 +226,8 @@ namespace OpenBound.GameComponents.Pawn
             SyncMobile.Update(syncMobile);
 
             //Position
-            ((RemoteMovement)Movement).EnqueuePosition(Topography.GetTransformedPosition(new Vector2(syncMobile.Position[0], syncMobile.Position[1])).ToVector2());
+            if (LevelScene.MatchMetadata != null && LevelScene.MatchMetadata.CurrentTurnOwner.Owner.ID == Owner.ID)
+                ((RemoteMovement)Movement).EnqueuePosition(Topography.GetTransformedPosition(new Vector2(syncMobile.Position[0], syncMobile.Position[1])).ToVector2());
 
             //ShotType
             ChangeShot(SyncMobile.SelectedShotType);
@@ -257,6 +265,9 @@ namespace OpenBound.GameComponents.Pawn
 
         public virtual void GrantTurn()
         {
+            OnGrantTurn?.Invoke();
+            OnGrantTurn = default;
+
             LevelScene.MatchMetadata.CurrentTurnOwner = SyncMobile;
 
             Movement.RemainingStepsThisTurn = Movement.MaximumStepsPerTurn;
@@ -415,15 +426,64 @@ namespace OpenBound.GameComponents.Pawn
             {
                 case ItemType.Dual:
                     ItemsUnderEffectList.Add(ItemType.Dual);
+                    OnGrantTurn += () => { ItemsUnderEffectList.Clear(); };
                     break;
                 case ItemType.DualPlus:
                     ItemsUnderEffectList.Add(ItemType.DualPlus);
+                    OnGrantTurn += () => { ItemsUnderEffectList.Clear(); };
                     break;
+                case ItemType.Thunder:
+                    ItemsUnderEffectList.Add(ItemType.Thunder);
+                    OnGrantTurn += () => { ItemsUnderEffectList.Clear(); };
+                    break;
+                case ItemType.Teleport:
+                    ItemsUnderEffectList.Add(ItemType.Teleport);
+                    OnGrantTurn += () => { ItemsUnderEffectList.Clear(); };
+                    break;
+
                 case ItemType.EnergyUp1:
                     Heal(NetworkObjectParameters.InGameItemEnergyUp1Value, NetworkObjectParameters.InGameItemEnergyUp1ExtraValue);
                     break;
                 case ItemType.EnergyUp2:
                     Heal(NetworkObjectParameters.InGameItemEnergyUp2Value, NetworkObjectParameters.InGameItemEnergyUp2ExtraValue);
+                    break;
+                case ItemType.BungeShot:
+                    Owner.Dig += (int)NetworkObjectParameters.InGameItemBungeShotValue;
+                    OnGrantTurn += () => { Owner.Dig -= (int)NetworkObjectParameters.InGameItemBungeShotValue; };
+                    break;
+                case ItemType.PowerUp:
+                    Owner.Attack += (int)NetworkObjectParameters.InGameItemPowerUpValue;
+                    OnGrantTurn += () => { Owner.Attack -= (int)NetworkObjectParameters.InGameItemPowerUpValue; };
+                    break;
+                case ItemType.Blood:
+                    Owner.Attack += (int)NetworkObjectParameters.InGameItemBloodValue;
+                    OnGrantTurn += () => { Owner.Attack -= (int)NetworkObjectParameters.InGameItemBloodValue; };
+                    MobileMetadata.CurrentHealth = Math.Max(1, MobileMetadata.CurrentHealth - MobileMetadata.BaseHealth * NetworkObjectParameters.InGameItemBloodExtraValue / 100f);
+                    break;
+                case ItemType.ChangeWind:
+                    LevelScene.MatchMetadata.WindAngleDegrees += 180;
+                    LevelScene.HUD.WindCompass.ChangeWind(LevelScene.MatchMetadata.WindAngleDegrees, LevelScene.MatchMetadata.WindForce);
+                    break;
+                case ItemType.TeamTeleport:
+                    Mobile tpMobile = LevelScene.MobileList
+                        .Where((x) => x != this && x.Owner.PlayerTeam == GameInformation.Instance.PlayerInformation.PlayerTeam)
+                        .OrderBy((x) => x.MobileMetadata.CurrentHealth).FirstOrDefault();
+
+                    if (tpMobile == null) return;
+
+                    Vector2 tmpPos = tpMobile.Position;
+
+                    //Other mobile
+                    SpecialEffectBuilder.TeleportFlame1(Position);
+                    SpecialEffectBuilder.TeleportFlame2(tpMobile.Position);
+
+                    ((RemoteMovement)tpMobile.Movement).DesiredPosition = tpMobile.Position = tpMobile.SyncPosition = Position;
+                    tpMobile.SyncMobile.Position = Position.ToArray<int>();
+
+                    SyncPosition = Position = tmpPos;
+                    SyncMobile.Position = tmpPos.ToArray<int>();
+
+                    AudioHandler.PlaySoundEffect("Audio/SFX/Tank/Blast/Teleport", pitch: 0.5f);
                     break;
             }
 
@@ -475,6 +535,12 @@ namespace OpenBound.GameComponents.Pawn
             }
             else if ((InputHandler.IsBeingReleased(Keys.Space) || LevelScene.HUD.StrenghtBar.IsFull) && hasShotSequenceStarted)
             {
+                if (Movement.IsFalling)
+                {
+                    LevelScene.HUD.StrenghtBar.Reset();
+                    return;
+                }
+
                 LevelScene.HUD.UpdatePreviousShotMarker();
 
                 RequestShoot();
@@ -672,25 +738,37 @@ namespace OpenBound.GameComponents.Pawn
 
         private void ShootWithModifiers()
         {
-            Shoot(SelectedShotType);
+            if (ItemsUnderEffectList.Count == 0)
+            {
+                Shoot(SelectedShotType);
+                return;
+            }
 
             foreach (ItemType it in ItemsUnderEffectList) {
                 switch (it)
                 {
                     case ItemType.Dual:
+                        Shoot(SelectedShotType);
                         Shoot(SelectedShotType, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
                         break;
                     case ItemType.DualPlus:
+                        Shoot(SelectedShotType);
                         if (SelectedShotType == ShotType.S1)
                             Shoot(ShotType.S2, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
                         else
                             Shoot(ShotType.S1, 1 + LastCreatedProjectileList.Max((x) => x.SpawnTime));
                         break;
+                    case ItemType.Thunder:
+                        Shoot(SelectedShotType);
+                        Weather weather = LevelScene.WeatherHandler.AddAbsoluteWeather(WeatherType.Electricity, default, Position,
+                            scale: 1000, shouldRender: false);
+                        LastCreatedProjectileList.ForEach((x) => x.OnFinalizeExecutionAction += () => { LevelScene.WeatherHandler.RemoveWeather(weather); });
+                        break;
+                    case ItemType.Teleport:
+                        Shoot(ShotType.TeleportationBeacon);
+                        break;
                 }
             }
-
-            ItemsUnderEffectList.Clear();
-
         }
 
         /// <summary>
@@ -702,7 +780,7 @@ namespace OpenBound.GameComponents.Pawn
             //Reset current animation to force ChangeFlipbook validation succeed
             ChangeFlipbookState(ActorFlipbookState.All, true);
 
-            if (shotType == ShotType.S1)
+            if (shotType == ShotType.S1 || shotType == ShotType.TeleportationBeacon)
                 ChangeFlipbookState(ActorFlipbookState.ShootingS1, true);
             else if (shotType == ShotType.S2)
                 ChangeFlipbookState(ActorFlipbookState.ShootingS2, true);
@@ -715,6 +793,15 @@ namespace OpenBound.GameComponents.Pawn
 
         protected virtual void Shoot(ShotType shotType, double timeOffset = 0)
         {
+            switch (shotType)
+            {
+                case ShotType.TeleportationBeacon:
+                    TeleportationBeacon tb = new TeleportationBeacon(this);
+                    UninitializedProjectileList.Add(tb);
+                    tb.SpawnTime = TeleportationBeaconInteractionTime;
+                    break;
+            }
+
             //Initialize Projectiles
             foreach(Projectile p in UninitializedProjectileList)
             {

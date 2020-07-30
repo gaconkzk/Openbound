@@ -72,7 +72,7 @@ namespace OpenBound.GameComponents.Interface
         public void ChangeWind(int degrees, int windForce)
         {
             //Wind Strenght
-            if (this.windForce == windForce) return;
+            if (this.windForce == windForce && MathHelper.ToRadians(degrees) == desiredArrowZRotation) return;
 
             this.windForce = windForce;
 

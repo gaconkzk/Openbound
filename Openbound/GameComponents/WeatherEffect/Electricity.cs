@@ -52,7 +52,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             //If the project can't collide, it should not be taken into consideration for spawning/explosion effects
             if (!projectile.CanCollide) return;
 
-            //Once added to the list the projectile starts spawning force particles around it's flipbook
+            //Once added to the list, the projectile starts spawning electrical particles around it's flipbook
             SpecialEffect se = SpecialEffectBuilder.ElectricityParticle(projectile.Position);
             projectile.OnAfterUpdateAction += () =>
             {

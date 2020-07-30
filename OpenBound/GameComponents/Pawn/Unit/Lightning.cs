@@ -24,6 +24,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Lightning : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0d;
+
         public Lightning(Player player, Vector2 position) : base(player, position, MobileType.Lightning)
         {
             Movement.CollisionOffset = 23;

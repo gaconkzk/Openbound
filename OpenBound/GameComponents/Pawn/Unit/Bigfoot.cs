@@ -22,6 +22,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Bigfoot : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.4d;
+
         public Bigfoot(Player player, Vector2 position) : base(player, position, MobileType.Bigfoot)
         {
             Movement.CollisionOffset = 25;

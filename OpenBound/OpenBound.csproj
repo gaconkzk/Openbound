@@ -809,6 +809,7 @@
     <Compile Include="GameComponents\Pawn\Avatar.cs" />
     <Compile Include="GameComponents\Pawn\Rider.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\BeamDummyProjectile.cs" />
+    <Compile Include="GameComponents\Pawn\UnitProjectiles\GenericProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\LightningProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\RaonLauncherProjectile.cs" />
     <Compile Include="GameComponents\Pawn\UnitProjectiles\ThorProjectile.cs" />

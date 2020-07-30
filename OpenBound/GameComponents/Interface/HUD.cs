@@ -58,7 +58,7 @@ namespace OpenBound.GameComponents.Interface
         private List<Nameplate> nameplateList;
 
         //Weather effects
-        public WindCompass windCompass;
+        public WindCompass WindCompass;
         public WeatherDisplay WeatherDisplay;
 
         //Static popups
@@ -235,7 +235,7 @@ namespace OpenBound.GameComponents.Interface
             menuButtonList.Add(textFilterButton);
 
             //Wind Compass
-            windCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
+            WindCompass = new WindCompass(Vector2.Zero + new Vector2(0, 65 - Parameter.ScreenCenter.Y));
 
             //Weather Display
             WeatherDisplay = new WeatherDisplay(origin + new Vector2(157, -20));
@@ -365,6 +365,13 @@ namespace OpenBound.GameComponents.Interface
         {
             if (mobile.IsAbleToUseItem)
             {
+                if (mobile.Movement.IsFalling)
+                {
+                    sender.Disable();
+                    sender.Enable();
+                    return;
+                }
+
                 if (!sender.IsEnabled)
                 {
                     sender.ChangeButtonState(ButtonAnimationState.Activated, true);
@@ -479,7 +486,7 @@ namespace OpenBound.GameComponents.Interface
             Delayboard.Update();
 
             //Wind Compass
-            windCompass.Update(gameTime);
+            WindCompass.Update(gameTime);
 
             //Incoming Weather
             WeatherDisplay.Update(gameTime);
@@ -530,7 +537,7 @@ namespace OpenBound.GameComponents.Interface
             Delayboard.Draw(gameTime, spriteBatch);
 
             //Wind Compass
-            windCompass.Draw(spriteBatch);
+            WindCompass.Draw(spriteBatch);
 
             //IncomingWeather
             WeatherDisplay.Draw(gameTime, spriteBatch);

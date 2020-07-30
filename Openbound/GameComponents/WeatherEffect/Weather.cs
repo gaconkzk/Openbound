@@ -81,6 +81,9 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         protected float fadeAnimationElapsedTime;
 
+        public bool IsMergeable;
+        public bool ShouldRender;
+
 #if DEBUG
         //Debug
         private DebugRectangle debugRectangle;
@@ -134,6 +137,9 @@ namespace OpenBound.GameComponents.WeatherEffect
             Scale = scale;
 
             BaseColor = Color.White;
+
+            IsMergeable = true;
+            ShouldRender = true;
 
             SetTransparency(0);
         }
@@ -370,6 +376,7 @@ namespace OpenBound.GameComponents.WeatherEffect
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            if (!ShouldRender) return;
             flipbookList.ForEach((x) => x.Draw(gameTime, spriteBatch));
         }
     }

@@ -493,6 +493,12 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Blast/RaonLauncherSS.mp3
 
+#begin Audio/SFX/Tank/Blast/Teleport.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SFX/Tank/Blast/Teleport.mp3
+
 #begin Audio/SFX/Tank/Blast/TricoS1.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -1020,6 +1026,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/SFX/Tank/Shoot/RaonLauncherSS.mp3
+
+#begin Audio/SFX/Tank/Shoot/Teleport.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/SFX/Tank/Shoot/Teleport.mp3
 
 #begin Audio/SFX/Tank/Shoot/TricoS1.mp3
 /importer:Mp3Importer
@@ -3809,6 +3821,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Maps/Stardust/Particle.png
+
+#begin Graphics/Special Effects/General/Teleport1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Special Effects/General/Teleport1.png
+
+#begin Graphics/Special Effects/General/Teleport2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Special Effects/General/Teleport2.png
 
 #begin Graphics/Special Effects/Tank/Armor/Flame1.png
 /importer:TextureImporter

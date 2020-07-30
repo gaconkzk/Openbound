@@ -20,6 +20,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Dragon : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.3d;
+
         public Dragon(Player player, Vector2 position) : base(player, position, MobileType.Dragon)
         {
             Movement.CollisionOffset = 25;

@@ -22,6 +22,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Knight : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0d;
+
         public KnightSword Satellite;
 
         public Knight(Player player, Vector2 position) : base(player, position, MobileType.Knight)

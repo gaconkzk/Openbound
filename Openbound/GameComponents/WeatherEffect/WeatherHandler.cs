@@ -16,6 +16,7 @@ using OpenBound.GameComponents.Level.Scene;
 using Openbound_Network_Object_Library.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace OpenBound.GameComponents.WeatherEffect
 {
@@ -44,6 +45,15 @@ namespace OpenBound.GameComponents.WeatherEffect
             toBeAddedWeatherList.Add(weather);
         }
 
+        public Weather AddAbsoluteWeather(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position, float scale = 1, bool shouldRender = true, float rotation = 0)
+        {
+            Weather weather = CreateWeather(weatherType, extraWeatherType, position, scale);
+            weather.IsMergeable = false;
+            weather.ShouldRender = shouldRender;
+            toBeAddedWeatherList.Add(weather);
+            return weather;
+        }
+
         public void Add(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position, float rotation = 0)
         {
             Weather weather = CreateWeather(weatherType, extraWeatherType, position);
@@ -51,7 +61,7 @@ namespace OpenBound.GameComponents.WeatherEffect
             //Return if the given weather is not implemented yet
             if (weather == null) return;
 
-            if (weatherType != WeatherType.Random)
+            if (weather.IsMergeable && weatherType != WeatherType.Random)
                 CheckAndMergeWeatherEffects(weather);
             else
                 toBeAddedWeatherList.Add(weather);
@@ -62,20 +72,20 @@ namespace OpenBound.GameComponents.WeatherEffect
             Add(weatherType, default, position, rotation);
         }
 
-        public static Weather CreateWeather(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position)
+        public static Weather CreateWeather(WeatherType weatherType, WeatherType extraWeatherType, Vector2 position, float scale = 1)
         {
             switch (weatherType)
             {
                 case WeatherType.Tornado:
-                    return new Tornado(position);
+                    return new Tornado(position, scale);
                 case WeatherType.Force:
-                    return new Force(position);
+                    return new Force(position, scale);
                 case WeatherType.Weakness:
-                    return new Weakness(position);
+                    return new Weakness(position, scale);
                 case WeatherType.Mirror:
-                    return new Mirror(position);
+                    return new Mirror(position, scale);
                 case WeatherType.Electricity:
-                    return new Electricity(position);
+                    return new Electricity(position, scale);
                 case WeatherType.Random:
                     return new Random(position, extraWeatherType);
                 case WeatherType.Thor:

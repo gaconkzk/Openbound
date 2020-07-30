@@ -23,6 +23,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Armor : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.1d;
+
         public Armor(Player player, Vector2 position) : base(player, position, MobileType.Armor)
         {
             Movement.CollisionOffset = 25;

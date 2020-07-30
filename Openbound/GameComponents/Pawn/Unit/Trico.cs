@@ -11,11 +11,7 @@
  */
 
 using Microsoft.Xna.Framework;
-using OpenBound.Common;
-using OpenBound.GameComponents.Animation;
-using OpenBound.GameComponents.Audio;
 using OpenBound.GameComponents.Collision;
-using OpenBound.GameComponents.Interface;
 using OpenBound.GameComponents.Pawn.UnitProjectiles;
 using Openbound_Network_Object_Library.Entity;
 using Openbound_Network_Object_Library.Models;
@@ -24,6 +20,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Trico : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.7d;
+
         public Trico(Player player, Vector2 position) : base(player, position, MobileType.Trico)
         {
             Movement.CollisionOffset = 25;

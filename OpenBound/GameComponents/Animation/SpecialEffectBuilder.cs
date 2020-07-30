@@ -97,6 +97,20 @@ namespace OpenBound.GameComponents.Animation
         #endregion
 
         #region Common
+        public static void TeleportFlame1(Vector2 position)
+        {
+            SpecialEffectHandler.Add(new SpecialEffect(new Flipbook(position, new Vector2(95, 100), 190, 192, "Graphics/Special Effects/General/Teleport1",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 18, TimePerFrame = 1 / 30f },
+                DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi), 1));
+        }
+
+        public static void TeleportFlame2(Vector2 position)
+        {
+            SpecialEffectHandler.Add(new SpecialEffect(new Flipbook(position, new Vector2(95, 100), 190, 192, "Graphics/Special Effects/General/Teleport2",
+                new AnimationInstance() { StartingFrame = 0, EndingFrame = 18, TimePerFrame = 1 / 30f },
+                DepthParameter.ProjectileSFX, (float)Parameter.Random.NextDouble() * MathHelper.TwoPi), 1));
+        }
+
         public static void CommonFlameSS(Vector2 position, float rotation)
         {
             SpecialEffectHandler.Add(new SpecialEffect(new Flipbook(position, new Vector2(185, 170) / 2, 185, 170, "Graphics/Special Effects/Tank/Common/FlameSS",

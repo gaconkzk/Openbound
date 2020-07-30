@@ -24,6 +24,8 @@ namespace OpenBound.GameComponents.Pawn.Unit
 {
     public class Ice : Mobile
     {
+        public override double TeleportationBeaconInteractionTime => 0.7d;
+
         public Ice(Player player, Vector2 position) : base(player, position, MobileType.Ice)
         {
             Movement.CollisionOffset = 25;

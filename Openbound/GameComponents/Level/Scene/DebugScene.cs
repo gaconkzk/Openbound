@@ -54,10 +54,9 @@ namespace OpenBound.GameComponents.Level.Scene
                 //SelectedItemTypeList,
             };
 
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp2);
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
-            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp2);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.TeamTeleport);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.TeamTeleport);
+            GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.TeamTeleport);
 
             /*
             GameInformation.Instance.PlayerInformation.SelectedItemTypeList.Add(ItemType.EnergyUp1);
@@ -86,7 +85,7 @@ namespace OpenBound.GameComponents.Level.Scene
                     Password = "123",
                     PlayerRank = PlayerRank.Staff4,
                     PlayerRoomStatus = PlayerRoomStatus.Ready,
-                    PrimaryMobile = MobileType.Turtle,
+                    PrimaryMobile = MobileType.Ice,
                     SecondaryMobile = MobileType.Knight,
                     PlayerTeam = PlayerTeam.Red,
                     FriendList = new List<Player>(),
@@ -306,7 +305,7 @@ namespace OpenBound.GameComponents.Level.Scene
                 TeamA = new List<Player>() { sMobList[0].Owner , sMobList[1].Owner, sMobList[2].Owner, sMobList[3].Owner  },
                 TeamB = new List<Player>() { sMobList[4].Owner, sMobList[5].Owner, sMobList[6].Owner, sMobList[7].Owner },
             };
-            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.A, GameMap.Metamine) ;
+            GameInformation.Instance.RoomMetadata.Map = Map.GetMap(GameMapType.B, GameMap.Metamine) ;
         }
 
 
@@ -418,7 +417,7 @@ namespace OpenBound.GameComponents.Level.Scene
             {
                 MatchMetadata.WindForce = r.Next(0, 35);
                 MatchMetadata.WindAngleDegrees = r.Next(0, 360);
-                HUD.windCompass.ChangeWind(MatchMetadata.WindAngleDegrees, MatchMetadata.WindForce);
+                HUD.WindCompass.ChangeWind(MatchMetadata.WindAngleDegrees, MatchMetadata.WindForce);
             }
 
             if (InputHandler.IsBeingPressed(Keys.F5))
